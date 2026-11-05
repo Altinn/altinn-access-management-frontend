@@ -1,5 +1,5 @@
 import { asUser } from './callAs';
-import { ApiError, appUrl, type HttpMethod } from './apiRequest';
+import { appUrl, type HttpMethod } from './apiRequest';
 
 /**
  * A notification address as returned by the settings BFF. Email addresses have
@@ -30,10 +30,6 @@ export class SettingsApiRequests {
 
   /**
    * Lists the organisation's notification addresses (both email and SMS).
-   *
-   * Note that this throws for an organisation that has no addresses registered:
-   * the endpoint answers 500 rather than an empty list in that case. Use
-   * `setNotificationAddresses` for setup, which handles it.
    *
    * @param pid - PID of a user who is company profile admin for the organisation.
    * @param orgNumber - The 9-digit organisation number.
@@ -106,11 +102,7 @@ export class SettingsApiRequests {
    * The order is not cosmetic — the API refuses (409) to delete an organisation's
    * last remaining address, so emptying the list first would break the call.
    *
-   * Two quirks of the endpoint are handled here so specs don't have to:
-   *  - Listing an organisation that has NO addresses answers 500, not an empty
-   *    list. POST works regardless, so the first wanted address is seeded before
-   *    the list is read, which also makes any fresh test organisation usable.
-   *  - The desired state must contain at least one address, for the 409 above.
+   * The desired state must contain at least one address, for the 409 above.
    *
    * Use this in `beforeEach` so a test never inherits addresses left behind by a
    * previous run, and in `afterEach` to put the organisation back.
@@ -133,7 +125,7 @@ export class SettingsApiRequests {
       );
     }
 
-    const existing = await this.readOrSeedAddresses(pid, orgNumber, { emails, phones });
+    const existing = await this.getNotificationAddresses(pid, orgNumber);
 
     const missingEmails = emails.filter(
       (email) => !existing.some((address) => address.email === email),
@@ -162,46 +154,6 @@ export class SettingsApiRequests {
     );
     for (const address of unwanted) {
       await this.deleteNotificationAddress(pid, orgNumber, address.notificationAddressId);
-    }
-  }
-
-  /**
-   * Reads the organisation's addresses, seeding one first if the list cannot be
-   * read because the organisation has none.
-   *
-   * Listing answers 500 for an organisation with no registered addresses, while
-   * POST works — so in that one case a wanted address is created and the list is
-   * read again. The re-read is what gets returned, so the caller's diff sees the
-   * seeded address and does not add it a second time.
-   *
-   * Only that specific 500 is treated as "empty". Anything else — 401/403, a
-   * misconfigured BASE_URL, a network failure — is rethrown, so a real problem
-   * surfaces instead of being hidden behind a write. A genuinely transient 500
-   * would still be read as empty; that is the closest signal the endpoint gives.
-   */
-  private async readOrSeedAddresses(
-    pid: string,
-    orgNumber: string,
-    { emails, phones }: { emails: string[]; phones: { countryCode: string; phone: string }[] },
-  ): Promise<NotificationAddress[]> {
-    try {
-      return await this.getNotificationAddresses(pid, orgNumber);
-    } catch (error) {
-      if (!(error instanceof ApiError) || error.status !== 500) {
-        throw error;
-      }
-
-      if (emails.length > 0) {
-        await this.addEmailNotificationAddress(pid, orgNumber, emails[0]);
-      } else {
-        await this.addSmsNotificationAddress(
-          pid,
-          orgNumber,
-          phones[0].countryCode,
-          phones[0].phone,
-        );
-      }
-      return await this.getNotificationAddresses(pid, orgNumber);
     }
   }
 

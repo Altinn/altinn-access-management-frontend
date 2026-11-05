@@ -525,11 +525,6 @@
       "count": 2
     }
   },
-  "src/features/amUI/settings/EmailAddressFields.tsx": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/features/amUI/settings/SettingsModal.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1
@@ -540,15 +535,7 @@
       "count": 1
     }
   },
-  "src/features/amUI/settings/SmsAddressFields.tsx": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/features/amUI/settings/addressMgmtUtils.test.tsx": {
-    "@typescript-eslint/require-await": {
-      "count": 8
-    },
     "react/display-name": {
       "count": 1
     }

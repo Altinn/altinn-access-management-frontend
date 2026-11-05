@@ -1,8 +1,10 @@
 import { useState } from 'react';
 
+import { useAppDispatch } from '@/rtk/app/hooks';
 import {
   type Address,
   type NotificationAddress,
+  settingsApi,
   useCreateOrgNotificationAddressMutation,
   useDeleteOrgNotificationAddressMutation,
   useUpdateOrgNotificationAddressMutation,
@@ -14,6 +16,30 @@ import {
 } from '@/resources/utils/textFieldUtils';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+
+export type AddressRow = NotificationAddress & { errorKey?: string };
+
+export const COUNTRY_CODE_ERROR_KEY = 'text_field_errors.invalid_country_code';
+const ADDRESS_ALREADY_EXISTS_KEY = 'settings_page.address_already_exists';
+const GENERIC_ERROR_KEY = 'settings_page.error_saving_addresses';
+const ADDRESS_NOT_FOUND_CODE = 'STUI-00006';
+
+const rowErrorKeys: Record<string, string> = {
+  'STUI-00000': 'text_field_errors.invalid_email_pattern',
+  'STUI-00001': 'text_field_errors.invalid_phone',
+  'STUI-00002': COUNTRY_CODE_ERROR_KEY,
+  'STUI-00004': ADDRESS_ALREADY_EXISTS_KEY,
+};
+
+const generalErrorKeys: Record<string, string> = {
+  'STUI-00003': 'settings_page.organization_not_in_er',
+  'STUI-00005': 'settings_page.no_addresses_error',
+  [ADDRESS_NOT_FOUND_CODE]: 'settings_page.address_not_found',
+  'STUI-00007': 'settings_page.not_authorized_error',
+};
+
+const getErrorCode = (error: unknown) =>
+  (error as { data?: { code?: string } } | undefined)?.data?.code ?? '';
 
 export const addressIsEmpty = (address: Address) => !address.email && !address.phone;
 
@@ -43,93 +69,172 @@ export const hasChanges = (stored: NotificationAddress[], current: NotificationA
   hasDeletions(stored, current) ||
   hasEdits(stored, current);
 
-export const isValidAddresses = (addresses: NotificationAddress[]) => {
-  return addresses
-    .filter((address) => address.email?.length > 0 || address.phone?.length > 0)
-    .every((address) => {
-      return (
-        (address.email?.length > 0 && validateEmail(address.email).isValid) ||
-        (address.phone?.length > 0 &&
-          validatePhoneNumber(address.phone).isValid &&
-          validateCountryCode(address.countryCode).isValid)
-      );
-    });
+export const getAddressErrorKey = (
+  address: NotificationAddress,
+  stored: NotificationAddress[] = [],
+): string | undefined => {
+  // Stored addresses can predate the rules in Core and must not stop other changes from being saved
+  if (addressIsEmpty(address) || stored.some((s) => addressIsEqual(s, address))) {
+    return undefined;
+  }
+
+  if (address.email) {
+    const validation = validateEmail(address.email);
+    return validation.isValid ? undefined : validation.errorMessageKey;
+  }
+
+  const countryCodeValidation = validateCountryCode(address.countryCode);
+  if (!countryCodeValidation.isValid) {
+    return countryCodeValidation.errorMessageKey;
+  }
+
+  const phoneValidation = validatePhoneNumber(address.phone, address.countryCode);
+  return phoneValidation.isValid ? undefined : phoneValidation.errorMessageKey;
 };
+
+export const isValidAddresses = (
+  addresses: NotificationAddress[],
+  stored: NotificationAddress[] = [],
+) => addresses.every((address) => !getAddressErrorKey(address, stored));
+
+const getDuplicateKey = (address: NotificationAddress) =>
+  address.email ? address.email.toLowerCase() : `${address.countryCode}${address.phone}`;
+
+export const withDuplicateErrors = (rows: AddressRow[]): AddressRow[] => {
+  const seen = new Set<string>();
+  return rows.map((row) => {
+    if (addressIsEmpty(row)) {
+      return row;
+    }
+    const key = getDuplicateKey(row);
+    if (seen.has(key)) {
+      return { ...row, errorKey: ADDRESS_ALREADY_EXISTS_KEY };
+    }
+    seen.add(key);
+    return row;
+  });
+};
+
+export const getAddressChanges = <T extends NotificationAddress>(
+  stored: NotificationAddress[],
+  current: T[],
+) => {
+  // Empty addresses can indicate deletions, but not additions
+  const filteredCurrent = current.filter((row) => !addressIsEmpty(row));
+  const additions = filteredCurrent.filter(
+    (row) => !row.notificationAddressId && !stored.some((s) => addressIsEqual(s, row)),
+  );
+  const updates = filteredCurrent.filter((row) => {
+    if (!row.notificationAddressId) {
+      return false;
+    }
+    const storedRow = stored.find((s) => s.notificationAddressId === row.notificationAddressId);
+    return !storedRow || !addressIsEqual(storedRow, row);
+  });
+  const deletions = stored.filter(
+    (s) =>
+      !filteredCurrent.some(
+        (row) =>
+          row.notificationAddressId === s.notificationAddressId ||
+          (!row.notificationAddressId && addressIsEqual(s, row)),
+      ),
+  );
+
+  return { additions, updates, deletions };
+};
+
+const toAddress = ({ notificationAddressId, email, phone, countryCode }: AddressRow) => ({
+  notificationAddressId,
+  email,
+  phone,
+  countryCode,
+});
 
 export const useSaveAddressChanges = (
   storedAddresses: NotificationAddress[],
-  addressList: NotificationAddress[],
+  addressList: AddressRow[],
+  setAddressList: (rows: AddressRow[]) => void,
 ) => {
   const isChanges = hasChanges(storedAddresses, addressList);
   const [isSaving, setIsSaving] = useState(false);
-  const [isError, setIsError] = useState(false);
+  const [generalErrorKey, setGeneralErrorKey] = useState<string>();
+  const dispatch = useAppDispatch();
   const { actingParty } = usePartyRepresentation();
   const [createAddress] = useCreateOrgNotificationAddressMutation();
   const [deleteAddress] = useDeleteOrgNotificationAddressMutation();
   const [updateAddress] = useUpdateOrgNotificationAddressMutation();
 
-  const saveChanges = () => {
-    if (isSaving) {
-      return; // Prevent multiple simultaneous saves
+  const saveChanges = async () => {
+    const orgNumber = actingParty?.organizationIdentifier;
+    if (isSaving || !isChanges || !orgNumber) {
+      return;
     }
 
-    if (isChanges && actingParty?.organizationIdentifier) {
-      setIsSaving(true);
-      setIsError(false); // Reset error state
+    setGeneralErrorKey(undefined);
+    const rows = withDuplicateErrors(addressList.map((row) => ({ ...row, errorKey: undefined })));
+    if (rows.some((row) => row.errorKey)) {
+      setAddressList(rows);
+      return;
+    }
 
-      // Empty addresses can indicate deletions, but not additions
-      const filteredCurrent = addressList.filter((addr) => addressIsEmpty(addr) === false);
-      const additions =
-        filteredCurrent.filter(
-          (current) =>
-            !storedAddresses.some((stored) => addressIsEqual(stored, current)) &&
-            !current.notificationAddressId,
-        ) ?? [];
-      const updates =
-        filteredCurrent.filter(
-          (current) =>
-            !storedAddresses.some((stored) => addressIsEqual(stored, current)) &&
-            current.notificationAddressId,
-        ) ?? [];
-      const deletions =
-        storedAddresses.filter(
-          (stored) =>
-            !filteredCurrent.some(
-              (current) => current.notificationAddressId === stored.notificationAddressId,
-            ),
-        ) ?? [];
+    setIsSaving(true);
+    let generalError: string | undefined;
 
-      // Delete outdated addresses and add new ones
-      Promise.all([
-        ...additions.map((address) =>
-          createAddress({ orgNumber: actingParty?.organizationIdentifier ?? '', address: address }),
-        ),
-        ...deletions.map((address) =>
-          deleteAddress({
-            orgNumber: actingParty?.organizationIdentifier ?? '',
+    const handleError = (error: unknown, row?: AddressRow) => {
+      const code = getErrorCode(error);
+      if (row && rowErrorKeys[code]) {
+        row.errorKey = rowErrorKeys[code];
+        return;
+      }
+      generalError = generalErrorKeys[code] ?? GENERIC_ERROR_KEY;
+      if (row && code === ADDRESS_NOT_FOUND_CODE) {
+        row.notificationAddressId = ''; // Removed by someone else, so saving again must create it
+      }
+    };
+
+    const { additions, updates, deletions } = getAddressChanges(storedAddresses, rows);
+
+    try {
+      // New addresses go first so the organization is never left without one, and deletions
+      // before updates so a row can take over an address that is removed in the same save
+      let additionFailed = false;
+      for (const row of additions) {
+        const result = await createAddress({ orgNumber, address: toAddress(row) });
+        if ('error' in result) {
+          additionFailed = true;
+          handleError(result.error, row);
+        } else {
+          row.notificationAddressId = result.data.notificationAddressId;
+        }
+      }
+      if (!additionFailed) {
+        for (const address of deletions) {
+          const result = await deleteAddress({
+            orgNumber,
             notificationAddressId: address.notificationAddressId,
-          }),
-        ),
-        ...updates.map((address) =>
-          updateAddress({ orgNumber: actingParty?.organizationIdentifier ?? '', address: address }),
-        ),
-      ])
-        .then((results) => {
-          // Check if any of the results contain errors
-          const hasError = results.some((result) => 'error' in result);
-          if (hasError) {
-            setIsError(true);
+          });
+          if ('error' in result) {
+            handleError(result.error);
           }
-        })
-        .catch(() => {
-          // Fallback for any unexpected promise rejections
-          setIsError(true);
-        })
-        .finally(() => {
-          setIsSaving(false);
-        });
+        }
+      }
+      for (const row of updates) {
+        const result = await updateAddress({ orgNumber, address: toAddress(row) });
+        if ('error' in result) {
+          handleError(result.error, row);
+        } else {
+          row.notificationAddressId = result.data.notificationAddressId;
+        }
+      }
+    } catch {
+      generalError = GENERIC_ERROR_KEY;
     }
+
+    setAddressList(rows);
+    setGeneralErrorKey(generalError);
+    setIsSaving(false);
+    dispatch(settingsApi.util.invalidateTags(['NotificationAddress']));
   };
 
-  return { isChanges, saveChanges, isSaving, isError, setIsError };
+  return { isChanges, saveChanges, isSaving, generalErrorKey, setGeneralErrorKey };
 };

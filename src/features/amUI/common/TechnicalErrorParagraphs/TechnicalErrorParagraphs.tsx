@@ -31,7 +31,8 @@ export const TechnicalErrorParagraphs = ({
   additionalContext,
 }: TechnicalErrorParagraphsProps) => {
   const { t } = useTranslation();
-  const parsedDate = new Date(time);
+  // An error without a body has no time, and new Date(null) would show 1970
+  const parsedDate = new Date(time || NaN);
   const formattedTime = (isNaN(parsedDate.getTime()) ? new Date() : parsedDate).toLocaleDateString(
     'nb-NO',
     { hour: '2-digit', minute: '2-digit', second: '2-digit' },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useEffectEvent, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
@@ -20,7 +20,20 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import classes from './SettingsModal.module.css';
 import { EmailAddressFields } from './EmailAddressFields';
 import { SmsAddressFields } from './SmsAddressFields';
-import { addressIsEmpty, isValidAddresses, useSaveAddressChanges } from './addressMgmtUtils';
+import {
+  type AddressRow,
+  addressIsEmpty,
+  getAddressErrorKey,
+  isValidAddresses,
+  useSaveAddressChanges,
+} from './addressMgmtUtils';
+
+const createEmptyRow = (mode: 'email' | 'sms'): AddressRow => ({
+  notificationAddressId: '',
+  email: '',
+  phone: '',
+  countryCode: mode === 'sms' ? '+47' : '',
+});
 
 export const SettingsModal = ({
   mode,
@@ -35,43 +48,37 @@ export const SettingsModal = ({
 }) => {
   const { t } = useTranslation();
   const { actingParty } = usePartyRepresentation();
-  const [addressList, setAddressList] = useState<NotificationAddress[]>([]);
+  const [addressList, setAddressList] = useState<AddressRow[]>([]);
   const [storedAddresses, setStoredAddresses] = useState<NotificationAddress[]>([]);
   const { data: notificationAddresses, isLoading } = useGetOrgNotificationAddressesQuery(
     actingParty?.organizationIdentifier ?? '',
     { skip: !actingParty?.organizationIdentifier },
   );
-  const { isChanges, saveChanges, isSaving, isError, setIsError } = useSaveAddressChanges(
-    storedAddresses,
-    addressList,
+  const { isChanges, saveChanges, isSaving, generalErrorKey, setGeneralErrorKey } =
+    useSaveAddressChanges(storedAddresses, addressList, setAddressList);
+
+  const onAddressesLoaded = useEffectEvent(
+    (addresses: NotificationAddress[], addressMode: 'email' | 'sms') => {
+      setStoredAddresses(addresses);
+      // Keep what the user has typed while there are errors to correct
+      if (generalErrorKey || addressList.some((row) => row.errorKey)) return;
+      setAddressList(addresses.length > 0 ? addresses : [createEmptyRow(addressMode)]);
+    },
   );
 
   useEffect(() => {
-    if (isLoading) return;
-    if (mode === 'email') {
-      const emailAddresses = notificationAddresses?.filter((addr) => addr.email);
-      const setList =
-        emailAddresses && emailAddresses.length > 0
-          ? emailAddresses
-          : [{ email: '', phone: '', countryCode: '', notificationAddressId: '' }];
-      setAddressList(setList);
-      setStoredAddresses(emailAddresses ?? []);
-    } else if (mode === 'sms') {
-      const smsAddresses = notificationAddresses?.filter((addr) => addr.phone);
-      const setList =
-        smsAddresses && smsAddresses.length > 0
-          ? smsAddresses
-          : [{ email: '', phone: '', countryCode: '+47', notificationAddressId: '' }];
-      setAddressList(setList);
-      setStoredAddresses(smsAddresses ?? []);
-    }
+    if (isLoading || !mode) return;
+    onAddressesLoaded(
+      notificationAddresses?.filter((addr) => (mode === 'email' ? addr.email : addr.phone)) ?? [],
+      mode,
+    );
   }, [mode, notificationAddresses, isLoading]);
 
   let headingText = '';
   let labelText = '';
   let icon = null;
   const noAddressesError =
-    addressList.length === 1 && addressIsEmpty(addressList[0]) && !canDeleteLastAddress;
+    addressList.length > 0 && addressList.every(addressIsEmpty) && !canDeleteLastAddress;
   switch (mode) {
     case 'email':
       headingText = t('settings_page.alerts_on_email');
@@ -98,8 +105,17 @@ export const SettingsModal = ({
   }
 
   const closeModal = () => {
-    setIsError(false);
+    setGeneralErrorKey(undefined);
+    setAddressList([]);
     onClose();
+  };
+
+  const validateRow = (index: number) => {
+    setAddressList((rows) =>
+      rows.map((row, i) =>
+        i === index ? { ...row, errorKey: getAddressErrorKey(row, storedAddresses) } : row,
+      ),
+    );
   };
 
   return (
@@ -119,16 +135,14 @@ export const SettingsModal = ({
       </div>
 
       <div className={classes.modalContent}>
-        {(noAddressesError || isError) && (
+        {(noAddressesError || generalErrorKey) && (
           <DsAlert
             data-color='danger'
             className={classes.errorBox}
             data-size='sm'
           >
             <DsParagraph className={classes.errorText}>
-              {isError
-                ? t('settings_page.error_saving_addresses')
-                : t('settings_page.no_addresses_error')}
+              {t(generalErrorKey ?? 'settings_page.no_addresses_error')}
             </DsParagraph>
           </DsAlert>
         )}
@@ -143,31 +157,25 @@ export const SettingsModal = ({
             <EmailAddressFields
               addressList={addressList}
               setAddressList={setAddressList}
-              isLoading={isLoading}
+              onValidateRow={validateRow}
+              isLoading={isLoading || isSaving}
             />
           )}
           {mode === 'sms' && (
             <SmsAddressFields
               addressList={addressList}
               setAddressList={setAddressList}
-              isLoading={isLoading}
+              onValidateRow={validateRow}
+              isLoading={isLoading || isSaving}
             />
           )}
         </div>
         <DsButton
           variant='secondary'
           onClick={() => {
-            setAddressList([
-              ...addressList,
-              {
-                notificationAddressId: '',
-                email: '',
-                phone: '',
-                countryCode: mode === 'sms' ? '+47' : '',
-              },
-            ]);
+            setAddressList([...addressList, createEmptyRow(mode)]);
           }}
-          disabled={isLoading || addressList.length >= 10}
+          disabled={isLoading || isSaving || addressList.length >= 10}
         >
           <PlusIcon aria-hidden='true' />
           {t('settings_page.add_more')}
@@ -178,11 +186,11 @@ export const SettingsModal = ({
         <div className={classes.buttonRow}>
           <DsButton
             variant='primary'
-            onClick={saveChanges}
+            onClick={() => void saveChanges()}
             disabled={
               isLoading ||
               !isChanges ||
-              !isValidAddresses(addressList) ||
+              !isValidAddresses(addressList, storedAddresses) ||
               isSaving ||
               noAddressesError
             }

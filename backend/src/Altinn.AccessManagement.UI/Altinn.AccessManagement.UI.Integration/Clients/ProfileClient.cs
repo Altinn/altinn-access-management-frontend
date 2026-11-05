@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,6 +10,7 @@ using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -122,6 +124,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
 
+                // Profile answers 404 for an organization that has no addresses registered
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return new List<NotificationAddressResponse>();
+                }
+
                 var resString = await response.Content.ReadAsStringAsync();
                 OrganizationResponse orgNotifications = await ClientUtils.DeserializeIfSuccessfullStatusCode<OrganizationResponse>(response);
                 return orgNotifications?.NotificationAddresses;
@@ -134,7 +142,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationAddressResponse> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress)
+        public async Task<Result<NotificationAddressResponse>> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress)
         {
             try
             {
@@ -146,9 +154,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
 
-                var resString = await response.Content.ReadAsStringAsync();
-                NotificationAddressResponse orgNotification = await ClientUtils.DeserializeIfSuccessfullStatusCode<NotificationAddressResponse>(response);
-                return orgNotification;
+                return await GetNotificationAddressResult(response, HttpMethod.Post);
             }
             catch (Exception ex)
             {
@@ -158,7 +164,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationAddressResponse> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId)
+        public async Task<Result<NotificationAddressResponse>> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId)
         {
             try
             {
@@ -168,9 +174,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, accessToken);
 
-                var resString = await response.Content.ReadAsStringAsync();
-                NotificationAddressResponse orgNotification = await ClientUtils.DeserializeIfSuccessfullStatusCode<NotificationAddressResponse>(response);
-                return orgNotification;
+                return await GetNotificationAddressResult(response, HttpMethod.Delete);
             }
             catch (Exception ex)
             {
@@ -180,7 +184,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress)
+        public async Task<Result<NotificationAddressResponse>> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress)
         {
             try
             {
@@ -192,9 +196,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 HttpResponseMessage response = await _client.PutAsync(token, endpointUrl, requestBody, accessToken);
 
-                var resString = await response.Content.ReadAsStringAsync();
-                NotificationAddressResponse orgNotification = await ClientUtils.DeserializeIfSuccessfullStatusCode<NotificationAddressResponse>(response);
-                return orgNotification;
+                return await GetNotificationAddressResult(response, HttpMethod.Put);
             }
             catch (Exception ex)
             {
@@ -270,6 +272,20 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError(ex, "AccessManagement.UI // ProfileClient // DeletePartyUuidFromFavorites // Exception");
                 throw;
             }
+        }
+
+        private async Task<Result<NotificationAddressResponse>> GetNotificationAddressResult(HttpResponseMessage response, HttpMethod method)
+        {
+            string responseContent = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return JsonSerializer.Deserialize<NotificationAddressResponse>(responseContent, _serializerOptions);
+            }
+
+            _logger.LogError("AccessManagement.UI // ProfileClient // {Method} notification address // Unexpected HttpStatusCode: {StatusCode}", method, response.StatusCode);
+
+            return SettingsProblemMapper.MapToSettingsUiError(responseContent, response.StatusCode, method);
         }
 
         private async Task<UserProfile> GetUserProfileFromEndpoint(string endpointUrl)
