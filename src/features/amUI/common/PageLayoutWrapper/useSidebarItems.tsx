@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   hasActivityLogPermission,
+  hasBankruptcyEstateAdminPermission,
   hasConsentPermission,
   hasCreateSystemUserPermission,
   hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
+  isBankruptcyEstateAdministrationAvailable,
 } from '@/resources/utils/permissionUtils';
 import {
   getActivityLogMenuItem,
@@ -24,6 +26,7 @@ import {
   getSystemUserMenuItem,
   getUsersMenuItem,
   getYourClientsMenuItem,
+  getBankruptcyEstateAdministrationMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
 import { isOrganization } from '@/resources/utils/reporteeUtils';
@@ -36,6 +39,7 @@ import {
 } from '@/rtk/features/userInfoApi';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
+import { useGetIsBankruptcyEstateAdminQuery } from '@/rtk/features/bankruptcyEstateApi';
 
 export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { t } = useTranslation();
@@ -63,6 +67,9 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     useGetIsCompanyProfileAdminQuery();
   const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
     skip: !isOrganization(reportee),
+  });
+  const { data: isBankruptcyEstateAdmin } = useGetIsBankruptcyEstateAdminQuery(undefined, {
+    skip: !isBankruptcyEstateAdministrationAvailable(reportee),
   });
 
   const isLoading =
@@ -138,6 +145,10 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
 
   if (hasActivityLogPermission(isAdmin, isMaskinportenAdmin)) {
     items.push(getActivityLogMenuItem(pathname, isLoading, isSmall));
+  }
+
+  if (hasBankruptcyEstateAdminPermission(reportee, isBankruptcyEstateAdmin)) {
+    items.push(getBankruptcyEstateAdministrationMenuItem(pathname, isLoading, isSmall));
   }
 
   const sidebarItems = items.map((item) => {

@@ -687,5 +687,29 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             factory.Server.AllowSynchronousIO = true;
             return factory.CreateClient();
         }
+
+        /// <summary>
+        /// Gets a HttpClient for unittests testing for BankruptcyEstateController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for BankruptcyEstateController tests</param>
+        /// <returns>HttpClient</returns>
+        internal static HttpClient GetTestClient(CustomWebApplicationFactory<BankruptcyEstateController> customFactory)
+        {
+            WebApplicationFactory<BankruptcyEstateController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IBankruptcyEstateClient, BankruptcyEstateClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
     }
 }

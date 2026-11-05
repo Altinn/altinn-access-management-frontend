@@ -121,6 +121,11 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool IdPortenAuthorization { get; set; }
 
         /// <summary>
+        /// Set to mock bankruptcy estate administration during runtime
+        /// </summary>
+        public bool BankruptcyEstateAdministration { get; set; }
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         public MockSettings()
@@ -133,7 +138,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <param name="value">The boolean value to which all memebers will be set</param>
         public MockSettings(bool value)
         {
-            AccessManagement = AccessManagement_V0 = AccessPackage = SingleRights = Instance = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = Dialogporten = Maskinporten = SelfIdentifiedUser = IdPortenAuthorization = value;
+            AccessManagement = AccessManagement_V0 = AccessPackage = SingleRights = Instance = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = Dialogporten = Maskinporten = SelfIdentifiedUser = IdPortenAuthorization = BankruptcyEstateAdministration = value;
         }
     }
 }

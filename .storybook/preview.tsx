@@ -29,6 +29,7 @@ window.featureFlags = {
   enableActivityLog: false,
   showSettingsPageServiceAnnouncement: false,
   showRolesRemovedAlert: false,
+  enableBankruptcyEstateAdministration: false,
 };
 
 // Initialise i18next;

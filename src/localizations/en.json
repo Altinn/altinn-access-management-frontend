@@ -178,7 +178,8 @@
     "requests": "Requests",
     "requests_badge": "received",
     "maskinporten": "Maskinporten administration",
-    "activity_log": "Activity log"
+    "activity_log": "Activity log",
+    "bankruptcy_estate_administration": "Bankruptcy estate administration"
   },
   "error_page": {
     "page_title": "Error page - Altinn",
@@ -1176,7 +1177,8 @@
     "new_requests_self_other": "You have {{count}} new requests",
     "new_requests_zero": "{{reportee}} has no new requests",
     "new_requests_one": "{{reportee}} has one new request",
-    "new_requests_other": "{{reportee}} has {{count}} new requests"
+    "new_requests_other": "{{reportee}} has {{count}} new requests",
+    "bankruptcy_estate_admin_item_description": "Let others administer the bankruptcy estates of {{reportee}}."
   },
   "request_page": {
     "page_title": "Requests - Altinn",
@@ -1285,5 +1287,10 @@
     "add_account_from_token_error": "Could not add account",
     "add_account_from_token_invalid_token": "Invalid or expired link",
     "add_account_from_token_not_from_caller": "Link does not belong to the logged-in user"
+  },
+  "bankruptcy_estate_administration_page": {
+    "page_title": "Bankruptcy estate administration - Altinn",
+    "page_heading": "Bankruptcy estate administration for {{name}}",
+    "no_access_title": "You do not have access to bankruptcy estate administration"
   }
 }
