@@ -1,8 +1,12 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
-import { formatEntityDisplayName, isPerson } from '@/resources/utils/reporteeUtils';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import {
+  isBankruptcyEstateAdministrationAvailable,
+  hasBankruptcyEstateAdminPermission,
+} from '@/resources/utils/permissionUtils';
 import { useGetReporteeQuery } from '@/rtk/features/userInfoApi';
 import { useGetIsBankruptcyEstateAdminQuery } from '@/rtk/features/bankruptcyEstateApi';
 
@@ -13,12 +17,29 @@ export const BankruptcyEstateAdministrationPageContent = () => {
   const { t } = useTranslation();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
-  const { data: isBankruptcyEstateAdmin, isLoading: isLoadingIsBankruptcyEstateAdmin } =
-    useGetIsBankruptcyEstateAdminQuery(undefined, { skip: !isPerson(reportee) });
+  const {
+    data: isBankruptcyEstateAdmin,
+    isLoading: isLoadingIsBankruptcyEstateAdmin,
+    isError,
+  } = useGetIsBankruptcyEstateAdminQuery(undefined, {
+    skip: !isBankruptcyEstateAdministrationAvailable(reportee),
+  });
 
   const isLoading = isLoadingReportee || actorLoading || isLoadingIsBankruptcyEstateAdmin;
+  const hasPermission = hasBankruptcyEstateAdminPermission(reportee, isBankruptcyEstateAdmin);
 
-  if (!isLoading && (!isPerson(reportee) || isBankruptcyEstateAdmin === false)) {
+  if (isError) {
+    return (
+      <DsAlert
+        role='alert'
+        data-color='danger'
+      >
+        <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+      </DsAlert>
+    );
+  }
+
+  if (!isLoading && hasPermission === false) {
     return (
       <DsAlert data-color='warning'>
         {t('bankruptcy_estate_administration_page.no_access_title')}

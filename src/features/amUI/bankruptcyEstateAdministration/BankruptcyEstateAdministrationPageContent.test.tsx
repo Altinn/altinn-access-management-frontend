@@ -10,6 +10,7 @@ let reportee: AuthorizedPartyEntity | undefined;
 let isLoadingReportee = false;
 let isBankruptcyEstateAdmin: boolean | undefined;
 let isLoadingAccess = false;
+let isAccessError = false;
 const accessQuery = vi.fn();
 
 vi.mock('react-i18next', () => ({
@@ -30,7 +31,7 @@ vi.mock('@/rtk/features/userInfoApi', () => ({
 vi.mock('@/rtk/features/bankruptcyEstateApi', () => ({
   useGetIsBankruptcyEstateAdminQuery: (...args: unknown[]) => {
     accessQuery(...args);
-    return { data: isBankruptcyEstateAdmin, isLoading: isLoadingAccess };
+    return { data: isBankruptcyEstateAdmin, isLoading: isLoadingAccess, isError: isAccessError };
   },
 }));
 
@@ -46,6 +47,8 @@ beforeEach(() => {
   isLoadingReportee = false;
   isBankruptcyEstateAdmin = undefined;
   isLoadingAccess = false;
+  isAccessError = false;
+  window.featureFlags = { enableBankruptcyEstateAdministration: true } as Window['featureFlags'];
 });
 
 describe('BankruptcyEstateAdministrationPageContent', () => {
@@ -86,5 +89,28 @@ describe('BankruptcyEstateAdministrationPageContent', () => {
 
     expect(screen.getByText(warningText)).toBeInTheDocument();
     expect(screen.queryByText(headingText)).toBeNull();
+  });
+
+  it('shows an error instead of the page when the access check fails', () => {
+    reportee = person;
+    isAccessError = true;
+
+    render(<BankruptcyEstateAdministrationPageContent />);
+
+    expect(screen.getByRole('alert')).toHaveTextContent('common.general_error_paragraph');
+    expect(screen.queryByText(headingText)).toBeNull();
+    expect(screen.queryByText(warningText)).toBeNull();
+  });
+
+  it('shows the warning when the feature flag is off, even for a person with estates', () => {
+    window.featureFlags = { enableBankruptcyEstateAdministration: false } as Window['featureFlags'];
+    reportee = person;
+    isBankruptcyEstateAdmin = true;
+
+    render(<BankruptcyEstateAdministrationPageContent />);
+
+    expect(screen.getByText(warningText)).toBeInTheDocument();
+    expect(screen.queryByText(headingText)).toBeNull();
+    expect(accessQuery).toHaveBeenCalledWith(undefined, { skip: true });
   });
 });

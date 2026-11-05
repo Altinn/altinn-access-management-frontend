@@ -164,7 +164,7 @@ export const Router = createBrowserRouter(
           path={amUIPath.Maskinporten}
           element={<MaskinportenPage />}
         />
-        {window.featureFlags.enableBankruptcyEstateAdministration && (
+        {window.featureFlags?.enableBankruptcyEstateAdministration && (
           <Route
             path={amUIPath.BankruptcyEstateAdministration}
             element={<BankruptcyEstateAdministrationPage />}

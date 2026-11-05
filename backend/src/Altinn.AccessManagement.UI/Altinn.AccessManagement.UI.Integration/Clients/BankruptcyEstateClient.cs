@@ -1,10 +1,7 @@
 ﻿using System.Net;
-using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Extensions;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.Common;
-using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
 using Microsoft.AspNetCore.Http;
@@ -67,13 +64,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 return false;
             }
 
-            if (!httpResponse.IsSuccessStatusCode)
-            {
-                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
-            }
-
-            string content = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
-            return JsonSerializer.Deserialize<bool>(content);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<bool>(httpResponse, _logger, "BankruptcyEstateClient.HasAnyEstates");
         }
     }
 }

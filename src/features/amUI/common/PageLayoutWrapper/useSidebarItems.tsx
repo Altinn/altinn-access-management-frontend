@@ -5,10 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import {
   hasActivityLogPermission,
+  hasBankruptcyEstateAdminPermission,
   hasConsentPermission,
   hasCreateSystemUserPermission,
   hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
+  isBankruptcyEstateAdministrationAvailable,
 } from '@/resources/utils/permissionUtils';
 import {
   getActivityLogMenuItem,
@@ -27,7 +29,7 @@ import {
   getBankruptcyEstateAdministrationMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
-import { isOrganization, isPerson } from '@/resources/utils/reporteeUtils';
+import { isOrganization } from '@/resources/utils/reporteeUtils';
 import {
   useGetIsAdminQuery,
   useGetIsClientAdminQuery,
@@ -66,10 +68,8 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
   const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
     skip: !isOrganization(reportee),
   });
-  const showBankruptcyEstateAdministration =
-    window.featureFlags.enableBankruptcyEstateAdministration && isPerson(reportee);
   const { data: isBankruptcyEstateAdmin } = useGetIsBankruptcyEstateAdminQuery(undefined, {
-    skip: !showBankruptcyEstateAdministration,
+    skip: !isBankruptcyEstateAdministrationAvailable(reportee),
   });
 
   const isLoading =
@@ -147,7 +147,7 @@ export const useSidebarItems = ({ isSmall }: { isSmall?: boolean }) => {
     items.push(getActivityLogMenuItem(pathname, isLoading, isSmall));
   }
 
-  if (showBankruptcyEstateAdministration && isBankruptcyEstateAdmin) {
+  if (hasBankruptcyEstateAdminPermission(reportee, isBankruptcyEstateAdmin)) {
     items.push(getBankruptcyEstateAdministrationMenuItem(pathname, isLoading, isSmall));
   }
 
