@@ -38,6 +38,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// </summary>
         public const string ShowSystemUsersAsRightHolders = "AccessManagementUI.ShowSystemUsersAsRightHolders";
 
+        /// <summary>
         /// Whether or not to enable bankruptcy estate administration features
         /// </summary>
         public const string EnableBankruptcyEstateAdministration = "AccessManagementUI.EnableBankruptcyEstateAdministration";
