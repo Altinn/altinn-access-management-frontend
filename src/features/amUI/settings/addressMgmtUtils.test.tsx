@@ -521,7 +521,7 @@ describe('addressMgmtUtils', () => {
     });
 
     it('should filter out empty addresses when saving', async () => {
-      mockCreateAddress.mockResolvedValue({ data: { notificationAddressId: 9 } });
+      mockCreateAddress.mockResolvedValue({ data: { notificationAddressId: '9' } });
 
       await save(
         [],
@@ -552,7 +552,7 @@ describe('addressMgmtUtils', () => {
       const calls: string[] = [];
       mockCreateAddress.mockImplementation(() => {
         calls.push('create');
-        return Promise.resolve({ data: { notificationAddressId: 9 } });
+        return Promise.resolve({ data: { notificationAddressId: '9' } });
       });
       mockDeleteAddress.mockImplementation(() => {
         calls.push('delete');
@@ -560,7 +560,7 @@ describe('addressMgmtUtils', () => {
       });
       mockUpdateAddress.mockImplementation(() => {
         calls.push('update');
-        return Promise.resolve({ data: { notificationAddressId: 1 } });
+        return Promise.resolve({ data: { notificationAddressId: '1' } });
       });
 
       await save(
@@ -588,11 +588,11 @@ describe('addressMgmtUtils', () => {
     });
 
     it('should give saved rows their new id and report no errors', async () => {
-      mockCreateAddress.mockResolvedValueOnce({ data: { notificationAddressId: 9 } });
+      mockCreateAddress.mockResolvedValueOnce({ data: { notificationAddressId: '9' } });
 
       const result = await save([], [createAddress('new@example.com')]);
 
-      expect(savedRows()[0].notificationAddressId).toBe(9);
+      expect(savedRows()[0].notificationAddressId).toBe('9');
       expect(savedRows()[0].errorKey).toBeUndefined();
       expect(result.current.generalErrorKey).toBeUndefined();
     });
@@ -603,7 +603,7 @@ describe('addressMgmtUtils', () => {
       ['STUI-00002', 'text_field_errors.invalid_country_code'],
     ])('should show %s on the row that failed', async (code, expectedKey) => {
       mockCreateAddress
-        .mockResolvedValueOnce({ data: { notificationAddressId: 9 } })
+        .mockResolvedValueOnce({ data: { notificationAddressId: '9' } })
         .mockResolvedValueOnce(problem(code));
 
       const result = await save(
@@ -686,7 +686,7 @@ describe('addressMgmtUtils', () => {
     });
 
     it('should not send the row error to the api', async () => {
-      mockCreateAddress.mockResolvedValueOnce({ data: { notificationAddressId: 9 } });
+      mockCreateAddress.mockResolvedValueOnce({ data: { notificationAddressId: '9' } });
 
       await save([], [{ ...createAddress('new@example.com'), errorKey: 'stale_error' }]);
 
