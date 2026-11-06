@@ -557,7 +557,13 @@
     "object": {
       "scope": "the scope “{{name}}”",
       "role": "the role “{{name}}”",
+      "package": "the access package “{{name}}”",
       "access": "access"
+    },
+    "trigger": {
+      "created": "Created",
+      "updated": "Updated",
+      "deleted": "Deleted"
     },
     "events": {
       "assignment": {

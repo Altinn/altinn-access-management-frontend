@@ -1,6 +1,8 @@
 import type { TFunction } from 'i18next';
 import type { Color, LanguageCode } from '@altinn/altinn-components';
 
+import { formatDateToNorwegianWithMonthName } from '@/resources/utils/dateUtils';
+
 import type {
   ActivityLogDirection,
   ActivityLogDto,
@@ -12,6 +14,7 @@ type TranslateFunction = TFunction<'translation', undefined>;
 
 const EVENTS_KEY = 'activity_log_page.events';
 const OBJECT_KEY = 'activity_log_page.object';
+const TRIGGER_KEY = 'activity_log_page.trigger';
 
 const localeByLanguage: Record<LanguageCode, string> = {
   nb: 'nb-NO',
@@ -33,7 +36,7 @@ export const formatActivityLogTimestamp = (
     return timestamp;
   }
   return t('activity_log_page.timestamp', {
-    date: date.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' }),
+    date: formatDateToNorwegianWithMonthName(timestamp, locale),
     time: date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }),
   });
 };
@@ -60,10 +63,16 @@ export const getActivityLogCounterpart = (
   return id && name ? { id, name } : undefined;
 };
 
-/** The thing the entry concerns, as a translated label: the scope for scope entries, else the role. */
+/**
+ * The thing the entry concerns, as a translated label: the scope for scope entries, the package
+ * for package entries, else the role.
+ */
 export const getActivityLogObjectLabel = (entry: ActivityLogDto, t: TranslateFunction): string => {
   if (entry.subtype === 'Resource') {
     return t(`${OBJECT_KEY}.scope`, { name: entry.resourceName ?? '' });
+  }
+  if (entry.subtype === 'Package') {
+    return t(`${OBJECT_KEY}.package`, { name: entry.packageName ?? '' });
   }
   return entry.roleName
     ? t(`${OBJECT_KEY}.role`, { name: entry.roleName })
@@ -122,7 +131,7 @@ export const getActivityLogSentence = ({
       counterpart: getActivityLogCounterpart(entry, direction)?.name ?? '',
       object: getActivityLogObjectLabel(entry, t),
       by: entry.byName ?? '',
-      typeName: catalogName ?? `${entry.type} ${entry.trigger.toLowerCase()}`,
+      typeName: catalogName ?? t(`${TRIGGER_KEY}.${entry.trigger.toLowerCase()}`),
     },
   };
 };

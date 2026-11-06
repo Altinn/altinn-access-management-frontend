@@ -19,21 +19,24 @@ const entry = (
   from: Party,
   to: Party,
   fields: Partial<ActivityLogDto> & Pick<ActivityLogDto, 'trigger'>,
-): ActivityLogDto => ({
-  id: String(nextId++),
-  itemId: `item-${nextId}`,
-  type: 'Assignment',
-  when,
-  byName: 'Helle Hovedadmin',
-  fromId: from.id,
-  fromName: from.name,
-  fromType: 'Organisasjon',
-  toId: to.id,
-  toName: to.name,
-  toType: 'Organisasjon',
-  roleName: 'Leverandør',
-  ...fields,
-});
+): ActivityLogDto => {
+  const id = nextId++;
+  return {
+    id: String(id),
+    itemId: `item-${id}`,
+    type: 'Assignment',
+    when,
+    byName: 'Helle Hovedadmin',
+    fromId: from.id,
+    fromName: from.name,
+    fromType: 'Organisasjon',
+    toId: to.id,
+    toName: to.name,
+    toType: 'Organisasjon',
+    roleName: 'Leverandør',
+    ...fields,
+  };
+};
 
 const scope = (when: string, trigger: ActivityLogDto['trigger'], name: string, to = liseLarsen) =>
   entry(when, sampleReportee, to, { subtype: 'Resource', trigger, resourceName: name });

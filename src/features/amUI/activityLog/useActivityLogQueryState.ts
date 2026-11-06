@@ -17,6 +17,7 @@ export const useActivityLogQueryState = () => {
   const [direction, setDirection] = useState<ActivityLogDirection>('from');
   const [filterState, setFilterState] = useState<FilterState>({});
   const [pageNo, setPageNo] = useState(0);
+  const [party] = useState(() => getCookie('AltinnPartyUuid'));
 
   const selectedPartyIds = useMemo(
     () => (filterState[ACTIVITY_LOG_PARTY_FILTER] ?? []).map(String),
@@ -35,8 +36,6 @@ export const useActivityLogQueryState = () => {
   }, []);
 
   const loadMore = useCallback(() => setPageNo((current) => current + 1), []);
-
-  const party = getCookie('AltinnPartyUuid') ?? '';
 
   const queryParams = useMemo<ActivityLogQueryParams>(
     () => ({

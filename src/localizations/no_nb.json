@@ -554,7 +554,13 @@
     "object": {
       "scope": "scopet «{{name}}»",
       "role": "rollen «{{name}}»",
+      "package": "tilgangspakken «{{name}}»",
       "access": "tilgang"
+    },
+    "trigger": {
+      "created": "Opprettet",
+      "updated": "Endret",
+      "deleted": "Fjernet"
     },
     "events": {
       "assignment": {

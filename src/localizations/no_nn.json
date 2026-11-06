@@ -553,7 +553,13 @@
     "object": {
       "scope": "scopet «{{name}}»",
       "role": "rolla «{{name}}»",
+      "package": "tilgangspakken «{{name}}»",
       "access": "tilgang"
+    },
+    "trigger": {
+      "created": "Oppretta",
+      "updated": "Endra",
+      "deleted": "Fjerna"
     },
     "events": {
       "assignment": {

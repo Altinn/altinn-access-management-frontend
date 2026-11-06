@@ -65,6 +65,15 @@ describe('getActivityLogObjectLabel', () => {
     );
   });
 
+  it('names the package for package entries', () => {
+    expect(
+      getActivityLogObjectLabel(
+        { ...baseEntry, subtype: 'Package', resourceName: null, packageName: 'Lønn' },
+        t,
+      ),
+    ).toBe('activity_log_page.object.package({"name":"Lønn"})');
+  });
+
   it('names the role for main assignment entries', () => {
     expect(
       getActivityLogObjectLabel({ ...baseEntry, subtype: null, roleName: 'Leverandør' }, t),
@@ -129,6 +138,19 @@ describe('getActivityLogSentence', () => {
     expect(sentence.key).toBe('activity_log_page.events.fallback.from');
     expect(sentence.byKey).toBeUndefined();
     expect(sentence.values.typeName).toBe('Scope tildelt');
+  });
+
+  it('names the event by its trigger when neither a template nor a catalog entry exists', () => {
+    const sentence = getActivityLogSentence({
+      entry: { ...baseEntry, type: 'Delegation', activityTypeId: 'unknown' },
+      direction: 'from',
+      reporteeName: 'Fysioterapeutene AS',
+      t,
+      exists: (key) => key.startsWith('activity_log_page.events.fallback'),
+      activityTypes: [],
+    });
+
+    expect(sentence.values.typeName).toBe('activity_log_page.trigger.created');
   });
 });
 
