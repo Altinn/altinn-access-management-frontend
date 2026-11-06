@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import type { ProcessedStatus } from '../types';
+import { RequestErrorAlert, type RequestErrorAlertProps } from '../RequestErrorAlert';
 import { PackageHeader } from '../../common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '../../common/DelegationModal/AccessPackages/PackageMeta';
 import { StatusSection } from '../../common/StatusSection/StatusSection';
@@ -21,6 +22,7 @@ interface RequestPackageDetailProps {
   onApprove?: () => void;
   onReject?: () => void;
   cannotApprove?: boolean;
+  delegationCheckError?: RequestErrorAlertProps['details'];
   toPartyName: string;
 }
 
@@ -33,6 +35,7 @@ export const RequestPackageDetail = ({
   onApprove,
   onReject,
   cannotApprove,
+  delegationCheckError,
   toPartyName,
 }: RequestPackageDetailProps) => {
   const { t } = useTranslation();
@@ -52,6 +55,12 @@ export const RequestPackageDetail = ({
         >
           {t('request_page.cannot_approve_package')}
         </DsAlert>
+      )}
+      {delegationCheckError && (
+        <RequestErrorAlert
+          heading={t('delegation_modal.service_error.technical_error_heading')}
+          details={delegationCheckError}
+        />
       )}
       <PackageMeta accessPackage={pkg} />
       {processedStatus ? (

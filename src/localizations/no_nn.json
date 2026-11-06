@@ -173,7 +173,8 @@
     "requests": "Førespurnader",
     "requests_badge": "mottatt",
     "maskinporten": "Maskinporten\u00ADadministrasjon",
-    "activity_log": "Aktivitetslogg"
+    "activity_log": "Aktivitetslogg",
+    "bankruptcy_estate_administration": "Borolle\u00ADadministrasjon"
   },
   "error_page": {
     "page_title": "Feilside - Altinn",
@@ -1166,7 +1167,8 @@
     "new_requests_self_other": "Du har {{count}} nye førespurnader",
     "new_requests_zero": "{{reportee}} har ingen nye førespurnader",
     "new_requests_one": "{{reportee}} har en ny førespurnad",
-    "new_requests_other": "{{reportee}} har {{count}} nye førespurnader"
+    "new_requests_other": "{{reportee}} har {{count}} nye førespurnader",
+    "bankruptcy_estate_admin_item_description": "Gi andre tilgang til å administrere konkursbua til {{reportee}}."
   },
   "request_page": {
     "page_title": "Førespurnader - Altinn",
@@ -1275,5 +1277,10 @@
     "add_account_from_token_error": "Kunne ikkje legge til konto",
     "add_account_from_token_invalid_token": "Lenka er ugyldig eller utgått",
     "add_account_from_token_not_from_caller": "Lenka blei ikkje forespurt av pålogga brukar"
+  },
+  "bankruptcy_estate_administration_page": {
+    "page_title": "Borolleadministrasjon - Altinn",
+    "page_heading": "Borolleadministrasjon for {{name}}",
+    "no_access_title": "Du har ikkje tilgang til borolleadministrasjon"
   }
 }

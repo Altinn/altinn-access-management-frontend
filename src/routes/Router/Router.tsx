@@ -33,6 +33,7 @@ import { MaskinportenPage } from '@/features/amUI/maskinporten/MaskinportenPage'
 import { SupplierPage } from '@/features/amUI/maskinporten/SupplierPage';
 import { ConsumerPage } from '@/features/amUI/maskinporten/ConsumerPage';
 import { ActivityLogPage } from '@/features/amUI/activityLog/ActivityLogPage';
+import { BankruptcyEstateAdministrationPage } from '@/features/amUI/bankruptcyEstateAdministration/BankruptcyEstateAdministrationPage';
 
 import { GeneralPath, amUIPath, SystemUserPath, ConsentPath } from '../paths';
 
@@ -163,6 +164,12 @@ export const Router = createBrowserRouter(
           path={amUIPath.Maskinporten}
           element={<MaskinportenPage />}
         />
+        {window.featureFlags?.enableBankruptcyEstateAdministration && (
+          <Route
+            path={amUIPath.BankruptcyEstateAdministration}
+            element={<BankruptcyEstateAdministrationPage />}
+          />
+        )}
         <Route
           path={amUIPath.MaskinportenSupplier}
           element={<SupplierPage />}

@@ -30,6 +30,7 @@ window.featureFlags = {
   showSettingsPageServiceAnnouncement: false,
   showRolesRemovedAlert: false,
   showSystemUsersAsRightHolders: false,
+  enableBankruptcyEstateAdministration: false,
 };
 
 // Initialise i18next;

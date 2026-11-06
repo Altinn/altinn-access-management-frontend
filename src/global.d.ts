@@ -12,6 +12,7 @@ declare global {
       showSettingsPageServiceAnnouncement: boolean;
       showRolesRemovedAlert: boolean;
       showSystemUsersAsRightHolders: boolean;
+      enableBankruptcyEstateAdministration: boolean;
     };
   }
 }

@@ -37,5 +37,9 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// Whether or not to show system users as users in Users, Poa overview and client administration lists.
         /// </summary>
         public const string ShowSystemUsersAsRightHolders = "AccessManagementUI.ShowSystemUsersAsRightHolders";
+
+        /// Whether or not to enable bankruptcy estate administration features
+        /// </summary>
+        public const string EnableBankruptcyEstateAdministration = "AccessManagementUI.EnableBankruptcyEstateAdministration";
     }
 }

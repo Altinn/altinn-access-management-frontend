@@ -1,4 +1,6 @@
-import { DsAlert, List, UserListItem } from '@altinn/altinn-components';
+import { List, UserListItem } from '@altinn/altinn-components';
+import type { SerializedError } from '@reduxjs/toolkit';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -12,7 +14,9 @@ import {
 import { amUIPath } from '@/routes/paths';
 
 import { useRestoreFocusContext } from '../common/RestoreFocus';
+import { createErrorDetails } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
+import { RequestErrorAlert } from './RequestErrorAlert';
 import { RequestReviewModal } from './RequestReviewModal/RequestReviewModal';
 import { type Request } from './types';
 import classes from './RequestPage.module.css';
@@ -23,6 +27,7 @@ interface RequestsTabPanelProps {
   count: number;
   isLoading: boolean;
   isError: boolean;
+  error?: FetchBaseQueryError | SerializedError;
   emptyMessage: string;
   children?: React.ReactNode;
 }
@@ -31,6 +36,7 @@ export const RequestsTabPanel = ({
   count,
   isLoading,
   isError,
+  error,
   emptyMessage,
   children,
 }: RequestsTabPanelProps) => {
@@ -39,11 +45,14 @@ export const RequestsTabPanel = ({
     <>
       {isError && (
         <div className={classes.errorWrapper}>
-          <DsAlert data-color='danger'>
-            {count > 0
-              ? t('request_page.error_partial_loading_requests')
-              : t('request_page.error_loading_requests')}
-          </DsAlert>
+          <RequestErrorAlert
+            heading={
+              count > 0
+                ? t('request_page.error_partial_loading_requests')
+                : t('request_page.error_loading_requests')
+            }
+            details={createErrorDetails(error)}
+          />
         </div>
       )}
       {!isError && !isLoading && count === 0 && <div>{emptyMessage}</div>}

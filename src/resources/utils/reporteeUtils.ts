@@ -1,7 +1,7 @@
 import { formatDate, formatDisplayName } from '@altinn/altinn-components';
 import { t } from 'i18next';
 
-import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
+import { PartyType, type AuthorizedPartyEntity, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 const SUBUNIT_TYPES = ['BEDR', 'AAFY', 'ADOS'];
 
@@ -16,6 +16,10 @@ export const isOrganization = (entity: TypedEntity | null | undefined): boolean 
 
 export const isSystemUser = (entity: TypedEntity | null | undefined): boolean => {
   return entity?.type === PartyType.SystemUser;
+};
+
+export const isPerson = (reportee?: AuthorizedPartyEntity): boolean => {
+  return reportee?.type === PartyType.Person;
 };
 
 export const isSubUnitByType = (unitType?: string | null): boolean => {
