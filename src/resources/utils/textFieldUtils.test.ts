@@ -79,88 +79,60 @@ describe('validateEmail', () => {
 });
 
 describe('validatePhoneNumber', () => {
-  it('should return valid for correct phone number formats', () => {
-    const validPhones = [
-      '12345678', // exactly 8 digits
-      '123456789', // 9 digits
-      '1234567890', // 10 digits
-      '12345678901', // 11 digits
-      '123456789012', // 12 digits
-      '1234567890123', // 13 digits
-      '12345678901234', // 14 digits
-      '123456789012345', // exactly 15 digits
-      '90123456', // Norwegian mobile format
-      '22334455', // Norwegian landline format
-    ];
+  describe('with Norwegian country code', () => {
+    it('should accept 8 digits starting with 4 or 9', () => {
+      ['40000000', '49999999', '90000000', '99999999'].forEach((phone) => {
+        const result = validatePhoneNumber(phone, '+47');
+        expect(result.isValid).toBe(true);
+        expect(result.errorMessageKey).toBe('');
+      });
+    });
 
-    validPhones.forEach((phone) => {
-      const result = validatePhoneNumber(phone);
-      expect(result.isValid).toBe(true);
-      expect(result.errorMessageKey).toBe('');
+    it('should reject what Core rejects for Norwegian numbers', () => {
+      const invalidPhones = [
+        '', // empty string
+        '12345678', // does not start with 4 or 9
+        '22334455', // landline
+        '9123456', // too short
+        '912345678', // too long
+        '9123456a', // contains letter
+        '9123 456', // contains space
+      ];
+
+      invalidPhones.forEach((phone) => {
+        const result = validatePhoneNumber(phone, '+47');
+        expect(result.isValid).toBe(false);
+        expect(result.errorMessageKey).toBe('text_field_errors.invalid_norwegian_phone');
+      });
     });
   });
 
-  it('should return invalid for incorrect phone number formats', () => {
-    const invalidPhones = [
-      '', // empty string
-      '1234567', // too short (7 digits)
-      '1234567890123456', // too long (16 digits)
-      '12345abc', // contains letters
-      '123-456-7890', // contains hyphens
-      '123 456 7890', // contains spaces
-      '+4712345678', // contains plus sign
-      '(123)4567890', // contains parentheses
-      '123.456.7890', // contains dots
-      'abcdefgh', // all letters
-      '12345678a', // ends with letter
-      'a12345678', // starts with letter
-      '1234 5678', // space in middle
-    ];
-
-    invalidPhones.forEach((phone) => {
-      const result = validatePhoneNumber(phone);
-      expect(result.isValid).toBe(false);
-      expect(result.errorMessageKey).toBe('text_field_errors.invalid_phone');
+  describe('with other country codes', () => {
+    it('should leave the length rules of the country to Core', () => {
+      ['1234', '5551234', '701234567', '123456789012345'].forEach((phone) => {
+        const result = validatePhoneNumber(phone, '+46');
+        expect(result.isValid).toBe(true);
+        expect(result.errorMessageKey).toBe('');
+      });
     });
-  });
 
-  it('should handle edge cases', () => {
-    // Exactly minimum length
-    const minLength = '12345678';
-    const minResult = validatePhoneNumber(minLength);
-    expect(minResult.isValid).toBe(true);
+    it('should reject anything but up to 15 digits', () => {
+      const invalidPhones = [
+        '', // empty string
+        '1234567890123456', // too long (16 digits)
+        '12345abc', // contains letters
+        '123-456-7890', // contains hyphens
+        '123 456 7890', // contains spaces
+        '+4612345678', // contains plus sign
+        '(123)4567890', // contains parentheses
+        '123.456.7890', // contains dots
+      ];
 
-    // Exactly maximum length
-    const maxLength = '123456789012345';
-    const maxResult = validatePhoneNumber(maxLength);
-    expect(maxResult.isValid).toBe(true);
-
-    // One digit short
-    const tooShort = '1234567';
-    const shortResult = validatePhoneNumber(tooShort);
-    expect(shortResult.isValid).toBe(false);
-
-    // One digit too long
-    const tooLong = '1234567890123456';
-    const longResult = validatePhoneNumber(tooLong);
-    expect(longResult.isValid).toBe(false);
-  });
-
-  it('should only accept numeric characters', () => {
-    // Mixed valid and invalid characters
-    const mixedCases = [
-      '1234567a', // letter at end
-      'a1234567', // letter at start
-      '123a5678', // letter in middle
-      '123456@8', // special character
-      '12345#78', // hash symbol
-      '1234*678', // asterisk
-    ];
-
-    mixedCases.forEach((phone) => {
-      const result = validatePhoneNumber(phone);
-      expect(result.isValid).toBe(false);
-      expect(result.errorMessageKey).toBe('text_field_errors.invalid_phone');
+      invalidPhones.forEach((phone) => {
+        const result = validatePhoneNumber(phone, '+46');
+        expect(result.isValid).toBe(false);
+        expect(result.errorMessageKey).toBe('text_field_errors.invalid_phone');
+      });
     });
   });
 });

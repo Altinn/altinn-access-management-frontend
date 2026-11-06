@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -36,19 +37,19 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Posts a new notification address for a given organization
         /// </summary>
         /// <returns>A list of addresses</returns>
-        Task<NotificationAddressResponse> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress);
+        Task<Result<NotificationAddressResponse>> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress);
 
         /// <summary>
         /// Deletes a notification address for a given organization
         /// </summary>
         /// <returns>A list of addresses</returns>
-        Task<NotificationAddressResponse> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId);
+        Task<Result<NotificationAddressResponse>> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId);
 
         /// <summary>
         /// Updates a notification address for a given organization
         /// </summary>
         /// <returns>A list of addresses</returns>
-        Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress);
+        Task<Result<NotificationAddressResponse>> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress);
 
         /// <summary>
         /// Gets the user's favorite profile group from altinn profile

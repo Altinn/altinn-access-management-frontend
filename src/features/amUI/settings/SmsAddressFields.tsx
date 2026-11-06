@@ -1,43 +1,36 @@
 import { DsButton, DsTextfield } from '@altinn/altinn-components';
 import { MinusCircleIcon } from '@navikt/aksel-icons';
 import { useTranslation } from 'react-i18next';
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { validatePhoneNumber } from '@/resources/utils/textFieldUtils';
-import { type NotificationAddress } from '@/rtk/features/settingsApi';
-
+import { type AddressRow, COUNTRY_CODE_ERROR_KEY } from './addressMgmtUtils';
 import classes from './SettingsModal.module.css';
 
 export const SmsAddressFields = ({
   addressList,
   setAddressList,
+  onValidateRow,
   isLoading,
 }: {
-  addressList: NotificationAddress[];
-  setAddressList: React.Dispatch<React.SetStateAction<NotificationAddress[]>>;
+  addressList: AddressRow[];
+  setAddressList: React.Dispatch<React.SetStateAction<AddressRow[]>>;
+  onValidateRow: (index: number) => void;
   isLoading: boolean;
 }) => {
   const { t } = useTranslation();
-  const [validationErrors, setValidationErrors] = React.useState<string[]>(
-    Array.from({ length: addressList.length }, () => ''),
-  );
-
-  useEffect(() => {
-    if (addressList.length > validationErrors.length) {
-      setValidationErrors((prevErrors) => [...prevErrors, '']);
-    } else if (addressList.length < validationErrors.length) {
-      setValidationErrors((prevErrors) => prevErrors.slice(0, addressList.length));
-    }
-  }, [addressList]);
 
   const onPhoneChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newList = [...addressList];
-    newList[index] = { ...newList[index], phone: e.target.value.replaceAll(/\s+/g, '') };
+    newList[index] = {
+      ...newList[index],
+      phone: e.target.value.replaceAll(/\s+/g, ''),
+      errorKey: undefined,
+    };
     setAddressList(newList);
   };
   const onCountryCodeChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const newList = [...addressList];
-    newList[index] = { ...newList[index], countryCode: e.target.value };
+    newList[index] = { ...newList[index], countryCode: e.target.value, errorKey: undefined };
     setAddressList(newList);
   };
 
@@ -55,10 +48,12 @@ export const SmsAddressFields = ({
         <DsTextfield
           data-testid='sms-country-code'
           aria-label={t('settings_page.country_code_number', { number: index + 1 })}
+          aria-invalid={address.errorKey === COUNTRY_CODE_ERROR_KEY || undefined}
           value={address.countryCode}
           onChange={(e) =>
             isValidCountryCodeChange(e.target.value) ? onCountryCodeChange(e, index) : null
           }
+          onBlur={() => onValidateRow(index)}
           disabled={isLoading}
           className={classes.countryCodeField}
         />
@@ -67,15 +62,9 @@ export const SmsAddressFields = ({
           aria-label={t('settings_page.phone_number', { number: index + 1 })}
           value={address.phone}
           onChange={(e) => onPhoneChange(e, index)}
-          onBlur={() => {
-            const validation = validatePhoneNumber(address.phone);
-            const newErrors = [...validationErrors];
-            newErrors[index] =
-              validation.isValid || address.phone.length === 0 ? '' : validation.errorMessageKey;
-            setValidationErrors(newErrors);
-          }}
+          onBlur={() => onValidateRow(index)}
           disabled={isLoading}
-          error={validationErrors[index] ? t(validationErrors[index]) : undefined}
+          error={address.errorKey ? t(address.errorKey) : undefined}
         />
         {addressList.length > 1 && (
           <DsButton
@@ -88,6 +77,7 @@ export const SmsAddressFields = ({
             }}
             className={classes.removeButton}
             data-size='md'
+            disabled={isLoading}
           >
             <MinusCircleIcon aria-label={t('settings_page.remove_sms')} />
           </DsButton>

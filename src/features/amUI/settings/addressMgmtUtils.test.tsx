@@ -10,13 +10,17 @@ import { settingsApi } from '@/rtk/features/settingsApi';
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 
+import type { AddressRow } from './addressMgmtUtils';
 import {
+  getAddressChanges,
+  getAddressErrorKey,
   hasDeletions,
   hasAdditions,
   hasEdits,
   hasChanges,
   isValidAddresses,
   useSaveAddressChanges,
+  withDuplicateErrors,
 } from './addressMgmtUtils';
 
 // Mock the PartyRepresentation hook
@@ -26,15 +30,18 @@ vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () =>
 
 // Mock the validation functions
 vi.mock('@/resources/utils/textFieldUtils', () => ({
-  validateEmail: vi.fn((email: string) => ({
-    isValid: email.includes('@') && email.includes('.'),
-  })),
-  validatePhoneNumber: vi.fn((phone: string) => ({
-    isValid: phone.length >= 8 && /^\d+$/.test(phone),
-  })),
-  validateCountryCode: vi.fn((countryCode: string) => ({
-    isValid: countryCode.length >= 2 && countryCode.length <= 3,
-  })),
+  validateEmail: vi.fn((email: string) => {
+    const isValid = email.includes('@') && email.includes('.');
+    return { isValid, errorMessageKey: isValid ? '' : 'invalid_email' };
+  }),
+  validatePhoneNumber: vi.fn((phone: string) => {
+    const isValid = phone.length >= 8 && /^\d+$/.test(phone);
+    return { isValid, errorMessageKey: isValid ? '' : 'invalid_phone' };
+  }),
+  validateCountryCode: vi.fn((countryCode: string) => {
+    const isValid = countryCode.length >= 2 && countryCode.length <= 3;
+    return { isValid, errorMessageKey: isValid ? '' : 'invalid_country_code' };
+  }),
 }));
 
 // Mock the RTK mutations
@@ -341,164 +348,191 @@ describe('addressMgmtUtils', () => {
     });
   });
 
-  describe('useSaveAddressChanges', () => {
-    it('should detect changes correctly', () => {
-      const stored = [createNotificationAddress('1', 'test@example.com')];
-      const current = [createAddress('test2@example.com')];
+  describe('getAddressErrorKey', () => {
+    it('should return the key from the failing validator', () => {
+      expect(getAddressErrorKey(createAddress('invalid-email'))).toBe('invalid_email');
+      expect(getAddressErrorKey(createAddress('', '123', '+47'))).toBe('invalid_phone');
+      expect(getAddressErrorKey(createAddress('', '12345678', 'X'))).toBe('invalid_country_code');
+    });
 
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
+    it('should not report empty rows', () => {
+      expect(getAddressErrorKey(createAddress('', '', '+47'))).toBeUndefined();
+    });
+
+    it('should not report stored addresses that predate the current rules', () => {
+      const stored = [createNotificationAddress('1', '', '123', '+47')];
+
+      expect(getAddressErrorKey(createAddress('', '123', '+47', '1'), stored)).toBeUndefined();
+      expect(isValidAddresses([createAddress('', '123', '+47', '1')], stored)).toBe(true);
+    });
+  });
+
+  describe('withDuplicateErrors', () => {
+    it('should mark the later of two equal emails regardless of case', () => {
+      const rows = withDuplicateErrors([
+        createAddress('Same@example.com'),
+        createAddress('same@example.com'),
+        createAddress('other@example.com'),
+      ]);
+
+      expect(rows.map((row) => row.errorKey)).toEqual([
+        undefined,
+        'settings_page.address_already_exists',
+        undefined,
+      ]);
+    });
+
+    it('should compare phone numbers together with the country code', () => {
+      const rows = withDuplicateErrors([
+        createAddress('', '12345678', '+47'),
+        createAddress('', '12345678', '+46'),
+        createAddress('', '12345678', '+47'),
+      ]);
+
+      expect(rows.map((row) => row.errorKey)).toEqual([
+        undefined,
+        undefined,
+        'settings_page.address_already_exists',
+      ]);
+    });
+
+    it('should ignore empty rows', () => {
+      const rows = withDuplicateErrors([createAddress(), createAddress()]);
+
+      expect(rows.map((row) => row.errorKey)).toEqual([undefined, undefined]);
+    });
+  });
+
+  describe('getAddressChanges', () => {
+    it('should update a row that takes over the value of a removed row', () => {
+      const stored = [
+        createNotificationAddress('1', 'a@example.com'),
+        createNotificationAddress('2', 'b@example.com'),
+      ];
+      const current = [createAddress('b@example.com', '', '', '1')];
+
+      const { additions, updates, deletions } = getAddressChanges(stored, current);
+
+      expect(additions).toEqual([]);
+      expect(updates).toEqual(current);
+      expect(deletions).toEqual([stored[1]]);
+    });
+
+    it('should not delete an address that is typed again in a new row', () => {
+      const stored = [createNotificationAddress('1', 'a@example.com')];
+      const current = [createAddress('a@example.com')];
+
+      const { additions, updates, deletions } = getAddressChanges(stored, current);
+
+      expect(additions).toEqual([]);
+      expect(updates).toEqual([]);
+      expect(deletions).toEqual([]);
+    });
+
+    it('should treat an emptied row as a deletion', () => {
+      const stored = [createNotificationAddress('1', 'a@example.com')];
+
+      const { deletions } = getAddressChanges(stored, [createAddress('', '', '', '1')]);
+
+      expect(deletions).toEqual(stored);
+    });
+  });
+
+  describe('useSaveAddressChanges', () => {
+    const setAddressList = vi.fn();
+
+    const renderSave = (stored: NotificationAddress[], current: AddressRow[]) =>
+      renderHook(() => useSaveAddressChanges(stored, current, setAddressList), {
         wrapper: TestWrapper,
       });
+
+    const save = async (stored: NotificationAddress[], current: AddressRow[]) => {
+      const { result } = renderSave(stored, current);
+      await act(async () => {
+        await result.current.saveChanges();
+      });
+      return result;
+    };
+
+    const problem = (code: string) => ({ error: { status: 400, data: { code } } });
+
+    const savedRows = () => setAddressList.mock.lastCall?.[0] as AddressRow[];
+
+    it('should detect changes correctly', () => {
+      const { result } = renderSave(
+        [createNotificationAddress('1', 'test@example.com')],
+        [createAddress('test2@example.com')],
+      );
 
       expect(result.current.isChanges).toBe(true);
     });
 
     it('should detect no changes correctly', () => {
-      const stored = [createNotificationAddress('1', 'test@example.com')];
-      const current = [createAddress('test@example.com')];
-
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
-      });
+      const { result } = renderSave(
+        [createNotificationAddress('1', 'test@example.com')],
+        [createAddress('test@example.com')],
+      );
 
       expect(result.current.isChanges).toBe(false);
     });
 
     it('should initialize with correct default state', () => {
-      const stored: NotificationAddress[] = [];
-      const current: NotificationAddress[] = [];
-
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
-      });
+      const { result } = renderSave([], []);
 
       expect(result.current.isSaving).toBe(false);
-      expect(result.current.isError).toBe(false);
+      expect(result.current.generalErrorKey).toBeUndefined();
       expect(result.current.isChanges).toBe(false);
     });
 
     it('should not save when there are no changes', async () => {
-      const stored = [createNotificationAddress('1', 'test@example.com')];
-      const current = [createAddress('test@example.com')];
-
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
-      });
-
-      act(() => {
-        result.current.saveChanges();
-      });
+      await save(
+        [createNotificationAddress('1', 'test@example.com')],
+        [createAddress('test@example.com')],
+      );
 
       expect(mockCreateAddress).not.toHaveBeenCalled();
       expect(mockDeleteAddress).not.toHaveBeenCalled();
     });
 
     it('should not save when actingParty has no orgNumber', async () => {
-      // Override the mock for this specific test
       vi.mocked(usePartyRepresentation).mockReturnValue({
         actingParty: undefined,
         isLoading: false,
         isError: false,
       });
 
-      const stored = [createNotificationAddress('1', 'test@example.com')];
-      const current = [createAddress('test2@example.com')];
-
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
-      });
-
-      act(() => {
-        result.current.saveChanges();
-      });
+      await save(
+        [createNotificationAddress('1', 'test@example.com')],
+        [createAddress('test2@example.com')],
+      );
 
       expect(mockCreateAddress).not.toHaveBeenCalled();
       expect(mockDeleteAddress).not.toHaveBeenCalled();
     });
 
-    it('should handle successful save operations', async () => {
-      mockCreateAddress.mockResolvedValueOnce({ data: {} });
-      mockDeleteAddress.mockResolvedValueOnce({ data: {} });
+    it('should not send anything when two rows have the same address', async () => {
+      await save(
+        [createNotificationAddress('1', 'a@example.com')],
+        [createAddress('a@example.com', '', '', '1'), createAddress('A@example.com')],
+      );
 
-      const stored = [createNotificationAddress('1', 'old@example.com')];
-      const current = [createAddress('new@example.com')];
-
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
-      });
-
-      await act(async () => {
-        result.current.saveChanges();
-      });
-
-      expect(mockDeleteAddress).toHaveBeenCalledWith({
-        orgNumber: '123456789',
-        notificationAddressId: '1',
-      });
-      expect(mockCreateAddress).toHaveBeenCalledWith({
-        orgNumber: '123456789',
-        address: {
-          email: 'new@example.com',
-          phone: '',
-          countryCode: '',
-          notificationAddressId: '',
-        },
-      });
-    });
-
-    it('should handle API errors correctly', async () => {
-      mockCreateAddress.mockResolvedValueOnce({ error: 'API Error' });
-
-      const stored: NotificationAddress[] = [];
-      const current = [createAddress('new@example.com')];
-
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
-      });
-
-      await act(async () => {
-        result.current.saveChanges();
-      });
-
-      expect(result.current.isError).toBe(true);
-    });
-
-    it('should handle promise rejections correctly', async () => {
-      mockCreateAddress.mockRejectedValueOnce(new Error('Network error'));
-
-      const stored: NotificationAddress[] = [];
-      const current = [createAddress('new@example.com')];
-
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
-      });
-
-      await act(async () => {
-        result.current.saveChanges();
-      });
-
-      expect(result.current.isError).toBe(true);
+      expect(mockCreateAddress).not.toHaveBeenCalled();
+      expect(savedRows()[1].errorKey).toBe('settings_page.address_already_exists');
     });
 
     it('should filter out empty addresses when saving', async () => {
-      mockCreateAddress.mockResolvedValueOnce({ data: {} });
+      mockCreateAddress.mockResolvedValue({ data: { notificationAddressId: 9 } });
 
-      const stored: NotificationAddress[] = [];
-      const current = [
-        createAddress('test@example.com'),
-        createAddress('', '', ''), // empty address should be filtered out
-        createAddress('', '12345678', '+47'),
-      ];
+      await save(
+        [],
+        [
+          createAddress('test@example.com'),
+          createAddress('', '', ''),
+          createAddress('', '12345678', '+47'),
+        ],
+      );
 
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
-      });
-
-      await act(async () => {
-        result.current.saveChanges();
-      });
-
-      expect(mockCreateAddress).toHaveBeenCalledTimes(2); // Only non-empty addresses
+      expect(mockCreateAddress).toHaveBeenCalledTimes(2);
       expect(mockCreateAddress).toHaveBeenCalledWith({
         orgNumber: '123456789',
         address: {
@@ -514,74 +548,157 @@ describe('addressMgmtUtils', () => {
       });
     });
 
-    it('should properly identify addresses to add and remove', async () => {
-      mockCreateAddress.mockResolvedValueOnce({ data: {} });
-      mockDeleteAddress.mockResolvedValueOnce({ data: {} });
-
-      const stored = [
-        createNotificationAddress('1', 'keep@example.com'),
-        createNotificationAddress('2', 'remove@example.com'),
-      ];
-      const current = [
-        createAddress('keep@example.com', '', '', '1'), // Keep existing with ID
-        createAddress('add@example.com'), // New address without ID
-      ];
-
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
+    it('should add, then delete, then update', async () => {
+      const calls: string[] = [];
+      mockCreateAddress.mockImplementation(() => {
+        calls.push('create');
+        return Promise.resolve({ data: { notificationAddressId: 9 } });
+      });
+      mockDeleteAddress.mockImplementation(() => {
+        calls.push('delete');
+        return Promise.resolve({ data: {} });
+      });
+      mockUpdateAddress.mockImplementation(() => {
+        calls.push('update');
+        return Promise.resolve({ data: { notificationAddressId: 1 } });
       });
 
-      await act(async () => {
-        result.current.saveChanges();
-      });
+      await save(
+        [
+          createNotificationAddress('1', 'edit@example.com'),
+          createNotificationAddress('2', 'remove@example.com'),
+        ],
+        [createAddress('edited@example.com', '', '', '1'), createAddress('add@example.com')],
+      );
 
-      expect(mockDeleteAddress).toHaveBeenCalledTimes(1);
+      expect(calls).toEqual(['create', 'delete', 'update']);
       expect(mockDeleteAddress).toHaveBeenCalledWith({
         orgNumber: '123456789',
         notificationAddressId: '2',
       });
-
-      expect(mockCreateAddress).toHaveBeenCalledTimes(1);
-      expect(mockCreateAddress).toHaveBeenCalledWith({
-        orgNumber: '123456789',
-        address: {
-          email: 'add@example.com',
-          phone: '',
-          countryCode: '',
-          notificationAddressId: '',
-        },
-      });
-    });
-
-    it('should properly identify addresses to update', async () => {
-      mockUpdateAddress.mockResolvedValueOnce({ data: {} });
-
-      const stored = [createNotificationAddress('1', 'original@example.com')];
-      const current = [
-        createAddress('updated@example.com', '', '', '1'), // Same ID, different email = update
-      ];
-
-      const { result } = renderHook(() => useSaveAddressChanges(stored, current), {
-        wrapper: TestWrapper,
-      });
-
-      await act(async () => {
-        result.current.saveChanges();
-      });
-
-      expect(mockUpdateAddress).toHaveBeenCalledTimes(1);
       expect(mockUpdateAddress).toHaveBeenCalledWith({
         orgNumber: '123456789',
         address: {
-          email: 'updated@example.com',
+          email: 'edited@example.com',
           phone: '',
           countryCode: '',
           notificationAddressId: '1',
         },
       });
+    });
 
-      expect(mockCreateAddress).not.toHaveBeenCalled();
+    it('should give saved rows their new id and report no errors', async () => {
+      mockCreateAddress.mockResolvedValueOnce({ data: { notificationAddressId: 9 } });
+
+      const result = await save([], [createAddress('new@example.com')]);
+
+      expect(savedRows()[0].notificationAddressId).toBe(9);
+      expect(savedRows()[0].errorKey).toBeUndefined();
+      expect(result.current.generalErrorKey).toBeUndefined();
+    });
+
+    it.each([
+      ['STUI-00000', 'text_field_errors.invalid_email_pattern'],
+      ['STUI-00001', 'text_field_errors.invalid_phone'],
+      ['STUI-00002', 'text_field_errors.invalid_country_code'],
+    ])('should show %s on the row that failed', async (code, expectedKey) => {
+      mockCreateAddress
+        .mockResolvedValueOnce({ data: { notificationAddressId: 9 } })
+        .mockResolvedValueOnce(problem(code));
+
+      const result = await save(
+        [],
+        [createAddress('ok@example.com'), createAddress('bad@example.com')],
+      );
+
+      expect(savedRows()[0].errorKey).toBeUndefined();
+      expect(savedRows()[1].errorKey).toBe(expectedKey);
+      expect(result.current.generalErrorKey).toBeUndefined();
+    });
+
+    it('should show a conflict on update on the row that failed', async () => {
+      mockUpdateAddress.mockResolvedValueOnce(problem('STUI-00004'));
+
+      await save(
+        [createNotificationAddress('1', 'a@example.com')],
+        [createAddress('b@example.com', '', '', '1')],
+      );
+
+      expect(savedRows()[0].errorKey).toBe('settings_page.address_already_exists');
+    });
+
+    it.each([
+      ['STUI-00003', 'settings_page.organization_not_in_er'],
+      ['STUI-00007', 'settings_page.not_authorized_error'],
+      ['STUI-00099', 'settings_page.error_saving_addresses'],
+      ['', 'settings_page.error_saving_addresses'],
+    ])('should show %s as a general error', async (code, expectedKey) => {
+      mockCreateAddress.mockResolvedValueOnce(problem(code));
+
+      const result = await save([], [createAddress('new@example.com')]);
+
+      expect(result.current.generalErrorKey).toBe(expectedKey);
+      expect(savedRows()[0].errorKey).toBeUndefined();
+    });
+
+    it('should show the last address conflict as a general error', async () => {
+      mockDeleteAddress.mockResolvedValueOnce(problem('STUI-00005'));
+
+      const result = await save(
+        [createNotificationAddress('1', 'a@example.com')],
+        [createAddress('', '', '', '1')],
+      );
+
+      expect(result.current.generalErrorKey).toBe('settings_page.no_addresses_error');
+    });
+
+    it('should not delete anything when a new address fails', async () => {
+      mockCreateAddress.mockResolvedValueOnce(problem('STUI-00000'));
+
+      await save(
+        [createNotificationAddress('1', 'old@example.com')],
+        [createAddress('new@example.com')],
+      );
+
       expect(mockDeleteAddress).not.toHaveBeenCalled();
+    });
+
+    it('should create an address again when it was removed by someone else', async () => {
+      mockUpdateAddress.mockResolvedValueOnce(problem('STUI-00006'));
+
+      const result = await save(
+        [createNotificationAddress('1', 'a@example.com')],
+        [createAddress('b@example.com', '', '', '1')],
+      );
+
+      expect(result.current.generalErrorKey).toBe('settings_page.address_not_found');
+      expect(savedRows()[0].notificationAddressId).toBe('');
+      expect(savedRows()[0].email).toBe('b@example.com');
+    });
+
+    it('should show a general error when a mutation rejects', async () => {
+      mockCreateAddress.mockRejectedValueOnce(new Error('Network error'));
+
+      const result = await save([], [createAddress('new@example.com')]);
+
+      expect(result.current.generalErrorKey).toBe('settings_page.error_saving_addresses');
+      expect(result.current.isSaving).toBe(false);
+    });
+
+    it('should not send the row error to the api', async () => {
+      mockCreateAddress.mockResolvedValueOnce({ data: { notificationAddressId: 9 } });
+
+      await save([], [{ ...createAddress('new@example.com'), errorKey: 'stale_error' }]);
+
+      expect(mockCreateAddress).toHaveBeenCalledWith({
+        orgNumber: '123456789',
+        address: {
+          email: 'new@example.com',
+          phone: '',
+          countryCode: '',
+          notificationAddressId: '',
+        },
+      });
     });
   });
 });

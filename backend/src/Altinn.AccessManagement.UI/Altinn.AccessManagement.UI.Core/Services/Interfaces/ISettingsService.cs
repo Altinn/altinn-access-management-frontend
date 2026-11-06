@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.Profile;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -24,7 +25,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <returns>
         /// The created notification address
         /// </returns>
-        Task<NotificationAddressResponse> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress);
+        Task<Result<NotificationAddressResponse>> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress);
 
         /// <summary>
         /// Deletes a notification address for a given organization
@@ -34,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <returns>
         /// The deleted notification address
         /// </returns>
-        Task<NotificationAddressResponse> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId);
+        Task<Result<NotificationAddressResponse>> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId);
 
         /// <summary>
         /// Updates a notification address for a given organization
@@ -45,6 +46,6 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <returns>
         /// The updated notification address
         /// </returns>
-        Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress);
+        Task<Result<NotificationAddressResponse>> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress);
     }
 }

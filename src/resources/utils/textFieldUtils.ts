@@ -14,9 +14,18 @@ export const validateEmail = (email: string) => {
   };
 };
 
-export const validatePhoneNumber = (phone: string) => {
-  const isNumbersOnly = /^\d+$/.test(phone);
-  const isValid = isNumbersOnly && phone.length >= 8 && phone.length <= 15;
+export const validatePhoneNumber = (phone: string, countryCode: string) => {
+  if (countryCode === '+47') {
+    const isValid = /^[49]\d{7}$/.test(phone);
+
+    return {
+      isValid,
+      errorMessageKey: isValid ? '' : 'text_field_errors.invalid_norwegian_phone',
+    };
+  }
+
+  // The length rules for other countries are checked by Core when saving
+  const isValid = /^\d{1,15}$/.test(phone);
 
   return {
     isValid,
