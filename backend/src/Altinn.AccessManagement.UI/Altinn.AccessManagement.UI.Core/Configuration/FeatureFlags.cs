@@ -34,13 +34,13 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public const string ShowRolesRemovedAlert = "AccessManagementUI.ShowRolesRemovedAlert";
 
         /// <summary>
-        /// Whether or not to enable bankruptcy estate administration features
-        /// </summary>
-        public const string EnableBankruptcyEstateAdministration = "AccessManagementUI.EnableBankruptcyEstateAdministration";
-
-        /// <summary>
         /// Whether or not to show system users as users in Users, Poa overview and client administration lists.
         /// </summary>
         public const string ShowSystemUsersAsRightHolders = "AccessManagementUI.ShowSystemUsersAsRightHolders";
+
+        /// <summary>
+        /// Whether or not to enable bankruptcy estate administration features
+        /// </summary>
+        public const string EnableBankruptcyEstateAdministration = "AccessManagementUI.EnableBankruptcyEstateAdministration";
     }
 }
