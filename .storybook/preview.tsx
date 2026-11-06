@@ -29,6 +29,7 @@ window.featureFlags = {
   enableActivityLog: false,
   showSettingsPageServiceAnnouncement: false,
   showRolesRemovedAlert: false,
+  showSystemUsersAsRightHolders: false,
   enableBankruptcyEstateAdministration: false,
 };
 

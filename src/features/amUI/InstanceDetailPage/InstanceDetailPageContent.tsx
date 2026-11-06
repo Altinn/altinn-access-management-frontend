@@ -31,8 +31,7 @@ import {
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
 
-import { InstanceUsersAsInstanceAdmin } from './InstanceUsersAsInstanceAdmin';
-import { InstanceUsersAsAdmin } from './InstanceUsersAsAdmin';
+import { InstanceUsers } from './InstanceUsers';
 import classes from './InstanceDetailPageContent.module.css';
 import { RequestInstanceAdminPackage } from './RequestInstanceAdminPackage';
 
@@ -243,24 +242,18 @@ export const InstanceDetailPageContent = () => {
             </DsParagraph>
           )}
           <RestoreFocusFallback>
-            {isAdmin ? (
-              <InstanceUsersAsAdmin
+            {(isAdmin || isInstanceAdmin) && (
+              <InstanceUsers
                 resourceId={resourceId}
                 instanceUrn={instanceUrn}
+                isAdmin={!!isAdmin}
                 onSelect={handleUserSelect}
                 onDelegate={handleIndirectUserDelegate}
                 onRevoke={handleRevoke}
                 isRevoking={isRevoking}
                 restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
               />
-            ) : isInstanceAdmin ? (
-              <InstanceUsersAsInstanceAdmin
-                resourceId={resourceId}
-                instanceUrn={instanceUrn}
-                onDelegate={handleIndirectUserDelegate}
-                restoreFocusFallbackId={USER_SEARCH_FALLBACK_ID}
-              />
-            ) : null}
+            )}
           </RestoreFocusFallback>
         </div>
       )}

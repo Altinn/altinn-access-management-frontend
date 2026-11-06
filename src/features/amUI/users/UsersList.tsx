@@ -71,7 +71,11 @@ export const UsersList = () => {
     };
 
     return rightHolders.reduce<Connection[]>((acc, connection) => {
-      if (connection.party.id === removeUuid || connection.party.type === PartyType.SystemUser) {
+      if (
+        connection.party.id === removeUuid ||
+        (!window.featureFlags?.showSystemUsersAsRightHolders &&
+          connection.party.type === PartyType.SystemUser)
+      ) {
         return acc;
       }
       acc.push(mapConnection(connection));
