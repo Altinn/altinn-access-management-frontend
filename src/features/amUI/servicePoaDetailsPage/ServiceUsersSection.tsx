@@ -3,9 +3,11 @@ import { DsAlert, DsParagraph, useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { PartyType } from '@/dataObjects/dtos/Party';
+import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useGetRightHoldersQuery } from '@/rtk/features/connectionApi';
 import {
+  useDelegateRightsMutation,
   useRevokeResourceMutation,
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
@@ -54,11 +56,11 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
   const modalRef = useRef<HTMLDialogElement>(null);
   const resourceId = resource?.identifier ?? '';
 
-  // 'edit' opens on a user that already holds the service, 'delegate' on one that does not (an
-  // indirect right holder, or a user just added). Both open the same dialog; the mode only decides
-  // whether revoking is offered there.
+  // The dialog offers both giving and revoking; ResourceInfo only shows the revoke button when the
+  // user actually holds the service, so it needs no per-user mode.
   const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
-  const [selectedUserMode, setSelectedUserMode] = useState<'edit' | 'delegate'>('edit');
+  // Set when a delegation from the list failed, so the dialog opens on that user and says why.
+  const [selectedUserError, setSelectedUserError] = useState<ActionError | null>(null);
 
   // No `to`: this returns the services delegated from the reportee to everyone, which is the same
   // cache entry the overview already holds, so the permissions for this service arrive with it.
@@ -123,6 +125,7 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
   // Hold the ways of giving the service back until eligibility is known.
   const canDelegate = !isRightsLoading && !displayResourceAlert;
 
+  const [delegateRights, { isLoading: isDelegating }] = useDelegateRightsMutation();
   const [revokeResource, { isLoading: isRevoking }] = useRevokeResourceMutation();
   const { canRedelegateResource } = useCanRedelegateResource();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
@@ -134,8 +137,8 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     }
   }, [selectedUser]);
 
-  const openModalFor = (user: UserActionTarget, mode: 'edit' | 'delegate') => {
-    setSelectedUserMode(mode);
+  const openModalFor = (user: UserActionTarget, error: ActionError | null = null) => {
+    setSelectedUserError(error);
     setSelectedUser(user);
   };
 
@@ -155,6 +158,40 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
         service: resource?.title,
       }),
     );
+
+  // Giving from the list gives the whole service, as the resource list in the Users view does. When
+  // only some of the actions can be passed on, or the delegation fails, the dialog opens instead so
+  // the user sees which actions are left out, or why it failed. The list only offers this once
+  // canDelegate says at least one action is delegable.
+  const handleDelegate = (user: UserActionTarget) => {
+    if (!actingParty?.id || !fromParty?.id || !resourceId) return;
+    if (rights.length === 0 || rights.some((r) => !r.delegable)) {
+      openModalFor(user);
+      return;
+    }
+    const actionKeys = rights.map((r) => r.rightKey);
+
+    // The row moves from the users without access to those with it once the delegations query
+    // refetches, so focus follows it there.
+    requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
+    delegateRights({
+      partyUuid: actingParty.id,
+      fromUuid: fromParty.id,
+      toUuid: user.id,
+      resourceId,
+      actionKeys,
+    })
+      .unwrap()
+      .then(() =>
+        queueSnackbar(
+          t('service_poa_details_page.delegation_success', {
+            name: formatUserName(user),
+            service: resource?.title,
+          }),
+        ),
+      )
+      .catch((error: unknown) => openModalFor(user, getActionError(error)));
+  };
 
   const handleRevoke = (user: UserActionTarget) => {
     if (!actingParty?.id || !fromParty?.id || !resourceId) return;
@@ -247,7 +284,11 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
             indirectUsers={indirectUsers}
             isLoading={isListLoading}
             isActionLoading={
-              isListLoading || isDelegationsFetching || isIndirectFetching || isRevoking
+              isListLoading ||
+              isDelegationsFetching ||
+              isIndirectFetching ||
+              isDelegating ||
+              isRevoking
             }
             canDelegate={canDelegate}
             noUsersText={t('service_poa_details_page.no_users')}
@@ -258,8 +299,8 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
                 onUserAdded={handleUserAdded}
               />
             }
-            onSelect={(user) => openModalFor(user, 'edit')}
-            onDelegate={(user) => openModalFor(user, 'delegate')}
+            onSelect={(user) => openModalFor(user)}
+            onDelegate={handleDelegate}
             onRevoke={handleRevoke}
           />
         </RestoreFocusFallback>
@@ -270,16 +311,14 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
             resource={resource}
             user={selectedUser}
             partyUuid={fromParty?.id ?? ''}
-            availableActions={
-              selectedUserMode === 'delegate'
-                ? [DelegationAction.DELEGATE]
-                : [DelegationAction.DELEGATE, DelegationAction.REVOKE]
-            }
+            availableActions={[DelegationAction.DELEGATE, DelegationAction.REVOKE]}
+            actionError={selectedUserError}
             onClose={() => {
               // Restore focus synchronously to the row that opened the dialog before clearing state.
               // If the user was revoked inside the dialog their row is gone, so the fallback catches it.
               restoreFocus?.requestFocus(selectedUser.id, USER_SEARCH_FALLBACK_ID);
               setSelectedUser(null);
+              setSelectedUserError(null);
             }}
           />
         )}
