@@ -79,6 +79,37 @@ export const getActivityLogObjectLabel = (entry: ActivityLogDto, t: TranslateFun
     : t(`${OBJECT_KEY}.access`);
 };
 
+/**
+ * One filter option per party. `GET {area}/filter/{to|from}` returns a pair per historical name,
+ * so a renamed party recurs with the same id; its names are folded into one option so that what
+ * the user picks is what the active filter shows, while every historical name stays findable.
+ */
+export const getActivityLogPartyOptions = (
+  parties: ActivityLogFilterValueDto[],
+): ActivityLogFilterValueDto[] => {
+  const namesById = new Map<string, string[]>();
+  for (const party of parties) {
+    const names = namesById.get(party.id) ?? [];
+    if (!names.includes(party.name)) {
+      names.push(party.name);
+    }
+    namesById.set(party.id, names);
+  }
+  return [...namesById].map(([id, names]) => ({ id, name: names.join(' / ') }));
+};
+
+/** The active-filter chip text: the prefix alone, or the prefix followed by the selected party names. */
+export const getActivityLogPartyFilterLabel = (
+  prefix: string,
+  selectedIds: (string | number)[] | undefined,
+  partyOptions: ActivityLogFilterValueDto[],
+): string => {
+  const names = (selectedIds ?? [])
+    .map((id) => partyOptions.find((party) => party.id === String(id))?.name)
+    .filter(Boolean);
+  return names.length > 0 ? `${prefix}: ${names.join(', ')}` : prefix;
+};
+
 /** The translation key for the entry's event: `events.<type>.<trigger>`. */
 export const getActivityLogEventKey = (entry: ActivityLogDto): string =>
   `${EVENTS_KEY}.${entry.type.toLowerCase()}.${entry.trigger.toLowerCase()}`;

@@ -7,6 +7,8 @@ import {
   getActivityLogEventKey,
   getActivityLogLocale,
   getActivityLogObjectLabel,
+  getActivityLogPartyFilterLabel,
+  getActivityLogPartyOptions,
   getActivityLogSentence,
 } from './activityLogUtils';
 import type { ActivityLogDto } from './types';
@@ -159,5 +161,45 @@ describe('getActivityLogLocale', () => {
     expect(getActivityLogLocale('nb')).toBe('nb-NO');
     expect(getActivityLogLocale('nn')).toBe('nn-NO');
     expect(getActivityLogLocale('en')).toBe('en-GB');
+  });
+});
+
+describe('getActivityLogPartyOptions', () => {
+  it('folds the historical names of a renamed party into one option', () => {
+    expect(
+      getActivityLogPartyOptions([
+        { id: 'lise', name: 'Lise Larsen AS' },
+        { id: 'fysio', name: 'Fysio Partner AS' },
+        { id: 'lise', name: 'Larsen Fysioterapi AS' },
+        { id: 'lise', name: 'Lise Larsen AS' },
+      ]),
+    ).toEqual([
+      { id: 'lise', name: 'Lise Larsen AS / Larsen Fysioterapi AS' },
+      { id: 'fysio', name: 'Fysio Partner AS' },
+    ]);
+  });
+});
+
+describe('getActivityLogPartyFilterLabel', () => {
+  const options = [
+    { id: 'lise', name: 'Lise Larsen AS' },
+    { id: 'fysio', name: 'Fysio Partner AS' },
+  ];
+
+  it('is the prefix alone when nothing is selected', () => {
+    expect(getActivityLogPartyFilterLabel('Til', undefined, options)).toBe('Til');
+    expect(getActivityLogPartyFilterLabel('Til', [], options)).toBe('Til');
+  });
+
+  it('lists the selected party names after the prefix', () => {
+    expect(getActivityLogPartyFilterLabel('Til', ['fysio', 'lise'], options)).toBe(
+      'Til: Fysio Partner AS, Lise Larsen AS',
+    );
+  });
+
+  it('skips ids that are no longer among the options', () => {
+    expect(getActivityLogPartyFilterLabel('Til', ['gone', 'lise'], options)).toBe(
+      'Til: Lise Larsen AS',
+    );
   });
 });
