@@ -79,7 +79,7 @@ export const UserSearch: React.FC<UserSearchProps> = ({
   const directUsers = useMemo(() => filterAvailableUserTypes(initialUsers), [initialUsers]);
 
   const indirectUsers = useMemo(
-    () => filterAvailableUserTypes(initialIndirectUsers),
+    () => filterAvailableUserTypes(initialIndirectUsers).filter((x) => !x.isVendorFixedRights),
     [initialIndirectUsers],
   );
 
