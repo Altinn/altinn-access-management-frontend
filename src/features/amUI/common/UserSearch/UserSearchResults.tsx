@@ -6,7 +6,6 @@ import { isSubUnitByType } from '@/resources/utils/reporteeUtils';
 import { UserItem } from '@/features/amUI/common/UserList/UserItem';
 
 import { UserListActions } from '../UserList/UserListActions';
-import { DelegationAction } from '../DelegationModal/EditModal';
 
 import classes from './UserSearch.module.css';
 import type { UserActionTarget, UserSearchNode } from './types';
@@ -15,7 +14,6 @@ export interface UserSearchResultsProps {
   users: UserSearchNode[];
   hasNextPage: boolean;
   goNextPage: () => void;
-  availableAction: DelegationAction;
   onRevoke?: (user: UserActionTarget) => void;
   onDelegate?: (user: UserActionTarget) => void;
   onSelect?: (user: UserActionTarget) => void;
@@ -26,22 +24,10 @@ export interface UserSearchResultsProps {
   getUserLink?: (user: UserActionTarget) => string;
 }
 
-const mapUserToActionTarget = (user: UserSearchNode): UserActionTarget => ({
-  id: user.id,
-  name: user.name,
-  type: user.type,
-  unitType: user.unitType,
-  organizationIdentifier: user.organizationIdentifier,
-  dateOfBirth: user.dateOfBirth,
-  isDeleted: user.isDeleted,
-  isInherited: user.isInherited,
-});
-
 export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
   users,
   hasNextPage,
   goNextPage,
-  availableAction,
   onRevoke,
   onDelegate,
   onSelect,
@@ -66,15 +52,14 @@ export const UserSearchResults: React.FC<UserSearchResultsProps> = ({
             size='md'
             interactive={isInteractive}
             linkTo={getUserLink ? getUserLink(user) : undefined}
-            onSelect={onSelect ? (user) => onSelect(mapUserToActionTarget(user)) : undefined}
+            onSelect={onSelect}
             roleDirection='toUser'
             disableLinks={!isInteractive}
-            showEditPoasHint={availableAction === DelegationAction.REVOKE && !!onRevoke}
+            showEditPoasHint={!!onRevoke}
             controls={(user) => (
               <UserListActions
                 isLoading={isActionLoading}
                 user={user}
-                availableAction={availableAction}
                 onRevoke={onRevoke ? () => onRevoke(user) : undefined}
                 onDelegate={onDelegate ? () => onDelegate(user) : undefined}
                 delegateLabel={delegateLabel}

@@ -16,6 +16,8 @@ export interface PartyEntity {
   organizationIdentifier?: string | null;
   dateOfBirth?: string | null;
   isDeleted: boolean;
+  /** True for standard system users, whose rights are set by the vendor and can't be added or revoked */
+  isVendorFixedRights?: boolean;
   children?: PartyEntity[] | null;
   /** The main unit, for a subunit */
   parent?: PartyEntity | null;

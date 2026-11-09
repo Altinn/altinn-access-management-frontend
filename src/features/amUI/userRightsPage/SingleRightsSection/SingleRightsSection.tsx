@@ -99,7 +99,11 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
     return <SingleRightsSectionSkeleton />;
   }
 
-  const availableActions = getAvailableActions({ canGiveAccess, canRequestAccess });
+  const availableActions = getAvailableActions({
+    canGiveAccess,
+    canRequestAccess,
+    isVendorFixedRights: toParty?.isVendorFixedRights,
+  });
 
   return (
     toParty && (

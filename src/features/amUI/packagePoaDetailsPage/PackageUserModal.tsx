@@ -1,14 +1,14 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { DsDialog } from '@altinn/altinn-components';
 
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 import type { ActionError } from '@/resources/hooks/useActionError';
 
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { type DelegationAction } from '../common/DelegationModal/EditModal';
 import { getInheritedStatus } from '../common/useInheritedStatus';
-
-import { PartyInfoModal } from './PartyInfoModal';
+import { PartyInfo } from '../common/DelegationModal/Party/PartyInfo';
+import classes from '../common/DelegationModal/DelegationModal.module.css';
 
 const SUCCESS_ANIMATION_DURATION = 2000;
 
@@ -22,10 +22,10 @@ export interface PackageUserModalHandle {
 
 interface PackageUserModalProps {
   accessPackage?: AccessPackage;
-  availableActions: DelegationAction[];
   isActionLoading: boolean;
   isFetching?: boolean;
-  onDelegate: (user: UserActionTarget) => void;
+  // Omit when delegation isn't available; the dialog then only offers revoke.
+  onDelegate?: (user: UserActionTarget) => void;
   onRevoke: (user: UserActionTarget) => void;
   // Called when the dialog closes, with the user it was showing, so the caller can restore focus to
   // the originating list row (or its fallback if the row was just revoked away).
@@ -33,18 +33,7 @@ interface PackageUserModalProps {
 }
 
 export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserModalProps>(
-  (
-    {
-      accessPackage,
-      availableActions,
-      isActionLoading,
-      isFetching,
-      onDelegate,
-      onRevoke,
-      onClosed,
-    },
-    ref,
-  ) => {
+  ({ accessPackage, isActionLoading, isFetching, onDelegate, onRevoke, onClosed }, ref) => {
     const { fromParty } = usePartyRepresentation();
     const dialogRef = useRef<HTMLDialogElement>(null);
     const [selectedUser, setSelectedUser] = useState<UserActionTarget | null>(null);
@@ -81,7 +70,8 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
     );
 
     const selectedUserHasAccess = selectedUserPermissions.length > 0;
-    const selectedUserAccessIsInherited = selectedUser?.isInherited ?? false;
+    // Inherited access and rights fixed by the vendor (standard system users) can't be changed here
+    const selectedUserIsEditable = !selectedUser?.isInherited && !selectedUser?.isVendorFixedRights;
 
     const selectedUserInheritedStatus = useMemo(
       () =>
@@ -94,31 +84,10 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
     );
 
     return (
-      <PartyInfoModal
+      <DsDialog
         ref={dialogRef}
-        partyInfo={
-          selectedUser && accessPackage
-            ? {
-                party: selectedUser,
-                accessPackage,
-                userHasAccess: selectedUserHasAccess,
-                inheritedStatus: selectedUserInheritedStatus,
-                availableActions: selectedUserAccessIsInherited ? [] : availableActions,
-                isLoading: isActionLoading,
-                isFetching,
-                isSuccess: actionSuccess,
-                error: actionError,
-                onDelegate: () => {
-                  setActionError(null);
-                  onDelegate(selectedUser);
-                },
-                onRevoke: () => {
-                  setActionError(null);
-                  onRevoke(selectedUser);
-                },
-              }
-            : undefined
-        }
+        className={classes.modalDialog}
+        closedby='any'
         onClose={() => {
           if (selectedUser) {
             onClosed?.(selectedUser);
@@ -127,7 +96,38 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
           setActionSuccess(false);
           setActionError(null);
         }}
-      />
+      >
+        <div className={classes.content}>
+          {selectedUser && accessPackage && (
+            <PartyInfo
+              party={selectedUser}
+              accessPackage={accessPackage}
+              userHasAccess={selectedUserHasAccess}
+              inheritedStatus={selectedUserInheritedStatus}
+              isLoading={isActionLoading}
+              isFetching={isFetching}
+              isSuccess={actionSuccess}
+              error={actionError}
+              onDelegate={
+                selectedUserIsEditable && onDelegate
+                  ? () => {
+                      setActionError(null);
+                      onDelegate(selectedUser);
+                    }
+                  : undefined
+              }
+              onRevoke={
+                selectedUserIsEditable
+                  ? () => {
+                      setActionError(null);
+                      onRevoke(selectedUser);
+                    }
+                  : undefined
+              }
+            />
+          )}
+        </div>
+      </DsDialog>
     );
   },
 );

@@ -5,7 +5,6 @@ import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 
-import { DelegationAction } from '../DelegationModal/EditModal';
 import type { UserSearchNode } from '../UserSearch/types';
 
 export const UserListActions = ({
@@ -13,7 +12,6 @@ export const UserListActions = ({
   onDelegate,
   onRevoke,
   onRequest,
-  availableAction,
   isLoading,
   delegateLabel,
   revokeLabel,
@@ -22,7 +20,6 @@ export const UserListActions = ({
   onDelegate?: (user: UserSearchNode) => void;
   onRevoke?: (user: UserSearchNode) => void;
   onRequest?: (user: UserSearchNode) => void;
-  availableAction?: DelegationAction;
   isLoading?: boolean;
   delegateLabel?: string;
   revokeLabel?: string;
@@ -31,7 +28,10 @@ export const UserListActions = ({
   const isSmall = useIsMobileOrSmaller();
   const displayName = formatEntityDisplayName(user);
 
-  if (!availableAction || isSmall) {
+  // An action is offered when its handler is passed. Inherited access and rights fixed by the vendor
+  // (standard system users) can't be given, requested or revoked.
+  const hasAction = !!(onDelegate || onRequest || onRevoke);
+  if (!hasAction || isSmall || user.isInherited || user.isVendorFixedRights) {
     return null;
   }
   if (isLoading) {
@@ -51,7 +51,7 @@ export const UserListActions = ({
   }
   return (
     <>
-      {availableAction === DelegationAction.DELEGATE && onDelegate && !user.isInherited && (
+      {onDelegate && (
         <DsButton
           variant='tertiary'
           data-size='md'
@@ -64,7 +64,7 @@ export const UserListActions = ({
           {delegateLabel ?? t('common.give_poa')}
         </DsButton>
       )}
-      {availableAction === DelegationAction.REQUEST && onRequest && !user.isInherited && (
+      {onRequest && (
         <DsButton
           variant='tertiary'
           data-size='md'
@@ -75,7 +75,7 @@ export const UserListActions = ({
           {t('common.request_poa')}
         </DsButton>
       )}
-      {availableAction === DelegationAction.REVOKE && onRevoke && !user.isInherited && (
+      {onRevoke && (
         <DsButton
           variant='tertiary'
           data-size='md'

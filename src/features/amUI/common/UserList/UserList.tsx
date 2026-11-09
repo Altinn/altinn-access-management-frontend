@@ -4,7 +4,6 @@ import { Button, DsParagraph, List } from '@altinn/altinn-components';
 
 import { type Connection } from '@/rtk/features/connectionApi';
 
-import { type DelegationAction } from '../DelegationModal/EditModal';
 import { mapConnectionsToUserSearchNodes } from '../UserSearch/connectionMapper';
 import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 
@@ -12,7 +11,6 @@ import { UserItem } from './UserItem';
 import { useFilteredUsers } from './useFilteredUsers';
 import classes from './UserList.module.css';
 import { SkeletonUserList } from './SkeletonUserList';
-import { UserListActions } from './UserListActions';
 
 export interface UserListProps {
   connections?: Connection[];
@@ -23,9 +21,6 @@ export interface UserListProps {
   showRoles?: boolean;
   roleDirection?: 'toUser' | 'fromUser';
   disableLinks?: boolean;
-  availableAction?: DelegationAction;
-  onDelegate?: (userId: string) => void;
-  onRevoke?: (userId: string) => void;
 }
 
 export const UserList = ({
@@ -37,9 +32,6 @@ export const UserList = ({
   showRoles = true,
   roleDirection = 'toUser',
   disableLinks = false,
-  availableAction,
-  onDelegate,
-  onRevoke,
 }: UserListProps) => {
   const { t } = useTranslation();
   const mappedUsers = useMemo(() => mapConnectionsToUserSearchNodes(connections), [connections]);
@@ -100,14 +92,6 @@ export const UserList = ({
             showRoles={showRoles}
             roleDirection={roleDirection}
             disableLinks={disableLinks}
-            controls={(user) => (
-              <UserListActions
-                user={user}
-                availableAction={availableAction}
-                onDelegate={() => onDelegate && onDelegate(user.id)}
-                onRevoke={() => onRevoke && onRevoke(user.id)}
-              />
-            )}
           />
         ))}
       </List>

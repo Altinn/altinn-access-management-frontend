@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
@@ -16,6 +17,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly ISingleRightClient _singleRightClient;
         private readonly IAltinnCdnService _altinnCdnService;
+        private readonly ISystemUserRightsResolver _systemUserRightsResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleRightService"/> class.
@@ -24,12 +26,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceRegistryClient">The resource registry client.</param>
         /// <param name="singleRightClient">The single rights client.</param>
         /// <param name="altinnCdnService">The Altinn CDN service, used to look up resource owner logos.</param>
-        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient, IAltinnCdnService altinnCdnService)
+        /// <param name="systemUserRightsResolver">Resolves which system users have rights fixed by the vendor.</param>
+        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient, IAltinnCdnService altinnCdnService, ISystemUserRightsResolver systemUserRightsResolver)
         {
             _resourceService = resourceService;
             _resourceRegistryClient = resourceRegistryClient;
             _singleRightClient = singleRightClient;
             _altinnCdnService = altinnCdnService;
+            _systemUserRightsResolver = systemUserRightsResolver;
         }
 
         /// <inheritdoc />
@@ -74,6 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
             }
 
+            await _systemUserRightsResolver.ApplyVendorFixedRights(party, delegationsFE.SelectMany(d => d.Permissions).FlattenParties());
             return delegationsFE;
         }
 

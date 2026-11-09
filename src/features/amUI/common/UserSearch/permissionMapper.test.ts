@@ -258,4 +258,32 @@ describe('mapPermissionsToUserSearchNodes', () => {
     expect(selfChild?.roles).toEqual([]);
     expect(inheritedChild?.isInherited).toBe(true);
   });
+
+  it.each([
+    [true, true],
+    [false, false],
+  ])(
+    'marks a direct system user permission as inherited when isVendorFixedRights is %s',
+    (isVendorFixedRights, expectedInherited) => {
+      const systemUser: PartyEntity = {
+        ...person('456', 'Systembruker'),
+        type: PartyType.SystemUser,
+        isVendorFixedRights,
+      };
+      const permissions = [
+        {
+          from: org('123', '123'),
+          to: systemUser,
+          via: null,
+          role: role('r1', 'rettighetshaver'),
+          viaRole: null,
+        },
+      ];
+
+      const res = run(permissions);
+
+      expect(res[0].isInherited).toBe(expectedInherited);
+      expect(res[0].isVendorFixedRights).toBe(isVendorFixedRights);
+    },
+  );
 });

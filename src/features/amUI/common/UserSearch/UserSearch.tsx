@@ -7,7 +7,6 @@ import { useDebouncedValue } from '@/resources/hooks';
 import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
-import { DelegationAction } from '../DelegationModal/EditModal';
 import { UserList } from '../UserList/UserList';
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
@@ -178,7 +177,6 @@ export const UserSearch: React.FC<UserSearchProps> = ({
             users={filteredDirectUsers}
             hasNextPage={hasNextPage}
             goNextPage={goNextPage}
-            availableAction={DelegationAction.REVOKE}
             isActionLoading={isActionLoading}
             onRevoke={onRevoke}
             onSelect={onSelect}
@@ -205,7 +203,6 @@ export const UserSearch: React.FC<UserSearchProps> = ({
               users={filteredIndirectUsers}
               hasNextPage={!!hasNextIndirectPage}
               goNextPage={goNextIndirectPage}
-              availableAction={DelegationAction.DELEGATE}
               onDelegate={canDelegate ? onDelegate : undefined}
               onSelect={onSelect}
               isActionLoading={isActionLoading}
