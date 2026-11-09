@@ -1,4 +1,5 @@
-﻿using Altinn.AccessManagement.UI.Core.Helpers;
+﻿using System.Net;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.BankruptcyEstate.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
@@ -6,7 +7,6 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
