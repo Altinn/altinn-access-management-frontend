@@ -58,7 +58,7 @@ export const settingsHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
     async ({ request }) => {
       const address = (await request.json()) as { email?: string };
       return (
-        problemFor(address.email) ?? HttpResponse.json({ notificationAddressId: 2, ...address })
+        problemFor(address.email) ?? HttpResponse.json({ ...address, notificationAddressId: 2 })
       );
     },
   ),

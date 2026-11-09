@@ -24,6 +24,7 @@ import {
   type AddressRow,
   addressIsEmpty,
   getAddressErrorKey,
+  getAddressesAddedElsewhere,
   isValidAddresses,
   useSaveAddressChanges,
 } from './addressMgmtUtils';
@@ -50,18 +51,29 @@ export const SettingsModal = ({
   const { actingParty } = usePartyRepresentation();
   const [addressList, setAddressList] = useState<AddressRow[]>([]);
   const [storedAddresses, setStoredAddresses] = useState<NotificationAddress[]>([]);
-  const { data: notificationAddresses, isLoading } = useGetOrgNotificationAddressesQuery(
-    actingParty?.organizationIdentifier ?? '',
-    { skip: !actingParty?.organizationIdentifier },
-  );
-  const { isChanges, saveChanges, isSaving, generalErrorKey, setGeneralErrorKey } =
+  const {
+    data: notificationAddresses,
+    isLoading,
+    isFetching,
+  } = useGetOrgNotificationAddressesQuery(actingParty?.organizationIdentifier ?? '', {
+    skip: !actingParty?.organizationIdentifier,
+  });
+  const { isChanges, saveChanges, isSaving, generalErrorKey, resetSaveState } =
     useSaveAddressChanges(storedAddresses, addressList, setAddressList);
+  const isBusy = isFetching || isSaving;
 
   const onAddressesLoaded = useEffectEvent(
     (addresses: NotificationAddress[], addressMode: 'email' | 'sms') => {
       setStoredAddresses(addresses);
-      // Keep what the user has typed while there are errors to correct
-      if (generalErrorKey || addressList.some((row) => row.errorKey)) return;
+      // Keep what the user has typed while there are errors to correct. Addresses others have
+      // added must still be shown, or saving would delete them
+      if (generalErrorKey || addressList.some((row) => row.errorKey)) {
+        setAddressList([
+          ...addressList,
+          ...getAddressesAddedElsewhere(addresses, storedAddresses, addressList),
+        ]);
+        return;
+      }
       setAddressList(addresses.length > 0 ? addresses : [createEmptyRow(addressMode)]);
     },
   );
@@ -105,7 +117,7 @@ export const SettingsModal = ({
   }
 
   const closeModal = () => {
-    setGeneralErrorKey(undefined);
+    resetSaveState();
     setAddressList([]);
     onClose();
   };
@@ -113,7 +125,9 @@ export const SettingsModal = ({
   const validateRow = (index: number) => {
     setAddressList((rows) =>
       rows.map((row, i) =>
-        i === index ? { ...row, errorKey: getAddressErrorKey(row, storedAddresses) } : row,
+        i === index
+          ? { ...row, errorKey: getAddressErrorKey(row, storedAddresses) ?? row.errorKey }
+          : row,
       ),
     );
   };
@@ -147,7 +161,7 @@ export const SettingsModal = ({
               addressList={addressList}
               setAddressList={setAddressList}
               onValidateRow={validateRow}
-              isLoading={isLoading || isSaving}
+              isLoading={isBusy}
             />
           )}
           {mode === 'sms' && (
@@ -155,7 +169,7 @@ export const SettingsModal = ({
               addressList={addressList}
               setAddressList={setAddressList}
               onValidateRow={validateRow}
-              isLoading={isLoading || isSaving}
+              isLoading={isBusy}
             />
           )}
         </div>
@@ -164,7 +178,7 @@ export const SettingsModal = ({
           onClick={() => {
             setAddressList([...addressList, createEmptyRow(mode)]);
           }}
-          disabled={isLoading || isSaving || addressList.length >= 10}
+          disabled={isBusy || addressList.length >= 10}
         >
           <PlusIcon aria-hidden='true' />
           {t('settings_page.add_more')}
@@ -189,10 +203,9 @@ export const SettingsModal = ({
             variant='primary'
             onClick={() => void saveChanges()}
             disabled={
-              isLoading ||
+              isBusy ||
               !isChanges ||
               !isValidAddresses(addressList, storedAddresses) ||
-              isSaving ||
               noAddressesError
             }
           >

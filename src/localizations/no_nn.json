@@ -615,7 +615,7 @@
     "remove_sms": "Fjern telefonnummer",
     "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen.",
     "no_addresses_error": "Verksemda må ha minst ei e-postadresse eller sms-adresse for varslingar.",
-    "organization_not_in_er": "Vi kan ikkje registrere varslingsadresser for denne verksemda, fordi ho ikkje er registrert i Einingsregisteret.",
+    "organization_not_in_er": "Vi kan ikkje registrere varslingsadresser for denne verksemda fordi ho ikkje er registrert i Einingsregisteret.",
     "address_already_exists": "Adressa er allereie registrert",
     "address_not_found": "Ei av adressene er allereie fjerna av nokon andre. Sjå over lista og lagre på nytt.",
     "not_authorized_error": "Du har ikkje tilgang til å endre varslingsadresser for denne verksemda.",

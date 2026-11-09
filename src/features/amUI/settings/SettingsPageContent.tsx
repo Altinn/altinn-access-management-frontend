@@ -187,16 +187,16 @@ export const SettingsPageContent = () => {
               linkIcon
             />
           </List>
-          <SettingsModal
-            mode={modalMode}
-            open={openModal}
-            onClose={onCloseModal}
-            canDeleteLastAddress={
-              modalMode === 'email' ? phoneNumbers.length > 0 : emailAddresses.length > 0 // Must have at least one address of either type
-            }
-          />
         </div>
       )}
+      <SettingsModal
+        mode={modalMode}
+        open={openModal}
+        onClose={onCloseModal}
+        canDeleteLastAddress={
+          modalMode === 'email' ? phoneNumbers.length > 0 : emailAddresses.length > 0 // Must have at least one address of either type
+        }
+      />
     </div>
   );
 };

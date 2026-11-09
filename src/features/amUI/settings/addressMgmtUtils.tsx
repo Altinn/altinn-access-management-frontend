@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { useAppDispatch } from '@/rtk/app/hooks';
 import {
@@ -138,6 +138,21 @@ export const getAddressChanges = <T extends NotificationAddress>(
   return { additions, updates, deletions };
 };
 
+export const getAddressesAddedElsewhere = (
+  fetched: NotificationAddress[],
+  stored: NotificationAddress[],
+  rows: AddressRow[],
+) =>
+  fetched.filter(
+    (address) =>
+      !stored.some((s) => s.notificationAddressId === address.notificationAddressId) &&
+      !rows.some(
+        (row) =>
+          row.notificationAddressId === address.notificationAddressId ||
+          addressIsEqual(address, row),
+      ),
+  );
+
 const toAddress = ({ notificationAddressId, email, phone, countryCode }: AddressRow) => ({
   notificationAddressId,
   email,
@@ -165,6 +180,7 @@ export const useSaveAddressChanges = (
   const isChanges = hasChanges(storedAddresses, addressList);
   const [isSaving, setIsSaving] = useState(false);
   const [generalErrorKey, setGeneralErrorKey] = useState<string>();
+  const currentSave = useRef(0);
   const dispatch = useAppDispatch();
   const { actingParty } = usePartyRepresentation();
   const [createAddress] = useCreateOrgNotificationAddressMutation();
@@ -185,6 +201,8 @@ export const useSaveAddressChanges = (
     }
 
     setIsSaving(true);
+    currentSave.current += 1;
+    const thisSave = currentSave.current;
     let generalError: string | undefined;
 
     const handleError = (error: unknown, row?: AddressRow) => {
@@ -229,11 +247,19 @@ export const useSaveAddressChanges = (
       generalError = GENERIC_ERROR_KEY;
     }
 
-    setAddressList(rows);
-    setGeneralErrorKey(generalError);
+    // The dialog may have been closed during the save, and its rows must not come back
+    if (thisSave === currentSave.current) {
+      setAddressList(rows);
+      setGeneralErrorKey(generalError);
+    }
     setIsSaving(false);
     dispatch(settingsApi.util.invalidateTags(['NotificationAddress']));
   };
 
-  return { isChanges, saveChanges, isSaving, generalErrorKey, setGeneralErrorKey };
+  const resetSaveState = () => {
+    currentSave.current += 1;
+    setGeneralErrorKey(undefined);
+  };
+
+  return { isChanges, saveChanges, isSaving, generalErrorKey, resetSaveState };
 };
