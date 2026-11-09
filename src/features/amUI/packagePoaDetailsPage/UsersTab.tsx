@@ -15,7 +15,6 @@ import { mapConnectionsToUserSearchNodes } from '../common/UserSearch/connection
 import { mapPermissionsToUserSearchNodes } from '../common/UserSearch/permissionMapper';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { DelegationAction } from '../common/DelegationModal/EditModal';
 import {
   RestoreFocusFallback,
   useRestoreFocusContext,
@@ -149,11 +148,6 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
     handleOnDelegate(user);
   };
 
-  const availableActions = [
-    DelegationAction.REVOKE,
-    ...(canDelegate ? [DelegationAction.DELEGATE] : []),
-  ];
-
   return (
     <>
       <RestoreFocusFallback>
@@ -202,10 +196,9 @@ export const UsersTab = ({ accessPackage, isLoading, isFetching }: UsersTabProps
       <PackageUserModal
         ref={modalRef}
         accessPackage={accessPackage}
-        availableActions={availableActions}
         isActionLoading={isActionLoading}
         isFetching={isFetching}
-        onDelegate={handleOnDelegate}
+        onDelegate={canDelegate ? handleOnDelegate : undefined}
         onRevoke={handleOnRevoke}
         onClosed={(user) => restoreFocus?.requestFocus(user.id, USER_SEARCH_FALLBACK_ID)}
       />

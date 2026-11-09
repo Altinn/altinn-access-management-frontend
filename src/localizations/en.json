@@ -1139,7 +1139,9 @@
   },
   "party_info": {
     "delegate_confirmation": "Do you want to grant <b>{{partyName}}</b> power of attorney for <b>{{packageName}}</b>? The user will get access to all services in the package.",
-    "revoke_confirmation": "Do you want to revoke <b>{{partyName}}</b>'s power of attorney for <b>{{packageName}}</b>? The user will lose access to all services in the package."
+    "revoke_confirmation": "Do you want to revoke <b>{{partyName}}</b>'s power of attorney for <b>{{packageName}}</b>? The user will lose access to all services in the package.",
+    "cannot_delegate": "You cannot grant <b>{{partyName}}</b> power of attorney for <b>{{packageName}}</b>.",
+    "cannot_revoke": "You cannot revoke <b>{{partyName}}</b>'s power of attorney for <b>{{packageName}}</b>."
   },
   "package_poa_details_page": {
     "page_title": "Access package - Altinn",

@@ -18,7 +18,6 @@ import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
 import type { InheritedStatusMessageType } from '../../useInheritedStatus';
-import { DelegationAction } from '../EditModal';
 import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 
 import classes from './PartyInfo.module.css';
@@ -28,8 +27,9 @@ export interface PartyInfoProps {
   accessPackage: AccessPackage;
   userHasAccess: boolean;
   inheritedStatus?: InheritedStatusMessageType[];
-  availableActions?: DelegationAction[];
+  /** Offers delegation when passed; omit it when the user can't delegate */
   onDelegate?: () => void;
+  /** Offers revocation when passed; omit it when the user can't revoke */
   onRevoke?: () => void;
   isLoading?: boolean;
   isSuccess?: boolean;
@@ -40,14 +40,11 @@ export interface PartyInfoProps {
   error?: ActionError | null;
 }
 
-const defaultActions: DelegationAction[] = [];
-
 export const PartyInfo = ({
   party,
   accessPackage,
   userHasAccess,
   inheritedStatus,
-  availableActions = defaultActions,
   onDelegate,
   onRevoke,
   isLoading = false,
@@ -70,9 +67,8 @@ export const PartyInfo = ({
   const userName = formatEntityDisplayName(party);
   const partyAvatarType = getAvatarType(party);
 
-  const canRevoke = userHasAccess && availableActions.includes(DelegationAction.REVOKE);
-  const canDelegate =
-    !userHasAccess && availableActions.includes(DelegationAction.DELEGATE) && !!onDelegate;
+  const canRevoke = userHasAccess && !!onRevoke;
+  const canDelegate = !userHasAccess && !!onDelegate;
 
   const partySubtitle =
     party.type === PartyType.Person
@@ -81,9 +77,16 @@ export const PartyInfo = ({
         ? `${t('common.org_nr')} ${formatOrgNr(party.organizationIdentifier)}`
         : undefined;
 
-  const actionDescriptionKey = userHasAccess
-    ? 'party_info.revoke_confirmation'
-    : 'party_info.delegate_confirmation';
+  let actionDescriptionKey;
+  if (userHasAccess && canRevoke) {
+    actionDescriptionKey = 'party_info.revoke_confirmation';
+  } else if (!userHasAccess && canDelegate) {
+    actionDescriptionKey = 'party_info.delegate_confirmation';
+  } else if (userHasAccess && !canRevoke) {
+    actionDescriptionKey = 'party_info.cannot_revoke';
+  } else if (!userHasAccess && !canDelegate) {
+    actionDescriptionKey = 'party_info.cannot_delegate';
+  }
 
   return (
     <div className={classes.container}>

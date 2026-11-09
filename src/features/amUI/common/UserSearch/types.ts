@@ -3,7 +3,14 @@ import type { RoleInfo } from '@/rtk/features/connectionApi';
 
 export interface UserSearchNode extends Pick<
   PartyEntity,
-  'id' | 'name' | 'type' | 'unitType' | 'organizationIdentifier' | 'dateOfBirth' | 'isDeleted'
+  | 'id'
+  | 'name'
+  | 'type'
+  | 'unitType'
+  | 'organizationIdentifier'
+  | 'dateOfBirth'
+  | 'isDeleted'
+  | 'isVendorFixedRights'
 > {
   children: UserSearchNode[] | null;
   roles: RoleInfo[];
@@ -13,14 +20,7 @@ export interface UserSearchNode extends Pick<
   matchInChildren?: boolean;
 }
 
-export type UserActionTarget = Pick<
+export type UserActionTarget = Omit<
   UserSearchNode,
-  | 'id'
-  | 'name'
-  | 'type'
-  | 'unitType'
-  | 'organizationIdentifier'
-  | 'dateOfBirth'
-  | 'isDeleted'
-  | 'isInherited'
+  'children' | 'roles' | 'sortKey' | 'addedAt' | 'matchInChildren'
 >;
