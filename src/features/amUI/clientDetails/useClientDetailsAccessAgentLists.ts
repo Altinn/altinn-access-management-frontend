@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { Agent } from '@/rtk/features/clientApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { isNewUser } from '../common/isNewUser';
 import { countAgentSearchHits } from '../common/ClientAgentPackageList/ClientAgentPackageList';
@@ -22,7 +23,11 @@ export const useClientDetailsAccessAgentLists = ({
   const { t } = useTranslation();
 
   const lists = useMemo(() => {
-    const selectableAgents = agents ?? [];
+    const selectableAgents = (agents ?? []).filter((agent) =>
+      window.featureFlags.showSystemUsersAsRightHolders
+        ? true
+        : agent.agent.type !== PartyType.SystemUser,
+    );
 
     const hasClientAccess = (agent: Agent) =>
       (clientAccessPackages ?? []).some(
