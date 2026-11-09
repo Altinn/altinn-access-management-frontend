@@ -19,10 +19,6 @@ namespace Altinn.AccessManagement.UI.Tests
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             Environment.SetEnvironmentVariable("ASPNETCORE_ENVIRONMENT", "Test");
-
-            // Each test starts its own host, and real file watchers exhaust the inotify limit on Linux
-            Environment.SetEnvironmentVariable("DOTNET_USE_POLLING_FILE_WATCHER", "true");
-
             builder.ConfigureAppConfiguration(config =>
             {
                 config.AddConfiguration(new ConfigurationBuilder()

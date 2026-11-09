@@ -404,7 +404,7 @@ describe('addressMgmtUtils', () => {
   });
 
   describe('getAddressChanges', () => {
-    it('should update a row that takes over the value of a removed row', () => {
+    it('should only delete the address no row holds when a row takes over a removed value', () => {
       const stored = [
         createNotificationAddress('1', 'a@example.com'),
         createNotificationAddress('2', 'b@example.com'),
@@ -414,8 +414,47 @@ describe('addressMgmtUtils', () => {
       const { additions, updates, deletions } = getAddressChanges(stored, current);
 
       expect(additions).toEqual([]);
-      expect(updates).toEqual(current);
-      expect(deletions).toEqual([stored[1]]);
+      expect(updates).toEqual([]);
+      expect(deletions).toEqual([stored[0]]);
+    });
+
+    it('should create the edited row when a new row keeps its old value', () => {
+      const stored = [createNotificationAddress('1', 'a@example.com')];
+      const current = [createAddress('b@example.com', '', '', '1'), createAddress('a@example.com')];
+
+      const { additions, updates, deletions } = getAddressChanges(stored, current);
+
+      expect(additions).toEqual([current[0]]);
+      expect(updates).toEqual([]);
+      expect(deletions).toEqual([]);
+    });
+
+    it('should keep both addresses when values move between edited and new rows', () => {
+      const stored = [
+        createNotificationAddress('1', 'a@example.com'),
+        createNotificationAddress('2', 'c@example.com'),
+      ];
+      const current = [createAddress('c@example.com', '', '', '1'), createAddress('a@example.com')];
+
+      const { additions, updates, deletions } = getAddressChanges(stored, current);
+
+      expect(additions).toEqual([]);
+      expect(updates).toEqual([]);
+      expect(deletions).toEqual([]);
+    });
+
+    it('should still update a row whose id is no longer stored', () => {
+      const stored = [createNotificationAddress('1', 'a@example.com')];
+      const current = [
+        createAddress('a@example.com', '', '', '1'),
+        createAddress('b@example.com', '', '', '99'),
+      ];
+
+      const { additions, updates, deletions } = getAddressChanges(stored, current);
+
+      expect(additions).toEqual([]);
+      expect(updates).toEqual([current[1]]);
+      expect(deletions).toEqual([]);
     });
 
     it('should not delete an address that is typed again in a new row', () => {

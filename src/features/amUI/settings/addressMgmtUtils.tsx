@@ -121,23 +121,18 @@ export const getAddressChanges = <T extends NotificationAddress>(
 ) => {
   // Empty addresses can indicate deletions, but not additions
   const filteredCurrent = current.filter((row) => !addressIsEmpty(row));
-  const additions = filteredCurrent.filter(
-    (row) => !row.notificationAddressId && !stored.some((s) => addressIsEqual(s, row)),
+  // A stored address stays as long as any row holds it, whichever row that is
+  const isKept = (s: NotificationAddress) => filteredCurrent.some((row) => addressIsEqual(s, row));
+  const newValues = filteredCurrent.filter((row) => !stored.some((s) => addressIsEqual(s, row)));
+  const updates = newValues.filter(
+    (row) =>
+      row.notificationAddressId &&
+      !stored.some((s) => s.notificationAddressId === row.notificationAddressId && isKept(s)),
   );
-  const updates = filteredCurrent.filter((row) => {
-    if (!row.notificationAddressId) {
-      return false;
-    }
-    const storedRow = stored.find((s) => s.notificationAddressId === row.notificationAddressId);
-    return !storedRow || !addressIsEqual(storedRow, row);
-  });
+  const additions = newValues.filter((row) => !updates.includes(row));
   const deletions = stored.filter(
     (s) =>
-      !filteredCurrent.some(
-        (row) =>
-          row.notificationAddressId === s.notificationAddressId ||
-          (!row.notificationAddressId && addressIsEqual(s, row)),
-      ),
+      !isKept(s) && !updates.some((row) => row.notificationAddressId === s.notificationAddressId),
   );
 
   return { additions, updates, deletions };
@@ -149,6 +144,18 @@ const toAddress = ({ notificationAddressId, email, phone, countryCode }: Address
   phone,
   countryCode,
 });
+
+const applySaveError = (error: unknown, row?: AddressRow): string | undefined => {
+  const code = getErrorCode(error);
+  if (row && rowErrorKeys[code]) {
+    row.errorKey = rowErrorKeys[code];
+    return undefined;
+  }
+  if (row && code === ADDRESS_NOT_FOUND_CODE) {
+    row.notificationAddressId = ''; // Removed by someone else, so saving again must create it
+  }
+  return generalErrorKeys[code] ?? GENERIC_ERROR_KEY;
+};
 
 export const useSaveAddressChanges = (
   storedAddresses: NotificationAddress[],
@@ -181,15 +188,7 @@ export const useSaveAddressChanges = (
     let generalError: string | undefined;
 
     const handleError = (error: unknown, row?: AddressRow) => {
-      const code = getErrorCode(error);
-      if (row && rowErrorKeys[code]) {
-        row.errorKey = rowErrorKeys[code];
-        return;
-      }
-      generalError = generalErrorKeys[code] ?? GENERIC_ERROR_KEY;
-      if (row && code === ADDRESS_NOT_FOUND_CODE) {
-        row.notificationAddressId = ''; // Removed by someone else, so saving again must create it
-      }
+      generalError = applySaveError(error, row) ?? generalError;
     };
 
     const { additions, updates, deletions } = getAddressChanges(storedAddresses, rows);
