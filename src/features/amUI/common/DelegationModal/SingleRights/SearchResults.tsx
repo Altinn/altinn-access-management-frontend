@@ -90,7 +90,7 @@ export const SearchResults = ({
       setActionError(null);
       requestFocusOnDataChange(resourceActionControlId(resource.identifier));
     },
-    onPartialDelegation: (resource) => {
+    onMissingAccessToAllActions: (resource) => {
       setActionError(null);
       onSelect(resource);
     },

@@ -171,9 +171,6 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     }
     const actionKeys = rights.map((r) => r.rightKey);
 
-    // The row moves from the users without access to those with it once the delegations query
-    // refetches, so focus follows it there.
-    requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
     delegateRights({
       partyUuid: actingParty.id,
       fromUuid: fromParty.id,
@@ -182,14 +179,17 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
       actionKeys,
     })
       .unwrap()
-      .then(() =>
+      .then(() => {
+        // The row moves from the users without access to those with it once the delegations query
+        // refetches, so focus follows it there.
+        requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
         queueSnackbar(
           t('service_poa_details_page.delegation_success', {
             name: formatUserName(user),
             service: resource?.title,
           }),
-        ),
-      )
+        );
+      })
       .catch((error: unknown) => openModalFor(user, getActionError(error)));
   };
 
@@ -197,9 +197,6 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
     if (!actingParty?.id || !fromParty?.id || !resourceId) return;
 
     const revoke = () => {
-      // Revoking from the list removes the row once the delegations query refetches, so defer
-      // focus restoration until then. (Revoking in the dialog keeps focus there until it closes.)
-      requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
       revokeResource({
         party: actingParty.id,
         from: fromParty.id,
@@ -207,15 +204,18 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
         resourceId,
       })
         .unwrap()
-        .then(() =>
+        .then(() => {
+          // Revoking from the list removes the row once the delegations query refetches, so defer
+          // focus restoration until then. (Revoking in the dialog keeps focus there until it closes.)
+          requestFocusAfterListChange(user.id, USER_SEARCH_FALLBACK_ID);
           openSnackbar({
             message: t('service_poa_details_page.revoke_success', {
               name: formatUserName(user),
               service: resource?.title,
             }),
             color: 'success',
-          }),
-        )
+          });
+        })
         .catch(() =>
           openSnackbar({
             message: t('service_poa_details_page.revoke_error', {
