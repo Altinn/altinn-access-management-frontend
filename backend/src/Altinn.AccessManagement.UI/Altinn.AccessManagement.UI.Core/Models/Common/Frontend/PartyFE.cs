@@ -55,6 +55,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common.Frontend
         public bool IsDeleted { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the party is a standard system user, whose rights are set by the vendor
+        /// and cannot be added or revoked
+        /// </summary>
+        public bool IsVendorFixedRights { get; set; }
+
+        /// <summary>
         /// Gets or sets the child parties (subunits)
         /// </summary>
         public List<PartyFE> Children { get; set; }

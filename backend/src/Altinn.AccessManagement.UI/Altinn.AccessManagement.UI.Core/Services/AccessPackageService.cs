@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Core.Services
@@ -12,16 +13,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
     {
         private readonly IAccessPackageClient _accessPackageClient;
         private readonly ResourceHelper _resourceHelper;
+        private readonly ISystemUserRightsResolver _systemUserRightsResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AccessPackageService"/> class.
         /// </summary>
         /// <param name="accessPackageClient">The access package client.</param>
         /// <param name="resourceHelper">The resource helper, used to enrich package resources.</param>
-        public AccessPackageService(IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper)
+        /// <param name="systemUserRightsResolver">Resolves which system users have rights fixed by the vendor.</param>
+        public AccessPackageService(IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper, ISystemUserRightsResolver systemUserRightsResolver)
         {
             _accessPackageClient = accessPackageClient;
             _resourceHelper = resourceHelper;
+            _systemUserRightsResolver = systemUserRightsResolver;
         }
 
         /// <inheritdoc />
@@ -53,7 +57,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Dictionary<Guid, List<PackagePermissionFE>>> GetDelegations(Guid party, Guid? to, Guid? from, string languageCode)
         {
             PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
-            IEnumerable<PackagePermissionFE> accesses = paginatedAccesses.Items.Select(PackagePermissionFE.FromPackagePermission);
+            List<PackagePermissionFE> accesses = paginatedAccesses.Items.Select(PackagePermissionFE.FromPackagePermission).ToList();
+            await _systemUserRightsResolver.ApplyVendorFixedRights(party, accesses.SelectMany(a => a.Permissions).FlattenParties());
 
             var sortedAccesses = new Dictionary<Guid, List<PackagePermissionFE>>();
             foreach (PackagePermissionFE access in accesses)
@@ -90,6 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
                 AccessPackageFE packageFE = (await _resourceHelper.MapToAccessPackagesFE([package])).Single();
                 packageFE.Permissions = PermissionFE.FromPermissions(packagePermissions?.Permissions);
+                await _systemUserRightsResolver.ApplyVendorFixedRights(party, packageFE.Permissions.FlattenParties());
                 return packageFE;
             }
         }

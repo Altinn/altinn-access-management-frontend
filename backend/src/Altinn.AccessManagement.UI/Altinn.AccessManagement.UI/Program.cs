@@ -248,6 +248,7 @@ void ConfigureServices(IServiceCollection services, IConfiguration config)
     services.AddSingleton<IAccessPackageService, AccessPackageService>();
     services.AddSingleton<ISystemRegisterService, SystemRegisterService>();
     services.AddSingleton<ISystemUserService, SystemUserService>();
+    services.AddSingleton<ISystemUserRightsResolver, SystemUserRightsResolver>();
     services.AddSingleton<ISystemUserRequestService, SystemUserRequestService>();
     services.AddSingleton<ISystemUserChangeRequestService, SystemUserChangeRequestService>();
     services.AddSingleton<ISystemUserAgentRequestService, SystemUserAgentRequestService>();
