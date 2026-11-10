@@ -16,7 +16,7 @@ import {
 interface UseResourceListDelegationProps {
   onActionError?: (resource: ServiceResource, errorInfo: ActionError) => void;
   onSuccess?: (resource: ServiceResource) => void;
-  onPartialDelegation?: (resource: ServiceResource) => void;
+  onMissingAccessToAllActions?: (resource: ServiceResource) => void;
 }
 
 const forbiddenError = (): ActionError => ({
@@ -27,7 +27,7 @@ const forbiddenError = (): ActionError => ({
 export const useResourceListDelegation = ({
   onActionError,
   onSuccess,
-  onPartialDelegation,
+  onMissingAccessToAllActions,
 }: UseResourceListDelegationProps = {}) => {
   const [runDelegationCheck] = useLazyDelegationCheckQuery();
   const [delegateRights] = useDelegateRightsMutation();
@@ -115,13 +115,7 @@ export const useResourceListDelegation = ({
           return;
         }
       }
-      const canDelegateSomeActions = result.data && result.data.some((action) => action.result);
-
-      if (canDelegateSomeActions) {
-        onPartialDelegation?.(resource);
-      } else {
-        onActionError?.(resource, forbiddenError());
-      }
+      onMissingAccessToAllActions?.(resource);
       setResourceLoading(resource.identifier, false);
     },
     [
@@ -129,7 +123,7 @@ export const useResourceListDelegation = ({
       delegateRights,
       fromParty,
       onActionError,
-      onPartialDelegation,
+      onMissingAccessToAllActions,
       onSuccess,
       runDelegationCheck,
       setResourceLoading,

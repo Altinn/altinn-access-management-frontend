@@ -21,6 +21,7 @@ import { amUIPath } from '@/routes/paths';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import type { Request } from '../types';
+import { RequestErrorAlert } from '../RequestErrorAlert';
 import { ResourceList } from '../../common/ResourceList/ResourceList';
 import { useRestoreFocus, useRestoreFocusTarget } from '../../common/RestoreFocus';
 import { TwoStepDialog } from '../../common/TwoStepDialog';
@@ -47,6 +48,10 @@ export const RequestReviewModalContent = ({
   const {
     isLoadingRequests,
     isFetchingRequests,
+    requestsError,
+    hasMissingRequests,
+    delegationCheckError,
+    actionError,
     snapshotResources,
     snapshotPackages,
     selectedResource,
@@ -153,6 +158,7 @@ export const RequestReviewModalContent = ({
           onApprove={() => handleApprove({ packageId: selectedPackage.id })}
           onReject={() => handleReject({ packageId: selectedPackage.id })}
           cannotApprove={cannotApprove({ packageId: selectedPackage.id })}
+          delegationCheckError={delegationCheckError}
         />
       );
     } else {
@@ -168,6 +174,21 @@ export const RequestReviewModalContent = ({
               })}
             </Link>
           </DsLink>
+          {requestsError && (
+            <RequestErrorAlert
+              heading={t('request_page.error_loading_requests')}
+              details={requestsError}
+            />
+          )}
+          {hasMissingRequests && (
+            <RequestErrorAlert heading={t('request_page.error_partial_loading_requests')} />
+          )}
+          {delegationCheckError && (
+            <RequestErrorAlert
+              heading={t('delegation_modal.service_error.technical_error_heading')}
+              details={delegationCheckError}
+            />
+          )}
           {/* The snapshot stays stable while the modal is open, so only the initial load (empty
               snapshot) shows skeletons. Keeping rows mounted during background refetches lets a
               pending focus request from handleBack resolve to the row instead of being consumed
@@ -287,6 +308,11 @@ export const RequestReviewModalContent = ({
       restoreFocus={restoreFocus}
     >
       {content}
+      {actionError && (
+        <div className={classes.actionError}>
+          <RequestErrorAlert {...actionError} />
+        </div>
+      )}
     </TwoStepDialog>
   );
 };

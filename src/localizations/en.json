@@ -178,7 +178,8 @@
     "requests": "Requests",
     "requests_badge": "received",
     "maskinporten": "Maskinporten administration",
-    "activity_log": "Activity log"
+    "activity_log": "Activity log",
+    "bankruptcy_estate_administration": "Bankruptcy estate administration"
   },
   "error_page": {
     "page_title": "Error page - Altinn",
@@ -555,7 +556,54 @@
     "tab_connections": "Powers of attorney",
     "tab_request": "Requests",
     "tab_maskinporten": "Maskinporten administration",
-    "empty": "There is no activity in the log yet."
+    "empty": "There is no activity in the log yet.",
+    "direction_legend": "Show activity",
+    "direction_from": "From the organisation",
+    "direction_to": "To the organisation",
+    "filter_party_to": "To",
+    "filter_party_from": "From",
+    "add_filter": "Add filter",
+    "remove_filter": "Remove filter",
+    "reset_filters": "Reset filter",
+    "timestamp": "{{date}} at {{time}}",
+    "load_more": "Load more",
+    "load_error": "Could not load the activity log.",
+    "no_results": "No activity found for the selected filter.",
+    "object": {
+      "scope": "the scope “{{name}}”",
+      "role": "the role “{{name}}”",
+      "package": "the access package “{{name}}”",
+      "access": "access"
+    },
+    "trigger": {
+      "created": "Created",
+      "updated": "Updated",
+      "deleted": "Deleted"
+    },
+    "events": {
+      "assignment": {
+        "created": {
+          "from": "<0>{{counterpart}}</0> was given {{object}}.",
+          "to": "{{reportee}} was given {{object}} by <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who granted the access."
+        },
+        "updated": {
+          "from": "The access to {{object}} for <0>{{counterpart}}</0> was moved.",
+          "to": "The access to {{object}} from <0>{{counterpart}}</0> was moved.",
+          "by": "It was {{by}} who made the change."
+        },
+        "deleted": {
+          "from": "<0>{{counterpart}}</0> lost {{object}}.",
+          "to": "{{reportee}} lost {{object}} from <0>{{counterpart}}</0>.",
+          "by": "It was {{by}} who removed the access."
+        }
+      },
+      "fallback": {
+        "from": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "to": "<0>{{counterpart}}</0>: {{typeName}} – {{object}}.",
+        "by": "Performed by {{by}}."
+      }
+    }
   },
   "maskinporten_page": {
     "scopes": "Scopes",
@@ -1176,7 +1224,8 @@
     "new_requests_self_other": "You have {{count}} new requests",
     "new_requests_zero": "{{reportee}} has no new requests",
     "new_requests_one": "{{reportee}} has one new request",
-    "new_requests_other": "{{reportee}} has {{count}} new requests"
+    "new_requests_other": "{{reportee}} has {{count}} new requests",
+    "bankruptcy_estate_admin_item_description": "Let others administer the bankruptcy estates of {{reportee}}."
   },
   "request_page": {
     "page_title": "Requests - Altinn",
@@ -1285,5 +1334,10 @@
     "add_account_from_token_error": "Could not add account",
     "add_account_from_token_invalid_token": "Invalid or expired link",
     "add_account_from_token_not_from_caller": "Link does not belong to the logged-in user"
+  },
+  "bankruptcy_estate_administration_page": {
+    "page_title": "Bankruptcy estate administration - Altinn",
+    "page_heading": "Bankruptcy estate administration for {{name}}",
+    "no_access_title": "You do not have access to bankruptcy estate administration"
   }
 }

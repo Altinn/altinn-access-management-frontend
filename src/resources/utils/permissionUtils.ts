@@ -1,5 +1,5 @@
 import { PartyType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
-import { isOrganization } from '@/resources/utils/reporteeUtils';
+import { isOrganization, isPerson } from '@/resources/utils/reporteeUtils';
 
 export const hasConsentPermission = (
   reporteeInfo?: AuthorizedPartyEntity,
@@ -52,4 +52,22 @@ export const hasReporteeListAdminAccess = (
     return isAdmin;
   }
   return isCurrentUserReportee;
+};
+
+export const isBankruptcyEstateAdministrationAvailable = (
+  reporteeInfo?: AuthorizedPartyEntity,
+): boolean => {
+  return (
+    window.featureFlags?.enableBankruptcyEstateAdministration === true && isPerson(reporteeInfo)
+  );
+};
+
+export const hasBankruptcyEstateAdminPermission = (
+  reporteeInfo?: AuthorizedPartyEntity,
+  isBankruptcyEstateAdmin?: boolean,
+): boolean | undefined => {
+  if (!isBankruptcyEstateAdministrationAvailable(reporteeInfo)) {
+    return false;
+  }
+  return isBankruptcyEstateAdmin;
 };

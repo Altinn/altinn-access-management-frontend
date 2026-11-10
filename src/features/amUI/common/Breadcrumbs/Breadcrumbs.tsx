@@ -70,6 +70,10 @@ const BreadcrumbConfig = {
     href: `/${amUIPath.ActivityLog}`,
     label: 'sidebar.activity_log',
   },
+  bankruptcy_estate_administration: {
+    href: `/${amUIPath.BankruptcyEstateAdministration}`,
+    label: 'sidebar.bankruptcy_estate_administration',
+  },
 };
 
 interface BreadcrumbsProps {

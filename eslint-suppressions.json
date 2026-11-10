@@ -681,7 +681,7 @@
   },
   "src/resources/utils/sidebarConfig.tsx": {
     "@typescript-eslint/no-unsafe-argument": {
-      "count": 13
+      "count": 14
     }
   },
   "src/rtk/app/baseQuery.test.ts": {
