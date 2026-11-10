@@ -44,7 +44,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddSingleton<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddSingleton<ISingleRightClient, SingleRightClientMock>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
                 });
@@ -102,7 +101,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
@@ -123,7 +121,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
                     services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
@@ -187,7 +184,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IProfileClient, ProfileClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
                     services.AddTransient<IConnectionClient, ConnectionClientMock>();
                     services.AddTransient<IUserService, UserService>();
@@ -236,7 +232,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<ISystemUserClient, SystemUserClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
@@ -260,7 +255,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<ISystemUserRequestClient, SystemUserRequestClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
@@ -288,7 +282,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<ISystemUserChangeRequestClient, SystemUserChangeRequestClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
@@ -316,7 +309,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<ISystemUserAgentRequestClient, SystemUserAgentRequestClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
@@ -344,7 +336,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<ISystemUserAgentDelegationClient, SystemUserAgentDelegationClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<ISystemRegisterClient, SystemRegisterClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
@@ -373,7 +364,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 {
                     services.AddTransient<IEncryptionService, EncryptionServiceMock>();
                     services.AddTransient<IConsentClient, ConsentClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IRegisterClient, RegisterClientMock>();
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -458,7 +448,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                     services.AddTransient<IAuthenticationClient, AuthenticationMock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
                     services.AddTransient<IConnectionClient, ConnectionClientMock>();
                     services.AddTransient<IUserService, UserService>();
@@ -538,7 +527,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             {
                 builder.ConfigureTestServices(services =>
                 {
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();
                     services.AddTransient<IConnectionClient, ConnectionClientMock>();
@@ -616,7 +604,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 builder.ConfigureTestServices(services =>
                 {
                     // Reportee resolution (UserService -> these clients).
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
                     services.AddTransient<IConnectionClient, ConnectionClientMock>();
                     services.AddTransient<IProfileClient, ProfileClientMock>();

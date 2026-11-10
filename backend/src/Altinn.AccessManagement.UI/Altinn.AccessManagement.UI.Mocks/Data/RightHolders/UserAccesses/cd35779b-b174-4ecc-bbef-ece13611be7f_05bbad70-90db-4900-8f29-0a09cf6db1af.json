@@ -1,5 +1,0 @@
-{
-  "accessPackages": ["test_package"],
-  "services": ["appid-502", "a3-app2"],
-  "roles": []
-}

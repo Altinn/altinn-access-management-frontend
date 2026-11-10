@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             ILogger<RequestClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
         {
-            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RequestClientMock).Assembly.Location).LocalPath), "Data");
         }
 
         /// <inheritdoc />

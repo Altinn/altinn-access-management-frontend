@@ -628,7 +628,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IProfileClient, ProfileClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
                     services.AddTransient<IConnectionClient, ConnectionClientMock>();
                     services.AddTransient<IUserService, UserService>();
