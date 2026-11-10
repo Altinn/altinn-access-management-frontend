@@ -1,0 +1,44 @@
+[
+  {
+    "administrator": {
+      "id": "4136a76b-095e-4d4f-b271-36d898b0478a",
+      "partyId": 50758618,
+      "name": "ESTETISK SKÅL",
+      "type": "Person",
+      "unitType": null,
+      "organizationIdentifier": null,
+      "dateOfBirth": "1928-01-11",
+      "isDeleted": false,
+      "children": null,
+      "parent": null
+    },
+    "adminRole": {
+      "id": "e8f2e3bc-41e8-4ea6-87d3-3308934d471d",
+      "name": "Konkursbo administrator",
+      "code": "innbygger-konkursbo-administrator",
+      "urn": "urn:altinn:role:innbygger-konkursbo-administrator"
+    },
+    "adminAddedAt": "2026-01-15T10:00:00+00:00"
+  },
+  {
+    "administrator": {
+      "id": "4aa1b6e1-609e-4e0e-af13-1074d62b3283",
+      "partyId": 50367406,
+      "name": "KURSIV FOSSEKALL",
+      "type": "Person",
+      "unitType": null,
+      "organizationIdentifier": null,
+      "dateOfBirth": "1980-11-07",
+      "isDeleted": false,
+      "children": null,
+      "parent": null
+    },
+    "adminRole": {
+      "id": "e8f2e3bc-41e8-4ea6-87d3-3308934d471d",
+      "name": "Konkursbo administrator",
+      "code": "innbygger-konkursbo-administrator",
+      "urn": "urn:altinn:role:innbygger-konkursbo-administrator"
+    },
+    "adminAddedAt": "2026-03-02T08:30:00+00:00"
+  }
+]
