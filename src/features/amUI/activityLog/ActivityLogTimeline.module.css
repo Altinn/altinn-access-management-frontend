@@ -1,0 +1,19 @@
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-6);
+}
+
+.entryText {
+  margin-bottom: var(--ds-size-3);
+}
+
+.partyName {
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.loadMore {
+  display: flex;
+  justify-content: center;
+}
