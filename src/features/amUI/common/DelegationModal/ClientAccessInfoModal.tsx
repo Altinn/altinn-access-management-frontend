@@ -1,4 +1,4 @@
-import { useState, type Ref } from 'react';
+import { useRef, useState, type Ref } from 'react';
 import { DsDialog } from '@altinn/altinn-components';
 
 import { getActionError, type ActionError } from '@/resources/hooks/useActionError';
@@ -28,8 +28,11 @@ export const ClientAccessInfoModal = ({ ref, entry, onClose }: ClientAccessInfoM
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<ActionError | null>(null);
+  // Advances on every run and on close, so results from an earlier run are discarded.
+  const runTokenRef = useRef(0);
 
   const handleClose = () => {
+    runTokenRef.current += 1;
     setIsLoading(false);
     setIsSuccess(false);
     setError(null);
@@ -37,6 +40,8 @@ export const ClientAccessInfoModal = ({ ref, entry, onClose }: ClientAccessInfoM
   };
 
   const run = async (mode: ClientAccessMode, current: ClientAccessEntry) => {
+    const token = ++runTokenRef.current;
+    const isCurrentRun = () => runTokenRef.current === token;
     setIsLoading(true);
     setIsSuccess(false);
     setError(null);
@@ -46,10 +51,13 @@ export const ClientAccessInfoModal = ({ ref, entry, onClose }: ClientAccessInfoM
     } catch (thrown) {
       result = { ok: false, error: getActionError(thrown) };
     }
+    if (!isCurrentRun()) return;
     setIsLoading(false);
     if (result.ok) {
       setIsSuccess(true);
-      setTimeout(() => setIsSuccess(false), animationDuration);
+      setTimeout(() => {
+        if (isCurrentRun()) setIsSuccess(false);
+      }, animationDuration);
     } else {
       setError(result.error ?? null);
     }
