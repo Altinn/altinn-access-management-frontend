@@ -416,15 +416,15 @@
     "expired_resource_description": "Denne tjenesten er utgått. Dersom du gir fullmakt til denne tjenesten, vil {{name}} kun få tilgang til å se gamle innsendinger/meldinger. De vil ikke kunne sende inn ny data.",
     "expired_resource_request_description": "Denne tjenesten er utgått. Dersom du ber om fullmakt til denne tjenesten, vil du kun få tilgang til å se gamle innsendinger/meldinger. Du vil ikke kunne sende inn ny data.",
     "actions": {
-      "access_to_all": "Tilgang til hele tjenesten",
-      "partial_access": "Tilgang til {{count}} av {{total}} handlinger",
+      "access_to_all": "Fullmakt til hele tjenesten",
+      "partial_access": "Fullmakt til {{count}} av {{total}} handlinger",
       "action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan gi fullmakt til hele tjenesten eller velge spesifikke handlinger.",
       "request_action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan kun be om fullmakt til hele tjenesten.",
       "approve_action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan kun godkjenne fullmakt til hele tjenesten.",
       "cannot_give_header": "Du kan ikke gi tilgang til:"
     },
     "instance_actions": {
-      "access_to_all": "Tilgang til hele meldingen eller skjemaet",
+      "access_to_all": "Fullmakt til hele meldingen eller skjemaet",
       "action_description": "Her vises de tekniske handlingene som er tilgjengelige. Du kan gi fullmakt til alle handlingene eller velge enkelte av dem."
     },
     "technical_error_message": {
