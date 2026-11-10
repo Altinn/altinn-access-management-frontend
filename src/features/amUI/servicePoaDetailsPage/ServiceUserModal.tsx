@@ -2,6 +2,7 @@ import type { Ref } from 'react';
 import { DsDialog } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
+import type { ActionError } from '@/resources/hooks/useActionError';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import classes from '../common/DelegationModal/DelegationModal.module.css';
@@ -17,6 +18,8 @@ interface ServiceUserModalProps {
   /** The reportee, which is both the acting party and the party the service is delegated from. */
   partyUuid: string;
   availableActions: DelegationAction[];
+  /** A delegation from the list that failed; the dialog opens on it to show why. */
+  actionError?: ActionError | null;
   onClose: () => void;
   ref?: Ref<HTMLDialogElement>;
 }
@@ -34,6 +37,7 @@ export const ServiceUserModal = ({
   user,
   partyUuid,
   availableActions,
+  actionError,
   onClose,
   ref,
 }: ServiceUserModalProps) => {
@@ -62,6 +66,7 @@ export const ServiceUserModal = ({
           <ResourceInfo
             resource={resource}
             availableActions={availableActions}
+            actionError={actionError}
           />
         </PartyRepresentationProvider>
       </div>

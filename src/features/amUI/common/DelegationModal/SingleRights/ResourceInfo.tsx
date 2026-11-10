@@ -3,6 +3,7 @@ import { DsButton, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import type { ActionError } from '@/resources/hooks/useActionError';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import { StatusMessageForScreenReader } from '@/components/StatusMessageForScreenReader/StatusMessageForScreenReader';
 import { useRevokeResource } from '@/resources/hooks/useRevokeResource';
@@ -39,6 +40,8 @@ export interface ResourceInfoProps {
   availableActions?: DelegationAction[];
   // Optional for the single right request flow, where there may not be a toParty in context
   toPartyName?: string;
+  /** An action taken outside the dialog (e.g. from a list) that failed; shown in the resource alert. */
+  actionError?: ActionError | null;
 }
 
 export const ResourceInfo = ({
@@ -46,6 +49,7 @@ export const ResourceInfo = ({
   onDelegate,
   availableActions,
   toPartyName,
+  actionError,
 }: ResourceInfoProps) => {
   const isSmall = useIsMobileOrSmaller();
   const { t } = useTranslation();
@@ -123,7 +127,16 @@ export const ResourceInfo = ({
   const delegationCheckErrorDetails = isDelegationCheckError
     ? createErrorDetails(delegationCheckError)
     : null;
-  const technicalErrorDetails = rightsMetaTechnicalErrorDetails ?? delegationCheckErrorDetails;
+  // A failed delegation from outside the dialog is reported like a failed lookup: in ResourceAlert.
+  const actionErrorDetails = actionError
+    ? {
+        status: actionError.httpStatus,
+        time: actionError.timestamp,
+        traceId: actionError.details?.traceId,
+      }
+    : null;
+  const technicalErrorDetails =
+    rightsMetaTechnicalErrorDetails ?? delegationCheckErrorDetails ?? actionErrorDetails;
 
   const inheritedStatus = useInheritedStatusInfo({
     permissions:

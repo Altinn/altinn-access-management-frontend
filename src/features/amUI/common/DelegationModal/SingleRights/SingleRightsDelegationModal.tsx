@@ -19,7 +19,7 @@ export const SingleRightsDelegationModal = ({
   availableActions = [],
 }: SingleRightsDelegationModalProps) => {
   const { t } = useTranslation();
-  const { setInfoView, setResourceToView, resourceToView, setActionError } =
+  const { setInfoView, setResourceToView, resourceToView, actionError, setActionError } =
     useDelegationModalContext();
   const { toParty } = usePartyRepresentation();
 
@@ -65,6 +65,7 @@ export const SingleRightsDelegationModal = ({
           <ResourceInfo
             resource={resourceToView}
             availableActions={availableActions}
+            actionError={actionError}
           />
         )
       }
