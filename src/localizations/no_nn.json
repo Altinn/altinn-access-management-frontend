@@ -415,15 +415,15 @@
     "expired_resource_description": "Denne tenesta er utgått. Dersom du gir fullmakt til denne tenesta, vil {{name}} kun få tilgang til å sjå gamle innsendingar/meldingar. Dei vil ikkje kunne sende inn nye data.",
     "expired_resource_request_description": "Denne tenesta er utgått. Dersom du ber om fullmakt til denne tenesta, vil du kun få tilgang til å sjå gamle innsendingar/meldingar. Du vil ikkje kunne sende inn nye data.",
     "actions": {
-      "access_to_all": "Tilgang til heile tenesta",
-      "partial_access": "Tilgang til {{count}} av {{total}} handlingar",
+      "access_to_all": "Fullmakt til heile tenesta",
+      "partial_access": "Fullmakt til {{count}} av {{total}} handlingar",
       "action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan gi fullmakt til heile tenesta eller velje spesifikke handlingar.",
       "request_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre be om fullmakt til heile tenesta.",
       "approve_action_description": "Her ser du dei tekniske handlingane som tenesta tilbyr. Du kan berre godkjenne fullmakt til heile tenesta.",
       "cannot_give_header": "Du kan ikkje gi tilgang til:"
     },
     "instance_actions": {
-      "access_to_all": "Tilgang til heile meldinga eller skjemaet",
+      "access_to_all": "Fullmakt til heile meldinga eller skjemaet",
       "action_description": "Her blir dei tekniske handlingane som er tilgjengelege viste. Du kan gi fullmakt til alle handlingane eller velje enkelte av dei."
     },
     "specific_rights": {
