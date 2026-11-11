@@ -1,16 +1,16 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
+import { type CompactRole } from '@/dataObjects/dtos/Common';
 import { type PartyEntity } from '@/dataObjects/dtos/Party';
 import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { type AssignmentDto } from './clientApi';
 import { type PersonInput } from './connectionApi';
-import { type Role } from './roleApi';
 
 export interface BankruptcyEstateAdministrator {
   administrator: PartyEntity;
-  adminRole: Role;
+  adminRole: CompactRole;
   adminAddedAt: string;
 }
 

@@ -49,6 +49,7 @@ export const AddAdministratorButton = () => {
         variant='primary'
         data-color='company'
         onClick={() => {
+          setError(null);
           setIsOpen(true);
           modalRef.current?.showModal();
         }}
