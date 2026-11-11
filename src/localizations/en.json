@@ -1338,6 +1338,16 @@
   "bankruptcy_estate_administration_page": {
     "page_title": "Bankruptcy estate administration - Altinn",
     "page_heading": "Bankruptcy estate administration for {{name}}",
-    "no_access_title": "You do not have access to bankruptcy estate administration"
+    "no_access_title": "You do not have access to bankruptcy estate administration",
+    "add_administrator_button": "New bankruptcy estate administrator",
+    "add_administrator_heading": "Add user and grant Bankruptcy estate administrator",
+    "add_administrator_description": "The recipient will become main administrator for all your current and future bankruptcy estates.",
+    "add_administrator_not_person_error": "Only persons can be bankruptcy estate administrators.",
+    "trustee": "Trustee",
+    "intro": "Here you can add and remove users who will administer your bankruptcy estates. The person you add becomes Main administrator for all your bankruptcy estates.",
+    "info_icon_label": "More information about Bankruptcy estate administrator",
+    "info_heading": "Bankruptcy estate administrator",
+    "info_body": "The Bankruptcy estate administrator becomes Main administrator for all current and future bankruptcy estates for which the trustee is responsible. They automatically receive Bankruptcy estate read and write access, and can delegate the necessary authorizations to other creditors and stakeholders.",
+    "info_body_removal": "If the authorization is removed here, access to all bankruptcy estates will be lost."    
   }
 }

@@ -1328,6 +1328,16 @@
   "bankruptcy_estate_administration_page": {
     "page_title": "Borolleadministrasjon - Altinn",
     "page_heading": "Borolleadministrasjon for {{name}}",
-    "no_access_title": "Du har ikkje tilgang til borolleadministrasjon"
+    "no_access_title": "Du har ikkje tilgang til borolleadministrasjon",
+    "add_administrator_button": "Ny konkursbu administrator",
+    "add_administrator_heading": "Legg til brukar og gi Konkursbu administrator",
+    "add_administrator_description": "Mottakaren blir hovudadministrator for alle noverande og framtidige konkursbu dine.",
+    "add_administrator_not_person_error": "Berre personar kan vere konkursbu administrator.",
+    "trustee": "Bustyrar",
+    "intro": "Her kan du leggje til og fjerne brukarar som skal administrere konkursbua dine. Den du legg til, blir Hovudadministrator for alle konkursbua dine.",
+    "info_icon_label": "Meir informasjon om Konkursbu administrator",
+    "info_heading": "Konkursbu administrator",
+    "info_body": "Konkursbu administrator blir Hovudadministrator for alle noverande og framtidige konkursbu som bustyraren er ansvarleg for. Dei får automatisk Konkursbu lese- og skrivetilgang, og kan gi nødvendige fullmakter vidare til andre kreditorar og interessentar.",
+    "info_body_removal": "Blir fullmakta fjerna her, mistar dei tilgangen til alle konkursbua."    
   }
 }

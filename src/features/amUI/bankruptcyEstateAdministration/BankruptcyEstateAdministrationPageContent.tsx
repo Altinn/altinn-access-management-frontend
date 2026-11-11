@@ -1,8 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsParagraph } from '@altinn/altinn-components';
+import { Badge, DsAlert, DsParagraph, ListItem, ListItemLabel } from '@altinn/altinn-components';
 
-import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import {
+  formatEntityDisplayName,
+  getFormattedDateOfBirthLabel,
+} from '@/resources/utils/reporteeUtils';
 import {
   isBankruptcyEstateAdministrationAvailable,
   hasBankruptcyEstateAdminPermission,
@@ -12,6 +15,10 @@ import { useGetIsBankruptcyEstateAdminQuery } from '@/rtk/features/bankruptcyEst
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
+
+import { AddAdministratorButton } from './AddAdministratorButton';
+import { AdministratorInfoPopover } from './AdministratorInfoPopover';
+import classes from './BankruptcyEstateAdministrationPage.module.css';
 
 export const BankruptcyEstateAdministrationPageContent = () => {
   const { t } = useTranslation();
@@ -27,6 +34,7 @@ export const BankruptcyEstateAdministrationPageContent = () => {
 
   const isLoading = isLoadingReportee || actorLoading || isLoadingIsBankruptcyEstateAdmin;
   const hasPermission = hasBankruptcyEstateAdminPermission(reportee, isBankruptcyEstateAdmin);
+  const trusteeName = formatEntityDisplayName(actingParty);
 
   if (isError) {
     return (
@@ -48,12 +56,48 @@ export const BankruptcyEstateAdministrationPageContent = () => {
   }
 
   return (
-    <ReporteePageHeading
-      title={t('bankruptcy_estate_administration_page.page_heading', {
-        name: formatEntityDisplayName(actingParty),
-      })}
-      reportee={reportee}
-      isLoading={isLoading}
-    />
+    <>
+      <ReporteePageHeading
+        title={t('bankruptcy_estate_administration_page.page_heading', {
+          name: formatEntityDisplayName(actingParty),
+        })}
+        reportee={reportee}
+        isLoading={isLoading}
+      />
+      {!isLoading && hasPermission && (
+        <>
+          <div className={classes.trustee}>
+            <ListItem
+              id={actingParty?.id ?? ''}
+              icon={{ type: 'person', name: trusteeName }}
+              ariaLabel={trusteeName}
+              label={
+                <div className={classes.trusteeLabel}>
+                  <ListItemLabel
+                    title={{ children: trusteeName, as: 'div' }}
+                    description={getFormattedDateOfBirthLabel(actingParty?.dateOfBirth)}
+                    size='md'
+                  />
+                  <Badge
+                    label={t('bankruptcy_estate_administration_page.trustee')}
+                    color='company'
+                  />
+                </div>
+              }
+              color='company'
+              size='md'
+              as='div'
+              containerAs='div'
+              interactive={false}
+              className={classes.trusteeItem}
+            />
+          </div>
+          <AdministratorInfoPopover>
+            {t('bankruptcy_estate_administration_page.intro')}
+          </AdministratorInfoPopover>
+          <AddAdministratorButton />
+        </>
+      )}
+    </>
   );
 };

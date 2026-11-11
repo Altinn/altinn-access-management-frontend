@@ -1,6 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.BankruptcyEstate;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
 {
@@ -31,8 +32,8 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="partyId">The party uuid of the bankruptcy estate administrator (bostyrer).</param>
         /// <param name="personInput">The person identifier and last name of the person to add.</param>
         /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result is the created assignment.</returns>
-        Task<AssignmentDto> AddAdministrator(Guid partyId, PersonInput personInput, CancellationToken cancellationToken = default);
+        /// <returns>A task that represents the asynchronous operation. The task result is the created assignment, or a validation problem when Access Management rejects the person.</returns>
+        Task<Result<AssignmentDto>> AddAdministrator(Guid partyId, PersonInput personInput, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes an administrator of the bankruptcy estates of the specified party.

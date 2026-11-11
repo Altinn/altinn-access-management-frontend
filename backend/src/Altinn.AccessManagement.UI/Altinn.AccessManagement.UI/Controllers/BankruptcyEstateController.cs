@@ -5,6 +5,7 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -132,12 +133,13 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                AssignmentDto assignment = await _bankruptcyEstateService.AddAdministrator(party, personInput, cancellationToken);
-                return Ok(assignment);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
+                Result<AssignmentDto> result = await _bankruptcyEstateService.AddAdministrator(party, personInput, cancellationToken);
+                if (result.IsProblem)
+                {
+                    return result.Problem.ToActionResult();
+                }
+
+                return Ok(result.Value);
             }
             catch (HttpStatusException ex)
             {
@@ -146,8 +148,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return StatusCode((int)HttpStatusCode.TooManyRequests);
                 }
 
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
             catch (Exception ex)
             {

@@ -263,5 +263,38 @@ namespace Altinn.AccessManagement.UI.Tests.Helpers
             Assert.True(actualError.Extensions.TryGetValue("NotDelegableResources", out string resources));
             Assert.Equal("resource-a, resource-b", resources);
         }
+
+        [Fact]
+        public void MapToAmUiValidationProblem_MapsKnownCodes()
+        {
+            const string responseContent = """
+            {
+              "status": 400,
+              "validationErrors": [
+                { "code": "AM.VLD-00034", "detail": "Given external identifiers yielded empty result." },
+                { "code": "AM.VLD-99999", "detail": "A code the UI has no message for." },
+                { "code": "AM.VLD-00008", "detail": "This entity type is not allowed here." }
+              ]
+            }
+            """;
+
+            ValidationProblemInstance problem = ProblemMapper.MapToAmUiValidationProblem(responseContent);
+
+            Assert.NotNull(problem);
+            Assert.Equal(["AM.VLD-00034", "AM.VLD-00008"], problem.Errors.Select(error => error.ErrorCode.ToString()));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData("upstream is down")]
+        [InlineData("""{ "status": 400, "title": "Bad Request" }""")]
+        [InlineData("""{ "status": 400, "validationErrors": [ { "code": "AM.VLD-99999" } ] }""")]
+        public void MapToAmUiValidationProblem_ReturnsNullWithoutKnownCode(string responseContent)
+        {
+            ValidationProblemInstance problem = ProblemMapper.MapToAmUiValidationProblem(responseContent);
+
+            Assert.Null(problem);
+        }
     }
 }

@@ -7,6 +7,7 @@ using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Integration.Clients;
 using Altinn.AccessManagement.UI.Integration.Configuration;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -175,7 +176,7 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
             RecordingHandler handler = new RecordingHandler(responseContent);
             PersonInput personInput = new PersonInput { PersonIdentifier = "20814098533", LastName = "GÅSTOL" };
 
-            AssignmentDto result = await CreateClient(handler).AddAdministrator(_party, personInput);
+            AssignmentDto result = (await CreateClient(handler).AddAdministrator(_party, personInput)).Value;
 
             Assert.Equal(HttpMethod.Post, handler.Request.Method);
             Assert.Equal($"{AdministratorsUrl}?party={_party}", handler.Request.RequestUri.ToString());
@@ -188,8 +189,45 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
         }
 
         /// <summary>
-        /// The API explains a refused person in the response body, and the frontend maps that
-        /// explanation to a message, so the body must be carried on the exception.
+        /// A validation error the UI has a message for is an answer the user can act on,
+        /// so it comes back as a problem and not as an exception.
+        /// </summary>
+        [Fact]
+        public async Task AddAdministrator_ValidationErrorReturnsProblem()
+        {
+            const string responseContent = """
+            {
+              "status": 400,
+              "validationErrors": [ { "code": "AM.VLD-00034", "detail": "Given external identifiers yielded empty result." } ]
+            }
+            """;
+            RecordingHandler handler = new RecordingHandler(responseContent, HttpStatusCode.BadRequest);
+            PersonInput personInput = new PersonInput { PersonIdentifier = "20814098533", LastName = "GÅSTOL" };
+
+            Result<AssignmentDto> result = await CreateClient(handler).AddAdministrator(_party, personInput);
+
+            Assert.True(result.IsProblem);
+            ValidationProblemInstance problem = Assert.IsType<ValidationProblemInstance>(result.Problem);
+            Assert.Equal("AM.VLD-00034", Assert.Single(problem.Errors).ErrorCode.ToString());
+        }
+
+        [Fact]
+        public async Task AddAdministrator_ThrowsOnBadRequestWithoutKnownValidationError()
+        {
+            const string responseContent = """{ "status": 400, "title": "Bad Request" }""";
+            RecordingHandler handler = new RecordingHandler(responseContent, HttpStatusCode.BadRequest);
+            PersonInput personInput = new PersonInput { PersonIdentifier = "20814098533", LastName = "GÅSTOL" };
+
+            HttpStatusException exception = await Assert.ThrowsAsync<HttpStatusException>(
+                () => CreateClient(handler).AddAdministrator(_party, personInput));
+
+            Assert.Equal(HttpStatusCode.BadRequest, exception.StatusCode);
+            Assert.Equal(responseContent, exception.Message);
+        }
+
+        /// <summary>
+        /// Statuses other than a known validation error, such as Conflict, are still thrown
+        /// with the response body, so the controller can pass the status on.
         /// </summary>
         [Fact]
         public async Task AddAdministrator_ThrowsWithResponseBodyOnErrorResponse()
