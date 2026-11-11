@@ -35,6 +35,10 @@ vi.mock('@/rtk/features/bankruptcyEstateApi', () => ({
   },
 }));
 
+vi.mock('./AddAdministratorButton', () => ({
+  AddAdministratorButton: () => <button>add_administrator</button>,
+}));
+
 const person = { name: 'NORDMANN OLA', type: PartyType.Person } as AuthorizedPartyEntity;
 const organization = { name: 'ACME AS', type: PartyType.Organization } as AuthorizedPartyEntity;
 
@@ -59,6 +63,8 @@ describe('BankruptcyEstateAdministrationPageContent', () => {
 
     expect(screen.queryByText(warningText)).toBeNull();
     expect(screen.queryByText(headingText)).toBeNull();
+    expect(screen.queryByRole('button', { name: 'add_administrator' })).toBeNull();
+    expect(screen.queryByText('bankruptcy_estate_administration_page.intro')).toBeNull();
   });
 
   it('shows the warning for an organization without asking the BFF', () => {
@@ -79,6 +85,14 @@ describe('BankruptcyEstateAdministrationPageContent', () => {
     expect(screen.getByText(headingText)).toBeInTheDocument();
     expect(screen.queryByText(warningText)).toBeNull();
     expect(accessQuery).toHaveBeenCalledWith(undefined, { skip: false });
+    expect(screen.getByRole('button', { name: 'add_administrator' })).toBeInTheDocument();
+    expect(screen.getByText('Nordmann Ola')).toBeInTheDocument();
+    expect(screen.getByText('bankruptcy_estate_administration_page.trustee')).toBeInTheDocument();
+    expect(screen.getByText('bankruptcy_estate_administration_page.intro')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('bankruptcy_estate_administration_page.info_icon_label'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('bankruptcy_estate_administration_page.info_body')).toBeInTheDocument();
   });
 
   it('shows the warning for a person without estates', () => {

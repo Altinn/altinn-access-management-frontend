@@ -1,6 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Core.Models.BankruptcyEstate.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
 {
@@ -34,9 +35,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="partyId">The party the user is acting on behalf of.</param>
         /// <param name="personInput">The person identifier and last name of the person to add.</param>
         /// <param name="cancellationToken">A token used to cancel the asynchronous operation.</param>
-        /// <returns>The created assignment.</returns>
-        /// <exception cref="ArgumentException">Thrown when the person input is missing or the person identifier has an invalid format.</exception>
-        Task<AssignmentDto> AddAdministrator(Guid partyId, PersonInput personInput, CancellationToken cancellationToken = default);
+        /// <returns>The created assignment, or a validation problem when the person input is missing, malformed or rejected by Access Management.</returns>
+        Task<Result<AssignmentDto>> AddAdministrator(Guid partyId, PersonInput personInput, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes an administrator of the bankruptcy estates of the given party.
