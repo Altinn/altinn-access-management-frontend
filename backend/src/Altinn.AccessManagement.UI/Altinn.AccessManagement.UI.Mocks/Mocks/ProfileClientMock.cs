@@ -28,7 +28,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IHttpContextAccessor httpContextAccessor,
             IAccessTokenProvider accessTokenProvider)
         {
-            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(ProfileClientMock).Assembly.Location).LocalPath), "Data");
             _httpContextAccessor = httpContextAccessor;
         }
 

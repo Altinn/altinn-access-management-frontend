@@ -131,7 +131,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IEncryptionService, EncryptionServiceMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IResourceRegistryClient, ResourceRegistryClientMock>();
                     clients(services);
                     services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
