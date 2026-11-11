@@ -70,12 +70,20 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 // Log only the host (if parsable) and length: the query string may contain authorization codes
                 string host = Uri.TryCreate(decryptedCookieValue, UriKind.Absolute, out Uri parsed) ? parsed.Host : "<unparsable>";
-                logger.LogWarning("LogoutRedirect: decrypted redirect url is not well-formed (host {Host}, length {UrlLength}), redirecting to fallback", host, decryptedCookieValue?.Length ?? 0);
+                logger.LogWarning("LogoutRedirect: decrypted redirect url is not well-formed (host {Host}, length {UrlLength}), redirecting to fallback", SanitizeForLog(host), decryptedCookieValue?.Length ?? 0);
                 return Redirect(fallbackUrl);
             }
 
-            logger.LogInformation("LogoutRedirect: redirecting to {Host}", new Uri(decryptedCookieValue).Host);
+            logger.LogInformation("LogoutRedirect: redirecting to {Host}", SanitizeForLog(new Uri(decryptedCookieValue).Host));
             return Redirect(decryptedCookieValue);
+        }
+
+        /// <summary>
+        /// Strips line breaks so a value derived from the cookie cannot forge extra log entries.
+        /// </summary>
+        private static string SanitizeForLog(string value)
+        {
+            return value.Replace("\r", string.Empty).Replace("\n", string.Empty);
         }
     }
 }
