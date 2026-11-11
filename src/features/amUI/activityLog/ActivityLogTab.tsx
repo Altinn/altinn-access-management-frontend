@@ -31,13 +31,14 @@ export const ActivityLogTab = ({
     counterpartField,
   } = useActivityLogQueryState();
 
-  const { data, isLoading, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
+  const { currentData, isFetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useGetActivityLogInfiniteQuery({
       area,
       direction,
       [counterpartField]: selectedPartyIds,
       pageSize: ACTIVITY_LOG_PAGE_SIZE,
     });
+  const isLoading = isFetching && !isFetchingNextPage;
   const { data: partyValues } = useGetActivityLogFilterValuesQuery({
     area,
     direction,
@@ -54,7 +55,7 @@ export const ActivityLogTab = ({
       filterState={filterState}
       onFilterStateChange={changeFilterState}
       partyOptions={partyValues?.data ?? []}
-      entries={data?.pages.flatMap((page) => page.data) ?? []}
+      entries={currentData?.pages.flatMap((page) => page.data) ?? []}
       activityTypes={activityTypes}
       isLoading={isLoading}
       isError={isError}

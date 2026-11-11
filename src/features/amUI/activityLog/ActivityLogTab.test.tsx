@@ -27,18 +27,20 @@ const fetchNextPage = vi.fn();
 
 const setActivityLog = ({
   pages = [],
-  isLoading = false,
+  isFetching = false,
   isError = false,
   hasNextPage = false,
 }: {
   pages?: (typeof sampleActivityLogEntries)[];
-  isLoading?: boolean;
+  isFetching?: boolean;
   isError?: boolean;
   hasNextPage?: boolean;
 }) => {
+  const data = { pages: pages.map((entries) => ({ data: entries, links: {} })), pageParams: [] };
   vi.mocked(activityLogApi.useGetActivityLogInfiniteQuery).mockReturnValue({
-    data: { pages: pages.map((data) => ({ data, links: {} })), pageParams: [] },
-    isLoading,
+    data,
+    currentData: isFetching ? undefined : data,
+    isFetching,
     isError,
     hasNextPage,
     fetchNextPage,
@@ -115,6 +117,25 @@ describe('ActivityLogTab', () => {
     expect(activityLogApi.useGetActivityLogFilterValuesQuery).toHaveBeenLastCalledWith(
       expect.objectContaining({ direction: 'to', field: 'from' }),
     );
+  });
+
+  it('shows the skeleton rather than the previous entries while a new query fetching', () => {
+    setActivityLog({
+      pages: [sampleActivityLogEntries.slice(0, 2)],
+      isFetching: true,
+      hasNextPage: true,
+    });
+    render(
+      <ActivityLogTab
+        area='maskinporten'
+        reporteeName='Fysioterapeutene AS'
+      />,
+    );
+
+    expect(screen.queryByText(/events\.assignment/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'activity_log_page.load_more' }),
+    ).not.toBeInTheDocument();
   });
 
   it('shows an alert when the log cannot be loaded', () => {

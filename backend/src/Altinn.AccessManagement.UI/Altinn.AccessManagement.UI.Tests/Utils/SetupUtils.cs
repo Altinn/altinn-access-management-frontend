@@ -560,11 +560,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Gets a HttpClient for unittests testing for MaskinportenController
-        /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for MaskinportenController tests</param>
-        /// <returns>HttpClient</returns>
-        /// <summary>
         ///     Gets a HttpClient for unittests testing for ActivityLogController
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for ActivityLogController tests</param>
@@ -590,6 +585,11 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             return client;
         }
 
+        /// <summary>
+        /// Gets a HttpClient for unittests testing for MaskinportenController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for MaskinportenController tests</param>
+        /// <returns>HttpClient</returns>
         internal static HttpClient GetTestClient(CustomWebApplicationFactory<MaskinportenController> customFactory)
         {
             WebApplicationFactory<MaskinportenController> factory = customFactory.WithWebHostBuilder(builder =>
