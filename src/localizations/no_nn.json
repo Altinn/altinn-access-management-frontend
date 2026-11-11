@@ -119,8 +119,8 @@
     "too_many_subunits_warning": "Denne verksemda har for mange undereiningar til å inkludere dei i nedlastinga. Dette er noko vi jobbar med å løyse, men for no må du laste ned kvar undereining for seg dersom du ønskjer denne informasjonen."
   },
   "info_banner": {
-    "info": "Altinn er fornya.",
-    "link": "Slik gir du nye fullmakter og tilgangar."
+    "info": "Altinn-rollene blir fasa ut no.",
+    "link": "Sørg for at rette personar har fullmakt."
   },
   "header": {
     "access_management": "Tilgangsstyring",
