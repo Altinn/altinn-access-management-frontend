@@ -11,11 +11,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         public bool PDP { get; set; }
 
         /// <summary>
-        /// Set to mock AccessManagementClient during runtime
-        /// </summary>
-        public bool AccessManagement { get; set; }
-
-        /// <summary>
         /// Set to mock AccessManagementClientV0 during runtime
         /// </summary>
         public bool AccessManagement_V0 { get; set; }
@@ -143,7 +138,7 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <param name="value">The boolean value to which all memebers will be set</param>
         public MockSettings(bool value)
         {
-            AccessManagement = AccessManagement_V0 = AccessPackage = SingleRights = Instance = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = Dialogporten = Maskinporten = SelfIdentifiedUser = IdPortenAuthorization = ActivityLog = BankruptcyEstateAdministration = value;
+            AccessManagement_V0 = AccessPackage = SingleRights = Instance = Profile = Register = ResourceRegistry = KeyVault = ClientDelegation = Dialogporten = Maskinporten = SelfIdentifiedUser = IdPortenAuthorization = ActivityLog = BankruptcyEstateAdministration = value;
         }
     }
 }

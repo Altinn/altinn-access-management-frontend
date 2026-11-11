@@ -31,14 +31,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         private readonly string dataFolder;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
+        ///     Initializes a new instance of the <see cref="SingleRightClientMock" /> class
         /// </summary>
         public SingleRightClientMock(
             HttpClient httpClient,
-            ILogger<AccessManagementClientMock> logger,
+            ILogger<SingleRightClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
         {
-            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SingleRightClientMock).Assembly.Location).LocalPath), "Data");
         }
 
 

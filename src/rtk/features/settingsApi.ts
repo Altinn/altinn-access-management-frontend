@@ -36,7 +36,6 @@ export const settingsApi = createApi({
           body: address,
         };
       },
-      invalidatesTags: ['NotificationAddress'],
     }),
     deleteOrgNotificationAddress: builder.mutation<
       void,
@@ -48,7 +47,6 @@ export const settingsApi = createApi({
           method: 'DELETE',
         };
       },
-      invalidatesTags: ['NotificationAddress'],
     }),
     updateOrgNotificationAddress: builder.mutation<
       NotificationAddress,
@@ -61,7 +59,6 @@ export const settingsApi = createApi({
           body: address,
         };
       },
-      invalidatesTags: ['NotificationAddress'],
     }),
     updateSelectedLanguage: builder.mutation<void, string>({
       query: (languageCode) => ({

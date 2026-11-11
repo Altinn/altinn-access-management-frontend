@@ -124,8 +124,8 @@
     "too_many_subunits_warning": "This organization has too many subunits to include them in the download. We are working on a solution for this, but for now, you must download each subunit separately if you want their information."
   },
   "info_banner": {
-    "info": "Altinn has been renewed.",
-    "link": "This is how you grant new powers of attorney and accesses."
+    "info": "The Altinn roles are being phased out now.",
+    "link": "Make sure the right people have power of attorney."
   },
   "header": {
     "access_management": "Access management",
@@ -435,15 +435,15 @@
     "expired_resource_description": "This service is expired. If you grant power of attorney for this service, {{name}} will only have access to view old submissions/messages. They will not be able to submit new data.",
     "expired_resource_request_description": "This service is expired. If you request power of attorney for this service, you will only have access to view old submissions/messages. You will not be able to submit new data.",
     "actions": {
-      "access_to_all": "Access to the full service",
-      "partial_access": "Access to {{count}} of {{total}} actions",
+      "access_to_all": "Power of attorney for the full service",
+      "partial_access": "Power of attorney for {{count}} of {{total}} actions",
       "action_description": "These are the technical actions that the service offers. You can grant power of attorney to the entire service or choose specific actions.",
       "request_action_description": "These are the technical actions that the service offers. You can only request power of attorney for the entire service.",
       "approve_action_description": "These are the technical actions that the service offers. You can only approve power of attorney for the entire service.",
       "cannot_give_header": "You cannot grant access to:"
     },
     "instance_actions": {
-      "access_to_all": "Access to the entire message or form",
+      "access_to_all": "Power of attorney for the entire message or form",
       "action_description": "The available technical actions are shown here. You can grant power of attorney to all actions or choose individual ones."
     },
     "specific_rights": {
@@ -671,6 +671,10 @@
     "remove_sms": "Remove phone number",
     "error_saving_addresses": "Something went wrong. Please try again.",
     "no_addresses_error": "The organization must have at least one email address or SMS number for notifications.",
+    "organization_not_in_er": "We cannot register notification addresses for this organization because it is not registered in the Central Coordinating Register for Legal Entities.",
+    "address_already_exists": "This address is already registered",
+    "address_not_found": "One of the addresses has already been removed by someone else. Review the list and save again.",
+    "not_authorized_error": "You do not have access to change notification addresses for this organization.",
     "alert_settings_info": "Notifications sent to registered notification addresses are sent regardless of whether the recipient has the right to view the content in Altinn. If you have a shared email address, it is natural to include it here. <a>Read more</a>",
     "info_button": "About notification addresses",
     "service_announcement_heading": "Planned maintenance 31st of October - 1st of November",
@@ -679,7 +683,9 @@
   "text_field_errors": {
     "required": "The field is required",
     "invalid_email_pattern": "Invalid email address",
-    "invalid_phone": "Invalid phone number"
+    "invalid_phone": "Invalid phone number",
+    "invalid_norwegian_phone": "Norwegian mobile numbers must have 8 digits and start with 4 or 9",
+    "invalid_country_code": "Invalid country code"
   },
   "info_modal": {
     "back_button": "Go to old Altinn",
@@ -1285,10 +1291,10 @@
   },
   "draft_request_page": {
     "page_title": "Power of Attorney Request - Altinn",
-    "heading": "Do you want to request access to <strong>{{to_name}}</strong>?",
-    "intro_person": "A proposal for access on your behalf has been created, but you must approve it for it to take effect. The request will only be sent to <strong>{{to_name}}</strong> if you agree.",
-    "intro_company": "A proposal for access on behalf of <strong>{{from_name}}</strong> has been created, but you must approve it for it to take effect. The request will only be sent to <strong>{{to_name}}</strong> if you agree.",
-    "confirm_request": "Yes, request access",
+    "heading": "Do you want to request power of attorney from <strong>{{to_name}}</strong>?",
+    "intro_person": "A request for power of attorney has been prepared for you, but you must approve it before it is sent. The request will only be sent to <strong>{{to_name}}</strong> if you agree.",
+    "intro_company": "A request for power of attorney has been prepared on behalf of <strong>{{from_name}}</strong>, but you must approve it before it is sent. The request will only be sent to <strong>{{to_name}}</strong> if you agree.",
+    "confirm_request": "Yes, request power of attorney",
     "withdraw_request": "No, reject",
     "loading_request": "Loading request",
     "load_request_error": "Could not load request",
@@ -1297,7 +1303,7 @@
     "request_approved": "The request has been sent to <strong>{{to_name}}</strong>",
     "request_approved_info": "Someone at <strong>{{to_name}}</strong> will soon process your request, and you will receive a notification when it is approved.",
     "request_withdrawn": "The request has been rejected",
-    "request_withdrawn_info": "You have rejected the request and will therefore not receive power of attorney for <strong>{{to_name}}</strong>.",
+    "request_withdrawn_info": "You have rejected the request and will therefore not receive power of attorney from <strong>{{to_name}}</strong>.",
     "close_window_info": "You can now close this window.",
     "missing_request_id": "Cannot load request: requestId-parameter is not set in url",
     "batch_partial_error": "Could not process the following requests: {{resources}}. Please try again.",

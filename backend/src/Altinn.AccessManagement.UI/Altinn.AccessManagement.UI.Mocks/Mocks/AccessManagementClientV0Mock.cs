@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
 {
     /// <summary>
-    ///     Mock class for <see cref="IAccessManagementClient"></see> interface
+    ///     Mock class for <see cref="IAccessManagementClientV0"></see> interface
     /// </summary>
     public class AccessManagementClientV0Mock : IAccessManagementClientV0
     {
@@ -17,14 +17,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="AccessManagementClientMock" /> class
+        ///     Initializes a new instance of the <see cref="AccessManagementClientV0Mock" /> class
         /// </summary>
         public AccessManagementClientV0Mock(
             HttpClient httpClient,
-            ILogger<AccessManagementClientMock> logger,
+            ILogger<AccessManagementClientV0Mock> logger,
             IHttpContextAccessor httpContextAccessor)
         {
-            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientV0Mock).Assembly.Location).LocalPath), "Data");
             _httpContextAccessor = httpContextAccessor;
         }
 

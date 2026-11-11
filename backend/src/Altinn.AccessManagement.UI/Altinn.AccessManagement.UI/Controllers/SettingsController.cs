@@ -4,6 +4,7 @@ using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -159,7 +160,9 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                return await _settingsService.PostNewOrganisationNotificationAddress(orgNumber, notificationAddress);
+                Result<NotificationAddressResponse> result = await _settingsService.PostNewOrganisationNotificationAddress(orgNumber, notificationAddress);
+
+                return result.IsProblem ? result.Problem.ToActionResult() : result.Value;
             }
             catch (Exception ex)
             {
@@ -192,12 +195,9 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                return await _settingsService.DeleteOrganisationNotificationAddress(orgNumber, notificationAddressId);
-            }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                Result<NotificationAddressResponse> result = await _settingsService.DeleteOrganisationNotificationAddress(orgNumber, notificationAddressId);
+
+                return result.IsProblem ? result.Problem.ToActionResult() : result.Value;
             }
             catch (Exception ex)
             {
@@ -231,12 +231,9 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                return await _settingsService.UpdateOrganisationNotificationAddress(orgNumber, notificationAddressId, notificationAddress);
-            }
-            catch (HttpStatusException ex)
-            {
-                string responseContent = ex.Message;
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+                Result<NotificationAddressResponse> result = await _settingsService.UpdateOrganisationNotificationAddress(orgNumber, notificationAddressId, notificationAddress);
+
+                return result.IsProblem ? result.Problem.ToActionResult() : result.Value;
             }
             catch (Exception ex)
             {

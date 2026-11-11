@@ -41,6 +41,8 @@ export class InnstillingerPage {
   readonly noAddressesError: Locator;
   readonly savingError: Locator;
   readonly ugyldigEpostFeilmelding: Locator;
+  readonly ugyldigMobilnummerFeilmelding: Locator;
+  readonly adresseFinnesFeilmelding: Locator;
 
   constructor(page: Page, language: Language = Language.NB) {
     this.page = page;
@@ -85,6 +87,10 @@ export class InnstillingerPage {
     this.ugyldigEpostFeilmelding = this.dialog.getByText(
       this.texts.text_field_errors.invalid_email_pattern,
     );
+    this.ugyldigMobilnummerFeilmelding = this.dialog.getByText(
+      this.texts.text_field_errors.invalid_norwegian_phone,
+    );
+    this.adresseFinnesFeilmelding = this.dialog.getByText(settings.address_already_exists);
   }
 
   /** Find a controlled email input by its exact value, regardless of row order. */

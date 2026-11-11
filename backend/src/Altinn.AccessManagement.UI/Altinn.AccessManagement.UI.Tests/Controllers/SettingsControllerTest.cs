@@ -294,6 +294,69 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: The organization is not registered in ER
+        ///     Expected: Returns BadRequest with an error code the frontend can act on
+        /// </summary>
+        [Fact]
+        public async Task PostNewOrganisationNotificationAddress_OrganizationNotInEr_ReturnsProblemWithCode()
+        {
+            // Arrange
+            string orgNumber = "999999999"; // Special org number that triggers the problem in mock
+            var notificationAddress = new NotificationAddressModel { Email = "test@example.com" };
+
+            // Act
+            HttpResponseMessage response = await _client.PostAsJsonAsync($"accessmanagement/api/v1/settings/org/{orgNumber}/notificationaddresses", notificationAddress);
+
+            // Assert
+            await AssertProblem(response, HttpStatusCode.BadRequest, "STUI-00003");
+        }
+
+        /// <summary>
+        ///     Test case: Update an address to one the organization already has
+        ///     Expected: Returns Conflict with an error code the frontend can act on
+        /// </summary>
+        [Fact]
+        public async Task UpdateOrganisationNotificationAddress_AddressAlreadyExists_ReturnsProblemWithCode()
+        {
+            // Arrange
+            string orgNumber = "310202398";
+            int notificationAddressId = 40900; // Special id that triggers the problem in mock
+            var notificationAddress = new NotificationAddressModel { Email = "test@example.com" };
+
+            // Act
+            HttpResponseMessage response = await _client.PutAsJsonAsync($"accessmanagement/api/v1/settings/org/{orgNumber}/notificationaddresses/{notificationAddressId}", notificationAddress);
+
+            // Assert
+            await AssertProblem(response, HttpStatusCode.Conflict, "STUI-00004");
+        }
+
+        /// <summary>
+        ///     Test case: Delete the last address of an organization
+        ///     Expected: Returns Conflict with an error code the frontend can act on
+        /// </summary>
+        [Fact]
+        public async Task DeleteOrganisationNotificationAddress_LastAddress_ReturnsProblemWithCode()
+        {
+            // Arrange
+            string orgNumber = "310202398";
+            int notificationAddressId = 40900; // Special id that triggers the problem in mock
+
+            // Act
+            HttpResponseMessage response = await _client.DeleteAsync($"accessmanagement/api/v1/settings/org/{orgNumber}/notificationaddresses/{notificationAddressId}");
+
+            // Assert
+            await AssertProblem(response, HttpStatusCode.Conflict, "STUI-00005");
+        }
+
+        private static async Task AssertProblem(HttpResponseMessage response, HttpStatusCode expectedStatus, string expectedCode)
+        {
+            Assert.Equal(expectedStatus, response.StatusCode);
+
+            using JsonDocument body = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            Assert.Equal(expectedCode, body.RootElement.GetProperty("code").GetString());
+        }
+
+        /// <summary>
         ///     Test case: Multiple validation scenarios for POST endpoint using Theory
         ///     Expected: All return BadRequest with validation message
         /// </summary>
@@ -628,7 +691,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 builder.ConfigureTestServices(services =>
                 {
                     services.AddTransient<IProfileClient, ProfileClientMock>();
-                    services.AddTransient<IAccessManagementClient, AccessManagementClientMock>();
                     services.AddTransient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
                     services.AddTransient<IConnectionClient, ConnectionClientMock>();
                     services.AddTransient<IUserService, UserService>();
