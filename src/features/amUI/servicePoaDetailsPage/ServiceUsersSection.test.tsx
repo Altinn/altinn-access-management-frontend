@@ -7,6 +7,7 @@ import type { UserSearchProps } from '../common/UserSearch/UserSearch';
 
 import { ServiceUsersSection } from './ServiceUsersSection';
 
+const delegateTrigger = vi.fn();
 const revokeTrigger = vi.fn();
 const canRedelegateResource = vi.fn();
 const openSnackbar = vi.fn();
@@ -14,7 +15,7 @@ const openSnackbar = vi.fn();
 let delegations: unknown;
 let rightHolders: unknown;
 let delegableRights: {
-  rights: { delegable: boolean; delegationReasons: string[] }[];
+  rights: { rightKey: string; delegable: boolean; delegationReasons: string[] }[];
   errorDetails: unknown;
 };
 
@@ -37,10 +38,17 @@ vi.mock('./ServiceUserModal', () => ({
   ServiceUserModal: ({
     user,
     availableActions,
+    actionError,
   }: {
     user: { name: string };
     availableActions: string[];
-  }) => <div data-testid='service-user-modal'>{`${user.name}:${availableActions.join(',')}`}</div>,
+    actionError?: { httpStatus: string } | null;
+  }) => (
+    <div data-testid='service-user-modal'>
+      {`${user.name}:${availableActions.join(',')}`}
+      {actionError && `:error ${actionError.httpStatus}`}
+    </div>
+  ),
 }));
 
 // Captured the same way as UserSearch's props: the dialog has its own tests, so what matters here
@@ -69,6 +77,7 @@ vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () =>
 
 vi.mock('@/rtk/features/singleRights/singleRightsApi', () => ({
   useGetSingleRightsForRightholderQuery: () => delegations,
+  useDelegateRightsMutation: () => [delegateTrigger, { isLoading: false }],
   useRevokeResourceMutation: () => [revokeTrigger, { isLoading: false }],
 }));
 
@@ -124,6 +133,7 @@ const RESOURCE = { identifier: 'res-1', title: 'Skattemelding' } as never;
 
 beforeEach(() => {
   vi.clearAllMocks();
+  delegateTrigger.mockReturnValue({ unwrap: () => Promise.resolve() });
   revokeTrigger.mockReturnValue({ unwrap: () => Promise.resolve() });
   canRedelegateResource.mockResolvedValue(true);
   delegations = {
@@ -143,8 +153,8 @@ beforeEach(() => {
   };
   delegableRights = {
     rights: [
-      { delegable: true, delegationReasons: [] },
-      { delegable: false, delegationReasons: ['MissingRoleAccess'] },
+      { rightKey: 'read', delegable: true, delegationReasons: [] },
+      { rightKey: 'write', delegable: false, delegationReasons: ['MissingRoleAccess'] },
     ],
     errorDetails: null,
   };
@@ -184,23 +194,83 @@ describe('ServiceUsersSection', () => {
     expect(userSearchProps.users).toEqual([]);
   });
 
-  it('opens the dialog to pick actions instead of delegating on the spot', async () => {
+  const PER = { id: 'per', name: 'Per Person', type: PartyType.Person, isDeleted: false };
+
+  const allDelegable = () => {
+    delegableRights = {
+      rights: [
+        { rightKey: 'read', delegable: true, delegationReasons: [] },
+        { rightKey: 'write', delegable: true, delegationReasons: [] },
+      ],
+      errorDetails: null,
+    };
+  };
+
+  it('gives the whole service on the spot when every action can be passed on', async () => {
+    allDelegable();
     renderSection();
 
-    userSearchProps.onDelegate?.({
-      id: 'per',
-      name: 'Per Person',
-      type: PartyType.Person,
-      isDeleted: false,
-    });
+    userSearchProps.onDelegate?.(PER);
 
-    expect(await screen.findByTestId('service-user-modal')).toHaveTextContent(
-      'Per Person:DELEGATE',
+    await vi.waitFor(() =>
+      expect(delegateTrigger).toHaveBeenCalledWith({
+        partyUuid: 'org',
+        fromUuid: 'org',
+        toUuid: 'per',
+        resourceId: 'res-1',
+        actionKeys: ['read', 'write'],
+      }),
     );
-    expect(revokeTrigger).not.toHaveBeenCalled();
+    expect(screen.queryByTestId('service-user-modal')).not.toBeInTheDocument();
   });
 
-  it('offers revoking as well when opening a user that already holds the service', async () => {
+  // As the resource list in the Users view does: the dialog shows which actions are left out.
+  it('opens the dialog instead when only some of the actions can be passed on', async () => {
+    renderSection();
+
+    userSearchProps.onDelegate?.(PER);
+
+    expect(await screen.findByTestId('service-user-modal')).toHaveTextContent(
+      'Per Person:DELEGATE,REVOKE',
+    );
+    expect(delegateTrigger).not.toHaveBeenCalled();
+  });
+
+  it('opens the dialog on the user with the error when the delegation fails', async () => {
+    allDelegable();
+    delegateTrigger.mockReturnValue({
+      unwrap: () => Promise.reject(Object.assign(new Error('boom'), { status: 500 })),
+    });
+    renderSection();
+
+    userSearchProps.onDelegate?.(PER);
+
+    expect(await screen.findByTestId('service-user-modal')).toHaveTextContent(
+      'Per Person:DELEGATE,REVOKE:error 500',
+    );
+    expect(openSnackbar).not.toHaveBeenCalled();
+  });
+
+  it('opens the dialog without an earlier error when a user is selected afterwards', async () => {
+    allDelegable();
+    delegateTrigger.mockReturnValue({
+      unwrap: () => Promise.reject(Object.assign(new Error('boom'), { status: 500 })),
+    });
+    renderSection();
+
+    userSearchProps.onDelegate?.(PER);
+    await screen.findByText(/error 500/);
+
+    userSearchProps.onSelect?.({ ...PER, id: 'ola', name: 'Ola Nordmann' });
+
+    expect(await screen.findByTestId('service-user-modal')).toHaveTextContent(
+      'Ola Nordmann:DELEGATE,REVOKE',
+    );
+    expect(screen.getByTestId('service-user-modal')).not.toHaveTextContent('error');
+  });
+
+  // ResourceInfo hides the revoke button itself when the user does not hold the service.
+  it('opens the dialog with both giving and revoking when a user is selected', async () => {
     renderSection();
 
     userSearchProps.onSelect?.({
@@ -322,8 +392,8 @@ describe('ServiceUsersSection', () => {
   it('explains why and hides the ways of giving it when no action can be passed on', () => {
     delegableRights = {
       rights: [
-        { delegable: false, delegationReasons: ['MissingRoleAccess'] },
-        { delegable: false, delegationReasons: ['MissingRoleAccess'] },
+        { rightKey: 'read', delegable: false, delegationReasons: ['MissingRoleAccess'] },
+        { rightKey: 'write', delegable: false, delegationReasons: ['MissingRoleAccess'] },
       ],
       errorDetails: null,
     };

@@ -22,6 +22,8 @@
     "reset_choices": "Nullstill val",
     "apply": "Bruk",
     "search": "Søk",
+    "search_hits": "{{count}} treff på søket",
+    "search_hits_in_list": "{{count}} treff i {{list}}",
     "add": "Legg til",
     "remove": "Fjern",
     "removed": "Fjerna",
@@ -75,6 +77,7 @@
     "delete_poa": "Slett fullmakt",
     "delete_poa_for": "Slett fullmakt for {{poa_object}}",
     "delete_poa_to_name": "Slett fullmakt til {{name}}",
+    "edit_poas": "Endre fullmakter",
     "delete_pos_confirm": "Er du sikker på at du vil slette denne?",
     "has_poa": "Har fullmakt",
     "refresh_cookie_alert": "Valt aktør er endra i ei anna fane. For å sykronisere visninga vil denne sida bli lasta på nytt.",
@@ -170,7 +173,8 @@
     "requests": "Førespurnader",
     "requests_badge": "mottatt",
     "maskinporten": "Maskinporten\u00ADadministrasjon",
-    "activity_log": "Aktivitetslogg"
+    "activity_log": "Aktivitetslogg",
+    "bankruptcy_estate_administration": "Borolle\u00ADadministrasjon"
   },
   "error_page": {
     "page_title": "Feilside - Altinn",
@@ -214,7 +218,6 @@
     "change_rights": "Endre rettar"
   },
   "single_rights": {
-    "search_hits": "treff på søket:",
     "give_new_single_right": "Gi fullmakt",
     "current_services_title": "Fullmakt til {{count}} enkelttenester",
     "delete_singleRight_success_message": "Fullmakta til {{resourceTitle}} er fjerna frå {{name}}.",
@@ -256,6 +259,11 @@
     "search_active_matches": "Treff i aktive fullmakter",
     "search_no_active_matches": "Ingen treff i aktive fullmakter",
     "search_other_matches": "Andre treff",
+    "search_hits": "{{count}} treff i {{areas}}",
+    "search_hits_areas": "{{count}} område",
+    "search_hits_active": "{{count}} treff i aktive fullmakter",
+    "search_other_hits_one": "{{count}} anna treff",
+    "search_other_hits_other": "{{count}} andre treff",
     "info_alert_text": "Tilgangspakkar erstattar dagens Altinn-roller. Les meir om dette på <a href='https://info.altinn.no/nn/hjelp/tilgangsstyring/'>hjelpesidene</a>.",
     "delegation_check": {
       "delegation_check_error_heading": "Teknisk feil",
@@ -272,6 +280,8 @@
     "modal_info_info_2": "For å sjå kva denne fullmakta gjeld, kan du gå til <a>fana for verjemål</a> i oversikta."
   },
   "role": {
+    "roles_removed_heading": "Gamle Altinn-roller er fjerna",
+    "roles_removed_content": "Gamle Altinn-roller er no fjerna og gir ikkje lenger tilgang til noko i Altinn. Denne fana vil snart forsvinne. Dersom du eller andre har mista tilgang, gå til <packages>Tilgangspakkar</packages> for å be om fullmakt eller gi fullmakt til andre. Viss du berre treng tilgang til éi enkelt teneste, bruk gjerne <singleRights>Enkelttenester</singleRights> i staden.",
     "header_info": "Informasjon om roller i Altinn",
     "header_info_content": "Desse rollene er overført frå gamle Altinn og vil gradvis fases ut. Ver merksam på at rollene kan vere ufullstendige og at du ikkje kan gi/be om nye fullmakter til roller. Bruk heller tilgangspakkar eller enkelttenester.",
     "provider_status": "Denne rolla er henta frå ",
@@ -553,7 +563,13 @@
     "object": {
       "scope": "scopet «{{name}}»",
       "role": "rolla «{{name}}»",
+      "package": "tilgangspakken «{{name}}»",
       "access": "tilgang"
+    },
+    "trigger": {
+      "created": "Oppretta",
+      "updated": "Endra",
+      "deleted": "Fjerna"
     },
     "events": {
       "assignment": {
@@ -620,7 +636,6 @@
     "search_api_placeholder": "Søk etter API",
     "no_scopes": "Ingen scopes funne for denne tenesta.",
     "scope_count": "{{count}} scopes",
-    "search_results_count": "{{count}} treff på søket",
     "delegated_resources_heading": "Fullmakt til {{count}} API",
     "no_delegated_resources": "Ingen fullmakter er lagde til enno.",
     "delegated_resources_error": "Kunne ikkje laste fullmakter.",
@@ -648,7 +663,9 @@
     "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen.",
     "no_addresses_error": "Verksemda må ha minst ei e-postadresse eller sms-adresse for varslingar.",
     "alert_settings_info": "Varsla som sendast ut til registrerte varslingsadresser blir sendt uavhengig av om mottakar har rett til å sjå innhaldet i Altinn. Dersom de har ei felles e-postadresse er det naturleg å legge den inn her. <a>Les meir</a>",
-    "info_button": "Informasjon om varslingsadresser"
+    "info_button": "Informasjon om varslingsadresser",
+    "service_announcement_heading": "Planlagt vedlikehald 31. oktober - 1. november",
+    "service_announcement_content": "Altinn utfører planlagt vedlikehald av varslingsadresser for verksemder. Dette kan føre til ustabil åtferd på denne sida i tidsrommet laurdag 31. oktober kl 08:00 til søndag 1. november kl 08:00. Sletting av adresser blir mellombels utilgjengeleg."
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",
@@ -722,6 +739,8 @@
     "single_rights_heading": "Enkelttenester:",
     "agent_has_clients_tab": "Har desse klientane",
     "agent_can_get_clients_tab": "Kan få desse klientane",
+    "agent_has_clients_search_list": "klientane brukaren har",
+    "agent_can_get_clients_search_list": "klientane brukaren kan få",
     "client_has_agents_tab": "Brukarar med fullmakt",
     "client_can_get_agents_tab": "Brukarar som kan få fullmakt",
     "recently_added_users": "Nyleg lagt til brukarar",
@@ -740,7 +759,18 @@
     "no_agents": "Ingen brukarar har fått klienttilgangar enno.",
     "addUserPrompt": "Vel «Legg til ny brukar» for å gi fleire brukarar fullmakt til klienten.",
     "no_results": "Ingen brukarar blei funne for dette søket.",
-    "client_search_placeholder": "Søk etter klient"
+    "client_search_placeholder": "Søk etter klient",
+    "bulk_actions_description": "Fullmakter som kan tildelast på vegner av klient",
+    "give_all": "Gi alle",
+    "delete_all": "Slett alle",
+    "give_all_for": "Gi alle fullmakter for {{clientName}}",
+    "delete_all_for": "Slett alle fullmakter for {{clientName}}",
+    "give_all_to": "Gi alle fullmakter for klienten til {{name}}",
+    "delete_all_to": "Slett alle fullmakter for klienten til {{name}}",
+    "delegate_all_success_snackbar": "{{name}} har no fått alle fullmakter for {{clientName}}.",
+    "delegate_all_error": "{{failedCount}} av {{totalCount}} fullmakter for {{clientName}} kunne ikkje bli gitt til {{name}}.",
+    "remove_all_success_snackbar": "{{name}} har ikkje lenger fullmakter for {{clientName}}.",
+    "remove_all_error": "{{failedCount}} av {{totalCount}} fullmakter for {{clientName}} kunne ikkje bli sletta for {{name}}."
   },
   "systemuser_creationpage": {
     "page_title": "Lag ny systemtilgang - Altinn",
@@ -751,8 +781,7 @@
     "system_search_placeholder": "Søk etter fagsystem eller leverandør",
     "no_systems_found": "Ingen fagsystem vart funne for dette søket.",
     "selected_system": "Valt: {{systemName}} - {{vendor}}",
-    "search_hits_one": "{{count}} fagsystem funne",
-    "search_hits_other": "{{count}} fagsystem funne",
+    "search_hits": "{{count}} fagsystem funne",
     "load_vendors_error": "Kunne ikkje laste systemleverandørar",
     "loading_systems": "Lastar leverandørar og system..."
   },
@@ -1185,7 +1214,8 @@
     "new_requests_self_other": "Du har {{count}} nye førespurnader",
     "new_requests_zero": "{{reportee}} har ingen nye førespurnader",
     "new_requests_one": "{{reportee}} har en ny førespurnad",
-    "new_requests_other": "{{reportee}} har {{count}} nye førespurnader"
+    "new_requests_other": "{{reportee}} har {{count}} nye førespurnader",
+    "bankruptcy_estate_admin_item_description": "Gi andre tilgang til å administrere konkursbua til {{reportee}}."
   },
   "request_page": {
     "page_title": "Førespurnader - Altinn",
@@ -1221,6 +1251,7 @@
     "review_handled_on": "{{status}} den {{date}}",
     "review_handled_by": "{{status}} av {{name}} den {{date}}",
     "handled_requests_title": "Behandla førespurnader",
+    "pending_requests_title": "Ubehandla førespurnader",
     "handled_requests_description": "Her kan du sjå førespurnader som blei behandla for opptil eit år sidan.",
     "search_placeholder": "Søk i førespurnader",
     "no_search_results": "Ingen treff på søket \"{{searchTerm}}\".",
@@ -1293,5 +1324,10 @@
     "add_account_from_token_error": "Kunne ikkje legge til konto",
     "add_account_from_token_invalid_token": "Lenka er ugyldig eller utgått",
     "add_account_from_token_not_from_caller": "Lenka blei ikkje forespurt av pålogga brukar"
+  },
+  "bankruptcy_estate_administration_page": {
+    "page_title": "Borolleadministrasjon - Altinn",
+    "page_heading": "Borolleadministrasjon for {{name}}",
+    "no_access_title": "Du har ikkje tilgang til borolleadministrasjon"
   }
 }

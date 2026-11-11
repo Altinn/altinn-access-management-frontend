@@ -1,7 +1,8 @@
 import { AccessPackageListItem, type AccessPackageListItemProps } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { PartyType } from '@/dataObjects/dtos/Party';
+import { type PartyType } from '@/dataObjects/dtos/Party';
+import { getPartyColor } from '@/resources/utils/reporteeUtils';
 import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { useRestoreFocusTarget } from '../RestoreFocus';
@@ -31,7 +32,7 @@ export const PackageItem = ({
   titleAs,
 }: PackageItemProps) => {
   const { t } = useTranslation();
-  const partyTypeColor = partyType === PartyType.Person ? 'person' : 'company';
+  const partyTypeColor = getPartyColor({ type: partyType });
   useRestoreFocusTarget(pkg.id);
   useRestoreFocusTarget(packageActionControlId(pkg.id));
   return (

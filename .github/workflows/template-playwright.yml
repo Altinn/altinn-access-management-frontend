@@ -52,9 +52,12 @@ jobs:
           TT02_REGISTER_SUBSCRIPTION_KEY: ${{ secrets.TT02_REGISTER_SUBSCRIPTION_KEY }}
           ENVIRONMENT: ${{ inputs.environment }}
           PROJECT: ${{ inputs.project }}
-        run: |
-          yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+          PLAYWRIGHT_HTML_OPEN: never
+          # Same URL as the Azure upload below; the UU reporter links to it.
+          REPORT_URL: https://playwrightreporting.z1.web.core.windows.net/${{ github.run_id }}-${{ inputs.environment }}/${{ inputs.environment }}/
+        run: yarn run "env:${ENVIRONMENT}" --project "${PROJECT}" --workers=4
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: playwright-report-${{ inputs.environment }}
@@ -84,13 +87,19 @@ jobs:
               --destination-path "$REPORT_ID/$REPORT_NAME" \
               --source "playwright/playwright-report/$REPORT_NAME" \
               --overwrite \
-              --auth-mode login
+              --auth-mode login \
+              --no-progress \
+              --only-show-errors \
+              --output none
 
           echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> "$GITHUB_ENV"
       - name: Show report URL
         if: always()
         run: |
-          echo ""
-          echo "📊 Playwright test report:"
-          echo "➡️  $REPORT_URL"
-          echo ""
+          NOTICE="Playwright-rapport: $REPORT_URL"
+          # The UU reporter only writes uu/ when the run had axe scans.
+          if [ -f "playwright/playwright-report/${{ inputs.environment }}/uu/index.html" ]; then
+            NOTICE="$NOTICE%0APlaywright Universell Utforming-rapport: ${REPORT_URL}uu/index.html"
+          fi
+          # The only place the report links are printed: an annotation at the top of the run page.
+          echo "::notice title=Rapporter ${{ inputs.environment }}::$NOTICE"

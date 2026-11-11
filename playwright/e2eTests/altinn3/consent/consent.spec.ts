@@ -4,7 +4,7 @@ import { test } from 'playwright/fixture/pomFixture';
 import { Language } from 'playwright/pages/consent/ConsentPage';
 import { addTimeToNowUtc, formatUiDateTime, pickRandom } from 'playwright/util/helper';
 
-import { fromPersons, toOrgs } from './helper/consentTestdata';
+import { personTilOrg, toOrgs } from './helper/consentTestdata';
 
 const REDIRECT_URL = 'https://example.com/';
 const APPROVED_REDIRECT_URL = `${REDIRECT_URL}?Status=OK`;
@@ -12,6 +12,9 @@ const REJECTED_REDIRECT_URL = `${REDIRECT_URL}?Status=Failed&ErrorMessage=User+d
 
 const LANGUAGES = [Language.NB, Language.NN, Language.EN];
 const MOBILE_VIEWPORT = { width: 375, height: 667 };
+// UU: én skanning per unike samtykkevariant, kun på bokmål. Språket endrer ikke
+// axe-reglene, og siden etter godkjenning er ekstern og skannes derfor ikke automatisk.
+const scanUu = (language: Language) => language === Language.NB;
 
 LANGUAGES.forEach((language) => {
   test.describe(`Samtykke - fra person til org (${language})`, () => {
@@ -19,8 +22,8 @@ LANGUAGES.forEach((language) => {
       language,
       viewport: MOBILE_VIEWPORT,
     });
-    test(`Standard samtykke`, async ({ login, consentPage, api }) => {
-      const fromPerson = pickRandom(fromPersons);
+    test(`Standard samtykke`, async ({ login, consentPage, api, runAccessibilityTest }) => {
+      const fromPerson = personTilOrg[language].standard;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -37,11 +40,11 @@ LANGUAGES.forEach((language) => {
 
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
-        await login.loginNotChoosingActor(fromPerson);
+        await login.loginNotChoosingActor(fromPerson, { setLanguage: false });
       });
 
+      // Eneste samtykketest som velger språk i GUI; resten setter det via API ved innlogging.
       await test.step('Pick language', async () => {
-        await consentPage.openMenu();
         await consentPage.pickLanguage(consentPage.language);
       });
 
@@ -52,13 +55,15 @@ LANGUAGES.forEach((language) => {
         await consentPage.expectExpiry(expected);
       });
 
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-standard');
+
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Krav-template`, async ({ consentPage, login, api }) => {
-      const fromPerson = pickRandom(fromPersons);
+    test(`Krav-template`, async ({ consentPage, login, api, runAccessibilityTest }) => {
+      const fromPerson = personTilOrg[language].krav;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -78,24 +83,27 @@ LANGUAGES.forEach((language) => {
         await login.loginNotChoosingActor(fromPerson);
       });
 
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
-      });
-
       await test.step('Verify consent UI and expiry', async () => {
         await consentPage.expectKravIntro();
         const expected = formatUiDateTime(validTo);
         await consentPage.expectExpiry(expected);
       });
 
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-krav');
+
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Fullmakt utføre tjeneste`, async ({ consentPage, page, login, api }) => {
-      const fromPerson = pickRandom(fromPersons);
+    test(`Fullmakt utføre tjeneste`, async ({
+      consentPage,
+      page,
+      login,
+      api,
+      runAccessibilityTest,
+    }) => {
+      const fromPerson = personTilOrg[language].fullmakt;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -115,11 +123,6 @@ LANGUAGES.forEach((language) => {
         await login.loginNotChoosingActor(fromPerson);
       });
 
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
-      });
-
       await test.step('Verify consent UI and expiry', async () => {
         await consentPage.expectFullmaktIntro();
         await expect(consentPage.textFullmaktHeading).toBeVisible();
@@ -130,13 +133,15 @@ LANGUAGES.forEach((language) => {
         await consentPage.expectExpiryDate(expected);
       });
 
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-fullmakt');
+
       await test.step('Approve consent', async () => {
         await consentPage.approveFullmaktAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Lånesøknad`, async ({ consentPage, login, api }) => {
-      const fromPerson = pickRandom(fromPersons);
+    test(`Lånesøknad`, async ({ consentPage, login, api, runAccessibilityTest }) => {
+      const fromPerson = personTilOrg[language].laanesoeknad;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -156,11 +161,6 @@ LANGUAGES.forEach((language) => {
         await login.loginNotChoosingActor(fromPerson);
       });
 
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
-      });
-
       await test.step('Verify consent UI', async () => {
         await consentPage.expectStandardIntro();
         await expect(consentPage.textLoanApplication).toBeVisible();
@@ -170,13 +170,15 @@ LANGUAGES.forEach((language) => {
         await expect(consentPage.textOneTimeDelivery).toBeVisible();
       });
 
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-laanesoeknad');
+
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
-    test(`Enkelt samtykke`, async ({ consentPage, login, api }) => {
-      const fromPerson = pickRandom(fromPersons);
+    test(`Enkelt samtykke`, async ({ consentPage, login, api, runAccessibilityTest }) => {
+      const fromPerson = personTilOrg[language].enkelt;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -196,11 +198,6 @@ LANGUAGES.forEach((language) => {
         await login.loginNotChoosingActor(fromPerson);
       });
 
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
-      });
-
       await test.step('Verify consent UI', async () => {
         await consentPage.expectEnkeltIntro();
         await expect(consentPage.textDataUsage).toBeVisible();
@@ -211,13 +208,15 @@ LANGUAGES.forEach((language) => {
         await expect(consentPage.textOneTimeUse).toBeVisible();
       });
 
+      if (scanUu(language)) await runAccessibilityTest.scan('samtykke-enkelt');
+
       await test.step('Approve consent', async () => {
         await consentPage.approveStandardAndWaitLogout(APPROVED_REDIRECT_URL);
       });
     });
 
     test(`Avvis samtykke`, async ({ consentPage, login, api }) => {
-      const fromPerson = pickRandom(fromPersons);
+      const fromPerson = personTilOrg[language].avvis;
       const toOrg = pickRandom(toOrgs);
       const validTo = addTimeToNowUtc({ days: 2 });
 
@@ -235,11 +234,6 @@ LANGUAGES.forEach((language) => {
       await test.step('Open consent page and login', async () => {
         await consentPage.open(consentResponse.viewUri);
         await login.loginNotChoosingActor(fromPerson);
-      });
-
-      await test.step('Pick language', async () => {
-        await consentPage.openMenu();
-        await consentPage.pickLanguage(consentPage.language);
       });
 
       await test.step('Verify consent request heading', async () => {

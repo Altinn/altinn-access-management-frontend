@@ -19,4 +19,5 @@ export enum amUIPath {
   MaskinportenSupplier = 'maskinporten/supplier/:id',
   MaskinportenConsumer = 'maskinporten/consumer/:id',
   ActivityLog = 'activity-log',
+  BankruptcyEstateAdministration = 'bankruptcy-estate-administration',
 }

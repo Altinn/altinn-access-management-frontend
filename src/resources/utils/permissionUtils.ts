@@ -1,4 +1,5 @@
 import { PartyType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
+import { isOrganization, isPerson } from '@/resources/utils/reporteeUtils';
 
 export const hasConsentPermission = (
   reporteeInfo?: AuthorizedPartyEntity,
@@ -18,8 +19,7 @@ export const hasCreateSystemUserPermission = (
   if (!reporteeInfo) {
     return undefined;
   }
-  const isOrganization = reporteeInfo.type === PartyType.Organization;
-  return isOrganization && isAdmin;
+  return isOrganization(reporteeInfo) && isAdmin;
 };
 
 export const hasSystemUserClientAdminPermission = (
@@ -29,9 +29,7 @@ export const hasSystemUserClientAdminPermission = (
   if (!reporteeInfo) {
     return undefined;
   }
-
-  const isOrganization = reporteeInfo.type === PartyType.Organization;
-  return isOrganization && isClientAdmin;
+  return isOrganization(reporteeInfo) && isClientAdmin;
 };
 
 export const hasActivityLogPermission = (
@@ -54,4 +52,22 @@ export const hasReporteeListAdminAccess = (
     return isAdmin;
   }
   return isCurrentUserReportee;
+};
+
+export const isBankruptcyEstateAdministrationAvailable = (
+  reporteeInfo?: AuthorizedPartyEntity,
+): boolean => {
+  return (
+    window.featureFlags?.enableBankruptcyEstateAdministration === true && isPerson(reporteeInfo)
+  );
+};
+
+export const hasBankruptcyEstateAdminPermission = (
+  reporteeInfo?: AuthorizedPartyEntity,
+  isBankruptcyEstateAdmin?: boolean,
+): boolean | undefined => {
+  if (!isBankruptcyEstateAdministrationAvailable(reporteeInfo)) {
+    return false;
+  }
+  return isBankruptcyEstateAdmin;
 };

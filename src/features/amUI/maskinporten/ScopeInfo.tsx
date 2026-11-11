@@ -37,10 +37,7 @@ interface ScopeInfoProps {
   availableActions?: DelegationAction[];
 }
 
-export const ScopeInfo = ({
-  resource,
-  availableActions = [DelegationAction.DELEGATE, DelegationAction.REVOKE],
-}: ScopeInfoProps) => {
+export const ScopeInfo = ({ resource, availableActions = [] }: ScopeInfoProps) => {
   const canDelegate = availableActions.includes(DelegationAction.DELEGATE);
   const canRevoke = availableActions.includes(DelegationAction.REVOKE);
   const isRevokeOnly = canRevoke && !canDelegate;

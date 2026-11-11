@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
 import { useGetActiveConsentsQuery } from '@/rtk/features/consentApi';
 import { type Request } from '@/features/amUI/requestPage/types';
 import { useGetPendingSystemUserRequestsQuery } from '@/rtk/features/systemUserApi';
@@ -37,16 +36,19 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     data: isAdmin,
     isLoading: isLoadingIsAdmin,
     isError: isAdminError,
+    error: adminError,
   } = useGetIsAdminQuery();
   const {
     data: reportee,
     isLoading: isLoadingReportee,
     isError: isReporteeError,
+    error: reporteeError,
   } = useGetReporteeQuery();
   const {
     data: currentUser,
     isLoading: isLoadingCurrentUser,
     isError: isCurrentUserError,
+    error: currentUserError,
   } = useGetPartyFromLoggedInUserQuery();
 
   const hasApproveConsentPermission = hasConsentPermission(
@@ -58,6 +60,7 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     data: activeConsents,
     isLoading: isLoadingActiveConsents,
     isError: isLoadingConsentsError,
+    error: consentsError,
   } = useGetActiveConsentsQuery(
     { partyId: partyUuid },
     { skip: !partyUuid || !hasApproveConsentPermission },
@@ -68,6 +71,7 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     data: pendingSystemUsers,
     isLoading: isLoadingPendingSystemUsers,
     isError: isLoadingPendingSystemUsersError,
+    error: pendingSystemUsersError,
   } = useGetPendingSystemUserRequestsQuery(partyUuid, {
     skip: !partyUuid || !hasSystemUserPermission,
   });
@@ -76,6 +80,7 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     data: pendingSentAccessRequests,
     isLoading: isLoadingPendingSentAccessRequests,
     isError: isSentAccessRequestsError,
+    error: sentAccessRequestsError,
   } = useGetSentRequestsQuery(
     { party: partyUuid || '', status: requestStatusesToLoad, to: '' },
     { skip: !partyUuid || skipSentRequests },
@@ -84,6 +89,7 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
     data: pendingReceivedAccessRequests,
     isLoading: isLoadingPendingReceivedAccessRequests,
     isError: isReceivedAccessRequestsError,
+    error: receivedAccessRequestsError,
   } = useGetReceivedRequestsQuery(
     { party: partyUuid || '', status: requestStatusesToLoad, from: '' },
     { skip: !partyUuid },
@@ -147,6 +153,14 @@ export const useRequests = ({ skipSentRequests = false }: UseRequestsOptions = {
       isLoadingPendingSystemUsersError ||
       isReceivedAccessRequestsError,
     isSentRequestsError: isAdminError || isReporteeError || isSentAccessRequestsError,
+    receivedRequestsError:
+      adminError ||
+      reporteeError ||
+      consentsError ||
+      currentUserError ||
+      pendingSystemUsersError ||
+      receivedAccessRequestsError,
+    sentRequestsError: adminError || reporteeError || sentAccessRequestsError,
     isLoadingReceivedRequests:
       isLoadingIsAdmin ||
       isLoadingReportee ||
@@ -165,7 +179,7 @@ const mapConsentToRequest = (request: ActiveConsentListItem): Request => {
     type: 'consent',
     createdDate: request.createdDate,
     displayPartyName: request.toParty.name,
-    displayPartyType: request.toParty.type === PartyType.Person ? 'person' : 'company',
+    displayPartyType: getAvatarType(request.toParty),
     isSubUnit: isSubUnitByType(request.toParty.unitType),
     description: request.isPoa ? 'request_page.request_poa' : 'request_page.request_consent',
   };

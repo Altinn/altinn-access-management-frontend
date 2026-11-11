@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSnackbar } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
+import { getActionError } from '@/resources/hooks/useActionError';
 import {
   useApproveRequestMutation,
   useRejectRequestMutation,
@@ -18,8 +20,10 @@ import {
 import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import type { Request, ProcessedStatus } from '../types';
+import type { RequestErrorAlertProps } from '../RequestErrorAlert';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useAccessPackageDelegationCheck } from '../../common/DelegationCheck/AccessPackageDelegationCheckContext';
+import { createErrorDetails } from '../../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 type SnapshotRequests = {
   resourceRequests: EnrichedResourceRequest[];
@@ -43,6 +47,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     data: resourceRequests,
     isLoading: isLoadingResourceRequests,
     isFetching: isFetchingResourceRequests,
+    error: resourceRequestsError,
   } = useGetEnrichedReceivedResourceRequestsQuery(
     { party: actingParty?.id || '', from: request?.partyUuid || '', status: ['Pending'] },
     { skip: !actingParty?.id || !request?.partyUuid },
@@ -51,6 +56,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     data: packageRequests,
     isLoading: isLoadingPackageRequests,
     isFetching: isFetchingPackageRequests,
+    error: packageRequestsError,
   } = useGetEnrichedReceivedPackageRequestsQuery(
     { party: actingParty?.id || '', from: request?.partyUuid || '', status: ['Pending'] },
     { skip: !actingParty?.id || !request?.partyUuid },
@@ -71,7 +77,11 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
   const [bulkActionLoading, setBulkActionLoading] = useState<'approveAll' | 'rejectAll' | null>(
     null,
   );
-  const { canDelegatePackage } = useAccessPackageDelegationCheck();
+  const [actionError, setActionError] = useState<RequestErrorAlertProps | null>(null);
+  const [resourceDelegationCheckError, setResourceDelegationCheckError] =
+    useState<FetchBaseQueryError>();
+  const { canDelegatePackage, error: packageDelegationCheckError } =
+    useAccessPackageDelegationCheck();
 
   // Reset state only when switching to a different party (not on every object reference change)
   const requestPartyUuid = request?.partyUuid;
@@ -83,6 +93,8 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     setDelegationChecks({});
     setActionLoading(null);
     setBulkActionLoading(null);
+    setActionError(null);
+    setResourceDelegationCheckError(undefined);
   }, [requestPartyUuid]);
 
   useEffect(() => {
@@ -114,8 +126,9 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
       try {
         const result = await lazyDelegationCheck({ resourceId }).unwrap();
         setDelegationChecks((prev) => ({ ...prev, [resourceId]: result }));
-      } catch {
-        // If delegation check fails, treat as no data
+      } catch (error) {
+        // If delegation check fails, treat as no data and show the error
+        setResourceDelegationCheckError(error as FetchBaseQueryError);
       }
     });
     // Deliberately keyed on snapshotRequests alone: depending on delegationChecks would
@@ -145,7 +158,17 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     setDelegationChecks({});
     setActionLoading(null);
     setBulkActionLoading(null);
+    setActionError(null);
+    setResourceDelegationCheckError(undefined);
     onClose();
+  };
+
+  const showActionError = (heading: string, error: unknown) => {
+    const { httpStatus, timestamp, details } = getActionError(error);
+    setActionError({
+      heading,
+      details: { status: httpStatus, time: timestamp, traceId: details?.traceId },
+    });
   };
 
   const findRequestId = (
@@ -176,6 +199,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     const requestId = findRequestId(resourceId, packageId);
     if (!requestId || !actingParty?.id) return;
     setActionLoading('approve');
+    setActionError(null);
 
     try {
       const result = await approveRequest({
@@ -191,11 +215,8 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
         message: t('request_page.request_approved'),
         color: 'success',
       });
-    } catch {
-      openSnackbar({
-        message: t('request_page.approve_failed'),
-        color: 'danger',
-      });
+    } catch (error) {
+      showActionError(t('request_page.approve_failed'), error);
     } finally {
       setActionLoading(null);
     }
@@ -211,6 +232,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     const requestId = findRequestId(resourceId, packageId);
     if (!requestId || !actingParty?.id) return;
     setActionLoading('reject');
+    setActionError(null);
     try {
       const result = await rejectRequest({
         party: actingParty.id,
@@ -225,11 +247,8 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
         message: t('request_page.request_rejected'),
         color: 'success',
       });
-    } catch {
-      openSnackbar({
-        message: t('request_page.reject_failed'),
-        color: 'danger',
-      });
+    } catch (error) {
+      showActionError(t('request_page.reject_failed'), error);
     } finally {
       setActionLoading(null);
     }
@@ -244,6 +263,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     const mutate = type === 'approve_all' ? approveRequest : rejectRequest;
     const status: ProcessedStatus = type === 'approve_all' ? 'approved' : 'rejected';
     setBulkActionLoading(type === 'approve_all' ? 'approveAll' : 'rejectAll');
+    setActionError(null);
     try {
       const results = await Promise.allSettled(
         items.map(async ({ id, key }) => {
@@ -254,13 +274,15 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
           }));
         }),
       );
-      const anyFailed = results.some((r) => r.status === 'rejected');
-      openSnackbar({
-        message: t(
-          anyFailed ? `request_page.${type}_partial_failed` : `request_page.${type}_success`,
-        ),
-        color: anyFailed ? 'danger' : 'success',
-      });
+      const failed = results.find((r) => r.status === 'rejected');
+      if (failed) {
+        showActionError(t(`request_page.${type}_partial_failed`), failed.reason);
+      } else {
+        openSnackbar({
+          message: t(`request_page.${type}_success`),
+          color: 'success',
+        });
+      }
     } finally {
       setBulkActionLoading(null);
     }
@@ -299,6 +321,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     resource?: ServiceResource;
     package?: AccessPackage;
   }) => {
+    setActionError(null);
     if (resource) {
       setSelectedResource(resource);
       setSelectedPackage(null);
@@ -309,6 +332,7 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
   };
 
   const resetSelection = () => {
+    setActionError(null);
     setSelectedResource(null);
     setSelectedPackage(null);
   };
@@ -330,9 +354,28 @@ export const useRequestReview = (request: Request | null, onClose: () => void) =
     pendingResourceIds.some((id) => !cannotApprove({ resourceId: id })) ||
     pendingPackageIds.some((id) => !cannotApprove({ packageId: id }));
 
+  const requestsError = createErrorDetails(resourceRequestsError || packageRequestsError);
+  const delegationCheckError = createErrorDetails(
+    selectedPackage
+      ? packageDelegationCheckError
+      : resourceDelegationCheckError || packageDelegationCheckError,
+  );
+
+  // The snapshot stays empty when nothing was returned, so that case is read from the queries
+  const snapshotCount = snapshotResources.length + snapshotPackages.length;
+  const hasNoRequests =
+    !isFetchingRequests && resourceRequests?.length === 0 && packageRequests?.length === 0;
+  const hasMissingRequests =
+    !!request?.numberOfRequests &&
+    (snapshotCount > 0 ? snapshotCount !== request.numberOfRequests : hasNoRequests);
+
   return {
     isLoadingRequests,
     isFetchingRequests,
+    requestsError,
+    hasMissingRequests,
+    delegationCheckError,
+    actionError,
     snapshotResources,
     snapshotPackages,
     selectedResource,

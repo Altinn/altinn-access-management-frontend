@@ -74,8 +74,8 @@ export const ActivityLogTimeline = ({
           return (
             <TimelineSegment
               key={entry.id}
-              data-color={color}
-              borderColor={color}
+              unread
+              color={color}
               datetime={entry.when}
               byline={formatActivityLogTimestamp(entry.when, t, locale)}
             >

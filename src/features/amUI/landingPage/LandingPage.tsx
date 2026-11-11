@@ -24,6 +24,8 @@ import {
   hasReporteeListAdminAccess,
   hasSystemUserClientAdminPermission,
   hasCreateSystemUserPermission,
+  isBankruptcyEstateAdministrationAvailable,
+  hasBankruptcyEstateAdminPermission,
 } from '@/resources/utils/permissionUtils';
 import {
   getActivityLogMenuItem,
@@ -38,6 +40,7 @@ import {
   getYourClientsMenuItem,
   getUsersMenuItem,
   getYourRightsMenuItem,
+  getBankruptcyEstateAdministrationMenuItem,
 } from '@/resources/utils/sidebarConfig';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import { useGetPartyFromLoggedInUserQuery } from '@/rtk/features/lookupApi';
@@ -47,10 +50,12 @@ import {
   isOrganization,
   isSubUnit,
   formatEntityDisplayName,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useSidebarRequestCount } from '@/resources/hooks/useSidebarRequestCount';
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
+import { useGetIsBankruptcyEstateAdminQuery } from '@/rtk/features/bankruptcyEstateApi';
 
 import { PageLayoutWrapper } from '../common/PageLayoutWrapper';
 import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
@@ -70,6 +75,9 @@ export const LandingPage = () => {
     useGetIsCompanyProfileAdminQuery();
   const { data: isMaskinportenAdmin } = useGetIsMaskinportenAdminQuery(undefined, {
     skip: !isOrganization(reportee),
+  });
+  const { data: isBankruptcyEstateAdmin } = useGetIsBankruptcyEstateAdminQuery(undefined, {
+    skip: !isBankruptcyEstateAdministrationAvailable(reportee),
   });
   const { data: currentUser, isLoading: currentUserIsLoading } = useGetPartyFromLoggedInUserQuery();
   const actingPartyUuid = getCookie('AltinnPartyUuid') ?? '';
@@ -191,6 +199,14 @@ export const LandingPage = () => {
         description: t('landing_page.activity_log_item_description', { reportee: reporteeName }),
       });
     }
+    if (hasBankruptcyEstateAdminPermission(reportee, isBankruptcyEstateAdmin)) {
+      items.push({
+        ...getBankruptcyEstateAdministrationMenuItem(),
+        description: t('landing_page.bankruptcy_estate_admin_item_description', {
+          reportee: reporteeName,
+        }),
+      });
+    }
     return items;
   };
 
@@ -270,7 +286,7 @@ export const LandingPage = () => {
           <div className={classes.landingPageHeading}>
             <UserListItem
               id={reportee?.id ?? ''}
-              type={isOrganization(reportee) ? 'company' : 'person'}
+              type={getAvatarType(reportee)}
               name={reporteeName}
               description={getReporteeDescription()}
               subUnit={isReporteeSubUnit}

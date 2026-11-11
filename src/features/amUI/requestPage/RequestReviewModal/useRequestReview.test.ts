@@ -38,6 +38,11 @@ vi.mock('@/rtk/features/singleRights/singleRightsApi', () => ({
 const PARTY_UUID = 'acting-party-uuid';
 const FROM_PARTY_UUID = 'from-party-uuid';
 const LAST_UPDATED = '2024-01-15T12:00:00Z';
+const HTTP_ERROR = Object.assign(new Error('API error'), {
+  status: 500,
+  data: { traceId: 'trace-id' },
+});
+const HTTP_ERROR_DETAILS = { status: '500', traceId: 'trace-id' };
 
 const mockRequest: Request = {
   id: 'mock-request',
@@ -118,6 +123,7 @@ describe('useRequestReview', () => {
   const renderWithData = (
     resources: EnrichedResourceRequest[] = [],
     packages: EnrichedPackageRequest[] = [],
+    request: Request = mockRequest,
   ) => {
     vi.mocked(requestApiModule.useGetEnrichedReceivedResourceRequestsQuery).mockReturnValue({
       data: resources,
@@ -129,7 +135,7 @@ describe('useRequestReview', () => {
       isLoading: false,
       isFetching: false,
     } as any);
-    return renderHook(() => useRequestReview(mockRequest, mockOnClose));
+    return renderHook(() => useRequestReview(request, mockOnClose));
   };
 
   // ---------------------------------------------------------------------------
@@ -287,14 +293,31 @@ describe('useRequestReview', () => {
       expect(mockOpenSnackbar).toHaveBeenCalledWith(expect.objectContaining({ color: 'success' }));
     });
 
-    it('shows an error snackbar when approval fails', async () => {
-      mockApproveFn.mockReturnValue({ unwrap: vi.fn().mockRejectedValue(new Error('API error')) });
+    it('exposes a technical error instead of a snackbar when approval fails', async () => {
+      mockApproveFn.mockReturnValue({ unwrap: vi.fn().mockRejectedValue(HTTP_ERROR) });
       const { result } = renderWithData([makeResourceReq('req-r1', 'resource-1')]);
       await act(async () => {});
       await act(async () => {
         await result.current.handleApprove({ resourceId: 'resource-1' });
       });
-      expect(mockOpenSnackbar).toHaveBeenCalledWith(expect.objectContaining({ color: 'danger' }));
+      expect(result.current.actionError).toMatchObject({
+        heading: 'request_page.approve_failed',
+        details: HTTP_ERROR_DETAILS,
+      });
+      expect(mockOpenSnackbar).not.toHaveBeenCalled();
+    });
+
+    it('clears the technical error when retrying', async () => {
+      mockApproveFn.mockReturnValueOnce({ unwrap: vi.fn().mockRejectedValue(HTTP_ERROR) });
+      const { result } = renderWithData([makeResourceReq('req-r1', 'resource-1')]);
+      await act(async () => {});
+      await act(async () => {
+        await result.current.handleApprove({ resourceId: 'resource-1' });
+      });
+      await act(async () => {
+        await result.current.handleApprove({ resourceId: 'resource-1' });
+      });
+      expect(result.current.actionError).toBeNull();
     });
   });
 
@@ -332,14 +355,18 @@ describe('useRequestReview', () => {
       expect(result.current.processedRequests['package-1']?.status).toBe('rejected');
     });
 
-    it('shows an error snackbar when rejection fails', async () => {
-      mockRejectFn.mockReturnValue({ unwrap: vi.fn().mockRejectedValue(new Error('API error')) });
+    it('exposes a technical error instead of a snackbar when rejection fails', async () => {
+      mockRejectFn.mockReturnValue({ unwrap: vi.fn().mockRejectedValue(HTTP_ERROR) });
       const { result } = renderWithData([makeResourceReq('req-r1', 'resource-1')]);
       await act(async () => {});
       await act(async () => {
         await result.current.handleReject({ resourceId: 'resource-1' });
       });
-      expect(mockOpenSnackbar).toHaveBeenCalledWith(expect.objectContaining({ color: 'danger' }));
+      expect(result.current.actionError).toMatchObject({
+        heading: 'request_page.reject_failed',
+        details: HTTP_ERROR_DETAILS,
+      });
+      expect(mockOpenSnackbar).not.toHaveBeenCalled();
     });
   });
 
@@ -400,14 +427,14 @@ describe('useRequestReview', () => {
       );
     });
 
-    it('shows a partial failure snackbar when some approvals fail', async () => {
+    it('exposes a technical error when some approvals fail', async () => {
       let callCount = 0;
       mockApproveFn.mockImplementation(() => ({
         unwrap: vi.fn().mockImplementation(() => {
           callCount++;
           return callCount === 1
             ? Promise.resolve({ lastUpdated: LAST_UPDATED })
-            : Promise.reject(new Error('API error'));
+            : Promise.reject(HTTP_ERROR);
         }),
       }));
       const { result } = renderWithData(
@@ -418,12 +445,11 @@ describe('useRequestReview', () => {
       await act(async () => {
         await result.current.handleApproveAll();
       });
-      expect(mockOpenSnackbar).toHaveBeenCalledWith(
-        expect.objectContaining({
-          color: 'danger',
-          message: 'request_page.approve_all_partial_failed',
-        }),
-      );
+      expect(result.current.actionError).toMatchObject({
+        heading: 'request_page.approve_all_partial_failed',
+        details: HTTP_ERROR_DETAILS,
+      });
+      expect(mockOpenSnackbar).not.toHaveBeenCalled();
     });
 
     it('bulkActionLoading is null after the operation completes', async () => {
@@ -479,14 +505,14 @@ describe('useRequestReview', () => {
       );
     });
 
-    it('shows a partial failure snackbar when some rejections fail', async () => {
+    it('exposes a technical error when some rejections fail', async () => {
       let callCount = 0;
       mockRejectFn.mockImplementation(() => ({
         unwrap: vi.fn().mockImplementation(() => {
           callCount++;
           return callCount === 1
             ? Promise.resolve({ lastUpdated: LAST_UPDATED })
-            : Promise.reject(new Error('API error'));
+            : Promise.reject(HTTP_ERROR);
         }),
       }));
       const { result } = renderWithData(
@@ -497,12 +523,146 @@ describe('useRequestReview', () => {
       await act(async () => {
         await result.current.handleRejectAll();
       });
-      expect(mockOpenSnackbar).toHaveBeenCalledWith(
-        expect.objectContaining({
-          color: 'danger',
-          message: 'request_page.reject_all_partial_failed',
-        }),
+      expect(result.current.actionError).toMatchObject({
+        heading: 'request_page.reject_all_partial_failed',
+        details: HTTP_ERROR_DETAILS,
+      });
+      expect(mockOpenSnackbar).not.toHaveBeenCalled();
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+
+  describe('loading errors', () => {
+    it('exposes requestsError when loading resource requests fails', () => {
+      vi.mocked(requestApiModule.useGetEnrichedReceivedResourceRequestsQuery).mockReturnValue({
+        isLoading: false,
+        isFetching: false,
+        error: HTTP_ERROR,
+      } as never);
+      const { result } = renderHook(() => useRequestReview(mockRequest, mockOnClose));
+      expect(result.current.requestsError).toMatchObject(HTTP_ERROR_DETAILS);
+    });
+
+    it('exposes requestsError when loading package requests fails', () => {
+      vi.mocked(requestApiModule.useGetEnrichedReceivedPackageRequestsQuery).mockReturnValue({
+        isLoading: false,
+        isFetching: false,
+        error: HTTP_ERROR,
+      } as never);
+      const { result } = renderHook(() => useRequestReview(mockRequest, mockOnClose));
+      expect(result.current.requestsError).toMatchObject(HTTP_ERROR_DETAILS);
+    });
+
+    it('has no requestsError when loading succeeds', () => {
+      const { result } = renderHook(() => useRequestReview(mockRequest, mockOnClose));
+      expect(result.current.requestsError).toBeNull();
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+
+  describe('hasMissingRequests', () => {
+    const requestOfTwo: Request = { ...mockRequest, numberOfRequests: 2 };
+
+    it('is false when the number of loaded requests matches', async () => {
+      const { result } = renderWithData(
+        [makeResourceReq('req-r1', 'resource-1')],
+        [makePackageReq('req-p1', 'package-1')],
+        requestOfTwo,
       );
+      await act(async () => {});
+      expect(result.current.hasMissingRequests).toBe(false);
+    });
+
+    it('is true when fewer requests are loaded than expected', async () => {
+      const { result } = renderWithData(
+        [makeResourceReq('req-r1', 'resource-1')],
+        [],
+        requestOfTwo,
+      );
+      await act(async () => {});
+      expect(result.current.hasMissingRequests).toBe(true);
+    });
+
+    it('is true when no requests are loaded but some are expected', async () => {
+      const { result } = renderWithData([], [], requestOfTwo);
+      await act(async () => {});
+      expect(result.current.hasMissingRequests).toBe(true);
+    });
+
+    it('is false while the requests are still loading', () => {
+      vi.mocked(requestApiModule.useGetEnrichedReceivedResourceRequestsQuery).mockReturnValue({
+        isLoading: true,
+        isFetching: true,
+      } as never);
+      vi.mocked(requestApiModule.useGetEnrichedReceivedPackageRequestsQuery).mockReturnValue({
+        isLoading: true,
+        isFetching: true,
+      } as never);
+      const { result } = renderHook(() => useRequestReview(requestOfTwo, mockOnClose));
+      expect(result.current.hasMissingRequests).toBe(false);
+    });
+
+    it('stays false when processed requests disappear from the query result', async () => {
+      const { result, rerender } = renderWithData(
+        [makeResourceReq('req-r1', 'resource-1')],
+        [makePackageReq('req-p1', 'package-1')],
+        requestOfTwo,
+      );
+      await act(async () => {});
+      vi.mocked(requestApiModule.useGetEnrichedReceivedResourceRequestsQuery).mockReturnValue({
+        data: [],
+        isLoading: false,
+        isFetching: false,
+      } as never);
+      rerender();
+      expect(result.current.hasMissingRequests).toBe(false);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+
+  describe('delegationCheckError', () => {
+    it('exposes the error when a resource delegation check fails', async () => {
+      mockLazyCheck.mockReturnValue({ unwrap: vi.fn().mockRejectedValue(HTTP_ERROR) });
+      const { result } = renderWithData([makeResourceReq('req-r1', 'resource-1')]);
+      await act(async () => {});
+      expect(result.current.delegationCheckError).toMatchObject(HTTP_ERROR_DETAILS);
+    });
+
+    it('exposes the error when the package delegation check fails', () => {
+      vi.mocked(delegationCheckModule.useAccessPackageDelegationCheck).mockReturnValue({
+        canDelegatePackage: mockCanDelegatePackage,
+        error: HTTP_ERROR,
+      } as never);
+      const { result } = renderHook(() => useRequestReview(mockRequest, mockOnClose));
+      expect(result.current.delegationCheckError).toMatchObject(HTTP_ERROR_DETAILS);
+    });
+
+    it('ignores a failed resource check when a package is selected', async () => {
+      mockLazyCheck.mockReturnValue({ unwrap: vi.fn().mockRejectedValue(HTTP_ERROR) });
+      const { result } = renderWithData([makeResourceReq('req-r1', 'resource-1')]);
+      await act(async () => {});
+      act(() => {
+        result.current.handleSelection({ package: { id: 'package-1' } as AccessPackage });
+      });
+      expect(result.current.delegationCheckError).toBeNull();
+    });
+
+    it('is cleared when the modal closes', async () => {
+      mockLazyCheck.mockReturnValue({ unwrap: vi.fn().mockRejectedValue(HTTP_ERROR) });
+      const { result } = renderWithData([makeResourceReq('req-r1', 'resource-1')]);
+      await act(async () => {});
+      vi.mocked(requestApiModule.useGetEnrichedReceivedResourceRequestsQuery).mockReturnValue({
+        data: [],
+        isLoading: false,
+        isFetching: false,
+      } as never);
+      act(() => {
+        result.current.handleClose();
+      });
+      expect(result.current.delegationCheckError).toBeNull();
     });
   });
 
@@ -569,6 +729,20 @@ describe('useRequestReview', () => {
       });
       expect(result.current.selectedPackage).toBe(pkg);
       expect(result.current.selectedResource).toBeNull();
+    });
+
+    it('clears the action error when the selection changes', async () => {
+      mockApproveFn.mockReturnValue({ unwrap: vi.fn().mockRejectedValue(HTTP_ERROR) });
+      const { result } = renderWithData([makeResourceReq('req-r1', 'resource-1')]);
+      await act(async () => {});
+      await act(async () => {
+        await result.current.handleApprove({ resourceId: 'resource-1' });
+      });
+      expect(result.current.actionError).not.toBeNull();
+      act(() => {
+        result.current.resetSelection();
+      });
+      expect(result.current.actionError).toBeNull();
     });
 
     it('resetSelection clears both selected items', () => {

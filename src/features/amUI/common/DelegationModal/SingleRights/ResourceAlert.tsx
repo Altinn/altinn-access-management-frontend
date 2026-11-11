@@ -65,7 +65,9 @@ export const ResourceAlert = ({
     );
   } else if (rightReasons) {
     if (isAccessListFailure(rightReasons)) {
-      headingText = t('delegation_modal.service_error.general_heading');
+      headingText = isApprove
+        ? t('delegation_modal.service_error.approve_heading')
+        : t('delegation_modal.service_error.general_heading');
       content = (
         <DsParagraph>
           {t('delegation_modal.service_error.access_list_service', {

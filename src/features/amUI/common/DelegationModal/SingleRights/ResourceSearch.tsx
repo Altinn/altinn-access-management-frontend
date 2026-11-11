@@ -1,7 +1,4 @@
 import * as React from 'react';
-import { useTranslation } from 'react-i18next';
-import { DsPopover, DsSwitch } from '@altinn/altinn-components';
-import { QuestionmarkCircleIcon } from '@navikt/aksel-icons';
 import { useCallback, useEffect } from 'react';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
@@ -30,8 +27,6 @@ export interface ResourceSearchProps {
 const searchResultsPerPage = 7;
 
 export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchProps) => {
-  const { t } = useTranslation();
-
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const {
     searchString,
@@ -111,36 +106,21 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
             }
           }}
           serviceOwnerOptions={filterOptions}
-        />
-        <div className={classes.toggleContainer}>
-          <DsSwitch
-            data-size='sm'
-            checked={includeExpiredResources}
-            onChange={(e) => {
+          expiredToggle={{
+            checked: includeExpiredResources,
+            onChange: (checked) => {
               setCurrentPage(1);
-              setIncludeExpiredResources(e.target.checked);
-            }}
-            label={t('resource_list.show_expired_services')}
-          />
-          <DsPopover.TriggerContext>
-            <DsPopover.Trigger
-              icon
-              variant='tertiary'
-              data-size='sm'
-              aria-label={t('resource_list.show_expired_services_helptext_button')}
-            >
-              <QuestionmarkCircleIcon aria-hidden='true' />
-            </DsPopover.Trigger>
-            <DsPopover>{t('resource_list.show_expired_services_helptext')}</DsPopover>
-          </DsPopover.TriggerContext>
-        </div>
+              setIncludeExpiredResources(checked);
+            },
+          }}
+        />
       </div>
       <div className={classes.searchResults}>
         <SearchResults
           isFetching={isFetching}
           error={error}
           resources={resources}
-          searchString={searchString}
+          searchString={debouncedSearchString}
           delegatedResources={delegatedResources}
           totalNumberOfResults={totalNumberOfResults}
           currentPage={currentPage}

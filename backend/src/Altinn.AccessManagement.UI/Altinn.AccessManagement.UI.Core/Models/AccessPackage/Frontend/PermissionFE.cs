@@ -50,9 +50,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
 
             return new PermissionFE
             {
-                From = PartyFE.FromCompactEntity(permission.From),
-                To = PartyFE.FromCompactEntity(permission.To),
-                Via = PartyFE.FromCompactEntity(permission.Via),
+                From = PartyFE.FromEntity(permission.From),
+                To = PartyFE.FromEntity(permission.To),
+                Via = PartyFE.FromEntity(permission.Via),
                 Role = permission.Role,
                 ViaRole = permission.ViaRole,
                 Reason = permission.Reason,

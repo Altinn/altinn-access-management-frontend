@@ -7,28 +7,17 @@
 .searchAndAdd {
   display: flex;
   align-items: center;
-  padding-bottom: var(--ds-size-2);
+  padding-bottom: var(--ds-spacing-4);
   flex-wrap: wrap;
   gap: var(--ds-size-2);
 }
 
-.expiredSwitch {
-  display: flex;
-  align-items: center;
+.searchHits {
+  margin-bottom: var(--ds-spacing-1);
 }
+
 .delegationModalButton {
   margin-left: auto;
-}
-
-.showMoreButtonContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 1rem;
-  width: 100%;
-}
-
-.showMoreButton {
-  width: 100%;
 }
 
 .resourceListContainer {

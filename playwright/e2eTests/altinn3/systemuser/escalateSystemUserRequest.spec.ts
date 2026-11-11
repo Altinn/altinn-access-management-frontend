@@ -56,10 +56,13 @@ test.describe('Systembruker - Eskaler', () => {
     browser,
     api,
     language,
+    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Login as regular user, select actor and escalate request', async () => {
       await page.goto(response.confirmUrl);
       await login.loginNotChoosingActor(regularUserPid);
+      await expect(systemUserPage.escalateConfirmButton).toBeVisible();
+      await runAccessibilityTest.scan('systembruker-eskalering');
       await systemUserPage.escalateConfirmButton.click();
       await Promise.all([page.waitForLoadState('load'), systemUserPage.finish.click()]);
     });
@@ -79,6 +82,7 @@ test.describe('Systembruker - Eskaler', () => {
       await managerSystemUserPage.requestsMenuItem.click();
       await managerSystemUserPage.requestLink(response.id).click();
       await expect(managerClientDelegationPage.confirmButton).toBeVisible();
+      await runAccessibilityTest.scan('systembruker-eskalert-godkjenning', managerPage);
       await managerClientDelegationPage.confirmButton.click();
     });
 

@@ -1,12 +1,11 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { type AccessPackageListItemProps, type UserListItemProps } from '@altinn/altinn-components';
 
-import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import {
   getFormattedDateOfBirthLabel,
   isSubUnitByType,
   formatEntityDisplayName,
+  getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import type { ActionError } from '@/resources/hooks/useActionError';
@@ -19,23 +18,23 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
-import { UserListItems, type UserListItemData } from '../UserListItems/UserListItems';
+import {
+  UserListItems,
+  matchesUserListSearch,
+  type UserListItemData,
+} from '../UserListItems/UserListItems';
 import {
   ClientPackageInfoModal,
   type ClientPackageModalData,
 } from '../DelegationModal/AccessPackages/ClientPackageInfoModal';
-import { ClientAccessSections } from '../ClientResourceList/ClientAccessSections';
-import { type ClientResourceListItemData } from '../ClientResourceList/ClientResourceListItems';
 import {
-  buildPackageItem,
-  buildResourceItem,
-  clientActionControlId,
-  restoreFocusOnSuccess,
-} from '../ClientResourceList/buildAccessItems';
+  ClientAccessItems,
+  type ClientPackageEntry,
+  type ClientResourceEntry,
+} from '../ClientResourceList/ClientAccessItems';
 import {
   ClientResourceInfoModal,
   type ClientResourceModalData,
@@ -57,6 +56,12 @@ type ClientAgentPackageListProps = {
   removeAgentAccessPackages: RemoveAgentAccessPackagesFn;
   addAgentResources?: AddAgentResourcesFn;
   removeAgentResources?: RemoveAgentResourcesFn;
+  // rowKey is unique per list, see listKey.
+  renderAgentActions?: (
+    agent: Agent,
+    rowKey: string,
+    restoreFocusFallbackId?: string,
+  ) => React.ReactNode;
   emptyText?: string;
   searchString?: string;
   expandedIds?: string[];
@@ -84,12 +89,13 @@ type SelectedAgentResource = {
   ) => void | Promise<void>;
 };
 
-const getUserListItemType = (agentType: PartyType): UserListItemProps['type'] => {
-  return agentType === PartyType.Person ? 'person' : 'company';
-};
-
 const getAgentSortKey = (agent: Agent): string =>
   `${isNewUser(agent.agentAddedAt) ? '0' : '1'}:${agent.agent.name.toLowerCase()}`;
+
+export const countAgentSearchHits = (agents: Agent[], searchString?: string) =>
+  agents.filter((agent) =>
+    matchesUserListSearch({ name: formatEntityDisplayName(agent.agent) }, searchString),
+  ).length;
 
 export const ClientAgentPackageList = ({
   agents,
@@ -103,6 +109,7 @@ export const ClientAgentPackageList = ({
   removeAgentAccessPackages,
   addAgentResources,
   removeAgentResources,
+  renderAgentActions,
   emptyText,
   searchString,
   expandedIds,
@@ -111,9 +118,8 @@ export const ClientAgentPackageList = ({
   restoreFocusFallbackId,
 }: ClientAgentPackageListProps) => {
   const { t } = useTranslation();
-  const { getAccessPackageById } = useAccessPackageLookup();
+  const { getAccessPackageByUrn } = useAccessPackageLookup();
   const { getRoleMetadata } = useRoleMetadata();
-  const isMobileOrSmaller = useIsMobileOrSmaller();
 
   const actionsDisabled = isLoading || !fromPartyUuid || !actingPartyUuid;
 
@@ -182,102 +188,93 @@ export const ClientAgentPackageList = ({
     [agents],
   );
 
+  const openPackageModal = (entry: ClientPackageEntry) => {
+    setSelected({
+      itemId: entry.itemId,
+      data: {
+        party: entry.party,
+        accessPackage: entry.accessPackage,
+        userHasAccess: entry.hasAccess,
+        roleDescription: entry.roleDescription,
+        onDelegate: entry.onDelegate,
+        onRevoke: entry.onRevoke,
+      },
+    });
+    modalRef.current?.showModal();
+  };
+
+  const openResourceModal = (entry: ClientResourceEntry) => {
+    setSelectedResource({
+      itemId: entry.itemId,
+      agentId: entry.party.id,
+      refId: entry.resource.identifier,
+      resource: entry.resource,
+      toPartyName: formatEntityDisplayName(entry.party),
+      onDelegate: entry.onDelegate,
+      onRevoke: entry.onRevoke,
+    });
+    resourceModalRef.current?.showModal();
+  };
+
   const userListItems: UserListItemData[] = sortedAgents.map((agent) => {
     const agentId = agent.agent.id;
     const idPrefix = listKey ? `${listKey}:${agentId}` : agentId;
     const isRecentlyAdded = isNewUser(agent.agentAddedAt);
     const isSubUnit = isSubUnitByType(agent.agent.unitType);
-    const userType = getUserListItemType(agent.agent.type);
+    const userType = getAvatarType(agent.agent);
     const agentName = formatEntityDisplayName(agent.agent);
-    const nodes = clientAccess.reduce((acc, access) => {
-      if (access.packages.length === 0) return acc;
 
+    const packages = clientAccess.flatMap((access) => {
       const roleName = getRoleMetadata(access.role.id)?.name ?? access.role.name;
-
-      const packages = access.packages.map<AccessPackageListItemProps>((pkg) => {
-        const hasAccess = agentHasPackage(agentId, pkg.id);
-        const accessPackage = getAccessPackageById(pkg.id);
-        const delegable = accessPackage?.isDelegable ?? false;
-        const packageName = accessPackage?.name || pkg.name;
-        const roleDescription =
-          access.role.code !== 'rettighetshaver'
-            ? t('client_administration_page.via_role', { role: roleName })
-            : undefined;
-        const itemId = `${idPrefix}:${access.role.code}:${pkg.id}`;
-        const requestFocus = () =>
-          requestPackageFocus(clientActionControlId(itemId), restoreFocusFallbackId);
-
-        const onDelegate = (onSuccess?: () => void, onError?: () => void) =>
-          addClientAccessPackage(
-            agentId,
-            access.role.code,
-            pkg.urn ?? '',
-            agentName,
-            packageName,
-            onSuccess,
-            onError,
-          );
-        const onRevoke = (onSuccess?: () => void, onError?: () => void) =>
-          removeClientAccessPackage(
-            agentId,
-            access.role.code,
-            pkg.urn ?? '',
-            agentName,
-            packageName,
-            onSuccess,
-            onError,
-          );
-
-        const onOpenModal =
-          accessPackage && delegable
-            ? () => {
-                setSelected({
-                  itemId,
-                  data: {
-                    party: agent.agent,
-                    accessPackage,
-                    userHasAccess: hasAccess,
-                    roleDescription,
-                    onDelegate,
-                    onRevoke,
-                  },
-                });
-                modalRef.current?.showModal();
-              }
-            : undefined;
-
-        return buildPackageItem({
-          id: itemId,
+      return access.packages.flatMap<ClientPackageEntry>((pkg) => {
+        // The client endpoints only send the package id and urn, so a package we can't look up has
+        // no name or resources to show.
+        const accessPackage = getAccessPackageByUrn(pkg.urn);
+        if (!accessPackage) return [];
+        const delegable = accessPackage.isDelegable ?? false;
+        return {
+          itemId: `${idPrefix}:${access.role.code}:${pkg.id}`,
+          party: agent.agent,
           accessPackage,
-          packageName,
-          hasAccess,
-          showAction: delegable,
-          isMobileOrSmaller,
-          addDisabled: actionsDisabled,
-          removeDisabled: actionsDisabled,
-          onDelegate: restoreFocusOnSuccess(delegable ? onDelegate : undefined, requestFocus),
-          onRevoke: restoreFocusOnSuccess(delegable ? onRevoke : undefined, requestFocus),
-          onOpenModal,
-          t,
-        });
+          hasAccess: agentHasPackage(agentId, pkg.id),
+          roleDescription:
+            access.role.code !== 'rettighetshaver'
+              ? t('client_administration_page.via_role', { role: roleName })
+              : undefined,
+          onDelegate: delegable
+            ? (onSuccess, onError) =>
+                addClientAccessPackage(
+                  agentId,
+                  access.role.code,
+                  pkg.urn,
+                  agentName,
+                  accessPackage.name,
+                  onSuccess,
+                  onError,
+                )
+            : undefined,
+          onRevoke: delegable
+            ? (onSuccess, onError) =>
+                removeClientAccessPackage(
+                  agentId,
+                  access.role.code,
+                  pkg.urn,
+                  agentName,
+                  accessPackage.name,
+                  onSuccess,
+                  onError,
+                )
+            : undefined,
+        };
       });
+    });
 
-      acc.push(...packages);
-
-      return acc;
-    }, [] as AccessPackageListItemProps[]);
-
-    const resourceNodes = clientAccess.reduce((acc, access) => {
-      (access.resources ?? []).forEach((clientResource) => {
+    const resources = clientAccess.flatMap((access) =>
+      (access.resources ?? []).flatMap<ClientResourceEntry>((clientResource) => {
         const resource = clientResource.details;
-        if (!resource) return;
+        if (!resource) return [];
 
-        const hasAccess = agentHasResource(agentId, clientResource.refId);
         const delegable = resource.delegable && !!addAgentResources && !!removeAgentResources;
-        const itemId = `${idPrefix}:${access.role.code}:${clientResource.refId}`;
-        const requestFocus = () =>
-          requestResourceFocus(clientActionControlId(itemId), restoreFocusFallbackId);
-
         const delegationInput = {
           clientId: fromPartyUuid ?? '',
           agentId,
@@ -286,44 +283,24 @@ export const ClientAgentPackageList = ({
           agentName,
           resourceName: resource.title,
         };
-        const onDelegate = (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
-          addClientResource(delegationInput, onSuccess, onError);
-        const onRevoke = (onSuccess?: () => void, onError?: (error?: ActionError) => void) =>
-          removeClientResource(delegationInput, onSuccess, onError);
-
-        acc.push(
-          buildResourceItem({
-            id: itemId,
-            resource,
-            hasAccess,
-            showAction: delegable,
-            isMobileOrSmaller,
-            addDisabled: actionsDisabled,
-            removeDisabled: actionsDisabled,
-            onDelegate: restoreFocusOnSuccess(delegable ? onDelegate : undefined, requestFocus),
-            onRevoke: restoreFocusOnSuccess(delegable ? onRevoke : undefined, requestFocus),
-            onOpenModal: () => {
-              setSelectedResource({
-                itemId,
-                agentId,
-                refId: clientResource.refId,
-                resource,
-                toPartyName: agentName,
-                onDelegate: delegable ? onDelegate : undefined,
-                onRevoke: delegable ? onRevoke : undefined,
-              });
-              resourceModalRef.current?.showModal();
-            },
-          }),
-        );
-      });
-
-      return acc;
-    }, [] as ClientResourceListItemData[]);
+        return {
+          itemId: `${idPrefix}:${access.role.code}:${clientResource.refId}`,
+          party: agent.agent,
+          resource,
+          hasAccess: agentHasResource(agentId, clientResource.refId),
+          onDelegate: delegable
+            ? (onSuccess, onError) => addClientResource(delegationInput, onSuccess, onError)
+            : undefined,
+          onRevoke: delegable
+            ? (onSuccess, onError) => removeClientResource(delegationInput, onSuccess, onError)
+            : undefined,
+        };
+      }),
+    );
 
     return {
       id: agentId,
-      name: agent.agent.name,
+      name: agentName,
       type: userType,
       subUnit: isSubUnit,
       deleted: agent.agent.isDeleted ?? undefined,
@@ -332,10 +309,20 @@ export const ClientAgentPackageList = ({
       titleAs: 'h2',
       as: 'button',
       children: (
-        <ClientAccessSections
-          packageItems={nodes}
-          resourceItems={resourceNodes}
-        />
+        <>
+          {renderAgentActions?.(agent, idPrefix, restoreFocusFallbackId)}
+          <ClientAccessItems
+            packages={packages}
+            resources={resources}
+            addDisabled={actionsDisabled}
+            removeDisabled={actionsDisabled}
+            requestPackageFocus={requestPackageFocus}
+            requestResourceFocus={requestResourceFocus}
+            restoreFocusFallbackId={restoreFocusFallbackId}
+            onOpenPackageModal={openPackageModal}
+            onOpenResourceModal={openResourceModal}
+          />
+        </>
       ),
       description:
         userType === 'company'

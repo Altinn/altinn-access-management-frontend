@@ -1,10 +1,11 @@
-import React, { useId, useState } from 'react';
+import React, { useCallback, useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph, DsSkeleton } from '@altinn/altinn-components';
 import { useParams } from 'react-router';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import {
+  type Agent,
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
   useGetAgentsQuery,
@@ -26,12 +27,15 @@ import {
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { ClientAgentPackageList } from '../common/ClientAgentPackageList/ClientAgentPackageList';
+import { ClientBulkActions } from '../common/ClientBulkDelegation/ClientBulkActions';
+import { useClientBulkDelegation } from '../common/ClientBulkDelegation/useClientBulkDelegation';
+import { indexHeldAccess } from '../common/ClientBulkDelegation/getClientBulkItems';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { UserPageHeaderSkeleton } from '../common/UserPageHeader/UserPageHeaderSkeleton';
 import { AddAgentButton } from '../users/NewUserModal/AddAgentModal';
 import { ClientAdminSearchField } from '../common/ClientAdminSearchField/ClientAdminSearchField';
 import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
-import { isNewUser } from '../common/isNewUser';
+import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,
@@ -50,11 +54,13 @@ export const ClientDetails = () => {
   const {
     data: clientAccessPackages,
     isLoading: isLoadingClientAccessPackages,
+    isFetching: isFetchingClientAccessPackages,
     error: clientAccessPackagesError,
   } = useGetClientAccessPackagesQuery({ from: id ?? '' }, { skip: !id });
   const {
     data: clientResources,
     isLoading: isLoadingClientResources,
+    isFetching: isFetchingClientResources,
     error: clientResourcesError,
   } = useGetClientResourcesQuery({ from: id ?? '' }, { skip: !id });
   const {
@@ -73,16 +79,14 @@ export const ClientDetails = () => {
   const [removeAgentResources, { isLoading: isRemovingAgentResources }] =
     useRemoveAgentResourcesMutation();
 
-  const { agentsWithClientAccess, agentsWithoutClientAccess } = useClientDetailsAccessAgentLists({
-    clientAccessPackages,
-    clientResources,
-    agents,
-  });
-
-  const recentlyAddedClients = [...agentsWithClientAccess, ...agentsWithoutClientAccess].filter(
-    (x) => isNewUser(x.agentAddedAt),
-  );
   const [searchString, setSearchString] = useState<string>('');
+  const { recentlyAddedClients, agentsWithClientAccess, agentsWithoutClientAccess, searchHits } =
+    useClientDetailsAccessAgentLists({
+      clientAccessPackages,
+      clientResources,
+      agents,
+      searchString,
+    });
 
   // Hold the confirmation until the agents have refetched, so it is announced after the modal has
   // closed and focus has returned, together with the row it is about.
@@ -105,6 +109,56 @@ export const ClientDetails = () => {
     selectedClient?.access?.flatMap((access) => access.resources ?? []) ?? [];
 
   const hasDelegatableAccesses = delegablePackages.length > 0 || delegableResources.length > 0;
+
+  const clientName = formatEntityDisplayName(fromParty);
+  const fromPartyUuid = fromParty?.id ?? id;
+  const actingPartyUuid = actingParty?.id;
+  const actionsDisabled =
+    isAddingAgentAccessPackages ||
+    isRemovingAgentAccessPackages ||
+    isAddingAgentResources ||
+    isRemovingAgentResources ||
+    isFetchingClientAccessPackages ||
+    isFetchingClientResources ||
+    !fromPartyUuid ||
+    !actingPartyUuid;
+  const heldPackages = useMemo(
+    () => indexHeldAccess(clientAccessPackages ?? [], (held) => held.agent.id),
+    [clientAccessPackages],
+  );
+  const heldResources = useMemo(
+    () => indexHeldAccess(clientResources ?? [], (held) => held.agent.id),
+    [clientResources],
+  );
+  const bulk = useClientBulkDelegation({
+    actingPartyUuid,
+    heldPackages,
+    heldResources,
+    disabled: actionsDisabled,
+    addAgentAccessPackages,
+    removeAgentAccessPackages,
+    addAgentResources,
+    removeAgentResources,
+  });
+  const renderAgentActions = useCallback(
+    (agent: Agent, rowKey: string, restoreFocusFallbackId?: string) => {
+      const agentId = agent.agent.id;
+      const items = bulk.getItems(selectedClient?.access ?? [], agentId);
+      if (items.missing.length === 0 && items.held.length === 0) return null;
+      return (
+        <ClientBulkActions
+          rowKey={rowKey}
+          rowKind='agent'
+          restoreFocusFallbackId={restoreFocusFallbackId}
+          target={{ clientId: fromPartyUuid, agentId }}
+          names={{ clientName, agentName: formatEntityDisplayName(agent.agent) }}
+          items={items}
+          bulk={bulk}
+        />
+      );
+    },
+    [bulk, clientName, fromPartyUuid, selectedClient],
+  );
 
   if (isClientAdmin === false) {
     return (
@@ -133,12 +187,8 @@ export const ClientDetails = () => {
   }
 
   const backUrl = `/${amUIPath.ClientAdministration}#clients`;
-  const clientName = formatEntityDisplayName(fromParty);
   const actingPartyName =
     actingParty?.name && actingParty.type ? formatEntityDisplayName(actingParty) : '';
-  const fromPartyUuid = fromParty?.id ?? id;
-  const actingPartyUuid = actingParty?.id;
-
   const onUserAdded = () =>
     queueSnackbar(t('client_administration_page.add_agent_client_access_success_snackbar'));
 
@@ -190,6 +240,10 @@ export const ClientDetails = () => {
                         variant='primary'
                       />
                     </ClientAdminSearchField>
+                    <SearchHitsStatus
+                      hits={searchHits}
+                      searchString={searchString}
+                    />
                     <div className={classes.agentSections}>
                       {recentlyAddedClients.length > 0 && (
                         <section aria-labelledby={recentlyAddedSectionId}>
@@ -205,12 +259,8 @@ export const ClientDetails = () => {
                             clientAccessPackages={clientAccessPackages ?? []}
                             clientResources={clientResources ?? []}
                             client={selectedClient}
-                            isLoading={
-                              isAddingAgentAccessPackages ||
-                              isRemovingAgentAccessPackages ||
-                              isAddingAgentResources ||
-                              isRemovingAgentResources
-                            }
+                            isLoading={bulk.disabled || bulk.hasActiveRun}
+                            renderAgentActions={renderAgentActions}
                             fromPartyUuid={fromPartyUuid}
                             actingPartyUuid={actingPartyUuid}
                             addAgentAccessPackages={addAgentAccessPackages}
@@ -238,12 +288,8 @@ export const ClientDetails = () => {
                             clientAccessPackages={clientAccessPackages ?? []}
                             clientResources={clientResources ?? []}
                             client={selectedClient}
-                            isLoading={
-                              isAddingAgentAccessPackages ||
-                              isRemovingAgentAccessPackages ||
-                              isAddingAgentResources ||
-                              isRemovingAgentResources
-                            }
+                            isLoading={bulk.disabled || bulk.hasActiveRun}
+                            renderAgentActions={renderAgentActions}
                             fromPartyUuid={fromPartyUuid}
                             actingPartyUuid={actingPartyUuid}
                             addAgentAccessPackages={addAgentAccessPackages}
@@ -269,12 +315,8 @@ export const ClientDetails = () => {
                             clientAccessPackages={clientAccessPackages ?? []}
                             clientResources={clientResources ?? []}
                             client={selectedClient}
-                            isLoading={
-                              isAddingAgentAccessPackages ||
-                              isRemovingAgentAccessPackages ||
-                              isAddingAgentResources ||
-                              isRemovingAgentResources
-                            }
+                            isLoading={bulk.disabled || bulk.hasActiveRun}
+                            renderAgentActions={renderAgentActions}
                             fromPartyUuid={fromPartyUuid}
                             actingPartyUuid={actingPartyUuid}
                             addAgentAccessPackages={addAgentAccessPackages}

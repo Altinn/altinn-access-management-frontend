@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   DsAlert,
   DsParagraph,
   FieldsetBase,
+  type FilterProps,
   type FilterState,
   RadioOptions,
   Toolbar,
@@ -17,6 +18,7 @@ import type {
   ActivityTypeDto,
 } from './types';
 import { ACTIVITY_LOG_PARTY_FILTER } from './useActivityLogQueryState';
+import { getActivityLogPartyFilterLabel, getActivityLogPartyOptions } from './activityLogUtils';
 import { ActivityLogTimeline } from './ActivityLogTimeline';
 import classes from './ActivityLogTabPanel.module.css';
 
@@ -29,7 +31,10 @@ export interface ActivityLogTabPanelProps {
   /** The toolbar's filter state; the party filter is keyed by `ACTIVITY_LOG_PARTY_FILTER`. */
   filterState: FilterState;
   onFilterStateChange: (filterState: FilterState) => void;
-  /** Parties to offer in the party filter, from `GET {area}/filter/to` (or `/from`). */
+  /**
+   * Parties to offer in the party filter, from `GET {area}/filter/to` (or `/from`). May hold several
+   * names for one id (a renamed party); they are folded into one option.
+   */
   partyOptions: ActivityLogFilterValueDto[];
   /** Entries as returned by the API for the current direction and filter, newest first. */
   entries: ActivityLogDto[];
@@ -66,6 +71,31 @@ export const ActivityLogTabPanel = ({
       : t('activity_log_page.filter_party_from');
   const hasPartyFilter = (filterState[ACTIVITY_LOG_PARTY_FILTER] ?? []).length > 0;
 
+  const partyFilterOptions = useMemo(
+    () => getActivityLogPartyOptions(partyOptions),
+    [partyOptions],
+  );
+
+  const partyFilter: FilterProps = {
+    id: ACTIVITY_LOG_PARTY_FILTER,
+    name: ACTIVITY_LOG_PARTY_FILTER,
+    title: partyLabelPrefix,
+    label: partyLabelPrefix,
+    removable: true,
+    items: partyFilterOptions.map((party) => ({
+      id: party.id,
+      value: party.id,
+      name: ACTIVITY_LOG_PARTY_FILTER,
+      role: 'checkbox',
+      label: party.name,
+    })),
+  };
+
+  const getFilterLabel = (name: string, values?: (string | number)[]) =>
+    name === ACTIVITY_LOG_PARTY_FILTER
+      ? getActivityLogPartyFilterLabel(partyLabelPrefix, values, partyFilterOptions)
+      : undefined;
+
   return (
     <div className={classes.panel}>
       <FieldsetBase
@@ -98,31 +128,8 @@ export const ActivityLogTabPanel = ({
           addLabel: t('activity_log_page.add_filter'),
           removeLabel: t('activity_log_page.remove_filter'),
           resetLabel: t('activity_log_page.reset_filters'),
-          getFilterLabel: (name, values) => {
-            if (name !== ACTIVITY_LOG_PARTY_FILTER) {
-              return undefined;
-            }
-            const names = (values ?? [])
-              .map((id) => partyOptions.find((party) => party.id === String(id))?.name)
-              .filter(Boolean);
-            return names.length > 0 ? `${partyLabelPrefix}: ${names.join(', ')}` : partyLabelPrefix;
-          },
-          filters: [
-            {
-              id: ACTIVITY_LOG_PARTY_FILTER,
-              name: ACTIVITY_LOG_PARTY_FILTER,
-              title: partyLabelPrefix,
-              label: partyLabelPrefix,
-              removable: true,
-              items: partyOptions.map((party) => ({
-                id: party.id,
-                value: party.id,
-                name: ACTIVITY_LOG_PARTY_FILTER,
-                role: 'checkbox',
-                label: party.name,
-              })),
-            },
-          ],
+          getFilterLabel,
+          filters: [partyFilter],
         }}
       />
       {isError ? (

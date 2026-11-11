@@ -3,15 +3,14 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useFilteredResources } from '@/features/amUI/common/ResourceList/useFilteredResources';
+import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
 import type {
   ResourceDelegation,
   ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
 
-import { ScopeList } from './ScopeList';
-import { getMaskinportenScopes } from './scopeUtils';
+import { getMaskinportenScopeCount, getMaskinportenScopes } from './scopeUtils';
 import classes from './DelegatedResourcesSection.module.css';
 
 // Durable anchor that focus falls back to when an acted-on resource row is gone (e.g. after a
@@ -42,40 +41,10 @@ export const DelegatedResourcesSection = ({
 }: DelegatedResourcesSectionProps) => {
   const { t } = useTranslation();
   const isMobile = useIsMobileOrSmaller();
-  const [search, setSearch] = React.useState('');
-  const [filterState, setFilterState] = React.useState<string[]>([]);
 
   const delegatedResources = (resourcePermissions ?? [])
     .map((delegation) => delegation.resource)
     .filter((resource) => resource.identifier);
-
-  const { resources: filteredResources } = useFilteredResources<ServiceResource>({
-    resources: delegatedResources,
-    searchString: search,
-    serviceOwnerFilter: filterState,
-    getResourceName: (resource) => resource.title ?? '',
-    getOwnerName: (resource) => resource.resourceOwnerName ?? '',
-    getOwnerOrgCode: (resource) => resource.resourceOwnerOrgcode ?? '',
-    getDescription: (resource) => {
-      const scopes = getMaskinportenScopes(resource)
-        .map((ref) => ref.reference)
-        .join(' ');
-      return `${resource.description ?? ''} ${scopes}`.trim();
-    },
-  });
-
-  const serviceOwnerOptions = React.useMemo(() => {
-    const seen = new Map<string, { value: string; label: string }>();
-    for (const resource of delegatedResources) {
-      const code = resource.resourceOwnerOrgcode;
-      if (!code || seen.has(code)) continue;
-      seen.set(code, {
-        value: code,
-        label: resource.resourceOwnerName ?? code,
-      });
-    }
-    return Array.from(seen.values());
-  }, [delegatedResources]);
 
   return (
     <section className={classes.resourceSection}>
@@ -96,15 +65,24 @@ export const DelegatedResourcesSection = ({
           height='2.5rem'
         />
       ) : (
-        <ScopeList
-          addNewResourceButton={addNewResourceButton}
-          resources={filteredResources}
-          search={search}
-          setSearch={setSearch}
-          filterState={filterState}
-          setFilterState={setFilterState}
-          serviceOwnerOptions={serviceOwnerOptions}
+        <ResourceList
+          className={classes.resourceList}
+          resources={delegatedResources}
+          searchPlaceholder={t('maskinporten_page.search_api_placeholder')}
+          getSearchableText={(resource) => {
+            const scopes = getMaskinportenScopes(resource)
+              .map((ref) => ref.reference)
+              .join(' ');
+            return `${resource.description ?? ''} ${scopes}`.trim();
+          }}
+          delegationModal={addNewResourceButton}
+          noResourcesText={t('maskinporten_page.no_delegated_resources')}
+          showDetails={false}
           onSelect={onResourceClick}
+          size='sm'
+          getDescriptionText={(resource) =>
+            t('maskinporten_page.scope_count', { count: getMaskinportenScopeCount(resource) })
+          }
           renderControls={(resource) => {
             if (isMobile) return null;
             const resourceLoading = isResourceLoading(resource.identifier);
@@ -124,13 +102,6 @@ export const DelegatedResourcesSection = ({
               </Button>
             );
           }}
-          emptyState={
-            <DsParagraph data-size='md'>
-              {delegatedResources.length === 0
-                ? t('maskinporten_page.no_delegated_resources')
-                : t('resource_list.no_resources_filtered', { searchTerm: search })}
-            </DsParagraph>
-          }
         />
       )}
       {editModal}

@@ -82,6 +82,7 @@ test.describe('Systembruker endringsforespørsel', () => {
     login,
     systemUserConfirmPage,
     api,
+    runAccessibilityTest,
   }): Promise<void> => {
     await test.step('Navigate to change request confirmation page and login', async () => {
       await page.goto(changeRequestResponse.confirmUrl);
@@ -89,6 +90,8 @@ test.describe('Systembruker endringsforespørsel', () => {
     });
 
     await test.step('Approve change request', async () => {
+      await expect(systemUserConfirmPage.approveButton).toBeVisible();
+      await runAccessibilityTest.scan('systembruker-endringsforespørsel');
       await systemUserConfirmPage.approve();
     });
 

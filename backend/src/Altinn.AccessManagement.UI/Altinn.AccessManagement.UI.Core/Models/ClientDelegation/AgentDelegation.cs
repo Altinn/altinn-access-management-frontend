@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.User;
 
 namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
 {
@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation
         /// <summary>
         /// Gets or sets the agent entity.
         /// </summary>
-        public CompactEntity Agent { get; set; } = new();
+        public Entity Agent { get; set; } = new();
 
         /// <summary>
         /// Gets or sets when the agent was added.

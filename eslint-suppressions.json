@@ -134,14 +134,6 @@
       "count": 1
     }
   },
-  "playwright/uuTests/accessibilityHelpers/delegeringHelper.ts": {
-    "@typescript-eslint/no-explicit-any": {
-      "count": 1
-    },
-    "@typescript-eslint/restrict-template-expressions": {
-      "count": 1
-    }
-  },
   "src/features/amUI/InstanceDetailPage/RequestInstanceAdminPackage/RequestModalBody.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 2
@@ -196,11 +188,6 @@
       "count": 1
     }
   },
-  "src/features/amUI/common/AccessPackageList/AccessPackageExpandedContext.tsx": {
-    "react-hooks/rules-of-hooks": {
-      "count": 1
-    }
-  },
   "src/features/amUI/common/AccessPackageList/AccessPackageList.tsx": {
     "@typescript-eslint/no-misused-promises": {
       "count": 4
@@ -225,18 +212,8 @@
       "count": 1
     }
   },
-  "src/features/amUI/common/ClientAccessList/ClientAccessList.tsx": {
-    "react-hooks/refs": {
-      "count": 1
-    }
-  },
   "src/features/amUI/common/ClientAdminSearchField/ClientAdminSearchField.tsx": {
     "react-hooks/use-memo": {
-      "count": 1
-    }
-  },
-  "src/features/amUI/common/ClientAgentPackageList/ClientAgentPackageList.tsx": {
-    "react-hooks/refs": {
       "count": 1
     }
   },
@@ -258,11 +235,6 @@
       "count": 4
     }
   },
-  "src/features/amUI/common/DelegationModal/AccessPackages/ClientPackageInfoModal.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
   "src/features/amUI/common/DelegationModal/DelegationModalContext.tsx": {
     "react-hooks/set-state-in-effect": {
       "count": 1
@@ -276,11 +248,6 @@
   "src/features/amUI/common/DelegationModal/Instance/useInstanceDelegationRightsData.ts": {
     "react-hooks/set-state-in-effect": {
       "count": 1
-    }
-  },
-  "src/features/amUI/common/DelegationModal/SingleRights/ClientResourceInfoModal.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
     }
   },
   "src/features/amUI/common/DelegationModal/SingleRights/ResourceAlert.tsx": {
@@ -714,7 +681,7 @@
   },
   "src/resources/utils/sidebarConfig.tsx": {
     "@typescript-eslint/no-unsafe-argument": {
-      "count": 13
+      "count": 14
     }
   },
   "src/rtk/app/baseQuery.test.ts": {

@@ -168,7 +168,7 @@ playwright/
   pages/          # Page Object Model classes
   fixture/        # Playwright fixtures (pomFixture.ts)
   e2eTests/       # Spec files — one feature per file
-  uuTests/        # Accessibility tests
+  accessibilityHelpers/  # UU scanning (axe), runs automatically with the e2e tests
   util/           # Helpers (env, token generation, etc.)
   config/         # .env files per environment
 ```
