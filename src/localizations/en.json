@@ -124,8 +124,8 @@
     "too_many_subunits_warning": "This organization has too many subunits to include them in the download. We are working on a solution for this, but for now, you must download each subunit separately if you want their information."
   },
   "info_banner": {
-    "info": "Altinn has been renewed.",
-    "link": "This is how you grant new powers of attorney and accesses."
+    "info": "The Altinn roles are being phased out now.",
+    "link": "Make sure the right people have power of attorney."
   },
   "header": {
     "access_management": "Access management",
