@@ -678,7 +678,10 @@
     "alert_settings_info": "Notifications sent to registered notification addresses are sent regardless of whether the recipient has the right to view the content in Altinn. If you have a shared email address, it is natural to include it here. <a>Read more</a>",
     "info_button": "About notification addresses",
     "service_announcement_heading": "Planned maintenance 31st of October - 1st of November",
-    "service_announcement_content": "Altinn is performing planned maintenance on notification addresses for organizations. This may cause unstable behaviour on this page between Saturday 31st of October at 08:00 and Sunday 1st of November at 08:00. Deleting addresses will be temporarily unavailable."
+    "service_announcement_content": "Altinn is performing planned maintenance on notification addresses for organizations. This may cause unstable behaviour on this page between Saturday 31st of October at 08:00 and Sunday 1st of November at 08:00. Deleting addresses will be temporarily unavailable.",
+    "notifications_not_supported_heading": "Notifications are not supported for this organization",
+    "notifications_not_supported_info": "This test environment only supports saving notification addresses for organizations in Tenor. Since {{name}} does not exist in Tenor, you cannot save notification addresses or receive notifications for this organization.",
+    "notifications_not_supported_apology": "We apologize for the inconvenience!"
   },
   "text_field_errors": {
     "required": "The field is required",

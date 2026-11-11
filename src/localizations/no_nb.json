@@ -671,7 +671,10 @@
     "alert_settings_info": "Varslene som sendes ut til registrerte varslingsadresser sendes uavhengig av om mottaker har rettighet til å se innholdet i altinn. Hvis dere har en felles e-postadresse er det naturlig å legge den inn her. <a>Les mer</a>",
     "info_button": "Informasjon om varslingsadresser",
     "service_announcement_heading": "Planlagt vedlikehold 31. oktober - 1. november",
-    "service_announcement_content": "Altinn utfører planlagt vedlikehold av varslingsadresser for virksomheter. Dette kan føre til ustabil oppførsel på denne siden i tidsrommet lørdag 31. oktober kl 08:00 til søndag 1. november kl 08:00. Sletting av adresser blir midlertidig utilgjengelig."
+    "service_announcement_content": "Altinn utfører planlagt vedlikehold av varslingsadresser for virksomheter. Dette kan føre til ustabil oppførsel på denne siden i tidsrommet lørdag 31. oktober kl 08:00 til søndag 1. november kl 08:00. Sletting av adresser blir midlertidig utilgjengelig.",
+    "notifications_not_supported_heading": "Varsling er ikke støttet for denne virksomheten",
+    "notifications_not_supported_info": "Dette testmiljøet støtter kun lagring av varslingsadresser for virksomheter i Tenor. Siden {{name}} ikke eksisterer i Tenor, kan du derfor ikke lagre varslingsadresser eller motta varsel på denne virksomheten.",
+    "notifications_not_supported_apology": "Beklager ulempen dette medfører!"
   },
   "text_field_errors": {
     "required": "Feltet er påkrevd",

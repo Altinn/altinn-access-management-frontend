@@ -1,6 +1,6 @@
 import { getCookie } from '../Cookie/CookieMethods';
 
-enum Environment {
+export enum Environment {
   TT02 = 'tt02',
   PROD = 'prod',
   AT22 = 'at22',
