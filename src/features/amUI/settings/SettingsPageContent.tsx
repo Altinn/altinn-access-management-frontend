@@ -4,6 +4,7 @@ import {
   Divider,
   DsAlert,
   DsHeading,
+  DsParagraph,
   DsPopover,
   List,
   SettingsItem,
@@ -17,6 +18,10 @@ import { useGetIsCompanyProfileAdminQuery, useGetReporteeQuery } from '@/rtk/fea
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
+import {
+  createErrorDetails,
+  TechnicalErrorParagraphs,
+} from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
 import classes from './SettingsPageContent.module.css';
 import { SettingsModal } from './SettingsModal';
@@ -31,10 +36,14 @@ export const SettingsPageContent = () => {
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
-  const { data: notificationAddresses, isLoading: notifLoading } =
-    useGetOrgNotificationAddressesQuery(actingParty?.organizationIdentifier ?? '', {
-      skip: !actingParty?.organizationIdentifier,
-    });
+  const {
+    data: notificationAddresses,
+    isLoading: notifLoading,
+    error: notifError,
+  } = useGetOrgNotificationAddressesQuery(actingParty?.organizationIdentifier ?? '', {
+    skip: !actingParty?.organizationIdentifier,
+  });
+  const notifErrorDetails = createErrorDetails(notifError);
 
   const { data: isCompanyProfileAdmin, isLoading: isCompanyProfileAdminLoading } =
     useGetIsCompanyProfileAdminQuery();
@@ -116,63 +125,78 @@ export const SettingsPageContent = () => {
           </DsPopover>
         </DsPopover.TriggerContext>
       </div>
-      <div className={classes.settingsListContainer}>
-        <List size='sm'>
-          <SettingsItem
-            id='settings-email-alerts'
-            title={t('settings_page.alerts_on_email')}
-            value={emailAddresses.join(', ')}
-            icon={<PaperplaneIcon aria-hidden='true' />}
-            badge={
-              emailAddresses.length > 0 && {
-                children: (
-                  <span data-testid='email-address-count'>
-                    {emailAddresses.length === 1
-                      ? t('settings_page.one_address')
-                      : t('settings_page.num_of_addresses', { count: emailAddresses.length })}
-                  </span>
-                ),
-              }
-            }
-            as={'button'}
-            onClick={() => onSettingsClick('email')}
-            controls={emailAddresses.length === 0 && t('common.add')}
-            loading={isLoading}
-            linkIcon
+      {notifErrorDetails ? (
+        <DsAlert
+          role='alert'
+          data-color='danger'
+          data-testid='settings-addresses-error'
+        >
+          <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+          <TechnicalErrorParagraphs
+            status={notifErrorDetails.status}
+            time={notifErrorDetails.time}
+            traceId={notifErrorDetails.traceId}
           />
-          <Divider as='li' />
-          <SettingsItem
-            id='settings-sms-alerts'
-            title={t('settings_page.alerts_on_sms')}
-            value={phoneNumbers.join(', ')}
-            icon={<ChatIcon aria-hidden='true' />}
-            badge={
-              phoneNumbers.length > 0 && {
-                children: (
-                  <span data-testid='sms-address-count'>
-                    {phoneNumbers.length === 1
-                      ? t('settings_page.one_address')
-                      : t('settings_page.num_of_addresses', { count: phoneNumbers.length })}
-                  </span>
-                ),
+        </DsAlert>
+      ) : (
+        <div className={classes.settingsListContainer}>
+          <List size='sm'>
+            <SettingsItem
+              id='settings-email-alerts'
+              title={t('settings_page.alerts_on_email')}
+              value={emailAddresses.join(', ')}
+              icon={<PaperplaneIcon aria-hidden='true' />}
+              badge={
+                emailAddresses.length > 0 && {
+                  children: (
+                    <span data-testid='email-address-count'>
+                      {emailAddresses.length === 1
+                        ? t('settings_page.one_address')
+                        : t('settings_page.num_of_addresses', { count: emailAddresses.length })}
+                    </span>
+                  ),
+                }
               }
-            }
-            as={'button'}
-            onClick={() => onSettingsClick('sms')}
-            loading={isLoading}
-            controls={phoneNumbers.length === 0 && t('common.add')}
-            linkIcon
-          />
-        </List>
-        <SettingsModal
-          mode={modalMode}
-          open={openModal}
-          onClose={onCloseModal}
-          canDeleteLastAddress={
-            modalMode === 'email' ? phoneNumbers.length > 0 : emailAddresses.length > 0 // Must have at least one address of either type
-          }
-        />
-      </div>
+              as={'button'}
+              onClick={() => onSettingsClick('email')}
+              controls={emailAddresses.length === 0 && t('common.add')}
+              loading={isLoading}
+              linkIcon
+            />
+            <Divider as='li' />
+            <SettingsItem
+              id='settings-sms-alerts'
+              title={t('settings_page.alerts_on_sms')}
+              value={phoneNumbers.join(', ')}
+              icon={<ChatIcon aria-hidden='true' />}
+              badge={
+                phoneNumbers.length > 0 && {
+                  children: (
+                    <span data-testid='sms-address-count'>
+                      {phoneNumbers.length === 1
+                        ? t('settings_page.one_address')
+                        : t('settings_page.num_of_addresses', { count: phoneNumbers.length })}
+                    </span>
+                  ),
+                }
+              }
+              as={'button'}
+              onClick={() => onSettingsClick('sms')}
+              loading={isLoading}
+              controls={phoneNumbers.length === 0 && t('common.add')}
+              linkIcon
+            />
+          </List>
+        </div>
+      )}
+      <SettingsModal
+        mode={modalMode}
+        open={openModal}
+        onClose={onCloseModal}
+        canDeleteLastAddress={
+          modalMode === 'email' ? phoneNumbers.length > 0 : emailAddresses.length > 0 // Must have at least one address of either type
+        }
+      />
     </div>
   );
 };

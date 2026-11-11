@@ -662,6 +662,10 @@
     "remove_sms": "Fjern telefonnummer",
     "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen.",
     "no_addresses_error": "Verksemda må ha minst ei e-postadresse eller sms-adresse for varslingar.",
+    "organization_not_in_er": "Vi kan ikkje registrere varslingsadresser for denne verksemda fordi ho ikkje er registrert i Einingsregisteret.",
+    "address_already_exists": "Adressa er allereie registrert",
+    "address_not_found": "Ei av adressene er allereie fjerna av nokon andre. Sjå over lista og lagre på nytt.",
+    "not_authorized_error": "Du har ikkje tilgang til å endre varslingsadresser for denne verksemda.",
     "alert_settings_info": "Varsla som sendast ut til registrerte varslingsadresser blir sendt uavhengig av om mottakar har rett til å sjå innhaldet i Altinn. Dersom de har ei felles e-postadresse er det naturleg å legge den inn her. <a>Les meir</a>",
     "info_button": "Informasjon om varslingsadresser",
     "service_announcement_heading": "Planlagt vedlikehald 31. oktober - 1. november",
@@ -670,7 +674,9 @@
   "text_field_errors": {
     "required": "Feltet er påkrevd",
     "invalid_email_pattern": "Ugyldig e-postadresse",
-    "invalid_phone": "Ugyldig telefonnummer"
+    "invalid_phone": "Ugyldig telefonnummer",
+    "invalid_norwegian_phone": "Norske mobilnummer må ha 8 siffer og starte med 4 eller 9",
+    "invalid_country_code": "Ugyldig landskode"
   },
   "info_modal": {
     "back_button": "Gå til gamle Altinn",

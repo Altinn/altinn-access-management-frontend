@@ -1,6 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -27,19 +28,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationAddressResponse> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress)
+        public async Task<Result<NotificationAddressResponse>> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress)
         {
             return await _profileClient.PostNewOrganisationNotificationAddress(orgNumber, notificationAddress);
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationAddressResponse> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId)
+        public async Task<Result<NotificationAddressResponse>> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId)
         {
             return await _profileClient.DeleteOrganisationNotificationAddress(orgNumber, notificationAddressId);
         }
 
         /// <inheritdoc/>
-        public async Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress)
+        public async Task<Result<NotificationAddressResponse>> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress)
         {
             return await _profileClient.UpdateOrganisationNotificationAddress(orgNumber, notificationAddressId, notificationAddress);
         }

@@ -48,4 +48,38 @@ test.describe('Innstillinger - SMS-adresser', () => {
       });
     });
   });
+
+  test.describe('ugyldig SMS-adresse', () => {
+    // Nothing is saved here, so this can share an organisation with the invalid email test.
+    const actor = ACTORS.ugyldigEpost;
+    const ugyldigNummer = { countryCode: '+47', phone: '12345678' };
+
+    test.beforeEach(async ({ api }) => {
+      await api.settings.setNotificationAddresses(actor.pid, actor.org, {
+        emails: [BASELINE_EPOST],
+        phones: [],
+      });
+    });
+
+    test('norsk nummer som ikke er et mobilnummer kan ikke lagres', async ({
+      innstillingerPage,
+      login,
+    }) => {
+      await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
+        await login.LoginToAccessManagement(actor.pid);
+        await login.selectActor(actor.orgName);
+        await innstillingerPage.goToInnstillinger();
+      });
+
+      await test.step('Skriv inn et nummer Core ikke godtar', async () => {
+        await innstillingerPage.openSmsDialog();
+        await innstillingerPage.leggTilTelefonnummer(ugyldigNummer);
+      });
+
+      await test.step('Feilmeldingen vises og endringen kan ikke lagres', async () => {
+        await expect(innstillingerPage.ugyldigMobilnummerFeilmelding).toBeVisible();
+        await expect(innstillingerPage.saveButton).toBeDisabled();
+      });
+    });
+  });
 });
