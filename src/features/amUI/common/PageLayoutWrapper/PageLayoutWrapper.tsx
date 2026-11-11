@@ -98,6 +98,6 @@ const getBannerLink = (languageCode: string) => {
     case 'nn':
       return 'https://info.altinn.no/nn/nyheiter/altinn-rollene-blir-fasa-ut-innan-nyttaar-sjekk-at-rette-personar-har-fullmakt/';
     default:
-      return 'https://info.altinn.no/nyheter/altinn-rollene-fases-ut-innen-nyttaar-sjekk-at-rette-personer-har-fullmakt';
+      return 'https://info.altinn.no/nyheter/altinn-rollene-fases-ut-innen-nyttaar-sjekk-at-rette-personer-har-fullmakt/';
   }
 };
