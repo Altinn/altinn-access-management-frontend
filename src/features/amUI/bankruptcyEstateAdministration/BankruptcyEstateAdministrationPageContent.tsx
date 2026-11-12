@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  Badge,
-  DsAlert,
-  DsParagraph,
-  DsSearch,
-  ListItem,
-  ListItemLabel,
-} from '@altinn/altinn-components';
+import { DsAlert, DsParagraph, DsSearch } from '@altinn/altinn-components';
 
-import {
-  formatEntityDisplayName,
-  getFormattedDateOfBirthLabel,
-} from '@/resources/utils/reporteeUtils';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import {
   isBankruptcyEstateAdministrationAvailable,
   hasBankruptcyEstateAdminPermission,
@@ -50,7 +40,6 @@ export const BankruptcyEstateAdministrationPageContent = () => {
 
   const isLoading = isLoadingReportee || actorLoading || isLoadingIsBankruptcyEstateAdmin;
   const hasPermission = hasBankruptcyEstateAdminPermission(reportee, isBankruptcyEstateAdmin);
-  const trusteeName = formatEntityDisplayName(actingParty);
 
   if (isError) {
     return (
@@ -82,32 +71,6 @@ export const BankruptcyEstateAdministrationPageContent = () => {
       />
       {!isLoading && hasPermission && (
         <>
-          <div className={classes.trustee}>
-            <ListItem
-              id={actingParty?.id ?? ''}
-              icon={{ type: 'person', name: trusteeName }}
-              ariaLabel={trusteeName}
-              label={
-                <div className={classes.trusteeLabel}>
-                  <ListItemLabel
-                    title={{ children: trusteeName, as: 'div' }}
-                    description={getFormattedDateOfBirthLabel(actingParty?.dateOfBirth)}
-                    size='md'
-                  />
-                  <Badge
-                    label={t('bankruptcy_estate_administration_page.trustee')}
-                    color='company'
-                  />
-                </div>
-              }
-              color='company'
-              size='md'
-              as='div'
-              containerAs='div'
-              interactive={false}
-              className={classes.trusteeItem}
-            />
-          </div>
           <AdministratorInfoPopover>
             {t('bankruptcy_estate_administration_page.intro')}
           </AdministratorInfoPopover>

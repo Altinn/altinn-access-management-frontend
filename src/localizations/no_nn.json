@@ -1339,7 +1339,6 @@
     "add_administrator_heading": "Legg til brukar og gi Konkursbu administrator",
     "add_administrator_description": "Mottakaren blir hovudadministrator for alle noverande og framtidige konkursbu dine.",
     "add_administrator_not_person_error": "Berre personar kan vere konkursbu administrator.",
-    "trustee": "Bustyrar",
     "intro": "Her kan du leggje til og fjerne brukarar som skal administrere konkursbua dine. Den du legg til, blir Hovudadministrator for alle konkursbua dine.",
     "info_icon_label": "Meir informasjon om Konkursbu administrator",
     "info_heading": "Konkursbu administrator",

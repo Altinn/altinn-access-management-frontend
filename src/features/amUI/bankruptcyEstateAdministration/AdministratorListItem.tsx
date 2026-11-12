@@ -60,7 +60,7 @@ export const AdministratorListItem = ({
         )
       }
     >
-      {isExpanded && <AdministratorAccess />}
+      {isExpanded && <AdministratorAccess administrator={administrator} />}
     </UserListItem>
   );
 };

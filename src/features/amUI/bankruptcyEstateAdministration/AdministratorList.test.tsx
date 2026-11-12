@@ -11,6 +11,8 @@ let administrators: BankruptcyEstateAdministrator[] | undefined;
 let isLoading = false;
 let isError = false;
 
+vi.mock('lottie-react', () => ({ Lottie: () => null }));
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));

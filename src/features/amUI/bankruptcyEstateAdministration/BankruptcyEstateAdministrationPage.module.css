@@ -1,18 +1,3 @@
-.trustee {
-  margin-bottom: var(--ds-spacing-6);
-}
-
-.trusteeLabel {
-  display: flex;
-  align-items: center;
-  gap: var(--ds-spacing-4);
-  padding-block: var(--ds-spacing-2);
-}
-
-.trusteeItem {
-  padding-inline: var(--ds-spacing-2);
-}
-
 .actions {
   display: flex;
   gap: var(--ds-spacing-4);
