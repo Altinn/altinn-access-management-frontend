@@ -156,26 +156,23 @@ export const ClientAccessList = ({
       titleAs: 'div',
       entries: buildEntries(client),
       renderActions: (items?: { packageId: string; resourceId: string; roleCode: string }[]) => {
-        const items2 =
-          !items || items.length === 0
-            ? isSystemuserAgent
-              ? []
-              : undefined
-            : client.access.map((access) => {
-                const itemPackages = items
-                  .filter((i) => i.roleCode === access.role.code)
-                  .map((x) => x.packageId);
+        const items2 = !items
+          ? undefined
+          : client.access.map((access) => {
+              const itemPackages = items
+                .filter((i) => i.roleCode === access.role.code)
+                .map((x) => x.packageId);
 
-                const itemResources = items
-                  .filter((i) => i.roleCode === access.role.code)
-                  .map((x) => x.resourceId);
+              const itemResources = items
+                .filter((i) => i.roleCode === access.role.code)
+                .map((x) => x.resourceId);
 
-                return {
-                  ...access,
-                  packages: access.packages.filter((p) => itemPackages?.indexOf(p.urn) > -1),
-                  resources: access.resources?.filter((r) => itemResources?.indexOf(r.refId) > -1),
-                };
-              });
+              return {
+                ...access,
+                packages: access.packages.filter((p) => itemPackages?.indexOf(p.urn) > -1),
+                resources: access.resources?.filter((r) => itemResources?.indexOf(r.refId) > -1),
+              };
+            });
         return renderClientActions?.(client, items2, restoreFocusFallbackId);
       },
       description:
