@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Badge, DsAlert, DsParagraph, ListItem, ListItemLabel } from '@altinn/altinn-components';
+import {
+  Badge,
+  DsAlert,
+  DsParagraph,
+  DsSearch,
+  ListItem,
+  ListItemLabel,
+} from '@altinn/altinn-components';
 
 import {
   formatEntityDisplayName,
@@ -17,11 +24,13 @@ import { usePartyRepresentation } from '../common/PartyRepresentationContext/Par
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
 
 import { AddAdministratorButton } from './AddAdministratorButton';
+import { AdministratorList } from './AdministratorList';
 import { AdministratorInfoPopover } from './AdministratorInfoPopover';
 import classes from './BankruptcyEstateAdministrationPage.module.css';
 
 export const BankruptcyEstateAdministrationPageContent = () => {
   const { t } = useTranslation();
+  const [searchString, setSearchString] = useState('');
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const {
@@ -95,7 +104,24 @@ export const BankruptcyEstateAdministrationPageContent = () => {
           <AdministratorInfoPopover>
             {t('bankruptcy_estate_administration_page.intro')}
           </AdministratorInfoPopover>
-          <AddAdministratorButton />
+          <div className={classes.actions}>
+            <DsSearch
+              className={classes.search}
+              data-size='sm'
+            >
+              <DsSearch.Input
+                aria-label={t('common.search')}
+                placeholder={t('client_administration_page.agent_search_placeholder')}
+                value={searchString}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchString(event.target.value)
+                }
+              />
+              {searchString && <DsSearch.Clear onClick={() => setSearchString('')} />}
+            </DsSearch>
+            <AddAdministratorButton />
+          </div>
+          <AdministratorList searchString={searchString} />
         </>
       )}
     </>

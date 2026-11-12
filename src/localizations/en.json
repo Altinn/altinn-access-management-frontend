@@ -1354,6 +1354,9 @@
     "info_icon_label": "More information about Bankruptcy estate administrator",
     "info_heading": "Bankruptcy estate administrator",
     "info_body": "The Bankruptcy estate administrator becomes Main administrator for all current and future bankruptcy estates for which the trustee is responsible. They automatically receive Bankruptcy estate read and write access, and can delegate the necessary authorizations to other creditors and stakeholders.",
-    "info_body_removal": "If the authorization is removed here, access to all bankruptcy estates will be lost."    
+    "info_body_removal": "If the authorization is removed here, access to all bankruptcy estates will be lost.",
+    "no_administrators": "No users have been given administrator access yet.",
+    "administrator_role_description": "Gives the ability to administer all current and future bankruptcy estates for the trustee. The recipient automatically gets Main administrator and Bankruptcy estate read and write access for all bankruptcy estates the trustee is appointed to.",
+    "packages_managed_per_estate": "These and any other access packages must be administered directly on each bankruptcy estate."     
   }
 }

@@ -1344,6 +1344,9 @@
     "info_icon_label": "Meir informasjon om Konkursbu administrator",
     "info_heading": "Konkursbu administrator",
     "info_body": "Konkursbu administrator blir Hovudadministrator for alle noverande og framtidige konkursbu som bustyraren er ansvarleg for. Dei får automatisk Konkursbu lese- og skrivetilgang, og kan gi nødvendige fullmakter vidare til andre kreditorar og interessentar.",
-    "info_body_removal": "Blir fullmakta fjerna her, mistar dei tilgangen til alle konkursbua."    
+    "info_body_removal": "Blir fullmakta fjerna her, mistar dei tilgangen til alle konkursbua.",
+    "no_administrators": "Ingen brukarar har fått administratortilgangar enno.",
+    "administrator_role_description": "Gir høve til å administrere alle noverande og framtidige konkursbu for bustyraren. Mottakaren får automatisk Hovudadministrator, Konkursbu lese- og skrivetilgang på alle konkursbu bustyraren er oppnemnd for.",
+    "packages_managed_per_estate": "Administrering av desse og eventuelt andre tilgangspakkar må gjerast direkte på kvart konkursbu."    
   }
 }

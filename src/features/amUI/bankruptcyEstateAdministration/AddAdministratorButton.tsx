@@ -48,6 +48,7 @@ export const AddAdministratorButton = () => {
       <DsButton
         variant='primary'
         data-color='company'
+        data-size='sm'
         onClick={() => {
           setError(null);
           setIsOpen(true);
