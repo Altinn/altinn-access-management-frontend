@@ -1347,6 +1347,7 @@
     "info_body_removal": "Blir fullmakta fjerna her, mistar dei tilgangen til alle konkursbua.",
     "no_administrators": "Ingen brukarar har fått administratortilgangar enno.",
     "administrator_role_description": "Gir høve til å administrere alle noverande og framtidige konkursbu for bustyraren. Mottakaren får automatisk Hovudadministrator, Konkursbu lese- og skrivetilgang på alle konkursbu bustyraren er oppnemnd for.",
-    "packages_managed_per_estate": "Administrering av desse og eventuelt andre tilgangspakkar må gjerast direkte på kvart konkursbu."    
+    "packages_managed_per_estate": "Administrering av desse og eventuelt andre tilgangspakkar må gjerast direkte på kvart konkursbu.",
+    "remove_administrator_body": "{{name}} vil miste fullmaktene på alle konkursbua til {{trustee}}, og vil ikkje lenger kunne representere dei i Altinn."
   }
 }

@@ -1349,6 +1349,7 @@
     "info_body_removal": "Fjernes fullmakten her mistes tilgangen til alle konkursbo.",
     "no_administrators": "Ingen brukere har fått administratortilganger ennå.",
     "administrator_role_description": "Gir mulighet til å administrere alle nåværende og fremtidige konkursbo for bostyrer. Mottaker får automatisk Hovedadministrator, Konkursbo lese- og skrivetilgang på alle konkursbo bostyrer er oppnevnt for.",
-    "packages_managed_per_estate": "Administrering av disse og eventuelt andre tilgangspakker må gjøres direkte på hvert konkursbo."    
+    "packages_managed_per_estate": "Administrering av disse og eventuelt andre tilgangspakker må gjøres direkte på hvert konkursbo.",
+    "remove_administrator_body": "{{name}} vil miste fullmakter på alle konkursboene til {{trustee}}, og vil ikke lenger kunne representere dem i Altinn."
   }
 }

@@ -9,19 +9,28 @@ import {
 } from '@/resources/utils/reporteeUtils';
 
 import { isNewUser } from '../common/isNewUser';
+import { useRestoreFocusTarget } from '../common/RestoreFocus';
 
 import { AdministratorAccess } from './AdministratorAccess';
+import { RemoveAdministratorButton } from './RemoveAdministratorButton';
 
 interface AdministratorListItemProps {
   administrator: PartyEntity;
   /*** When the administrator was added. Marks the row as new for the first hour */
   addedAt: string;
+  /*** The row that gets focus if this administrator is removed */
+  focusIdAfterRemoval?: string;
 }
 
 /*** One administrator in the list. Opens to show what the administrator has been given */
-export const AdministratorListItem = ({ administrator, addedAt }: AdministratorListItemProps) => {
+export const AdministratorListItem = ({
+  administrator,
+  addedAt,
+  focusIdAfterRemoval,
+}: AdministratorListItemProps) => {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
+  useRestoreFocusTarget(administrator.id);
 
   return (
     <UserListItem
@@ -42,6 +51,14 @@ export const AdministratorListItem = ({ administrator, addedAt }: AdministratorL
           variant: 'base' as const,
         },
       })}
+      controls={
+        isExpanded && (
+          <RemoveAdministratorButton
+            administrator={administrator}
+            focusIdAfterRemoval={focusIdAfterRemoval}
+          />
+        )
+      }
     >
       {isExpanded && <AdministratorAccess />}
     </UserListItem>

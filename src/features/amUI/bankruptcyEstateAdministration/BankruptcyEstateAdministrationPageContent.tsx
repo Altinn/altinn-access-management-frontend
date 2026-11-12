@@ -22,15 +22,22 @@ import { useGetIsBankruptcyEstateAdminQuery } from '@/rtk/features/bankruptcyEst
 
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { ReporteePageHeading } from '../common/ReporteePageHeading/ReporteePageHeading';
+import {
+  RestoreFocusFallback,
+  RestoreFocusProvider,
+  useRestoreFocus,
+} from '../common/RestoreFocus';
 
 import { AddAdministratorButton } from './AddAdministratorButton';
 import { AdministratorList } from './AdministratorList';
 import { AdministratorInfoPopover } from './AdministratorInfoPopover';
+import { ADMINISTRATOR_SEARCH_ID } from './administratorSearchId';
 import classes from './BankruptcyEstateAdministrationPage.module.css';
 
 export const BankruptcyEstateAdministrationPageContent = () => {
   const { t } = useTranslation();
   const [searchString, setSearchString] = useState('');
+  const restoreFocus = useRestoreFocus();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const {
@@ -104,24 +111,29 @@ export const BankruptcyEstateAdministrationPageContent = () => {
           <AdministratorInfoPopover>
             {t('bankruptcy_estate_administration_page.intro')}
           </AdministratorInfoPopover>
-          <div className={classes.actions}>
-            <DsSearch
-              className={classes.search}
-              data-size='sm'
-            >
-              <DsSearch.Input
-                aria-label={t('common.search')}
-                placeholder={t('client_administration_page.agent_search_placeholder')}
-                value={searchString}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearchString(event.target.value)
-                }
-              />
-              {searchString && <DsSearch.Clear onClick={() => setSearchString('')} />}
-            </DsSearch>
-            <AddAdministratorButton />
-          </div>
-          <AdministratorList searchString={searchString} />
+          <RestoreFocusProvider restoreFocus={restoreFocus}>
+            <div className={classes.actions}>
+              <DsSearch
+                className={classes.search}
+                data-size='sm'
+              >
+                <DsSearch.Input
+                  id={ADMINISTRATOR_SEARCH_ID}
+                  aria-label={t('common.search')}
+                  placeholder={t('client_administration_page.agent_search_placeholder')}
+                  value={searchString}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                    setSearchString(event.target.value)
+                  }
+                />
+                {searchString && <DsSearch.Clear onClick={() => setSearchString('')} />}
+              </DsSearch>
+              <AddAdministratorButton />
+            </div>
+            <RestoreFocusFallback>
+              <AdministratorList searchString={searchString} />
+            </RestoreFocusFallback>
+          </RestoreFocusProvider>
         </>
       )}
     </>

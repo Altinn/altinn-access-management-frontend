@@ -11,6 +11,10 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }));
 
+vi.mock('./RemoveAdministratorButton', () => ({
+  RemoveAdministratorButton: () => <button>remove_administrator</button>,
+}));
+
 vi.mock('./AdministratorAccess', () => ({
   AdministratorAccess: () => <div>administrator_access</div>,
 }));
@@ -64,5 +68,34 @@ describe('AdministratorListItem', () => {
 
     await userEvent.click(row);
     expect(screen.queryByText('administrator_access')).toBeNull();
+  });
+
+  it('offers to remove the administrator only while the row is open', async () => {
+    render(
+      <AdministratorListItem
+        administrator={administrator}
+        addedAt='2026-01-15T10:00:00+00:00'
+      />,
+    );
+
+    expect(screen.queryByRole('button', { name: 'remove_administrator' })).toBeNull();
+
+    await userEvent.click(screen.getByRole('button', { name: /Kursiv Fossekall/ }));
+
+    expect(screen.getByRole('button', { name: 'remove_administrator' })).toBeInTheDocument();
+  });
+
+  it('keeps the row open when the remove button is clicked', async () => {
+    render(
+      <AdministratorListItem
+        administrator={administrator}
+        addedAt='2026-01-15T10:00:00+00:00'
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: /Kursiv Fossekall/ }));
+
+    await userEvent.click(screen.getByRole('button', { name: 'remove_administrator' }));
+
+    expect(screen.getByText('administrator_access')).toBeInTheDocument();
   });
 });
