@@ -9,6 +9,7 @@ import {
 } from '@/resources/utils/reporteeUtils';
 
 import { isNewUser } from '../common/isNewUser';
+import { useRestoreFocusTarget } from '../common/RestoreFocus';
 
 import { AdministratorAccess } from './AdministratorAccess';
 import { RemoveAdministratorButton } from './RemoveAdministratorButton';
@@ -23,6 +24,7 @@ interface AdministratorListItemProps {
 export const AdministratorListItem = ({ administrator, addedAt }: AdministratorListItemProps) => {
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
+  useRestoreFocusTarget(administrator.id);
 
   return (
     <UserListItem

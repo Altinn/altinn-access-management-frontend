@@ -142,8 +142,10 @@ describe('BankruptcyEstateAdministrationPageContent', () => {
     isBankruptcyEstateAdmin = true;
 
     render(<BankruptcyEstateAdministrationPageContent />);
-    await userEvent.type(screen.getByRole('searchbox', { name: 'common.search' }), 'ola');
+    const searchField = screen.getByRole('searchbox', { name: 'common.search' });
+    await userEvent.type(searchField, 'ola');
 
     expect(screen.getByText('administrator_list')).toHaveAttribute('data-search', 'ola');
+    expect(searchField).toHaveAttribute('id', 'bankruptcy_estate_administrator_search');
   });
 });

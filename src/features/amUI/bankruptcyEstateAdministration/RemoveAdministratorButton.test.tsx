@@ -9,6 +9,7 @@ import { RemoveAdministratorButton } from './RemoveAdministratorButton';
 
 const removeAdministrator = vi.fn();
 const handleSelectAccount = vi.fn();
+const requestFocusOnDataChange = vi.fn();
 
 const person = (id: string, name: string): PartyEntity => ({
   id,
@@ -30,10 +31,15 @@ vi.mock('react-i18next', () => ({
 
 vi.mock('@/rtk/features/bankruptcyEstateApi', () => ({
   useRemoveAdministratorMutation: () => [removeAdministrator],
+  useGetAdministratorsQuery: () => ({ data: [] }),
 }));
 
 vi.mock('../common/PartyRepresentationContext/PartyRepresentationContext', () => ({
   usePartyRepresentation: () => ({ actingParty: trustee, selfParty }),
+}));
+
+vi.mock('../common/RestoreFocus', () => ({
+  useRestoreFocusOnDataChange: () => requestFocusOnDataChange,
 }));
 
 vi.mock('../common/PageLayoutWrapper/useHeader', () => ({
@@ -81,6 +87,10 @@ describe('RemoveAdministratorButton', () => {
 
     expect(removeAdministrator).toHaveBeenCalledWith({ user: 'administrator-uuid' });
     expect(handleSelectAccount).not.toHaveBeenCalled();
+    expect(requestFocusOnDataChange).toHaveBeenCalledWith(
+      'administrator-uuid',
+      'bankruptcy_estate_administrator_search',
+    );
   });
 
   it('continues as themself when the administrator removes themself', async () => {
@@ -91,6 +101,7 @@ describe('RemoveAdministratorButton', () => {
     await openAndConfirm();
 
     expect(handleSelectAccount).toHaveBeenCalledWith('administrator-uuid');
+    expect(requestFocusOnDataChange).not.toHaveBeenCalled();
   });
 
   it('shows an error and stays when the removal fails', async () => {
@@ -102,5 +113,6 @@ describe('RemoveAdministratorButton', () => {
 
     expect(screen.getByText('common.general_error_paragraph')).toBeInTheDocument();
     expect(handleSelectAccount).not.toHaveBeenCalled();
+    expect(requestFocusOnDataChange).not.toHaveBeenCalled();
   });
 });

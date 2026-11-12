@@ -4,12 +4,17 @@ import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import { useRemoveAdministratorMutation } from '@/rtk/features/bankruptcyEstateApi';
+import {
+  useGetAdministratorsQuery,
+  useRemoveAdministratorMutation,
+} from '@/rtk/features/bankruptcyEstateApi';
 
 import { DeleteClientProviderModal } from '../common/DeleteClientProviderModal/DeleteClientProviderModal';
 import { handleSelectAccount } from '../common/PageLayoutWrapper/useHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
+import { useRestoreFocusOnDataChange } from '../common/RestoreFocus';
 
+import { ADMINISTRATOR_SEARCH_ID } from './administratorSearchId';
 import classes from './RemoveAdministratorButton.module.css';
 
 interface RemoveAdministratorButtonProps {
@@ -22,12 +27,18 @@ export const RemoveAdministratorButton = ({ administrator }: RemoveAdministrator
   const { actingParty, selfParty } = usePartyRepresentation();
   const [removeAdministrator] = useRemoveAdministratorMutation();
 
+  const { data: administrators } = useGetAdministratorsQuery();
+  const requestFocusOnDataChange = useRestoreFocusOnDataChange(administrators);
+
   const onConfirm = async () => {
     await removeAdministrator({ user: administrator.id }).unwrap();
     // Someone who removes themself can no longer act for the trustee, so they continue as themself.
     if (administrator.id === selfParty?.id) {
       handleSelectAccount(selfParty.id);
+      return;
     }
+    // The row disappears when the list is fetched again, so focus moves to the search field.
+    requestFocusOnDataChange(administrator.id, ADMINISTRATOR_SEARCH_ID);
   };
 
   return (
