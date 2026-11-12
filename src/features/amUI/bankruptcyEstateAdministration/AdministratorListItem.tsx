@@ -11,6 +11,7 @@ import {
 import { isNewUser } from '../common/isNewUser';
 
 import { AdministratorAccess } from './AdministratorAccess';
+import { RemoveAdministratorButton } from './RemoveAdministratorButton';
 
 interface AdministratorListItemProps {
   administrator: PartyEntity;
@@ -42,6 +43,7 @@ export const AdministratorListItem = ({ administrator, addedAt }: AdministratorL
           variant: 'base' as const,
         },
       })}
+      controls={isExpanded && <RemoveAdministratorButton administrator={administrator} />}
     >
       {isExpanded && <AdministratorAccess />}
     </UserListItem>
