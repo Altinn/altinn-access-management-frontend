@@ -17,8 +17,8 @@ import { clientActionControlId } from './DelegationControl';
 export type ClientAccessRow = Omit<UserListItemData, 'children'> & {
   entries: ClientAccessEntry[];
   /** Rendered above the row's access lists, e.g. bulk actions. */
-  renderActions?: (
-    item?: { packageId: string; resourceId: string; roleCode: string }[],
+  renderActions: (
+    items?: { packageId: string; resourceId: string; roleCode: string }[],
   ) => ReactNode;
 };
 
@@ -177,7 +177,7 @@ export const ClientAccessRows = ({
               canAct: false,
             };
           } else {
-            // create fake entry for missing access package
+            // create fake entry for missing resource
             return {
               clientId: item.id,
               recipient: {
@@ -199,15 +199,14 @@ export const ClientAccessRows = ({
         });
         const setEntries = [...setEntriesPackages, ...setEntriesResources];
 
-        // group items by role
-        const item2: { packageId: string; resourceId: string; roleCode: string }[] =
-          setEntries.some((p) => !p.recipient.id)
-            ? []
-            : setEntries.map((entry) => ({
-                packageId: entry.kind === 'package' ? entry.accessPackage.urn || '' : '',
-                resourceId: entry.kind === 'resource' ? entry.resource.identifier : '',
-                roleCode: entry.roleCode,
-              }));
+        const isMissingRightFromSet = setEntries.some((p) => !p.recipient.id);
+        const item2: { packageId: string; resourceId: string; roleCode: string }[] = setEntries.map(
+          (entry) => ({
+            packageId: entry.kind === 'package' ? entry.accessPackage.urn || '' : '',
+            resourceId: entry.kind === 'resource' ? entry.resource.identifier : '',
+            roleCode: entry.roleCode,
+          }),
+        );
 
         return (
           <div
@@ -225,7 +224,7 @@ export const ClientAccessRows = ({
             >
               {set.name}
             </DsHeading>
-            {renderActions?.(item2)}
+            {isMissingRightFromSet ? null : renderActions?.(item2)}
             <ClientAccessSections
               entries={setEntries}
               emptyText={emptyAccessText}

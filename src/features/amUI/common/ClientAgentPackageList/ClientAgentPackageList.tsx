@@ -17,7 +17,6 @@ import type {
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
@@ -177,30 +176,27 @@ export const ClientAgentPackageList = ({
       as: 'button',
       entries: buildEntries(recipient, idPrefix),
       renderActions: (items?: { packageId: string; resourceId: string; roleCode: string }[]) => {
-        const items2 =
-          !items || items.length === 0
-            ? agent.agent.type === PartyType.SystemUser
-              ? []
-              : undefined
-            : client?.access.map((access) => {
-                const itemPackages = items
-                  .filter((i) => i.roleCode === access.role.code)
-                  .map((x) => x.packageId)
-                  .filter(Boolean);
+        const items2 = !items
+          ? undefined
+          : client?.access.map((access) => {
+              const itemPackages = items
+                .filter((i) => i.roleCode === access.role.code)
+                .map((x) => x.packageId)
+                .filter(Boolean);
 
-                const itemResources = items
-                  .filter((i) => i.roleCode === access.role.code)
-                  .map((x) => x.resourceId)
-                  .filter(Boolean);
+              const itemResources = items
+                .filter((i) => i.roleCode === access.role.code)
+                .map((x) => x.resourceId)
+                .filter(Boolean);
 
-                const returna = {
-                  ...access,
-                  packages: access.packages.filter((p) => itemPackages?.indexOf(p.urn) > -1),
-                  resources: access.resources?.filter((r) => itemResources?.indexOf(r.refId) > -1),
-                };
+              const returna = {
+                ...access,
+                packages: access.packages.filter((p) => itemPackages?.indexOf(p.urn) > -1),
+                resources: access.resources?.filter((r) => itemResources?.indexOf(r.refId) > -1),
+              };
 
-                return returna;
-              });
+              return returna;
+            });
         return renderAgentActions?.(agent, idPrefix, items2, restoreFocusFallbackId);
       },
 
