@@ -73,11 +73,15 @@ export const AdministratorList = ({ searchString }: AdministratorListProps) => {
         </DsParagraph>
       ) : (
         <List>
-          {visibleAdministrators.map(({ administrator, adminAddedAt }) => (
+          {visibleAdministrators.map(({ administrator, adminAddedAt }, index) => (
             <AdministratorListItem
               key={administrator.id}
               administrator={administrator}
               addedAt={adminAddedAt}
+              focusIdAfterRemoval={
+                (visibleAdministrators[index + 1] ?? visibleAdministrators[index - 1])
+                  ?.administrator.id
+              }
             />
           ))}
         </List>

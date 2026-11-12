@@ -115,4 +115,21 @@ describe('RemoveAdministratorButton', () => {
     expect(handleSelectAccount).not.toHaveBeenCalled();
     expect(requestFocusOnDataChange).not.toHaveBeenCalled();
   });
+
+  it('asks for focus on the neighbouring row when one is given', async () => {
+    succeed();
+    render(
+      <RemoveAdministratorButton
+        administrator={administrator}
+        focusIdAfterRemoval='neighbour-uuid'
+      />,
+    );
+
+    await openAndConfirm();
+
+    expect(requestFocusOnDataChange).toHaveBeenCalledWith(
+      'neighbour-uuid',
+      'bankruptcy_estate_administrator_search',
+    );
+  });
 });

@@ -19,10 +19,15 @@ import classes from './RemoveAdministratorButton.module.css';
 
 interface RemoveAdministratorButtonProps {
   administrator: PartyEntity;
+  /*** The row that gets focus when this one is gone. The search field when there is none */
+  focusIdAfterRemoval?: string;
 }
 
 /*** "Slett fullmakt" for one administrator, with a confirmation before anything is removed */
-export const RemoveAdministratorButton = ({ administrator }: RemoveAdministratorButtonProps) => {
+export const RemoveAdministratorButton = ({
+  administrator,
+  focusIdAfterRemoval,
+}: RemoveAdministratorButtonProps) => {
   const { t } = useTranslation();
   const { actingParty, selfParty } = usePartyRepresentation();
   const [removeAdministrator] = useRemoveAdministratorMutation();
@@ -37,8 +42,9 @@ export const RemoveAdministratorButton = ({ administrator }: RemoveAdministrator
       handleSelectAccount(selfParty.id);
       return;
     }
-    // The row disappears when the list is fetched again, so focus moves to the search field.
-    requestFocusOnDataChange(administrator.id, ADMINISTRATOR_SEARCH_ID);
+    // The row disappears when the list is fetched again, so focus moves to a neighbouring row,
+    // or to the search field when no row is left.
+    requestFocusOnDataChange(focusIdAfterRemoval ?? administrator.id, ADMINISTRATOR_SEARCH_ID);
   };
 
   return (
