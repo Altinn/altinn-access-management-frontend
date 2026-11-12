@@ -2,12 +2,22 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsParagraph, List } from '@altinn/altinn-components';
 
-import { useGetAdministratorsQuery } from '@/rtk/features/bankruptcyEstateApi';
+import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import {
+  useGetAdministratorsQuery,
+  type BankruptcyEstateAdministrator,
+} from '@/rtk/features/bankruptcyEstateApi';
 
+import { isNewUser } from '../common/isNewUser';
 import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
 import { SkeletonUserList } from '../common/UserList/SkeletonUserList';
+import { matchesUserListSearch } from '../common/UserListItems/UserListItems';
 
 import { AdministratorListItem } from './AdministratorListItem';
+
+/*** New administrators first, then by name, as the agents in client administration */
+const getSortKey = ({ administrator, adminAddedAt }: BankruptcyEstateAdministrator) =>
+  `${isNewUser(adminAddedAt) ? '0' : '1'}:${administrator.name.toLowerCase()}`;
 
 interface AdministratorListProps {
   /*** Only administrators whose name contains this are shown. Empty shows everyone */
@@ -45,11 +55,11 @@ export const AdministratorList = ({ searchString }: AdministratorListProps) => {
   }
 
   const query = searchString.trim();
-  const visibleAdministrators = query
-    ? administrators.filter(({ administrator }) =>
-        administrator.name.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
-      )
-    : administrators;
+  const visibleAdministrators = administrators
+    .filter(({ administrator }) =>
+      matchesUserListSearch({ name: formatEntityDisplayName(administrator) }, query),
+    )
+    .sort((a, b) => getSortKey(a).localeCompare(getSortKey(b)));
 
   return (
     <>

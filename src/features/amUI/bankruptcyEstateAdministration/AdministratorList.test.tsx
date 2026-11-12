@@ -118,4 +118,17 @@ describe('AdministratorList', () => {
     expect(screen.queryByText('Estetisk Skål')).toBeNull();
     expect(screen.queryByText(emptyText)).toBeNull();
   });
+
+  it('shows new administrators first, then the rest by name', () => {
+    administrators = [
+      administrator('1', 'ZETA DAHL', '1970-01-01', '2026-01-15T10:00:00+00:00'),
+      administrator('2', 'ALFA ANDERSEN', '1970-01-01', '2026-01-15T10:00:00+00:00'),
+      administrator('3', 'MIDT BERG', '1970-01-01', new Date().toISOString()),
+    ];
+
+    render(<AdministratorList searchString='' />);
+
+    const names = screen.getAllByText(/Andersen|Berg|Dahl/).map((element) => element.textContent);
+    expect(names).toEqual(['Midt Berg', 'Alfa Andersen', 'Zeta Dahl']);
+  });
 });
