@@ -9,7 +9,8 @@ import {
   getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import type { Client } from '@/rtk/features/clientApi';
+import type { Client, ClientAccess } from '@/rtk/features/clientApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
@@ -32,7 +33,11 @@ type ClientAccessListProps = {
   canDelegate?: boolean;
   addDisabled?: boolean;
   removeDisabled?: boolean;
-  renderClientActions?: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
+  renderClientActions?: (
+    client: Client,
+    overrideItems?: ClientAccess[],
+    restoreFocusFallbackId?: string,
+  ) => React.ReactNode;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
   emptyText?: string;
@@ -135,6 +140,7 @@ export const ClientAccessList = ({
       return [...packages, ...resources];
     });
 
+  const isSystemuserAgent = recipient.type === PartyType.SystemUser;
   const rows: ClientAccessRow[] = sortedClients.map((client) => {
     const userType = getAvatarType(client.client);
     return {
@@ -149,7 +155,29 @@ export const ClientAccessList = ({
       as: 'button',
       titleAs: 'div',
       entries: buildEntries(client),
-      actions: renderClientActions?.(client, restoreFocusFallbackId),
+      renderActions: (items?: { packageId: string; resourceId: string; roleCode: string }[]) => {
+        const items2 =
+          !items || items.length === 0
+            ? isSystemuserAgent
+              ? []
+              : undefined
+            : client.access.map((access) => {
+                const itemPackages = items
+                  .filter((i) => i.roleCode === access.role.code)
+                  .map((x) => x.packageId);
+
+                const itemResources = items
+                  .filter((i) => i.roleCode === access.role.code)
+                  .map((x) => x.resourceId);
+
+                return {
+                  ...access,
+                  packages: access.packages.filter((p) => itemPackages?.indexOf(p.urn) > -1),
+                  resources: access.resources?.filter((r) => itemResources?.indexOf(r.refId) > -1),
+                };
+              });
+        return renderClientActions?.(client, items2, restoreFocusFallbackId);
+      },
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {
@@ -177,6 +205,7 @@ export const ClientAccessList = ({
       expandedIds={expandedIds}
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
+      isSystemuserAgent={isSystemuserAgent}
     />
   );
 };

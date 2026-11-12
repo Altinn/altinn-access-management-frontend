@@ -5,6 +5,7 @@ import type {
   AddAgentAccessPackagesFn,
   AddAgentResourcesFn,
   Client,
+  ClientAccess,
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
@@ -18,7 +19,11 @@ type AgentDetailsClientsListProps = {
   agentAccessPackages: Client[];
   agentResources?: Client[];
   isLoading: boolean;
-  renderClientActions: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
+  renderClientActions: (
+    client: Client,
+    overrideItems?: ClientAccess[],
+    restoreFocusFallbackId?: string,
+  ) => React.ReactNode;
   toPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;

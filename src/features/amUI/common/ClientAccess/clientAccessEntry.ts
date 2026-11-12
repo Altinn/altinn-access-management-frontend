@@ -23,6 +23,7 @@ type ClientAccessEntryBase = {
   roleDescription?: string;
   /** Whether this access can be delegated or removed from here at all. */
   canAct: boolean;
+  isMissingRight?: boolean;
 };
 
 /** One access package or resource that a client can delegate to an agent. */
