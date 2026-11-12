@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PartyType, type AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
@@ -39,6 +40,12 @@ vi.mock('./AddAdministratorButton', () => ({
   AddAdministratorButton: () => <button>add_administrator</button>,
 }));
 
+vi.mock('./AdministratorList', () => ({
+  AdministratorList: ({ searchString }: { searchString: string }) => (
+    <div data-search={searchString}>administrator_list</div>
+  ),
+}));
+
 const person = { name: 'NORDMANN OLA', type: PartyType.Person } as AuthorizedPartyEntity;
 const organization = { name: 'ACME AS', type: PartyType.Organization } as AuthorizedPartyEntity;
 
@@ -65,6 +72,7 @@ describe('BankruptcyEstateAdministrationPageContent', () => {
     expect(screen.queryByText(headingText)).toBeNull();
     expect(screen.queryByRole('button', { name: 'add_administrator' })).toBeNull();
     expect(screen.queryByText('bankruptcy_estate_administration_page.intro')).toBeNull();
+    expect(screen.queryByText('administrator_list')).toBeNull();
   });
 
   it('shows the warning for an organization without asking the BFF', () => {
@@ -93,6 +101,7 @@ describe('BankruptcyEstateAdministrationPageContent', () => {
       screen.getByLabelText('bankruptcy_estate_administration_page.info_icon_label'),
     ).toBeInTheDocument();
     expect(screen.getByText('bankruptcy_estate_administration_page.info_body')).toBeInTheDocument();
+    expect(screen.getByText('administrator_list')).toBeInTheDocument();
   });
 
   it('shows the warning for a person without estates', () => {
@@ -126,5 +135,15 @@ describe('BankruptcyEstateAdministrationPageContent', () => {
     expect(screen.getByText(warningText)).toBeInTheDocument();
     expect(screen.queryByText(headingText)).toBeNull();
     expect(accessQuery).toHaveBeenCalledWith(undefined, { skip: true });
+  });
+
+  it('hands the search text to the administrator list', async () => {
+    reportee = person;
+    isBankruptcyEstateAdmin = true;
+
+    render(<BankruptcyEstateAdministrationPageContent />);
+    await userEvent.type(screen.getByRole('searchbox', { name: 'common.search' }), 'ola');
+
+    expect(screen.getByText('administrator_list')).toHaveAttribute('data-search', 'ola');
   });
 });

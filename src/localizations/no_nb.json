@@ -1346,6 +1346,9 @@
     "info_icon_label": "Mer informasjon om Konkursbo administrator",
     "info_heading": "Konkursbo administrator",
     "info_body": "Konkursbo administrator blir hovedadministrator for alle nåværende og fremtidige konkursbo som bostyrer er ansvarlig for. De får automatisk Konkursbo lese- og skrivetilgang, og kan gi nødvendige fullmakter videre til andre kreditorer og interessenter.",
-    "info_body_removal": "Fjernes fullmakten her mistes tilgangen til alle konkursbo."    
+    "info_body_removal": "Fjernes fullmakten her mistes tilgangen til alle konkursbo.",
+    "no_administrators": "Ingen brukere har fått administratortilganger ennå.",
+    "administrator_role_description": "Gir mulighet til å administrere alle nåværende og fremtidige konkursbo for bostyrer. Mottaker får automatisk Hovedadministrator, Konkursbo lese- og skrivetilgang på alle konkursbo bostyrer er oppnevnt for.",
+    "packages_managed_per_estate": "Administrering av disse og eventuelt andre tilgangspakker må gjøres direkte på hvert konkursbo."    
   }
 }
