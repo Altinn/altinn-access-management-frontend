@@ -13,9 +13,11 @@ import type {
   AddAgentResourcesFn,
   Agent,
   Client,
+  ClientAccess,
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
+import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
@@ -41,6 +43,7 @@ type ClientAgentPackageListProps = {
   renderAgentActions?: (
     agent: Agent,
     rowKey: string,
+    overrideItems?: ClientAccess[],
     restoreFocusFallbackId?: string,
   ) => React.ReactNode;
   emptyText?: string;
@@ -173,7 +176,34 @@ export const ClientAgentPackageList = ({
       titleAs: 'h2',
       as: 'button',
       entries: buildEntries(recipient, idPrefix),
-      actions: renderAgentActions?.(agent, idPrefix, restoreFocusFallbackId),
+      renderActions: (items?: { packageId: string; resourceId: string; roleCode: string }[]) => {
+        const items2 =
+          !items || items.length === 0
+            ? agent.agent.type === PartyType.SystemUser
+              ? []
+              : undefined
+            : client?.access.map((access) => {
+                const itemPackages = items
+                  .filter((i) => i.roleCode === access.role.code)
+                  .map((x) => x.packageId)
+                  .filter(Boolean);
+
+                const itemResources = items
+                  .filter((i) => i.roleCode === access.role.code)
+                  .map((x) => x.resourceId)
+                  .filter(Boolean);
+
+                const returna = {
+                  ...access,
+                  packages: access.packages.filter((p) => itemPackages?.indexOf(p.urn) > -1),
+                  resources: access.resources?.filter((r) => itemResources?.indexOf(r.refId) > -1),
+                };
+
+                return returna;
+              });
+        return renderAgentActions?.(agent, idPrefix, items2, restoreFocusFallbackId);
+      },
+
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {

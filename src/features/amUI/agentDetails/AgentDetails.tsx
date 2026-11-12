@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import type { Client } from '@/rtk/features/clientApi';
+import type { Client, ClientAccess } from '@/rtk/features/clientApi';
 import {
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
@@ -129,9 +129,9 @@ export const AgentDetails = () => {
     removeAgentResources,
   });
   const renderClientActions = useCallback(
-    (client: Client, restoreFocusFallbackId?: string) => {
+    (client: Client, overrideItems?: ClientAccess[], restoreFocusFallbackId?: string) => {
       const clientId = client.client.id;
-      const items = bulk.getItems(client.access, clientId);
+      const items = bulk.getItems(overrideItems ? overrideItems : client.access, clientId);
       if (items.missing.length === 0 && items.held.length === 0) return null;
       return (
         <ClientBulkActions

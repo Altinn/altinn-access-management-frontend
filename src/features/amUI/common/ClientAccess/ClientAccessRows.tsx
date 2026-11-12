@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState, type ReactNode } from 'react';
+import { DsHeading } from '@altinn/altinn-components';
 
 import type { ClientAccess } from '@/rtk/features/clientApi';
+import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 
 import type { HeldAccessByRow } from '../ClientBulkDelegation/getClientBulkItems';
 import { ClientAccessInfoModal } from '../DelegationModal/ClientAccessInfoModal';
@@ -15,7 +17,9 @@ import { clientActionControlId } from './DelegationControl';
 export type ClientAccessRow = Omit<UserListItemData, 'children'> & {
   entries: ClientAccessEntry[];
   /** Rendered above the row's access lists, e.g. bulk actions. */
-  actions?: ReactNode;
+  renderActions?: (
+    item?: { packageId: string; resourceId: string; roleCode: string }[],
+  ) => ReactNode;
 };
 
 interface ClientAccessRowsProps {
@@ -35,6 +39,7 @@ interface ClientAccessRowsProps {
   onToggleExpanded?: (id: string) => void;
   // Focus target when the acted-on row is no longer reachable here, typically the section heading.
   restoreFocusFallbackId?: string;
+  isSystemuserAgent?: boolean;
 }
 
 const holdsAccess = (held: ClientAccess[], entry: ClientAccessEntry) =>
@@ -60,12 +65,14 @@ export const ClientAccessRows = ({
   expandedIds,
   onToggleExpanded,
   restoreFocusFallbackId,
+  isSystemuserAgent,
 }: ClientAccessRowsProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selected, setSelected] = useState<ClientAccessEntry | null>(null);
   const restoreFocus = useRestoreFocusContext();
   const requestPackageFocus = useRestoreFocusOnDataChange(heldPackages);
   const requestResourceFocus = useRestoreFocusOnDataChange(heldResources);
+  const { getAccessPackageByUrn } = useAccessPackageLookup();
 
   const hasAccess = (entry: ClientAccessEntry) => {
     const held = entry.kind === 'package' ? heldPackages : heldResources;
@@ -104,18 +111,147 @@ export const ClientAccessRows = ({
   });
   useEffect(() => () => restoreFocusOnUnmountRef.current?.(), []);
 
-  const items: UserListItemData[] = rows.map(({ entries, actions, ...item }) => ({
-    ...item,
-    children: (
-      <>
-        {actions}
-        <ClientAccessSections
-          entries={entries}
-          emptyText={emptyAccessText}
-        />
-      </>
-    ),
-  }));
+  const fixedSystemUserPackages = [
+    {
+      name: 'Jordbruk-informasjon-settet',
+      packages: [
+        'urn:altinn:accesspackage:informasjon-og-kommunikasjon',
+        'urn:altinn:accesspackage:jordbruk',
+      ],
+      resources: [],
+    },
+    {
+      name: 'Skattegreier-settet',
+      packages: ['urn:altinn:accesspackage:skattegrunnlag', 'urn:altinn:accesspackage:jordbruk'],
+      resources: [],
+    },
+    {
+      name: 'Annet-settet',
+      packages: ['urn:altinn:accesspackage:annen-tjenesteyting'],
+      resources: ['acn-migratedcorrespondence-4540-1'],
+    },
+  ];
+  // hvert rettighetssett er en ClientAccessSections.
+  const items: UserListItemData[] = rows.map(({ entries, renderActions, ...item }) => {
+    const isSystemuserClient = item.type === 'system';
+
+    if (isSystemuserAgent || isSystemuserClient) {
+      // enrich systemuser set
+      const setData = fixedSystemUserPackages.map((set) => {
+        const setEntriesPackages: ClientAccessEntry[] = set.packages.map((urn) => {
+          const existingEntry = entries.find(
+            (e) => e.kind === 'package' && e.accessPackage.urn === urn,
+          );
+          if (existingEntry) {
+            return {
+              ...existingEntry,
+              canAct: false,
+            };
+          } else {
+            const accessPackage = getAccessPackageByUrn(urn);
+            // create fake entry for missing access package. Eller skal disse berikes av backend? Det er et begrenset sett
+            return {
+              clientId: item.id,
+              recipient: {
+                id: '',
+                name: '',
+              },
+              roleCode: '',
+              accessId: '',
+              itemId: `generated-${urn}`,
+              kind: 'package',
+              accessPackage: accessPackage!, // TODO: handle missing access package gracefully
+              canAct: false,
+              isMissingRight: true,
+            };
+          }
+        });
+
+        const setEntriesResources: ClientAccessEntry[] = set.resources.map((identifier) => {
+          const existingEntry = entries.find(
+            (e) => e.kind === 'resource' && e.resource.identifier === identifier,
+          );
+          if (existingEntry) {
+            return {
+              ...existingEntry,
+              canAct: false,
+            };
+          } else {
+            // create fake entry for missing access package
+            return {
+              clientId: item.id,
+              recipient: {
+                id: '',
+                name: '',
+              },
+              roleCode: '',
+              accessId: '',
+              itemId: `generated-${identifier}`,
+              kind: 'resource',
+              resource: {
+                identifier: identifier,
+                name: identifier,
+              },
+              canAct: false,
+              isMissingRight: true,
+            };
+          }
+        });
+        const setEntries = [...setEntriesPackages, ...setEntriesResources];
+
+        // group items by role
+        const item2: { packageId: string; resourceId: string; roleCode: string }[] =
+          setEntries.some((p) => !p.recipient.id)
+            ? []
+            : setEntries.map((entry) => ({
+                packageId: entry.kind === 'package' ? entry.accessPackage.urn || '' : '',
+                resourceId: entry.kind === 'resource' ? entry.resource.identifier : '',
+                roleCode: entry.roleCode,
+              }));
+
+        return (
+          <div
+            key={set.name}
+            style={{
+              marginBottom: '2rem',
+              padding: '1rem',
+              borderLeft: '4px solid #aaa',
+              boxShadow: '0 0 5px 3px #eee',
+            }}
+          >
+            <DsHeading
+              level={2}
+              data-size='xs'
+            >
+              {set.name}
+            </DsHeading>
+            {renderActions?.(item2)}
+            <ClientAccessSections
+              entries={setEntries}
+              emptyText={emptyAccessText}
+            />
+          </div>
+        );
+      });
+
+      return {
+        ...item,
+        children: setData,
+      };
+    }
+    return {
+      ...item,
+      children: (
+        <>
+          {renderActions?.()}
+          <ClientAccessSections
+            entries={entries}
+            emptyText={emptyAccessText}
+          />
+        </>
+      ),
+    };
+  });
 
   return (
     <ClientAccessContext.Provider value={context}>
