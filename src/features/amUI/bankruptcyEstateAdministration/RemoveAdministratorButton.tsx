@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { MinusCircleIcon } from '@navikt/aksel-icons';
 
 import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
@@ -31,10 +32,11 @@ export const RemoveAdministratorButton = ({ administrator }: RemoveAdministrator
 
   return (
     <span
-      data-color='company'
+      data-color='accent'
       className={classes.remove}
     >
       <DeleteClientProviderModal
+        triggerIcon={<MinusCircleIcon aria-hidden='true' />}
         triggerLabel={t('common.delete_poa')}
         heading={t('common.confirm_delete_heading')}
         body={t('bankruptcy_estate_administration_page.remove_administrator_body', {
