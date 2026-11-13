@@ -202,7 +202,7 @@ export const ClientAccessRows = ({
         const isMissingRightFromSet = setEntries.some((p) => !p.recipient.id);
         const item2: { packageId: string; resourceId: string; roleCode: string }[] = setEntries.map(
           (entry) => ({
-            packageId: entry.kind === 'package' ? entry.accessPackage.urn || '' : '',
+            packageId: entry.kind === 'package' ? entry.accessPackage?.urn || '' : '',
             resourceId: entry.kind === 'resource' ? entry.resource.identifier : '',
             roleCode: entry.roleCode,
           }),
