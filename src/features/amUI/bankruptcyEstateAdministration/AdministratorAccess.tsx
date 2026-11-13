@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsHeading, DsParagraph } from '@altinn/altinn-components';
+import { DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 
 import type { PartyEntity } from '@/dataObjects/dtos/Party';
@@ -11,7 +11,8 @@ import {
   AccessPackageListItems,
   type AccessPackageListItemData,
 } from '../common/AccessPackageListItems/AccessPackageListItems';
-import { ClientPackageInfoModal } from '../common/DelegationModal/AccessPackages/ClientPackageInfoModal';
+import { ClientPackageInfo } from '../common/DelegationModal/AccessPackages/ClientPackageInfo';
+import dialogClasses from '../common/DelegationModal/DelegationModal.module.css';
 
 import classes from './AdministratorAccess.module.css';
 
@@ -81,13 +82,22 @@ export const AdministratorAccess = ({ administrator }: AdministratorAccessProps)
         />
         {t('bankruptcy_estate_administration_page.packages_managed_per_estate')}
       </DsParagraph>
-      <ClientPackageInfoModal
+      <DsDialog
         ref={modalRef}
-        data={
-          openPackage && { party: administrator, accessPackage: openPackage, userHasAccess: true }
-        }
+        className={dialogClasses.modalDialog}
+        closedby='any'
         onClose={() => setOpenPackage(undefined)}
-      />
+      >
+        <div className={dialogClasses.content}>
+          {openPackage && (
+            <ClientPackageInfo
+              accessPackage={openPackage}
+              recipient={administrator}
+              userHasAccess
+            />
+          )}
+        </div>
+      </DsDialog>
     </div>
   );
 };
