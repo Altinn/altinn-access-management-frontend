@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import type { ActionError } from '@/resources/hooks/useActionError';
 import type {
   AddAgentAccessPackagesFn,
   AddAgentResourcesFn,
@@ -11,10 +10,8 @@ import type {
 } from '@/rtk/features/clientApi';
 
 import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
-import { useClientResourceActions } from '../common/ClientResourceList/useClientResourceActions';
+import { useClientAccessAction } from '../common/ClientAccess/useClientAccessAction';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-
-import { useAgentDetailsAccessPackageActions } from './useAgentDetailsAccessPackageActions';
 
 type AgentDetailsClientsListProps = {
   clients: Client[];
@@ -54,26 +51,27 @@ export const AgentDetailsClientsList = ({
   restoreFocusFallbackId,
 }: AgentDetailsClientsListProps) => {
   const actionDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
+  const { toParty } = usePartyRepresentation();
 
-  const { addAgentAccessPackage, removeAgentAccessPackage } = useAgentDetailsAccessPackageActions({
-    toPartyUuid,
+  const runAction = useClientAccessAction({
     actingPartyUuid,
     addAgentAccessPackages,
     removeAgentAccessPackages,
-  });
-  const { addClientResource, removeClientResource } = useClientResourceActions({
-    actingPartyUuid,
     addAgentResources,
     removeAgentResources,
   });
-  const { toParty } = usePartyRepresentation();
-  const agentName = formatEntityDisplayName(toParty);
 
   return (
     <ClientAccessList
       clients={clients}
       accessStateClients={agentAccessPackages}
       resourceAccessClients={agentResources}
+      recipient={{
+        id: toPartyUuid ?? '',
+        name: formatEntityDisplayName(toParty),
+        type: toParty?.type,
+      }}
+      runAction={runAction}
       addDisabled={actionDisabled}
       removeDisabled={actionDisabled}
       searchString={searchString}
@@ -82,48 +80,6 @@ export const AgentDetailsClientsList = ({
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
       renderClientActions={renderClientActions}
-      onAddAccessPackage={(action, onSuccess, onError) =>
-        addAgentAccessPackage({ ...action, agentName }, onSuccess, onError)
-      }
-      onRemoveAccessPackage={(action, onSuccess, onError) =>
-        removeAgentAccessPackage({ ...action, agentName }, onSuccess, onError)
-      }
-      onAddResource={(
-        { clientId, roleCode, resourceId, resourceName },
-        onSuccess?: () => void,
-        onError?: (error?: ActionError) => void,
-      ) =>
-        addClientResource(
-          {
-            clientId,
-            agentId: toPartyUuid ?? '',
-            roleCode,
-            resourceId,
-            agentName,
-            resourceName,
-          },
-          onSuccess,
-          onError,
-        )
-      }
-      onRemoveResource={(
-        { clientId, roleCode, resourceId, resourceName },
-        onSuccess?: () => void,
-        onError?: (error?: ActionError) => void,
-      ) =>
-        removeClientResource(
-          {
-            clientId,
-            agentId: toPartyUuid ?? '',
-            roleCode,
-            resourceId,
-            agentName,
-            resourceName,
-          },
-          onSuccess,
-          onError,
-        )
-      }
     />
   );
 };

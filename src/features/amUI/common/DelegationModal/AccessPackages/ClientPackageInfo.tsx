@@ -3,22 +3,35 @@ import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PartyType } from '@/dataObjects/dtos/Party';
-import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
+import type { ActionError } from '@/resources/hooks/useActionError';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { LoadingAnimation } from '../../LoadingAnimation/LoadingAnimation';
 import { focusFirstEnabledButton, useRestoreFocusAfterSettled } from '../../RestoreFocus';
 import { StatusSection } from '../../StatusSection/StatusSection';
 import { TechnicalErrorParagraphs } from '../../TechnicalErrorParagraphs';
 import { ValidationErrorMessage } from '../../ValidationErrorMessage';
-import type { PartyInfoProps } from '../Party/PartyInfo';
+import type { ClientAccessRecipient } from '../../ClientAccess/clientAccessEntry';
 
 import classes from './AccessPackageInfo.module.css';
 import { PackageHeader } from './PackageHeader';
 import { PackageMeta } from './PackageMeta';
 
+export interface ClientPackageInfoProps {
+  accessPackage: AccessPackage;
+  recipient: ClientAccessRecipient;
+  userHasAccess: boolean;
+  roleDescription?: string;
+  isLoading?: boolean;
+  isSuccess?: boolean;
+  error?: ActionError | null;
+  onDelegate?: () => void;
+  onRevoke?: () => void;
+}
+
 export const ClientPackageInfo = ({
-  party,
   accessPackage,
+  recipient,
   userHasAccess,
   roleDescription,
   onDelegate,
@@ -26,7 +39,7 @@ export const ClientPackageInfo = ({
   isLoading = false,
   isSuccess = false,
   error,
-}: PartyInfoProps & { roleDescription?: string }) => {
+}: ClientPackageInfoProps) => {
   const { t } = useTranslation();
   const actionsRef = useRef<HTMLDivElement>(null);
   useRestoreFocusAfterSettled({
@@ -38,8 +51,6 @@ export const ClientPackageInfo = ({
       focusFirstEnabledButton(actionsRef.current?.closest('dialog') ?? null);
     },
   });
-
-  const userName = formatEntityDisplayName(party);
 
   const canRevoke = userHasAccess && !!onRevoke;
   const canDelegate = !userHasAccess && !!onDelegate;
@@ -74,7 +85,7 @@ export const ClientPackageInfo = ({
                   errorCode={error.details?.errorCode ?? error.details?.detail ?? ''}
                   translationValues={{
                     entity_type:
-                      party.type === PartyType.Person
+                      recipient.type === PartyType.Person
                         ? t('common.persons_lowercase')
                         : t('common.organizations_lowercase'),
                   }}
@@ -100,7 +111,7 @@ export const ClientPackageInfo = ({
           <StatusSection
             userHasAccess={userHasAccess}
             cannotDelegateHere={cannotChangeAccess}
-            toPartyName={userName}
+            toPartyName={recipient.name}
           />
 
           <PackageMeta accessPackage={accessPackage} />
