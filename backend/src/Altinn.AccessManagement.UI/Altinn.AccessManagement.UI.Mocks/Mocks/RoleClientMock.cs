@@ -26,10 +26,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         /// </summary>
         public RoleClientMock(
             HttpClient httpClient,
-            ILogger<AccessManagementClientMock> logger,
+            ILogger<RoleClientMock> logger,
             IHttpContextAccessor httpContextAccessor)
         {
-            _dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            _dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(RoleClientMock).Assembly.Location).LocalPath), "Data");
         }
 
         /// <inheritdoc />

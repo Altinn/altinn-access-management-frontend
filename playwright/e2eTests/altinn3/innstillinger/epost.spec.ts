@@ -160,6 +160,28 @@ test.describe('Innstillinger - e-postadresser', () => {
       });
     });
 
+    test('adresse som allerede er registrert kan ikke legges til', async ({
+      innstillingerPage,
+      login,
+    }) => {
+      await test.step(`Logg inn som ${actor.orgName} og åpne innstillinger`, async () => {
+        await login.LoginToAccessManagement(actor.pid);
+        await login.selectActor(actor.orgName);
+        await innstillingerPage.goToInnstillinger();
+      });
+
+      await test.step('Skriv inn adressen virksomheten allerede har', async () => {
+        await innstillingerPage.openEpostDialog();
+        await innstillingerPage.klikkLeggTilFlere();
+        await innstillingerPage.skrivEpost('', BASELINE_EPOST.toUpperCase());
+        await innstillingerPage.saveButton.click();
+      });
+
+      await test.step('Feilmeldingen vises på raden', async () => {
+        await expect(innstillingerPage.adresseFinnesFeilmelding).toBeVisible();
+      });
+    });
+
     test.afterEach(async ({ api }) => {
       await api.settings.setNotificationAddresses(actor.pid, actor.org, {
         emails: [BASELINE_EPOST],

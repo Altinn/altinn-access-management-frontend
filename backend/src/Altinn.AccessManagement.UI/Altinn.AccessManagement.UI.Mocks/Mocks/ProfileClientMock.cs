@@ -1,10 +1,12 @@
 ﻿using System.Net;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.Profile;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Mocks.Utils;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -28,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             IHttpContextAccessor httpContextAccessor,
             IAccessTokenProvider accessTokenProvider)
         {
-            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(AccessManagementClientMock).Assembly.Location).LocalPath), "Data");
+            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(ProfileClientMock).Assembly.Location).LocalPath), "Data");
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -150,13 +152,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
         }
 
-        public async Task<NotificationAddressResponse> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress)
+        public async Task<Result<NotificationAddressResponse>> PostNewOrganisationNotificationAddress(string orgNumber, NotificationAddressModel notificationAddress)
         {
             // Special string triggers backend style error for tests
             if (orgNumber == "000000000")
             {
-                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
+                return SettingsProblem.UnknownError;
             }
+
+            // Special string triggers an organization that is not registered in ER
+            if (orgNumber == "999999999")
+            {
+                return SettingsProblem.OrganizationNotInEr;
+            }
+
             NotificationAddressResponse response = new NotificationAddressResponse
             {
                 Email = notificationAddress.Email,
@@ -168,12 +177,18 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(response);
         }
 
-        public async Task<NotificationAddressResponse> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId)
+        public async Task<Result<NotificationAddressResponse>> DeleteOrganisationNotificationAddress(string orgNumber, int notificationAddressId)
         {
             // Special string triggers backend style error for tests
             if (orgNumber == "000000000")
             {
-                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
+                return SettingsProblem.UnknownError;
+            }
+
+            // Special id triggers the last address of the organization
+            if (notificationAddressId == 40900)
+            {
+                return SettingsProblem.CannotDeleteLastAddress;
             }
 
             NotificationAddressResponse response;
@@ -189,23 +204,29 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
             else
             {
-                throw new HttpStatusException("NotFound", "The specified notification address was not found", HttpStatusCode.NotFound, string.Empty);
+                return SettingsProblem.AddressNotFound;
             }
 
             return await Task.FromResult(response);
         }
 
-        public async Task<NotificationAddressResponse> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress)
+        public async Task<Result<NotificationAddressResponse>> UpdateOrganisationNotificationAddress(string orgNumber, int notificationAddressId, NotificationAddressModel notificationAddress)
         {
             // Special string triggers backend style error for tests
             if (orgNumber == "000000000")
             {
-                throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", HttpStatusCode.InternalServerError, string.Empty);
+                return SettingsProblem.UnknownError;
             }
 
             if (notificationAddressId < 10000)
             {
-                throw new HttpStatusException("NotFound", "The specified notification address was not found", HttpStatusCode.NotFound, string.Empty);
+                return SettingsProblem.AddressNotFound;
+            }
+
+            // Special id triggers an address that already exists on the organization
+            if (notificationAddressId == 40900)
+            {
+                return SettingsProblem.AddressAlreadyExists;
             }
 
             NotificationAddressResponse response = new NotificationAddressResponse

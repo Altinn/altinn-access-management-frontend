@@ -31,11 +31,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         };
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AccessManagementClient" /> class
+        /// Initializes a new instance of the <see cref="AccessManagementClientV0" /> class
         /// </summary>
         public AccessManagementClientV0(
             HttpClient httpClient,
-            ILogger<AccessManagementClient> logger,
+            ILogger<AccessManagementClientV0> logger,
             IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings)
         {
@@ -79,7 +79,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // AccessManagementClient // GetPartyFromReporteeListIfExists // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // AccessManagementClientV0 // GetPartyFromReporteeListIfExists // Exception");
                 throw;
             }
         }
@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "AccessManagement.UI // AccessManagementClient // GetReporteeListForUser // Exception");
+                _logger.LogError(ex, "AccessManagement.UI // AccessManagementClientV0 // GetReporteeListForUser // Exception");
                 throw;
             }
         }

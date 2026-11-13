@@ -12,7 +12,7 @@ import {
   ExternalLinkIcon,
   DatabaseIcon,
   FileTextIcon,
-  GavelIcon,
+  TrendDownIcon,
 } from '@navikt/aksel-icons';
 import i18next, { t } from 'i18next';
 import { Link } from 'react-router';
@@ -278,7 +278,7 @@ export const getBankruptcyEstateAdministrationMenuItem = (
     loading: isLoading,
     variant: isSmall ? 'default' : 'tinted',
     title: t('sidebar.bankruptcy_estate_administration'),
-    icon: { svgElement: GavelIcon, theme: isSmall ? 'surface' : 'default' },
+    icon: { svgElement: TrendDownIcon, theme: isSmall ? 'surface' : 'default' },
     selected: pathname?.includes(`/${amUIPath.BankruptcyEstateAdministration}`),
     as: (props) => getMenuLinkAs(props, `/${amUIPath.BankruptcyEstateAdministration}`),
   };

@@ -94,10 +94,10 @@ export const PageLayoutWrapper = ({
 const getBannerLink = (languageCode: string) => {
   switch (languageCode) {
     case 'en':
-      return 'https://info.altinn.no/en/news/new-power-of-attorney-solution/';
+      return 'https://info.altinn.no/en/news/altinn-roles-are-being-phased-out-by-the-new-year-make-sure-the-right-people-have-authorisation/';
     case 'nn':
-      return 'https://info.altinn.no/nn/nyheiter/ny-fullmaktsloeysing/';
+      return 'https://info.altinn.no/nn/nyheiter/altinn-rollene-blir-fasa-ut-innan-nyttaar-sjekk-at-rette-personar-har-fullmakt/';
     default:
-      return 'https://info.altinn.no/nyheter/ny-fullmaktsloesning/';
+      return 'https://info.altinn.no/nyheter/altinn-rollene-fases-ut-innen-nyttaar-sjekk-at-rette-personer-har-fullmakt/';
   }
 };

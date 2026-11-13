@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsButton, DsHeading } from '@altinn/altinn-components';
+import { DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import { AmTabs } from '../AmTabs/AmTabs';
 import { OrgLookupFields } from '../RecipientFields/OrgLookupFields';
@@ -20,6 +20,8 @@ export interface AddUserFormProps {
   heading: string;
   /*** Given to the heading. The flow owns the dialog, so it wires the same id to aria-labelledby */
   headingId: string;
+  /*** Shown under the heading, for flows that must say what adding the recipient leads to */
+  description?: string;
   /**
    * Which recipients this form can take, in tab order. The first is selected, and a single kind
    * renders no tabs at all. Each carries its own submit label, so a kind cannot be offered without
@@ -52,6 +54,7 @@ export interface AddUserFormProps {
 export const AddUserForm = ({
   heading,
   headingId,
+  description,
   recipientKinds,
   onSubmit,
   isSubmitting,
@@ -103,11 +106,20 @@ export const AddUserForm = ({
       <DsHeading
         data-size='xs'
         level={2}
-        className={classes.heading}
+        className={description ? classes.headingWithDescription : classes.heading}
         id={headingId}
       >
         {heading}
       </DsHeading>
+
+      {description && (
+        <DsParagraph
+          data-size='sm'
+          className={classes.description}
+        >
+          {description}
+        </DsParagraph>
+      )}
 
       {recipientKinds.length > 1 ? (
         <AmTabs

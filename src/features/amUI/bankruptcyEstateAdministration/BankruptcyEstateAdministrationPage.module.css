@@ -1,0 +1,10 @@
+.actions {
+  display: flex;
+  gap: var(--ds-spacing-4);
+  margin-bottom: var(--ds-spacing-4);
+}
+
+.search {
+  flex: 1;
+  max-width: 21rem;
+}

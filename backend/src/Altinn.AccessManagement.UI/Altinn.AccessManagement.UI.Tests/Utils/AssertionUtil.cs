@@ -404,16 +404,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
 
         }
 
-        public static void AssertEqual(UserAccesses expected, UserAccesses actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            AssertCollections(expected.AccessPackages, actual.AccessPackages, Assert.Equal);
-            AssertCollections(expected.Services, actual.Services, Assert.Equal);
-
-        }
-
         public static void AssertEqual(PackagePermissionFE expected, PackagePermissionFE actual)
         {
             Assert.NotNull(actual);

@@ -119,8 +119,8 @@
     "too_many_subunits_warning": "Denne virksomheten har for mange underenheter til å inkludere dem i nedlastingen. Dette er noe vi jobber med å løse, men for nå må du laste ned hver underenhet for seg hvis du ønsker denne informasjonen."
   },
   "info_banner": {
-    "info": "Altinn er fornyet.",
-    "link": "Slik gir du nye fullmakter og tilganger."
+    "info": "Altinn-rollene fases ut nå.",
+    "link": "Sørg for at rette personer har fullmakt."
   },
   "error_page": {
     "page_title": "Feilside - Altinn",
@@ -428,15 +428,15 @@
     "expired_resource_description": "Denne tjenesten er utgått. Dersom du gir fullmakt til denne tjenesten, vil {{name}} kun få tilgang til å se gamle innsendinger/meldinger. De vil ikke kunne sende inn ny data.",
     "expired_resource_request_description": "Denne tjenesten er utgått. Dersom du ber om fullmakt til denne tjenesten, vil du kun få tilgang til å se gamle innsendinger/meldinger. Du vil ikke kunne sende inn ny data.",
     "actions": {
-      "access_to_all": "Tilgang til hele tjenesten",
-      "partial_access": "Tilgang til {{count}} av {{total}} handlinger",
+      "access_to_all": "Fullmakt til hele tjenesten",
+      "partial_access": "Fullmakt til {{count}} av {{total}} handlinger",
       "action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan gi fullmakt til hele tjenesten eller velge spesifikke handlinger.",
       "request_action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan kun be om fullmakt til hele tjenesten.",
       "approve_action_description": "Her ser du de tekniske handlingene som tjenesten tilbyr. Du kan kun godkjenne fullmakt til hele tjenesten.",
       "cannot_give_header": "Du kan ikke gi tilgang til:"
     },
     "instance_actions": {
-      "access_to_all": "Tilgang til hele meldingen eller skjemaet",
+      "access_to_all": "Fullmakt til hele meldingen eller skjemaet",
       "action_description": "Her vises de tekniske handlingene som er tilgjengelige. Du kan gi fullmakt til alle handlingene eller velge enkelte av dem."
     },
     "technical_error_message": {
@@ -664,6 +664,10 @@
     "remove_sms": "Fjern telefonnummer",
     "error_saving_addresses": "Noe gikk galt. Vennligst prøv igjen.",
     "no_addresses_error": "Virksomheten må ha minst én e-postadresse eller sms-adresse for varslinger.",
+    "organization_not_in_er": "Vi kan ikke registrere varslingsadresser for denne virksomheten fordi den ikke er registrert i Enhetsregisteret.",
+    "address_already_exists": "Adressen er allerede registrert",
+    "address_not_found": "En av adressene er allerede fjernet av noen andre. Se over listen og lagre på nytt.",
+    "not_authorized_error": "Du har ikke tilgang til å endre varslingsadresser for denne virksomheten.",
     "alert_settings_info": "Varslene som sendes ut til registrerte varslingsadresser sendes uavhengig av om mottaker har rettighet til å se innholdet i altinn. Hvis dere har en felles e-postadresse er det naturlig å legge den inn her. <a>Les mer</a>",
     "info_button": "Informasjon om varslingsadresser",
     "service_announcement_heading": "Planlagt vedlikehold 31. oktober - 1. november",
@@ -672,7 +676,9 @@
   "text_field_errors": {
     "required": "Feltet er påkrevd",
     "invalid_email_pattern": "Ugyldig e-postadresse",
-    "invalid_phone": "Ugyldig telefonnummer"
+    "invalid_phone": "Ugyldig telefonnummer",
+    "invalid_norwegian_phone": "Norske mobilnumre må ha 8 siffer og starte med 4 eller 9",
+    "invalid_country_code": "Ugyldig landskode"
   },
   "info_modal": {
     "back_button": "Gå til gamle Altinn",
@@ -1277,10 +1283,10 @@
   },
   "draft_request_page": {
     "page_title": "Forespørsel om fullmakt - Altinn",
-    "heading": "Vil du be om tilgang til <strong>{{to_name}}</strong>?",
-    "intro_person": "Det er opprettet et forslag om tilgang på dine vegne, men du må selv godkjenne det for at det skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
-    "intro_company": "Det er opprettet et forslag om tilgang på vegne av <strong>{{from_name}}</strong>, men du må selv godkjenne det for at det skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
-    "confirm_request": "Ja, be om tilgang",
+    "heading": "Vil du be <strong>{{to_name}}</strong> om fullmakt?",
+    "intro_person": "Det er opprettet et forslag om fullmakt på dine vegne, men du må selv godkjenne det for at det skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
+    "intro_company": "Det er opprettet et forslag om fullmakt på vegne av <strong>{{from_name}}</strong>, men du må selv godkjenne det for at det skal tre i kraft. Forespørselen vil kun sendes til <strong>{{to_name}}</strong> dersom du sier deg enig.",
+    "confirm_request": "Ja, be om fullmakt",
     "withdraw_request": "Nei, avvis",
     "loading_request": "Laster forespørsel",
     "load_request_error": "Kunne ikke laste forespørsel",
@@ -1289,7 +1295,7 @@
     "request_approved": "Forespørselen er sendt til <strong>{{to_name}}</strong>",
     "request_approved_info": "Noen i <strong>{{to_name}}</strong> vil snart behandle forespørselen din, og du vil få varsel når den er godkjent.",
     "request_withdrawn": "Forespørselen er avvist",
-    "request_withdrawn_info": "Du har avvist forespørselen og vil dermed ikke få fullmakt til <strong>{{to_name}}</strong>.",
+    "request_withdrawn_info": "Du har avvist forespørselen og vil dermed ikke få fullmakt fra <strong>{{to_name}}</strong>.",
     "close_window_info": "Du kan nå lukke dette vinduet.",
     "missing_request_id": "Kan ikke laste forespørsel: requestId-parameter er ikke satt i url",
     "batch_partial_error": "Kunne ikke behandle følgende forespørsler: {{resources}}. Vennligst prøv igjen.",
@@ -1330,6 +1336,19 @@
   "bankruptcy_estate_administration_page": {
     "page_title": "Borolleadministrasjon - Altinn",
     "page_heading": "Borolleadministrasjon for {{name}}",
-    "no_access_title": "Du har ikke tilgang til borolleadministrasjon"
+    "no_access_title": "Du har ikke tilgang til borolleadministrasjon",
+    "add_administrator_button": "Ny konkursbo administrator",
+    "add_administrator_heading": "Legg til bruker og gi Konkursbo administrator",
+    "add_administrator_description": "Mottaker blir hovedadministrator for alle dine nåværende og fremtidige konkursbo.",
+    "add_administrator_not_person_error": "Bare personer kan være konkursbo administrator.",
+    "intro": "Her kan du legge til og fjerne brukere som skal administrere dine konkursbo. Den du legger til vil bli Hovedadministrator for alle dine konkursbo.",
+    "info_icon_label": "Mer informasjon om Konkursbo administrator",
+    "info_heading": "Konkursbo administrator",
+    "info_body": "Konkursbo administrator blir hovedadministrator for alle nåværende og fremtidige konkursbo som bostyrer er ansvarlig for. De får automatisk Konkursbo lese- og skrivetilgang, og kan gi nødvendige fullmakter videre til andre kreditorer og interessenter.",
+    "info_body_removal": "Fjernes fullmakten her mistes tilgangen til alle konkursbo.",
+    "no_administrators": "Ingen brukere har fått administratortilganger ennå.",
+    "administrator_role_description": "Gir mulighet til å administrere alle nåværende og fremtidige konkursbo for bostyrer. Mottaker får automatisk Hovedadministrator, Konkursbo lese- og skrivetilgang på alle konkursbo bostyrer er oppnevnt for.",
+    "packages_managed_per_estate": "Administrering av disse og eventuelt andre tilgangspakker må gjøres direkte på hvert konkursbo.",
+    "remove_administrator_body": "{{name}} vil miste fullmakter på alle konkursboene til {{trustee}}, og vil ikke lenger kunne representere dem i Altinn."
   }
 }

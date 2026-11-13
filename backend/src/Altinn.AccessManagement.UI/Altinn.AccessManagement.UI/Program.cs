@@ -364,15 +364,6 @@ void ConfigureMockableClients(IServiceCollection services, IConfiguration config
         services.AddTransient<IPDP, PDPAppSI>();
     }
 
-    if (mockSettings.AccessManagement)
-    {
-        services.AddHttpClient<IAccessManagementClient, AccessManagementClientMock>();
-    }
-    else
-    {
-        services.AddHttpClient<IAccessManagementClient, AccessManagementClient>();
-    }
-
     if (mockSettings.AccessManagement_V0)
     {
         services.AddHttpClient<IAccessManagementClientV0, AccessManagementClientV0Mock>();
