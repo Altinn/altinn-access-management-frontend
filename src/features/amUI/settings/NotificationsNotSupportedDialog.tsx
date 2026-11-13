@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsButton, DsDialog, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
@@ -14,15 +14,19 @@ export const NotificationsNotSupportedDialog = ({
   onClose: () => void;
 }) => {
   const { t } = useTranslation();
+  const headingId = useId();
 
   return (
     <DsDialog
       open={open}
       onClose={onClose}
       closedby='any'
+      closeButton={t('common.close')}
+      aria-labelledby={headingId}
     >
       <div className={classes.content}>
         <DsHeading
+          id={headingId}
           level={2}
           data-size='xs'
         >
