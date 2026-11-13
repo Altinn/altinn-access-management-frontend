@@ -18,6 +18,7 @@ import { requestApi } from '../features/requestApi';
 import { selfIdentifiedUserApi } from '../features/selfIdentifiedUserApi';
 import { maskinportenApi } from '../features/maskinportenApi';
 import { idPortenAuthorizationApi } from '../features/idPortenAuthorizationApi';
+import { activityLogApi } from '../features/activityLogApi';
 import { bankruptcyEstateApi } from '../features/bankruptcyEstateApi';
 
 const store = configureStore({
@@ -39,6 +40,7 @@ const store = configureStore({
     [selfIdentifiedUserApi.reducerPath]: selfIdentifiedUserApi.reducer,
     [maskinportenApi.reducerPath]: maskinportenApi.reducer,
     [idPortenAuthorizationApi.reducerPath]: idPortenAuthorizationApi.reducer,
+    [activityLogApi.reducerPath]: activityLogApi.reducer,
     [bankruptcyEstateApi.reducerPath]: bankruptcyEstateApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -60,6 +62,7 @@ const store = configureStore({
       selfIdentifiedUserApi.middleware,
       maskinportenApi.middleware,
       idPortenAuthorizationApi.middleware,
+      activityLogApi.middleware,
       bankruptcyEstateApi.middleware,
     ),
 });
