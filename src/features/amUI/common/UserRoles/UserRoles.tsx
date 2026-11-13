@@ -11,9 +11,14 @@ import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
 import { useGroupedRoleListEntries } from '../RoleList/useGroupedRoleListEntries';
 
 import classes from './userRoles.module.css';
-import { useRoleMetadata, ROLE_CODES_TO_IGNORE } from './useRoleMetadata';
+import {
+  useRoleMetadata,
+  ROLE_CODES_TO_IGNORE,
+  isBankruptcyEstateAdministratorRole,
+} from './useRoleMetadata';
 import { ClientAccessInfoModal } from './ClientAccessInfoModal';
 import { GuardianshipInfoModal } from './GuardianshipInfoModal';
+import { BankruptcyEstateAdministratorInfoModal } from './BankruptcyEstateAdministratorInfoModal';
 
 export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => {
   const { t } = useTranslation();
@@ -21,6 +26,7 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const [isClientAccessModalOpen, setIsClientAccessModalOpen] = useState(false);
   const [isGuardianModalOpen, setIsGuardianModalOpen] = useState(false);
+  const [isEstateAdministratorModalOpen, setIsEstateAdministratorModalOpen] = useState(false);
   const isSmall = useIsMobileOrSmaller();
 
   const { toParty, fromParty, actingParty, selfParty } = usePartyRepresentation();
@@ -62,6 +68,12 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
   const isViewingOwnAccess = toParty?.id === selfParty?.id;
   const isAgent = altinn3Roles.some((rolePermission) => rolePermission.role?.code === 'agent');
   const isGuardian = guardianshipRoles.length > 0;
+  // Every person has this role from themselves to themselves, so it only counts between two parties.
+  const isEstateAdministrator =
+    fromParty?.id !== toParty?.id &&
+    altinn3Roles.some((rolePermission) =>
+      isBankruptcyEstateAdministratorRole(rolePermission.role?.code),
+    );
   const chipSize = isSmall ? 'sm' : 'md';
 
   return (
@@ -84,6 +96,15 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
             onClick={() => setIsGuardianModalOpen(true)}
           >
             {t('user_roles.is_guardian')}
+          </DsChip.Button>
+        )}
+        {isEstateAdministrator && (
+          <DsChip.Button
+            data-size={chipSize}
+            data-color='accent'
+            onClick={() => setIsEstateAdministratorModalOpen(true)}
+          >
+            {t('user_roles.is_bankruptcy_estate_administrator')}
           </DsChip.Button>
         )}
         {roles.map((role) => {
@@ -114,6 +135,14 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
         <GuardianshipInfoModal
           open={isGuardianModalOpen}
           onClose={() => setIsGuardianModalOpen(false)}
+        />
+      )}
+      {isEstateAdministrator && (
+        <BankruptcyEstateAdministratorInfoModal
+          open={isEstateAdministratorModalOpen}
+          onClose={() => setIsEstateAdministratorModalOpen(false)}
+          trustee={fromParty}
+          isTrusteeSelectedActor={actingParty?.id === fromParty?.id}
         />
       )}
     </>
