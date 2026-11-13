@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsHeading, DsParagraph } from '@altinn/altinn-components';
 import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
 
+import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
+import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import {
   AccessPackageListItems,
   type AccessPackageListItemData,
 } from '../common/AccessPackageListItems/AccessPackageListItems';
+import { ClientPackageInfoModal } from '../common/DelegationModal/AccessPackages/ClientPackageInfoModal';
 
 import classes from './AdministratorAccess.module.css';
 
@@ -22,10 +25,17 @@ const ADMINISTRATOR_PACKAGE_URNS = [
   'urn:altinn:accesspackage:konkursbo-skrivetilgang',
 ];
 
+interface AdministratorAccessProps {
+  /*** The administrator whose row is open. Named in the package details */
+  administrator: PartyEntity;
+}
+
 /*** What a bankruptcy estate administrator is given, shown when an administrator is expanded */
-export const AdministratorAccess = () => {
+export const AdministratorAccess = ({ administrator }: AdministratorAccessProps) => {
   const { t } = useTranslation();
   const { getAccessPackageByUrn, isLoading } = useAccessPackageLookup();
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [openPackage, setOpenPackage] = useState<AccessPackage>();
 
   const packageItems: AccessPackageListItemData[] = ADMINISTRATOR_PACKAGE_URNS.map((urn) => ({
     urn,
@@ -40,8 +50,13 @@ export const AdministratorAccess = () => {
       }),
       loading: isLoading,
       color: 'company',
-      as: 'div',
+      as: 'button',
       titleAs: 'div',
+      interactive: !!accessPackage,
+      onClick: () => {
+        setOpenPackage(accessPackage);
+        modalRef.current?.showModal();
+      },
     }));
 
   return (
@@ -66,6 +81,13 @@ export const AdministratorAccess = () => {
         />
         {t('bankruptcy_estate_administration_page.packages_managed_per_estate')}
       </DsParagraph>
+      <ClientPackageInfoModal
+        ref={modalRef}
+        data={
+          openPackage && { party: administrator, accessPackage: openPackage, userHasAccess: true }
+        }
+        onClose={() => setOpenPackage(undefined)}
+      />
     </div>
   );
 };

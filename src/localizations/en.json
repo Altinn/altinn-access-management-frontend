@@ -1349,7 +1349,6 @@
     "add_administrator_heading": "Add user and grant Bankruptcy estate administrator",
     "add_administrator_description": "The recipient will become main administrator for all your current and future bankruptcy estates.",
     "add_administrator_not_person_error": "Only persons can be bankruptcy estate administrators.",
-    "trustee": "Trustee",
     "intro": "Here you can add and remove users who will administer your bankruptcy estates. The person you add becomes Main administrator for all your bankruptcy estates.",
     "info_icon_label": "More information about Bankruptcy estate administrator",
     "info_heading": "Bankruptcy estate administrator",

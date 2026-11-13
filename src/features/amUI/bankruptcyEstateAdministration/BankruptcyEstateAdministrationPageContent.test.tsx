@@ -94,8 +94,6 @@ describe('BankruptcyEstateAdministrationPageContent', () => {
     expect(screen.queryByText(warningText)).toBeNull();
     expect(accessQuery).toHaveBeenCalledWith(undefined, { skip: false });
     expect(screen.getByRole('button', { name: 'add_administrator' })).toBeInTheDocument();
-    expect(screen.getByText('Nordmann Ola')).toBeInTheDocument();
-    expect(screen.getByText('bankruptcy_estate_administration_page.trustee')).toBeInTheDocument();
     expect(screen.getByText('bankruptcy_estate_administration_page.intro')).toBeInTheDocument();
     expect(
       screen.getByLabelText('bankruptcy_estate_administration_page.info_icon_label'),

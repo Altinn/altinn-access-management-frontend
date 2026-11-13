@@ -1,6 +1,9 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import { AdministratorAccess } from './AdministratorAccess';
 
@@ -27,6 +30,22 @@ vi.mock('@/resources/hooks/useAccessPackageLookup', () => ({
   }),
 }));
 
+vi.mock('../common/DelegationModal/AccessPackages/ClientPackageInfoModal', () => ({
+  ClientPackageInfoModal: ({
+    data,
+  }: {
+    data?: { party: PartyEntity; accessPackage: FakePackage };
+  }) =>
+    data ? <div>{`package_details ${data.accessPackage.name} ${data.party.name}`}</div> : null,
+}));
+
+const administrator: PartyEntity = {
+  id: 'administrator-uuid',
+  name: 'METTE MEDHJELPER',
+  type: PartyType.Person,
+  isDeleted: false,
+};
+
 const resourceCount = 'access_packages.package_number_of_resources';
 
 beforeEach(() => {
@@ -52,7 +71,7 @@ beforeEach(() => {
 
 describe('AdministratorAccess', () => {
   it('describes the role and that the packages are managed on each estate', () => {
-    render(<AdministratorAccess />);
+    render(<AdministratorAccess administrator={administrator} />);
 
     expect(
       screen.getByRole('heading', { name: 'bankruptcy_estate_administration_page.info_heading' }),
@@ -66,7 +85,7 @@ describe('AdministratorAccess', () => {
   });
 
   it('lists the three packages with their number of services', () => {
-    render(<AdministratorAccess />);
+    render(<AdministratorAccess administrator={administrator} />);
 
     expect(screen.getByText('Hovedadministrator')).toBeInTheDocument();
     expect(screen.getByText('Konkursbo lesetilgang')).toBeInTheDocument();
@@ -79,10 +98,22 @@ describe('AdministratorAccess', () => {
   it('leaves out a package the lookup does not know', () => {
     delete packages['urn:altinn:accesspackage:konkursbo-lesetilgang'];
 
-    render(<AdministratorAccess />);
+    render(<AdministratorAccess administrator={administrator} />);
 
     expect(screen.getByText('Hovedadministrator')).toBeInTheDocument();
     expect(screen.queryByText('Konkursbo lesetilgang')).toBeNull();
     expect(screen.getByText('Konkursbo skrivetilgang')).toBeInTheDocument();
+  });
+
+  it('shows the details of a package when the package is clicked', async () => {
+    render(<AdministratorAccess administrator={administrator} />);
+
+    expect(screen.queryByText(/package_details/)).toBeNull();
+
+    await userEvent.click(screen.getByRole('button', { name: /Konkursbo lesetilgang/ }));
+
+    expect(
+      screen.getByText('package_details Konkursbo lesetilgang METTE MEDHJELPER'),
+    ).toBeInTheDocument();
   });
 });

@@ -1341,7 +1341,6 @@
     "add_administrator_heading": "Legg til bruker og gi Konkursbo administrator",
     "add_administrator_description": "Mottaker blir hovedadministrator for alle dine nåværende og fremtidige konkursbo.",
     "add_administrator_not_person_error": "Bare personer kan være konkursbo administrator.",
-    "trustee": "Bostyrer",
     "intro": "Her kan du legge til og fjerne brukere som skal administrere dine konkursbo. Den du legger til vil bli Hovedadministrator for alle dine konkursbo.",
     "info_icon_label": "Mer informasjon om Konkursbo administrator",
     "info_heading": "Konkursbo administrator",
