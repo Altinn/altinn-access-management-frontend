@@ -175,6 +175,7 @@ export const ClientAgentPackageList = ({
       titleAs: 'h2',
       as: 'button',
       entries: buildEntries(recipient, idPrefix),
+      systemUserSets: agent.systemUserSets,
       renderActions: (items?: { packageId: string; resourceId: string; roleCode: string }[]) => {
         const items2 = !items
           ? undefined

@@ -45,7 +45,11 @@ import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientL
 import { AgentDetailsClientsList } from './AgentDetailsClientsList';
 import classes from './AgentDetails.module.css';
 
-export const AgentDetails = () => {
+interface AgentDetailsProps {
+  systemUserSets?: { name: string; accessPackages: string[]; resources: string[] }[];
+}
+
+export const AgentDetails = ({ systemUserSets }: AgentDetailsProps) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { toParty, actingParty } = usePartyRepresentation();
@@ -62,6 +66,8 @@ export const AgentDetails = () => {
     isFetching: isFetchingAgentResources,
     error: agentResourcesError,
   } = useGetAgentResourcesQuery(id ? { to: id } : skipToken);
+
+  // TODO: laste systembruker-sett her? I stedet for å berike agent med de?
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
   const [showDeleted, setShowDeleted] = useState(false);
   const visibleClients = useMemo(
@@ -264,6 +270,7 @@ export const AgentDetails = () => {
                         expandedIds={expandedIds}
                         onToggleExpanded={toggleExpanded}
                         restoreFocusFallbackId={assignedSectionId}
+                        systemUserSets={systemUserSets}
                       />
                     </CollapsibleContainer>
                   </section>
@@ -290,6 +297,7 @@ export const AgentDetails = () => {
                         expandedIds={expandedIds}
                         onToggleExpanded={toggleExpanded}
                         restoreFocusFallbackId={unassignedSectionId}
+                        systemUserSets={systemUserSets}
                       />
                     </CollapsibleContainer>
                   </section>

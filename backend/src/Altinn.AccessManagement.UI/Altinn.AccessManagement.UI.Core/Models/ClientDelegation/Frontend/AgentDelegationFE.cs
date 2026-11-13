@@ -17,6 +17,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend
         /// </summary>
         public DateTimeOffset AgentAddedAt { get; set; }
 
+        public List<SystemUserSet> SystemUserSets { get; set; }
+
         /// <summary>
         /// Gets or sets the access per role
         /// </summary>
@@ -32,12 +34,48 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend
                 return null;
             }
 
-            return new AgentDelegationFE
+            AgentDelegationFE retVal = new AgentDelegationFE
             {
                 Agent = PartyFE.FromEntity(delegation.Agent),
                 AgentAddedAt = delegation.AgentAddedAt,
                 Access = delegation.Access ?? new(),
             };
+
+            if (retVal.Agent.Type == Enums.PartyTypeFE.SystemUser)
+            {
+                retVal.SystemUserSets = new List<SystemUserSet>()
+                {
+                    new()
+                    {
+                        Name = "Jordbruk-informasjon-settet",
+                        AccessPackages = ["urn:altinn:accesspackage:informasjon-og-kommunikasjon", "urn:altinn:accesspackage:jordbruk"],
+                        Resources = []
+                    },
+                    new()
+                    {
+                        Name = "Skattegreier-settet",
+                        AccessPackages = ["urn:altinn:accesspackage:skattegrunnlag", "urn:altinn:accesspackage:jordbruk"],
+                        Resources = []
+                    },
+                    new()
+                    {
+                        Name = "Annet-settet",
+                        AccessPackages = ["urn:altinn:accesspackage:annen-tjenesteyting"],
+                        Resources = ["acn-migratedcorrespondence-4540-1"]
+                    }
+                };
+            }
+
+            return retVal;
         }
+    }
+
+    public class SystemUserSet
+    {
+        public string Name { get; set; }
+
+        public List<string> AccessPackages { get; set; }
+
+        public List<string> Resources { get; set; }
     }
 }
