@@ -672,6 +672,8 @@
     "error_saving_addresses": "Something went wrong. Please try again.",
     "no_addresses_error": "The organization must have at least one email address or SMS number for notifications.",
     "organization_not_in_er": "We cannot register notification addresses for this organization because it is not registered in the Central Coordinating Register for Legal Entities.",
+    "not_in_er_heading": "{{name}} is not registered in the Central Coordinating Register for Legal Entities",
+    "not_in_er_info": "Contact addresses are only available for organizations registered in the Central Coordinating Register for Legal Entities. If you want to receive notifications for the organization, you must register <strong>your personal notification address</strong> for the organization in <strong>Your profile</strong>. If nobody has done this for {{name}}, Altinn will not be able to send you notifications.",
     "address_already_exists": "This address is already registered",
     "address_not_found": "One of the addresses has already been removed by someone else. Review the list and save again.",
     "not_authorized_error": "You do not have access to change notification addresses for this organization.",

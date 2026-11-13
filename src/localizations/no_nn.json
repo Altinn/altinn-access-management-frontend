@@ -663,6 +663,8 @@
     "error_saving_addresses": "Noko gjekk gale. Ver venleg å prøv igjen.",
     "no_addresses_error": "Verksemda må ha minst ei e-postadresse eller sms-adresse for varslingar.",
     "organization_not_in_er": "Vi kan ikkje registrere varslingsadresser for denne verksemda fordi ho ikkje er registrert i Einingsregisteret.",
+    "not_in_er_heading": "{{name}} er ikkje registrert i Einingsregisteret",
+    "not_in_er_info": "Kontaktadresse for verksemder er berre tilgjengeleg for verksemder som er registrerte i Einingsregisteret. Viss du ønskjer å få varsel for verksemda, må du registrere <strong>den personlege varslingsadressa di</strong> for verksemda i <strong>Din profil</strong>. Viss ingen har gjort dette for {{name}}, kan ikkje Altinn sende dykk varsel.",
     "address_already_exists": "Adressa er allereie registrert",
     "address_not_found": "Ei av adressene er allereie fjerna av nokon andre. Sjå over lista og lagre på nytt.",
     "not_authorized_error": "Du har ikkje tilgang til å endre varslingsadresser for denne verksemda.",
