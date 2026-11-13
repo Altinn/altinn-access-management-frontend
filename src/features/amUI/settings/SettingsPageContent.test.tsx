@@ -76,7 +76,13 @@ describe('SettingsPageContent', () => {
 
     await userEvent.click(screen.getByRole('button', { name: /settings_page.alerts_on_email/ }));
 
-    expect(screen.getByText('settings_page.notifications_not_supported_heading')).toBeTruthy();
+    expect(
+      screen.getByRole('dialog', {
+        name: 'settings_page.notifications_not_supported_heading',
+        hidden: true,
+      }),
+    ).toBeTruthy();
+    expect(screen.getAllByRole('button', { name: 'common.close', hidden: true })).toHaveLength(2);
     expect(screen.queryByTestId('settings-modal')).toBeNull();
     expect(addressesQuery).toHaveBeenCalledWith('912345678', { skip: true });
   });
