@@ -307,7 +307,15 @@
     "is_guardian": "Verje",
     "has_client_access": "Har klienttilgang",
     "has_client_access_description": "Denne brukaren har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at dei har tilgang til verksemda sitt eige innhald, men at dei kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar dei har tilgang til kan administrerast under <a>klientadministrasjon</a>.",
-    "has_client_access_description_self": "Du har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at du har tilgang til verksemda sitt eige innhald, men kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar du har tilgang til kan administrerast under <a>dine klientar</a>."
+    "has_client_access_description_self": "Du har tilgang til ein eller fleire av verksemda sine klientar. Dette betyr ikkje nødvendigvis at du har tilgang til verksemda sitt eige innhald, men kan utføre arbeid på vegner av ein eller fleire av kundane deira. Kva klientar du har tilgang til kan administrerast under <a>dine klientar</a>.",
+    "is_bankruptcy_estate_administrator": "Konkursbu administrator",
+    "bankruptcy_estate_administrator_intro": "Fullmakta gir administratortilgangar til alle noverande og framtidige konkursbu som bustyraren er ansvarleg for.",
+    "bankruptcy_estate_administrator_packages": "Fullmakta inneheld tilgangspakkane:",
+    "bankruptcy_estate_administrator_package_main_administrator": "Hovudadministrator",
+    "bankruptcy_estate_administrator_package_read": "Konkursbu lesetilgang",
+    "bankruptcy_estate_administrator_package_write": "Konkursbu skrivetilgang",
+    "bankruptcy_estate_administrator_can_delegate": "Konkursbuadministrator kan gi nødvendige fullmakter vidare til andre kreditorar og interessentar. Den gir ingen fullmakter til bustyraren som privatperson.",
+    "bankruptcy_estate_administrator_managed_at": "Administrering må gjerast under <a>Borolleadministrasjon</a>."
   },
   "users_page": {
     "page_title": "Brukarar - Altinn",

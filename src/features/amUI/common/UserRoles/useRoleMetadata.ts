@@ -14,6 +14,14 @@ export const CRA_PROVIDER_CODE = 'sys-cra';
 export const A2_PROVIDER_CODE = 'sys-altinn2';
 export const A3_PROVIDER_CODE = 'sys-altinn3';
 
+/*** The role a trustee gives a person who administers all their bankruptcy estates */
+export const BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE = 'innbygger-konkursbo-administrator';
+
+/*** Tells if a role is the bankruptcy estate administrator role. Always false while the feature is turned off */
+export const isBankruptcyEstateAdministratorRole = (roleCode?: string | null) =>
+  window.featureFlags?.enableBankruptcyEstateAdministration === true &&
+  roleCode === BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE;
+
 export const ROLE_CODES_TO_IGNORE = [
   'hovedenhet',
   'ikke-naeringsdrivende-hovedenhet',

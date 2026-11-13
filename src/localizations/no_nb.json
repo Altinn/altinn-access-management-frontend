@@ -309,7 +309,15 @@
     "is_guardian": "Verge",
     "has_client_access": "Har klienttilgang",
     "has_client_access_description": "Denne brukeren har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at de har tilgang til virksomhetens eget innhold, men at de kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter de har tilgang til kan administreres under <a>klientadministrasjon</a>.",
-    "has_client_access_description_self": "Du har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at du har tilgang til virksomhetens eget innhold, men kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter du har tilgang til kan administreres under <a>dine klienter</a>."
+    "has_client_access_description_self": "Du har tilgang til en eller flere av virksomhetens klienter. Dette betyr ikke nødvendigvis at du har tilgang til virksomhetens eget innhold, men kan utføre arbeid på vegne av en eller flere av deres klienter/kunder. Hvilke klienter du har tilgang til kan administreres under <a>dine klienter</a>.",
+    "is_bankruptcy_estate_administrator": "Konkursbo administrator",
+    "bankruptcy_estate_administrator_intro": "Fullmakten gir administratortilganger til alle nåværende og fremtidige konkursbo for {{trustee}}.",
+    "bankruptcy_estate_administrator_packages": "Fullmakten inneholder tilgangspakkene:",
+    "bankruptcy_estate_administrator_package_main_administrator": "Hovedadministrator",
+    "bankruptcy_estate_administrator_package_read": "Konkursbo lesetilgang",
+    "bankruptcy_estate_administrator_package_write": "Konkursbo skrivetilgang",
+    "bankruptcy_estate_administrator_can_delegate": "Konkursbo administrator kan gi nødvendige fullmakter videre til andre kreditorer og interessenter. Den gir ingen fullmakter til bostyrer som privatperson.",
+    "bankruptcy_estate_administrator_managed_at": "Administrering må gjøres under <a>Borolleadministrasjon</a>."
   },
   "users_page": {
     "page_title": "Brukere - Altinn",

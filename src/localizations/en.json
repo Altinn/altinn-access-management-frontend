@@ -316,7 +316,15 @@
     "is_guardian": "Guardian",
     "has_client_access": "Has client access",
     "has_client_access_description": "This user has access to one or more of the organization's clients. This does not necessarily mean they have access to the organization's own content, but that they can perform work on behalf of one or more of their clients/customers. Which clients they have access to can be managed under <a>client administration</a>.",
-    "has_client_access_description_self": "You have access to one or more of the organization's clients. This does not necessarily mean you have access to the organization's own content, but you can perform work on behalf of one or more of their clients/customers. Which clients you have access to can be managed under <a>your clients</a>."
+    "has_client_access_description_self": "You have access to one or more of the organization's clients. This does not necessarily mean you have access to the organization's own content, but you can perform work on behalf of one or more of their clients/customers. Which clients you have access to can be managed under <a>your clients</a>.",
+    "is_bankruptcy_estate_administrator": "Bankruptcy estate administrator",
+    "bankruptcy_estate_administrator_intro": "This authorization grants administrator access to all current and future bankruptcy estates for which the trustee is responsible.",
+    "bankruptcy_estate_administrator_packages": "The authorization includes the following access packages:",
+    "bankruptcy_estate_administrator_package_main_administrator": "Main administrator",
+    "bankruptcy_estate_administrator_package_read": "Bankruptcy estate read access",
+    "bankruptcy_estate_administrator_package_write": "Bankruptcy estate write access",
+    "bankruptcy_estate_administrator_can_delegate": "The bankruptcy estate administrator can delegate the necessary authorizations to other creditors and stakeholders. It does not grant any authorizations to the trustee as a private individual.",
+    "bankruptcy_estate_administrator_managed_at": "User administration must be done under <a>Bankruptcy estate administration</a>."
   },
   "users_page": {
     "page_title": "Users - Altinn",
