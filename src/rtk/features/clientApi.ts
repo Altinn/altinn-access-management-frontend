@@ -29,6 +29,7 @@ export interface Client {
 export interface Agent {
   agent: PartyEntity;
   agentAddedAt: string;
+  systemUserSets?: { name: string; accessPackages: string[]; resources: string[] }[];
   access: ClientAccess[];
 }
 

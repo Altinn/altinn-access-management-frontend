@@ -32,7 +32,7 @@ export const AgentDetailsPage = () => {
           toPartyOverride={agentParty}
           isLoading={!selectedAgent}
         >
-          <AgentDetails />
+          <AgentDetails systemUserSets={selectedAgent?.systemUserSets} />
         </PartyRepresentationProvider>
       </PageLayoutWrapper>
     </PageWrapper>
