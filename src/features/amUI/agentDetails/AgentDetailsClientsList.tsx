@@ -35,6 +35,7 @@ type AgentDetailsClientsListProps = {
   expandedIds?: string[];
   onToggleExpanded?: (id: string) => void;
   restoreFocusFallbackId?: string;
+  systemUserSets?: { name: string; accessPackages: string[]; resources: string[] }[];
 };
 
 export const AgentDetailsClientsList = ({
@@ -54,6 +55,7 @@ export const AgentDetailsClientsList = ({
   expandedIds,
   onToggleExpanded,
   restoreFocusFallbackId,
+  systemUserSets,
 }: AgentDetailsClientsListProps) => {
   const actionDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
   const { toParty } = usePartyRepresentation();
@@ -85,6 +87,7 @@ export const AgentDetailsClientsList = ({
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
       renderClientActions={renderClientActions}
+      systemUserSets={systemUserSets}
     />
   );
 };

@@ -16,6 +16,7 @@ import { clientActionControlId } from './DelegationControl';
 
 export type ClientAccessRow = Omit<UserListItemData, 'children'> & {
   entries: ClientAccessEntry[];
+  systemUserSets?: { name: string; accessPackages: string[]; resources: string[] }[];
   /** Rendered above the row's access lists, e.g. bulk actions. */
   renderActions: (
     items?: { packageId: string; resourceId: string; roleCode: string }[],
@@ -39,7 +40,6 @@ interface ClientAccessRowsProps {
   onToggleExpanded?: (id: string) => void;
   // Focus target when the acted-on row is no longer reachable here, typically the section heading.
   restoreFocusFallbackId?: string;
-  isSystemuserAgent?: boolean;
 }
 
 const holdsAccess = (held: ClientAccess[], entry: ClientAccessEntry) =>
@@ -65,7 +65,6 @@ export const ClientAccessRows = ({
   expandedIds,
   onToggleExpanded,
   restoreFocusFallbackId,
-  isSystemuserAgent,
 }: ClientAccessRowsProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [selected, setSelected] = useState<ClientAccessEntry | null>(null);
@@ -111,34 +110,14 @@ export const ClientAccessRows = ({
   });
   useEffect(() => () => restoreFocusOnUnmountRef.current?.(), []);
 
-  const fixedSystemUserPackages = [
-    {
-      name: 'Jordbruk-informasjon-settet',
-      packages: [
-        'urn:altinn:accesspackage:informasjon-og-kommunikasjon',
-        'urn:altinn:accesspackage:jordbruk',
-      ],
-      resources: [],
-    },
-    {
-      name: 'Skattegreier-settet',
-      packages: ['urn:altinn:accesspackage:skattegrunnlag', 'urn:altinn:accesspackage:jordbruk'],
-      resources: [],
-    },
-    {
-      name: 'Annet-settet',
-      packages: ['urn:altinn:accesspackage:annen-tjenesteyting'],
-      resources: ['acn-migratedcorrespondence-4540-1'],
-    },
-  ];
   // hvert rettighetssett er en ClientAccessSections.
   const items: UserListItemData[] = rows.map(({ entries, renderActions, ...item }) => {
-    const isSystemuserClient = item.type === 'system';
+    const sets = item.systemUserSets;
 
-    if (isSystemuserAgent || isSystemuserClient) {
+    if (sets && sets.length > 0) {
       // enrich systemuser set
-      const setData = fixedSystemUserPackages.map((set) => {
-        const setEntriesPackages: ClientAccessEntry[] = set.packages.map((urn) => {
+      const setData = sets.map((set) => {
+        const setEntriesPackages: ClientAccessEntry[] = set.accessPackages.map((urn) => {
           const existingEntry = entries.find(
             (e) => e.kind === 'package' && e.accessPackage.urn === urn,
           );

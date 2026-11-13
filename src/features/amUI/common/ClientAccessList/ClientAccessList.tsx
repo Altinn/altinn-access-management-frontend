@@ -10,7 +10,6 @@ import {
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
 import type { Client, ClientAccess } from '@/rtk/features/clientApi';
-import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
@@ -46,6 +45,7 @@ type ClientAccessListProps = {
   onToggleExpanded?: (id: string) => void;
   // Focus target when the acted-on row is no longer reachable here, typically the section heading.
   restoreFocusFallbackId?: string;
+  systemUserSets?: { name: string; accessPackages: string[]; resources: string[] }[];
 };
 
 const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] =>
@@ -82,6 +82,7 @@ export const ClientAccessList = ({
   expandedIds,
   onToggleExpanded,
   restoreFocusFallbackId,
+  systemUserSets,
 }: ClientAccessListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageByUrn } = useAccessPackageLookup();
@@ -140,7 +141,6 @@ export const ClientAccessList = ({
       return [...packages, ...resources];
     });
 
-  const isSystemuserAgent = recipient.type === PartyType.SystemUser;
   const rows: ClientAccessRow[] = sortedClients.map((client) => {
     const userType = getAvatarType(client.client);
     return {
@@ -155,6 +155,7 @@ export const ClientAccessList = ({
       as: 'button',
       titleAs: 'div',
       entries: buildEntries(client),
+      systemUserSets: systemUserSets,
       renderActions: (items?: { packageId: string; resourceId: string; roleCode: string }[]) => {
         const items2 = !items
           ? undefined
@@ -202,7 +203,6 @@ export const ClientAccessList = ({
       expandedIds={expandedIds}
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
-      isSystemuserAgent={isSystemuserAgent}
     />
   );
 };
