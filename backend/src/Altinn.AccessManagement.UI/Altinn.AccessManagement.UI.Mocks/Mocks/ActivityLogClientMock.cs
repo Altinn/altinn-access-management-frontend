@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             if (!string.IsNullOrWhiteSpace(query.Term))
             {
-                values = values.Where(value => value.Name.Contains(query.Term, StringComparison.OrdinalIgnoreCase));
+                values = values.Where(value => value.Name?.Contains(query.Term, StringComparison.OrdinalIgnoreCase) == true);
             }
 
             List<ActivityLogFilterValueDto> ordered = values.OrderBy(value => value.Name).ToList();

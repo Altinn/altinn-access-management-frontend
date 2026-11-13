@@ -9,10 +9,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.ActivityLog
     public class ActivityLogQuery
     {
         /// <summary>
-        /// Gets or sets the party the log is anchored on.
+        /// Gets or sets the party the log is anchored on. Nullable so that a missing value fails
+        /// validation instead of binding to <see cref="Guid.Empty"/>.
         /// </summary>
         [Required]
-        public Guid Party { get; set; }
+        public Guid? Party { get; set; }
 
         /// <summary>
         /// Gets or sets the direction: "from" for access given by the party, "to" for access received by it.

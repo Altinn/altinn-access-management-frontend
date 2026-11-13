@@ -118,6 +118,19 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: GetActivityLog without a party returns bad request.
+        /// </summary>
+        [Fact]
+        public async Task GetActivityLog_MissingParty_ReturnsBadRequest()
+        {
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/maskinporten?direction=from");
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: GetActivityLog with an invalid party returns bad request.
         /// </summary>
         [Fact]
