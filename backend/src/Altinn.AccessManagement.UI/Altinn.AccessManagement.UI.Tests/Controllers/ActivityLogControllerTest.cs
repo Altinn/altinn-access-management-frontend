@@ -2,7 +2,6 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.ActivityLog;
 using Altinn.AccessManagement.UI.Core.Models.Common;
@@ -24,11 +23,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
         private readonly HttpClient _client;
         private readonly string _mockDataFolder;
-        private readonly JsonSerializerOptions _options = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-            Converters = { new JsonStringEnumConverter() },
-        };
+        private readonly JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ActivityLogControllerTest"/> class.
@@ -49,6 +44,13 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 
+        private async Task<T> GetOk<T>(string url)
+        {
+            HttpResponseMessage response = await _client.GetAsync(url);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            return await response.Content.ReadFromJsonAsync<T>(_options);
+        }
+
         /// <summary>
         /// Test case: GetActivityLog returns the entries where the party gave access, newest first.
         /// </summary>
@@ -61,10 +63,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                 .OrderByDescending(entry => entry.When)
                 .ToList();
 
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/maskinporten?party={Party}&direction=from");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            PaginatedResult<ActivityLogDto> actual = await response.Content.ReadFromJsonAsync<PaginatedResult<ActivityLogDto>>(_options);
+            PaginatedResult<ActivityLogDto> actual = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=from");
 
             Assert.NotNull(actual);
             Assert.Null(actual.Links.Next);
@@ -80,10 +79,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             SetAuthHeader();
 
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/maskinporten?party={Party}&direction=to");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            PaginatedResult<ActivityLogDto> actual = await response.Content.ReadFromJsonAsync<PaginatedResult<ActivityLogDto>>(_options);
+            PaginatedResult<ActivityLogDto> actual = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=to");
 
             Assert.NotNull(actual);
             Assert.All(actual.Items, entry => Assert.Equal(Guid.Parse(Party), entry.ToId));
@@ -98,13 +94,8 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             SetAuthHeader();
 
-            HttpResponseMessage firstPage = await _client.GetAsync($"{BaseUrl}/maskinporten?party={Party}&direction=from&to={FysioPartner}&pageNo=0&pageSize=1");
-            HttpResponseMessage secondPage = await _client.GetAsync($"{BaseUrl}/maskinporten?party={Party}&direction=from&to={FysioPartner}&pageNo=1&pageSize=1");
-
-            Assert.Equal(HttpStatusCode.OK, firstPage.StatusCode);
-            Assert.Equal(HttpStatusCode.OK, secondPage.StatusCode);
-            PaginatedResult<ActivityLogDto> first = await firstPage.Content.ReadFromJsonAsync<PaginatedResult<ActivityLogDto>>(_options);
-            PaginatedResult<ActivityLogDto> second = await secondPage.Content.ReadFromJsonAsync<PaginatedResult<ActivityLogDto>>(_options);
+            PaginatedResult<ActivityLogDto> first = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=from&to={FysioPartner}&pageNo=0&pageSize=1");
+            PaginatedResult<ActivityLogDto> second = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=from&to={FysioPartner}&pageNo=1&pageSize=1");
 
             Assert.Single(first.Items);
             Assert.NotNull(first.Links.Next);
@@ -184,10 +175,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             SetAuthHeader();
 
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/maskinporten/filter/to?party={Party}&direction=from");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            PaginatedResult<ActivityLogFilterValueDto> actual = await response.Content.ReadFromJsonAsync<PaginatedResult<ActivityLogFilterValueDto>>(_options);
+            PaginatedResult<ActivityLogFilterValueDto> actual = await GetOk<PaginatedResult<ActivityLogFilterValueDto>>($"{BaseUrl}/maskinporten/filter/to?party={Party}&direction=from");
 
             Assert.NotNull(actual);
             Assert.Equal(
@@ -203,10 +191,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             SetAuthHeader();
 
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/maskinporten/filter/to?party={Party}&direction=from&term=lise");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            PaginatedResult<ActivityLogFilterValueDto> actual = await response.Content.ReadFromJsonAsync<PaginatedResult<ActivityLogFilterValueDto>>(_options);
+            PaginatedResult<ActivityLogFilterValueDto> actual = await GetOk<PaginatedResult<ActivityLogFilterValueDto>>($"{BaseUrl}/maskinporten/filter/to?party={Party}&direction=from&term=lise");
 
             Assert.Single(actual.Items);
             Assert.Equal("Lise Larsen AS", actual.Items.First().Name);
@@ -221,10 +206,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             SetAuthHeader();
             List<ActivityTypeDto> expected = Util.GetMockData<List<ActivityTypeDto>>(Path.Combine(_mockDataFolder, "maskinporten_types.json"));
 
-            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/maskinporten/types");
-
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            List<ActivityTypeDto> actual = await response.Content.ReadFromJsonAsync<List<ActivityTypeDto>>(_options);
+            List<ActivityTypeDto> actual = await GetOk<List<ActivityTypeDto>>($"{BaseUrl}/maskinporten/types");
 
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);

@@ -12,26 +12,21 @@ import type {
 } from '@/features/amUI/activityLog/types';
 
 /**
- * Anchor and filters for one area of the activity log. `party` defaults to the current reportee.
- * Values within one list are OR'ed; different parameters are AND'ed.
+ * Anchor and filters for one area of the activity log. `party` defaults to the current reportee;
+ * `from` and `to` are the parties that gave and received access, `via` the facilitators and `by`
+ * the users or systems that made the change. `after` and `before` are ISO 8601 bounds on when the
+ * event happened. Values within one list are OR'ed; different parameters are AND'ed.
  */
 export interface ActivityLogQueryArgs {
   area: ActivityLogArea;
   direction: ActivityLogDirection;
   party?: string;
-  /** Parties that gave access. */
   from?: string[];
-  /** Parties that received access. */
   to?: string[];
-  /** Facilitator parties. */
   via?: string[];
-  /** Users or systems that performed the change. */
   by?: string[];
-  /** Activity type catalog entries. */
   typeId?: string[];
-  /** ISO 8601 lower bound on when the event happened. */
   after?: string;
-  /** ISO 8601 upper bound on when the event happened. */
   before?: string;
   /** Default 100, clamped to 1–1000 by the API. */
   pageSize?: number;

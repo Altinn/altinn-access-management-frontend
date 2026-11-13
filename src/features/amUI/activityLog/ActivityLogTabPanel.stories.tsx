@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { type FilterState, RootProvider } from '@altinn/altinn-components';
+import { RootProvider } from '@altinn/altinn-components';
 
-import { ActivityLogTabPanel, type ActivityLogTabPanelProps } from './ActivityLogTabPanel';
+import { ActivityLogTabPanel } from './ActivityLogTabPanel';
 import { getSampleActivityLog, sampleReportee } from './activityLogSampleData';
-import type { ActivityLogDirection } from './types';
 import { useActivityLogQueryState } from './useActivityLogQueryState';
 
 const STORY_PAGE_SIZE = 4;
@@ -20,36 +19,33 @@ const ActivityLogTabPanelStory = ({ isLoading, isError, empty }: StoryArgs) => {
     useActivityLogQueryState();
   const [pageNo, setPageNo] = useState(0);
 
-  const onDirectionChange = (newDirection: ActivityLogDirection) => {
-    changeDirection(newDirection);
-    setPageNo(0);
-  };
-  const onFilterStateChange = (newFilterState: FilterState) => {
-    changeFilterState(newFilterState);
-    setPageNo(0);
-  };
-
   const { entries, partyOptions, hasMore } = getSampleActivityLog(
     { direction, selectedPartyIds, pageNo, pageSize: STORY_PAGE_SIZE },
     empty ? [] : undefined,
   );
 
-  const props: ActivityLogTabPanelProps = {
-    area: 'maskinporten',
-    direction,
-    onDirectionChange,
-    reporteeName: sampleReportee.name,
-    filterState,
-    onFilterStateChange,
-    partyOptions,
-    entries,
-    isLoading,
-    isError,
-    hasMore,
-    onLoadMore: () => setPageNo((current) => current + 1),
-  };
-
-  return <ActivityLogTabPanel {...props} />;
+  return (
+    <ActivityLogTabPanel
+      area='maskinporten'
+      direction={direction}
+      onDirectionChange={(newDirection) => {
+        changeDirection(newDirection);
+        setPageNo(0);
+      }}
+      reporteeName={sampleReportee.name}
+      filterState={filterState}
+      onFilterStateChange={(newFilterState) => {
+        changeFilterState(newFilterState);
+        setPageNo(0);
+      }}
+      partyOptions={partyOptions}
+      entries={entries}
+      isLoading={isLoading}
+      isError={isError}
+      hasMore={hasMore}
+      onLoadMore={() => setPageNo((current) => current + 1)}
+    />
+  );
 };
 
 const meta: Meta<StoryArgs> = {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
 import * as activityLogApi from '@/rtk/features/activityLogApi';
 
@@ -25,6 +25,9 @@ vi.mock('react-i18next', () => ({
 
 const fetchNextPage = vi.fn();
 
+/** The query hooks are mocked with only the fields the tab reads. */
+const mockHookResult = (hook: unknown, result: object) => (hook as Mock).mockReturnValue(result);
+
 const setActivityLog = ({
   pages = [],
   isFetching = false,
@@ -37,7 +40,7 @@ const setActivityLog = ({
   hasNextPage?: boolean;
 }) => {
   const data = { pages: pages.map((entries) => ({ data: entries, links: {} })), pageParams: [] };
-  vi.mocked(activityLogApi.useGetActivityLogInfiniteQuery).mockReturnValue({
+  mockHookResult(activityLogApi.useGetActivityLogInfiniteQuery, {
     data,
     currentData: isFetching ? undefined : data,
     isFetching,
@@ -45,18 +48,16 @@ const setActivityLog = ({
     hasNextPage,
     fetchNextPage,
     isFetchingNextPage: false,
-  } as unknown as ReturnType<typeof activityLogApi.useGetActivityLogInfiniteQuery>);
+  });
 };
 
 describe('ActivityLogTab', () => {
   beforeEach(() => {
     fetchNextPage.mockReset();
-    vi.mocked(activityLogApi.useGetActivityLogFilterValuesQuery).mockReturnValue({
+    mockHookResult(activityLogApi.useGetActivityLogFilterValuesQuery, {
       data: { data: [{ id: 'lise-larsen-as', name: 'Lise Larsen AS' }], links: {} },
-    } as unknown as ReturnType<typeof activityLogApi.useGetActivityLogFilterValuesQuery>);
-    vi.mocked(activityLogApi.useGetActivityTypesQuery).mockReturnValue({
-      data: [],
-    } as unknown as ReturnType<typeof activityLogApi.useGetActivityTypesQuery>);
+    });
+    mockHookResult(activityLogApi.useGetActivityTypesQuery, { data: [] });
   });
 
   it('queries the area for access given by the reportee, with the party filter on the receivers', () => {
