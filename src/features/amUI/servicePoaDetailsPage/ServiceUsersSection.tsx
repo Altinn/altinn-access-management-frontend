@@ -311,7 +311,11 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
             resource={resource}
             user={selectedUser}
             partyUuid={fromParty?.id ?? ''}
-            availableActions={[DelegationAction.DELEGATE, DelegationAction.REVOKE]}
+            availableActions={
+              selectedUser.isVendorFixedRights
+                ? []
+                : [DelegationAction.DELEGATE, DelegationAction.REVOKE]
+            }
             actionError={selectedUserError}
             onClose={() => {
               // Restore focus synchronously to the row that opened the dialog before clearing state.

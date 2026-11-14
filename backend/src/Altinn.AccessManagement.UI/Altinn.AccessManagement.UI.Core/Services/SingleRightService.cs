@@ -1,5 +1,6 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
@@ -14,6 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IResourceService _resourceService;
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly ISingleRightClient _singleRightClient;
+        private readonly ISystemUserRightsResolver _systemUserRightsResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleRightService"/> class.
@@ -21,11 +23,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceService">The resource service.</param>
         /// <param name="resourceRegistryClient">The resource registry client.</param>
         /// <param name="singleRightClient">The single rights client.</param>
-        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient)
+        /// <param name="systemUserRightsResolver">Resolves which system users have rights fixed by the vendor.</param>
+        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient, ISystemUserRightsResolver systemUserRightsResolver)
         {
             _resourceService = resourceService;
             _resourceRegistryClient = resourceRegistryClient;
             _singleRightClient = singleRightClient;
+            _systemUserRightsResolver = systemUserRightsResolver;
         }
 
         /// <inheritdoc />
@@ -98,6 +102,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
             }
 
+            await _systemUserRightsResolver.ApplyVendorFixedRights(party, delegationsFE.SelectMany(d => d.Permissions).FlattenParties());
             return delegationsFE;
         }
 

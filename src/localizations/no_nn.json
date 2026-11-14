@@ -1135,7 +1135,9 @@
   },
   "party_info": {
     "delegate_confirmation": "Ønskjer du å gi <b>{{partyName}}</b> fullmakt til <b>{{packageName}}</b>? Brukaren vil få tilgang til alle tenestene i pakken.",
-    "revoke_confirmation": "Ønskjer du å slette fullmakta til <b>{{partyName}}</b> for <b>{{packageName}}</b>? Brukaren vil miste tilgang til alle tenestene i pakken."
+    "revoke_confirmation": "Ønskjer du å slette fullmakta til <b>{{partyName}}</b> for <b>{{packageName}}</b>? Brukaren vil miste tilgang til alle tenestene i pakken.",
+    "cannot_delegate": "Du kan ikkje gi <b>{{partyName}}</b> fullmakt til <b>{{packageName}}</b>.",
+    "cannot_revoke": "Du kan ikkje slette fullmakta til <b>{{partyName}}</b> for <b>{{packageName}}</b>."
   },
   "package_poa_details_page": {
     "page_title": "Tilgangspakke - Altinn",

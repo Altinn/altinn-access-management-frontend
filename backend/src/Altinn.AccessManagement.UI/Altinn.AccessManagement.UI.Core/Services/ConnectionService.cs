@@ -1,6 +1,7 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessManagement;
+using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Models.User.Frontend;
@@ -18,6 +19,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly ILogger _logger;
         private readonly IConnectionClient _connectionClient;
         private readonly IRegisterClient _registerClient;
+        private readonly ISystemUserRightsResolver _systemUserRightsResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectionService"/> class.
@@ -25,14 +27,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="logger">handler for logger</param>
         /// <param name="registerClient">handler for register client</param>
         /// <param name="connectionClient">handler for right holder client</param>
+        /// <param name="systemUserRightsResolver">resolves which system users have rights fixed by the vendor</param>
         public ConnectionService(
             ILogger<ConnectionService> logger,
             IRegisterClient registerClient,
-            IConnectionClient connectionClient)
+            IConnectionClient connectionClient,
+            ISystemUserRightsResolver systemUserRightsResolver)
         {
             _logger = logger;
             _registerClient = registerClient;
             _connectionClient = connectionClient;
+            _systemUserRightsResolver = systemUserRightsResolver;
         }
 
         /// <inheritdoc/>
@@ -126,7 +131,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     to,
                     includeClientDelegations,
                     includeAgentConnections);
-                return connections?.Select(ConnectionFE.FromConnection).ToList();
+                List<ConnectionFE> result = connections?.Select(ConnectionFE.FromConnection).ToList();
+                await _systemUserRightsResolver.ApplyVendorFixedRights(party, result.FlattenParties());
+                return result;
             }
             catch (Exception ex)
             {
