@@ -13,7 +13,11 @@ import { UserList } from '../common/UserList/UserList';
 import { CurrentUserPageHeader } from '../common/CurrentUserPageHeader/CurrentUserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useSelfConnection } from '../common/PartyRepresentationContext/useSelfConnection';
-import { ECC_PROVIDER_CODE, useRoleMetadata } from '../common/UserRoles/useRoleMetadata';
+import {
+  ECC_PROVIDER_CODE,
+  isBankruptcyEstateAdministratorRole,
+  useRoleMetadata,
+} from '../common/UserRoles/useRoleMetadata';
 
 import classes from './UsersList.module.css';
 import { NewUserButton } from './NewUserModal/NewUserModal';
@@ -60,7 +64,8 @@ export const UsersList = () => {
 
     const mapConnection = (connection: Connection): Connection => {
       const connectionRoles = mapRoles(connection.roles).filter(
-        (r) => r.provider?.code === ECC_PROVIDER_CODE,
+        (r) =>
+          r.provider?.code === ECC_PROVIDER_CODE || isBankruptcyEstateAdministratorRole(r.code),
       );
 
       return {

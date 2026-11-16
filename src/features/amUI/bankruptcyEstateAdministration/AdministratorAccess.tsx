@@ -94,6 +94,7 @@ export const AdministratorAccess = ({ administrator }: AdministratorAccessProps)
               accessPackage={openPackage}
               recipient={administrator}
               userHasAccess
+              hideStatus
             />
           )}
         </div>
