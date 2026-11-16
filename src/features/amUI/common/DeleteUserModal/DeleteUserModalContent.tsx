@@ -19,6 +19,7 @@ import { useRemoveRightHolderMutation } from '@/rtk/features/connectionApi';
 import { roleApi } from '@/rtk/features/roleApi';
 import { useGetIsAdminQuery } from '@/rtk/features/userInfoApi';
 import { getChangeReporteeAndRedirectUrl } from '@/resources/utils/changeReporteeUtils';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { LoadingAnimation } from '../LoadingAnimation/LoadingAnimation';
 import { handleSelectAccount } from '../PageLayoutWrapper/useHeader';
@@ -31,6 +32,7 @@ import {
 import classes from './DeleteUserModal.module.css';
 import {
   AGENT_ROLE_REASON,
+  BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON,
   DeletionLevel,
   type DeletionStatus,
   DeletionTarget,
@@ -56,10 +58,17 @@ const guardianshipInfoLink = 'https://www.vergemal.no/';
 const nonDeletableReasonKeys: Record<NonDeletableReason, string> = {
   [ER_ROLE_REASON]: 'delete_user.non_deletable_reason_er_roles',
   [AGENT_ROLE_REASON]: 'delete_user.non_deletable_reason_agent_role',
+  [BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON]:
+    'delete_user.non_deletable_reason_bankruptcy_estate_administrator',
   [GUARDIANSHIP_ROLE_REASON]: 'delete_user.non_deletable_reason_guardianship',
   [VIA_ROLE_REASON]: 'delete_user.non_deletable_reason_via_role',
 };
 const viaRoleSwitchKey = 'delete_user.non_deletable_reason_via_role_switch';
+
+const estateAdministratorYourselfKey =
+  'delete_user.non_deletable_reason_bankruptcy_estate_administrator_yourself';
+const estateAdministratorSwitchKey =
+  'delete_user.non_deletable_reason_bankruptcy_estate_administrator_switch';
 
 type ReasonListItem = {
   key: string;
@@ -124,6 +133,26 @@ export const DeleteUserModalContent = ({
     ? t('delete_user.agent_role_my_clients_link')
     : t('delete_user.agent_role_client_admin_link');
 
+  const estateAdministrationPath = `/${amUIPath.BankruptcyEstateAdministration}`;
+  // On your own page the acting party is yourself, so the selected actor is read from the cookie.
+  const isTrusteeSelectedActor = getCookie('AltinnPartyUuid') === fromParty?.id;
+  const estateAdministrationLink = isTrusteeSelectedActor ? (
+    <Link to={estateAdministrationPath} />
+  ) : (
+    <Link
+      to={getChangeReporteeAndRedirectUrl(
+        fromParty?.id ?? '',
+        `${window.location.origin}${GeneralPath.BasePath}${estateAdministrationPath}`,
+      )}
+      reloadDocument
+    />
+  );
+  const estateAdministratorReasonKey = !isTrusteeSelectedActor
+    ? estateAdministratorSwitchKey
+    : isDeletingYourself
+      ? estateAdministratorYourselfKey
+      : nonDeletableReasonKeys[BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON];
+
   const onDeleteUser = async () => {
     if (!toParty?.id || !fromParty?.id || !actingParty?.id) {
       return;
@@ -187,6 +216,14 @@ export const DeleteUserModalContent = ({
 
   const nonDeletableReasonItems = dialogModel.nonDeletableReasons.flatMap(
     (reason): ReasonListItem | ReasonListItem[] => {
+      if (reason === BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON) {
+        return {
+          key: reason,
+          i18nKey: estateAdministratorReasonKey,
+          values: { to_name: formattedToPartyName, from_name: formattedFromPartyName },
+          components: { estateLink: estateAdministrationLink },
+        };
+      }
       if (reason !== VIA_ROLE_REASON) {
         return {
           key: reason,
