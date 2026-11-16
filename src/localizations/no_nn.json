@@ -315,7 +315,8 @@
     "bankruptcy_estate_administrator_package_read": "Konkursbu lesetilgang",
     "bankruptcy_estate_administrator_package_write": "Konkursbu skrivetilgang",
     "bankruptcy_estate_administrator_can_delegate": "Konkursbuadministrator kan gi nødvendige fullmakter vidare til andre kreditorar og interessentar. Den gir ingen fullmakter til bustyraren som privatperson.",
-    "bankruptcy_estate_administrator_managed_at": "Administrering må gjerast under <a>Borolleadministrasjon</a>."
+    "bankruptcy_estate_administrator_managed_at": "Administrering må gjerast under <a>Borolleadministrasjon</a>.",
+    "bankruptcy_estate_administrator_managed_at_switch": "Administrering må gjerast under Borolleadministrasjon. <a>Byt til {{trustee}} og gå til Borolleadministrasjon</a>"
   },
   "users_page": {
     "page_title": "Brukarar - Altinn",

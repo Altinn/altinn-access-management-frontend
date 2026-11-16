@@ -24,6 +24,7 @@ const trustee: PartyEntity = {
 };
 
 const linkText = 'user_roles.bankruptcy_estate_administrator_managed_at';
+const switchLinkText = 'user_roles.bankruptcy_estate_administrator_managed_at_switch';
 
 const renderModal = (isTrusteeSelectedActor: boolean) =>
   render(
@@ -59,10 +60,10 @@ describe('BankruptcyEstateAdministratorInfoModal', () => {
     );
   });
 
-  it('links through an actor switch when someone else is the selected actor', () => {
+  it('says that the link switches actor when someone else is the selected actor', () => {
     renderModal(false);
 
-    const href = screen.getByRole('link', { name: linkText }).getAttribute('href') ?? '';
+    const href = screen.getByRole('link', { name: switchLinkText }).getAttribute('href') ?? '';
     expect(href).toContain('reportee/changeandredirect');
     expect(href).toContain('partyUuid=trustee-uuid');
     expect(decodeURIComponent(href)).toContain(

@@ -22,10 +22,13 @@ const rolePermission = (code: string) => ({
   permissions: [],
 });
 
-const mocks = vi.hoisted<{ parties: object; permissions: object[] }>(() => ({
-  parties: {},
-  permissions: [],
-}));
+const mocks = vi.hoisted<{ parties: object; permissions: object[]; selectedActorId: string }>(
+  () => ({
+    parties: {},
+    permissions: [],
+    selectedActorId: '',
+  }),
+);
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'no_nb' } }),
@@ -34,6 +37,10 @@ vi.mock('react-i18next', () => ({
 vi.mock('@/rtk/features/roleApi', () => ({
   useGetRolePermissionsQuery: () => ({ data: mocks.permissions }),
   useGetAllRolesQuery: () => ({ data: [], isLoading: false, isError: false }),
+}));
+
+vi.mock('@/resources/Cookie/CookieMethods', () => ({
+  getCookie: () => mocks.selectedActorId,
 }));
 
 vi.mock('@/resources/utils/screensizeUtils', () => ({
@@ -67,8 +74,13 @@ vi.mock('./BankruptcyEstateAdministratorInfoModal', () => ({
 
 const chipName = 'user_roles.is_bankruptcy_estate_administrator';
 
-const setUp = (parties: Record<string, PartyEntity>, roleCodes: string[]) => {
+const setUp = (
+  parties: Record<string, PartyEntity>,
+  roleCodes: string[],
+  selectedActor: PartyEntity = parties.actingParty,
+) => {
   mocks.parties = parties;
+  mocks.selectedActorId = selectedActor.id;
   mocks.permissions = roleCodes.map(rolePermission);
   render(<UserRoles />);
 };
@@ -138,5 +150,23 @@ describe('UserRoles, bankruptcy estate administrator', () => {
     );
 
     expect(screen.queryByRole('button', { name: chipName })).toBeNull();
+  });
+
+  it('links directly when the administrator has selected the trustee and looks at their own page', async () => {
+    // The user page makes you the acting party on your own page, whoever the selected actor is.
+    setUp(
+      {
+        fromParty: trustee,
+        toParty: administrator,
+        actingParty: administrator,
+        selfParty: administrator,
+      },
+      ['innbygger-konkursbo-administrator'],
+      trustee,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: chipName }));
+
+    expect(screen.getByText('info_modal BJARNE BOSTYRER direct_link=true')).toBeInTheDocument();
   });
 });

@@ -84,7 +84,12 @@ export const BankruptcyEstateAdministratorInfoModal = ({
         </DsParagraph>
         <DsParagraph data-size='sm'>
           <Trans
-            i18nKey='user_roles.bankruptcy_estate_administrator_managed_at'
+            i18nKey={
+              isTrusteeSelectedActor
+                ? 'user_roles.bankruptcy_estate_administrator_managed_at'
+                : 'user_roles.bankruptcy_estate_administrator_managed_at_switch'
+            }
+            values={{ trustee: formatEntityDisplayName(trustee) }}
             components={{ a: administrationLink }}
           />
         </DsParagraph>

@@ -324,7 +324,8 @@
     "bankruptcy_estate_administrator_package_read": "Bankruptcy estate read access",
     "bankruptcy_estate_administrator_package_write": "Bankruptcy estate write access",
     "bankruptcy_estate_administrator_can_delegate": "The bankruptcy estate administrator can delegate the necessary authorizations to other creditors and stakeholders. It does not grant any authorizations to the trustee as a private individual.",
-    "bankruptcy_estate_administrator_managed_at": "User administration must be done under <a>Bankruptcy estate administration</a>."
+    "bankruptcy_estate_administrator_managed_at": "User administration must be done under <a>Bankruptcy estate administration</a>.",
+    "bankruptcy_estate_administrator_managed_at_switch": "User administration must be done under Bankruptcy estate administration. <a>Switch to {{trustee}} and go to Bankruptcy estate administration</a>"
   },
   "users_page": {
     "page_title": "Users - Altinn",

@@ -5,6 +5,7 @@ import { useRef, useState } from 'react';
 
 import { type Role, useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 import { RoleInfoModal } from '../DelegationModal/RoleInfoModal';
@@ -142,7 +143,8 @@ export const UserRoles = ({ className, ...props }: React.HTMLAttributes<HTMLDivE
           open={isEstateAdministratorModalOpen}
           onClose={() => setIsEstateAdministratorModalOpen(false)}
           trustee={fromParty}
-          isTrusteeSelectedActor={actingParty?.id === fromParty?.id}
+          // On your own page the acting party is yourself, so the selected actor is read from the cookie.
+          isTrusteeSelectedActor={getCookie('AltinnPartyUuid') === fromParty?.id}
         />
       )}
     </>
