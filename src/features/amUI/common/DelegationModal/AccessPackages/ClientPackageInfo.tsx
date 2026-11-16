@@ -21,6 +21,8 @@ export interface ClientPackageInfoProps {
   accessPackage: AccessPackage;
   recipient: ClientAccessRecipient;
   userHasAccess: boolean;
+  /*** Leaves out the status lines. For pages where the package can be neither given nor removed */
+  hideStatus?: boolean;
   roleDescription?: string;
   isLoading?: boolean;
   isSuccess?: boolean;
@@ -33,6 +35,7 @@ export const ClientPackageInfo = ({
   accessPackage,
   recipient,
   userHasAccess,
+  hideStatus = false,
   roleDescription,
   onDelegate,
   onRevoke,
@@ -108,11 +111,13 @@ export const ClientPackageInfo = ({
               {roleDescription}
             </DsParagraph>
           )}
-          <StatusSection
-            userHasAccess={userHasAccess}
-            cannotDelegateHere={cannotChangeAccess}
-            toPartyName={recipient.name}
-          />
+          {!hideStatus && (
+            <StatusSection
+              userHasAccess={userHasAccess}
+              cannotDelegateHere={cannotChangeAccess}
+              toPartyName={recipient.name}
+            />
+          )}
 
           <PackageMeta accessPackage={accessPackage} />
 

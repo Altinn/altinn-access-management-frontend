@@ -34,10 +34,14 @@ vi.mock('../common/DelegationModal/AccessPackages/ClientPackageInfo', () => ({
   ClientPackageInfo: ({
     accessPackage,
     recipient,
+    hideStatus,
   }: {
     accessPackage: FakePackage;
     recipient: { name: string };
-  }) => <div>{`package_details ${accessPackage.name} ${recipient.name}`}</div>,
+    hideStatus?: boolean;
+  }) => (
+    <div>{`package_details ${accessPackage.name} ${recipient.name} hide_status=${hideStatus}`}</div>
+  ),
 }));
 
 const administrator: PartyEntity = {
@@ -106,7 +110,7 @@ describe('AdministratorAccess', () => {
     expect(screen.getByText('Konkursbo skrivetilgang')).toBeInTheDocument();
   });
 
-  it('shows the details of a package when the package is clicked', async () => {
+  it('shows the details of a package, without status, when the package is clicked', async () => {
     render(<AdministratorAccess administrator={administrator} />);
 
     expect(screen.queryByText(/package_details/)).toBeNull();
@@ -114,7 +118,7 @@ describe('AdministratorAccess', () => {
     await userEvent.click(screen.getByRole('button', { name: /Konkursbo lesetilgang/ }));
 
     expect(
-      screen.getByText('package_details Konkursbo lesetilgang METTE MEDHJELPER'),
+      screen.getByText('package_details Konkursbo lesetilgang METTE MEDHJELPER hide_status=true'),
     ).toBeInTheDocument();
   });
 });
