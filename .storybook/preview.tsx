@@ -21,7 +21,6 @@ document.cookie = 'XSRF-TOKEN=mocked-xsrf-token; path=/; SameSite=Lax';
 
 // Set feature flags for Storybook
 window.featureFlags = {
-  useNewSingleRightsClientDelegation: false,
   showHandledRequests: false,
   showIdPortenAuthorizations: false,
   enableSkyra: false,
