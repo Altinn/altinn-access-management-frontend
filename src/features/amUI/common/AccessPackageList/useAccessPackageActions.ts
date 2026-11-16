@@ -244,6 +244,12 @@ export const useAccessPackageActions = ({
 
   const onRequest = async (accessPackage: AccessPackage) => {
     if (!fromParty || !actingParty) {
+      openSnackbar({
+        message: t('delegation_modal.request.sent_request_error', {
+          resource: accessPackage.name,
+        }),
+        color: 'danger',
+      });
       return;
     }
     const packageId = accessPackage.urn;
