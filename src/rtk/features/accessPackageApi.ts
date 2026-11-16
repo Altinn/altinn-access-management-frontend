@@ -82,7 +82,7 @@ export const accessPackageApi = createApi({
         const serviceOwnerParams = (serviceOwners ?? [])
           .map((code) => `&resourceProviderCode=${encodeURIComponent(code)}`)
           .join('');
-        return `search?searchString=${searchString}${typeNameParam}${serviceOwnerParams}`;
+        return `search?searchString=${encodeURIComponent(searchString)}${typeNameParam}${serviceOwnerParams}`;
       },
     }),
     getUserDelegations: builder.query<

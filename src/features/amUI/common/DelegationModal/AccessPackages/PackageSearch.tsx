@@ -35,6 +35,11 @@ export const PackageSearch = ({
   const { searchString, setSearchString, filters, setFilters, setActionError } =
     useDelegationModalContext();
   const [searchInput, setSearchInput] = useState(searchString);
+  const [syncedSearchString, setSyncedSearchString] = useState(searchString);
+  if (searchString !== syncedSearchString) {
+    setSyncedSearchString(searchString);
+    setSearchInput(searchString);
+  }
   const { data: resourceOwners } = useGetResourceOwnersQuery();
 
   const serviceOwnerOptions = (resourceOwners ?? []).map((owner) => ({
