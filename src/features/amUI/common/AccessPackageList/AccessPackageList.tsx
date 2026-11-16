@@ -29,6 +29,7 @@ interface AccessPackageListProps {
   availableActions?: DelegationAction[];
   showAvailableToggle?: boolean;
   searchString?: string;
+  serviceOwners?: string[];
   showPermissions?: boolean;
   showPackagesCount?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
@@ -59,6 +60,7 @@ export const AccessPackageList = ({
   onRevokeSuccess,
   onRevokeError,
   searchString,
+  serviceOwners,
   showPermissions,
   showPackagesCount,
   packageAs,
@@ -86,6 +88,7 @@ export const AccessPackageList = ({
     showAllPackages,
     showOnlyGuardianships,
     searchString,
+    serviceOwners,
     filterByType,
   });
 
