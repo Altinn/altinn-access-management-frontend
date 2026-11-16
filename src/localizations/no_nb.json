@@ -665,6 +665,8 @@
     "error_saving_addresses": "Noe gikk galt. Vennligst prøv igjen.",
     "no_addresses_error": "Virksomheten må ha minst én e-postadresse eller sms-adresse for varslinger.",
     "organization_not_in_er": "Vi kan ikke registrere varslingsadresser for denne virksomheten fordi den ikke er registrert i Enhetsregisteret.",
+    "not_in_er_heading": "{{name}} er ikke registrert i Enhetsregisteret",
+    "not_in_er_info": "Kontaktadresse for virksomheter er kun tilgjengelig for virksomheter registrert i Enhetsregisteret. Hvis du ønsker å motta varsler for virksomheten, må du registrere <strong>din personlige varslingsadresse</strong> for virksomheten i <strong>Din profil</strong>. Hvis ingen har gjort dette for {{name}}, vil Altinn ikke kunne sende dere varsel.",
     "address_already_exists": "Adressen er allerede registrert",
     "address_not_found": "En av adressene er allerede fjernet av noen andre. Se over listen og lagre på nytt.",
     "not_authorized_error": "Du har ikke tilgang til å endre varslingsadresser for denne virksomheten.",

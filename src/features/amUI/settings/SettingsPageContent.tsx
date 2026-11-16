@@ -26,6 +26,7 @@ import {
 import classes from './SettingsPageContent.module.css';
 import { SettingsModal } from './SettingsModal';
 import { SettingsServiceAnnouncement } from './SettingsServiceAnnouncement';
+import { OrganizationNotInErAlert } from './OrganizationNotInErAlert';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();
@@ -94,6 +95,7 @@ export const SettingsPageContent = () => {
         isLoading={isLoading}
       />
       <SettingsServiceAnnouncement />
+      <OrganizationNotInErAlert />
       <div className={classes.settingsHeaderAndInfo}>
         <DsHeading
           level={2}
