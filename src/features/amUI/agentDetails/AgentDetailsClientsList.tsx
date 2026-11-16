@@ -6,9 +6,11 @@ import type {
   AddAgentResourcesFn,
   Client,
   ClientAccess,
+  ClientResource,
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
+import { type CompactPackage } from '@/dataObjects/dtos/accessPackage';
 
 import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
 import { useClientAccessAction } from '../common/ClientAccess/useClientAccessAction';
@@ -35,7 +37,11 @@ type AgentDetailsClientsListProps = {
   expandedIds?: string[];
   onToggleExpanded?: (id: string) => void;
   restoreFocusFallbackId?: string;
-  systemUserSets?: { name: string; accessPackages: string[]; resources: string[] }[];
+  systemUserSets?: {
+    name: string;
+    accessPackages: CompactPackage[];
+    resources: ClientResource[];
+  }[];
 };
 
 export const AgentDetailsClientsList = ({

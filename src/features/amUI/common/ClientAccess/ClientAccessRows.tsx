@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState, type ReactNode } from 'react';
 import { DsHeading } from '@altinn/altinn-components';
 
-import type { ClientAccess } from '@/rtk/features/clientApi';
+import type { ClientAccess, ClientResource } from '@/rtk/features/clientApi';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
+import { type CompactPackage } from '@/dataObjects/dtos/accessPackage';
 
 import type { HeldAccessByRow } from '../ClientBulkDelegation/getClientBulkItems';
 import { ClientAccessInfoModal } from '../DelegationModal/ClientAccessInfoModal';
@@ -16,7 +17,11 @@ import { clientActionControlId } from './DelegationControl';
 
 export type ClientAccessRow = Omit<UserListItemData, 'children'> & {
   entries: ClientAccessEntry[];
-  systemUserSets?: { name: string; accessPackages: string[]; resources: string[] }[];
+  systemUserSets?: {
+    name: string;
+    accessPackages: CompactPackage[];
+    resources: ClientResource[];
+  }[];
   /** Rendered above the row's access lists, e.g. bulk actions. */
   renderActions: (
     items?: { packageId: string; resourceId: string; roleCode: string }[],
@@ -117,7 +122,8 @@ export const ClientAccessRows = ({
     if (sets && sets.length > 0) {
       // enrich systemuser set
       const setData = sets.map((set) => {
-        const setEntriesPackages: ClientAccessEntry[] = set.accessPackages.map((urn) => {
+        const setEntriesPackages: ClientAccessEntry[] = set.accessPackages.map((accessPackage) => {
+          const urn = accessPackage.urn;
           const existingEntry = entries.find(
             (e) => e.kind === 'package' && e.accessPackage.urn === urn,
           );
@@ -146,7 +152,8 @@ export const ClientAccessRows = ({
           }
         });
 
-        const setEntriesResources: ClientAccessEntry[] = set.resources.map((identifier) => {
+        const setEntriesResources: ClientAccessEntry[] = set.resources.map((resource) => {
+          const identifier = resource.refId;
           const existingEntry = entries.find(
             (e) => e.kind === 'resource' && e.resource.identifier === identifier,
           );

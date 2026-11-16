@@ -9,7 +9,8 @@ import {
   getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import type { Client, ClientAccess } from '@/rtk/features/clientApi';
+import type { Client, ClientAccess, ClientResource } from '@/rtk/features/clientApi';
+import { type CompactPackage } from '@/dataObjects/dtos/accessPackage';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
@@ -45,7 +46,11 @@ type ClientAccessListProps = {
   onToggleExpanded?: (id: string) => void;
   // Focus target when the acted-on row is no longer reachable here, typically the section heading.
   restoreFocusFallbackId?: string;
-  systemUserSets?: { name: string; accessPackages: string[]; resources: string[] }[];
+  systemUserSets?: {
+    name: string;
+    accessPackages: CompactPackage[];
+    resources: ClientResource[];
+  }[];
 };
 
 const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] =>

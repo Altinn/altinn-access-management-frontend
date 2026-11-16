@@ -1,3 +1,4 @@
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend
@@ -48,20 +49,30 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend
                     new()
                     {
                         Name = "Jordbruk-informasjon-settet",
-                        AccessPackages = ["urn:altinn:accesspackage:informasjon-og-kommunikasjon", "urn:altinn:accesspackage:jordbruk"],
+                        AccessPackages = [
+                            new() { Urn = "urn:altinn:accesspackage:informasjon-og-kommunikasjon" }, 
+                            new() { Urn = "urn:altinn:accesspackage:jordbruk" }
+                        ],
                         Resources = []
                     },
                     new()
                     {
                         Name = "Skattegreier-settet",
-                        AccessPackages = ["urn:altinn:accesspackage:skattegrunnlag", "urn:altinn:accesspackage:jordbruk"],
+                        AccessPackages = [
+                            new() { Urn = "urn:altinn:accesspackage:skattegrunnlag" }, 
+                            new() { Urn = "urn:altinn:accesspackage:jordbruk" }
+                        ],
                         Resources = []
                     },
                     new()
                     {
                         Name = "Annet-settet",
-                        AccessPackages = ["urn:altinn:accesspackage:annen-tjenesteyting"],
-                        Resources = ["acn-migratedcorrespondence-4540-1"]
+                        AccessPackages = [
+                            new() { Urn = "urn:altinn:accesspackage:annen-tjenesteyting" }
+                        ],
+                        Resources = [
+                            new() { RefId = "acn-migratedcorrespondence-4540-1" }
+                        ]
                     }
                 };
             }
@@ -74,8 +85,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend
     {
         public string Name { get; set; }
 
-        public List<string> AccessPackages { get; set; }
+        public List<CompactPackage> AccessPackages { get; set; }
 
-        public List<string> Resources { get; set; }
+        public List<CompactResource> Resources { get; set; }
     }
 }

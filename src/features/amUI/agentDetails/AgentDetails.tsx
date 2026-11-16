@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import type { Client, ClientAccess } from '@/rtk/features/clientApi';
+import type { Client, ClientAccess, ClientResource } from '@/rtk/features/clientApi';
 import {
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
@@ -17,6 +17,7 @@ import {
 } from '@/rtk/features/clientApi';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
+import { type CompactPackage } from '@/dataObjects/dtos/accessPackage';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -46,7 +47,11 @@ import { AgentDetailsClientsList } from './AgentDetailsClientsList';
 import classes from './AgentDetails.module.css';
 
 interface AgentDetailsProps {
-  systemUserSets?: { name: string; accessPackages: string[]; resources: string[] }[];
+  systemUserSets?: {
+    name: string;
+    accessPackages: CompactPackage[];
+    resources: ClientResource[];
+  }[];
 }
 
 export const AgentDetails = ({ systemUserSets }: AgentDetailsProps) => {
