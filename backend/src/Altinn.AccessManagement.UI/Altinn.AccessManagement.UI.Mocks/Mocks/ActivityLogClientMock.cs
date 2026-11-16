@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ActivityLog;
 using Altinn.AccessManagement.UI.Core.Models.Common;
@@ -157,8 +156,10 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             string next = null;
             if (hasMore)
             {
-                string queryString = Regex.Replace(query.ToQueryString(), "&page(No|Size)=[^&]*", string.Empty);
-                next = $"?{queryString}&pageNo={pageNo + 1}&pageSize={pageSize}";
+                IEnumerable<string> search = query.ToQueryString()
+                    .Split('&')
+                    .Where(parameter => !parameter.StartsWith("pageNo=", StringComparison.Ordinal) && !parameter.StartsWith("pageSize=", StringComparison.Ordinal));
+                next = $"?{string.Join("&", search)}&pageNo={pageNo + 1}&pageSize={pageSize}";
             }
 
             return PaginatedResult.Create(page, next);
