@@ -13,14 +13,8 @@
 .searchInputs {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  gap: var(--ds-spacing-2);
+  gap: 12px;
   padding-bottom: var(--ds-spacing-4);
-}
-
-.searchInputs ul {
-  max-height: 30rem;
 }
 
 .searchResults {

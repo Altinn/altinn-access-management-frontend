@@ -1,0 +1,10 @@
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--ds-spacing-2);
+}
+
+.toolbar ul {
+  max-height: 30rem;
+}

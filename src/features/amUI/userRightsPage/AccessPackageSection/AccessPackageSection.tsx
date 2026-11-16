@@ -13,7 +13,7 @@ import { DelegationAction } from '../../common/DelegationModal/EditModal';
 import { getAvailableActions } from '../../common/DelegationModal/delegationActionUtils';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { TabContentSkeleton } from '../../common/RightsTabs/TabContentSkeleton';
-import { DebouncedSearchField } from '../../common/DebouncedSearchField/DebouncedSearchField';
+import { PackageSearchToolbar } from '../../common/PackageSearchToolbar/PackageSearchToolbar';
 import { AccessPackageInfoPopover } from '../../common/AccessPackageInfoPopover/AccessPackageInfoPopover';
 
 import { ActiveDelegations } from './ActiveDelegations';
@@ -50,8 +50,8 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
         .filter((item) => !isGuardianshipUrn(item.package.urn)).length
     : 0;
 
-  // Local search state with debounce to avoid excessive backend calls
-  const [debouncedSearchString, setDebouncedSearchString] = useState<string>('');
+  const [searchString, setSearchString] = useState('');
+  const [serviceOwners, setServiceOwners] = useState<string[]>([]);
 
   return (
     <>
@@ -72,9 +72,11 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
           {canRequestAccess && <PendingPackageRequests />}
           <div className={classes.inputs}>
             <div className={classes.searchField}>
-              <DebouncedSearchField
-                placeholder={t('access_packages.search_label')}
-                setDebouncedSearchString={setDebouncedSearchString}
+              <PackageSearchToolbar
+                searchString={searchString}
+                setSearchString={setSearchString}
+                serviceOwners={serviceOwners}
+                setServiceOwners={setServiceOwners}
               />
             </div>
             <div className={classes.delegateButton}>
@@ -85,7 +87,8 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
             </div>
           </div>
           <ActiveDelegations
-            searchString={debouncedSearchString}
+            searchString={searchString}
+            serviceOwners={serviceOwners}
             availableActions={availableActions}
           />
         </>
