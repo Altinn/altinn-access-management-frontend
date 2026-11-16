@@ -30,13 +30,14 @@ vi.mock('@/resources/hooks/useAccessPackageLookup', () => ({
   }),
 }));
 
-vi.mock('../common/DelegationModal/AccessPackages/ClientPackageInfoModal', () => ({
-  ClientPackageInfoModal: ({
-    data,
+vi.mock('../common/DelegationModal/AccessPackages/ClientPackageInfo', () => ({
+  ClientPackageInfo: ({
+    accessPackage,
+    recipient,
   }: {
-    data?: { party: PartyEntity; accessPackage: FakePackage };
-  }) =>
-    data ? <div>{`package_details ${data.accessPackage.name} ${data.party.name}`}</div> : null,
+    accessPackage: FakePackage;
+    recipient: { name: string };
+  }) => <div>{`package_details ${accessPackage.name} ${recipient.name}`}</div>,
 }));
 
 const administrator: PartyEntity = {
