@@ -23,7 +23,6 @@ const createResource = (overrides: Partial<ServiceResource> = {}): ServiceResour
   resourceOwnerOrgcode: 'org',
   resourceOwnerOrgNumber: '123456789',
   resourceReferences: [],
-  authorizationReference: [],
   resourceType: 'GenericAccessResource',
   delegable: true,
   ...overrides,

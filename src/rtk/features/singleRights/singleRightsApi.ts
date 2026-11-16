@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
-import type { IdValuePair } from '@/dataObjects/dtos/IdValuePair';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import type { Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
@@ -23,7 +22,6 @@ export interface ServiceResource {
   description?: string;
   status?: string;
   resourceReferences: resourceReference[];
-  authorizationReference: IdValuePair[];
   resourceType: string;
   delegable: boolean;
   keywords?: string[];

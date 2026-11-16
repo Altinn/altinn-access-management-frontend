@@ -63,8 +63,6 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 visible: resource.Visible,
                 delegable: resource.Delegable,
                 contactPoints: resource.ContactPoints,
-                spatial: resource.Spatial,
-                authorizationReference: resource.AuthorizationReference,
                 keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList() ?? [],
                 resourceOwnerLogoUrl: ResolveOwnerLogoUrl(orgs, owner?.Orgcode));
         }

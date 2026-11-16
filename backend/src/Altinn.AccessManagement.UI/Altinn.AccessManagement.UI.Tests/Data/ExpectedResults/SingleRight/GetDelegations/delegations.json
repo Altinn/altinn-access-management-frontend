@@ -7,7 +7,6 @@
       "rightDescription": "Gir tilgang til Narnia.",
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Some category",
@@ -25,12 +24,6 @@
       "resourceReferences": [],
       "priorityCounter": null,
       "resourceType": "Default",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "appid-502"
-        }
-      ],
       "keywords": []
     },
     "permissions": [
@@ -73,7 +66,6 @@
       "rightDescription": "Gir tilgang til en A3 app.",
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Some category",
@@ -97,16 +89,6 @@
       ],
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:app",
-          "value": "a3-app2"
-        },
-        {
-          "id": "urn:altinn:org",
-          "value": "ttd"
-        }
-      ],
       "keywords": []
     },
     "permissions": [
@@ -153,7 +135,6 @@
       "rightDescription": "Du gir tilgang til denne fine test ressursen",
       "homepage": null,
       "status": "Active",
-      "spatial": null,
       "contactPoints": [],
       "delegable": true,
       "visible": true,
@@ -164,12 +145,6 @@
       "resourceReferences": [],
       "priorityCounter": null,
       "resourceType": "GenericAccessResource",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "jks-test-resource"
-        }
-      ],
       "keywords": []
     },
     "permissions": [
@@ -212,7 +187,6 @@
       "rightDescription": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
       "homepage": null,
       "status": "Completed",
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Innrapportering",
@@ -230,12 +204,6 @@
       "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "GenericAccessResource",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "ske-innrapportering-boligsameie"
-        }
-      ],
       "keywords": []
     },
     "permissions": [

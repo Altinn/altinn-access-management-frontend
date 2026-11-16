@@ -9,7 +9,6 @@
       "rightDescription": "Her er en beskrivelse.",
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Some category",
@@ -25,12 +24,6 @@
       "resourceReferences": [],
       "priorityCounter": 1,
       "resourceType": "Default",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "appid-510"
-        }
-      ],
       "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg",
       "resourceOwnerOrgcode": "DIGDIR",
       "keywords": []
@@ -42,7 +35,6 @@
       "rightDescription": "Her er en beskrivelse.",
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Some category",
@@ -58,12 +50,6 @@
       "resourceReferences": [],
       "priorityCounter": 1,
       "resourceType": "Default",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "appid-511"
-        }
-      ],
       "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg",
       "resourceOwnerOrgcode": "DIGDIR",
       "keywords": []
@@ -75,7 +61,6 @@
       "rightDescription": "Her er en beskrivelse.",
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Some category",
@@ -91,12 +76,6 @@
       "resourceReferences": [],
       "priorityCounter": 1,
       "resourceType": "Default",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "appid-512"
-        }
-      ],
       "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg",
       "resourceOwnerOrgcode": "DIGDIR",
       "keywords": []
@@ -108,7 +87,6 @@
       "rightDescription": "Her er en beskrivelse.",
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Some category",
@@ -124,12 +102,6 @@
       "resourceReferences": [],
       "priorityCounter": 1,
       "resourceType": "Default",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "appid-513"
-        }
-      ],
       "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg",
       "resourceOwnerOrgcode": "DIGDIR",
       "keywords": []

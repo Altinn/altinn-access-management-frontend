@@ -25,7 +25,6 @@ const resource = {
   resourceOwnerOrgcode: 'skd',
   resourceOwnerLogoUrl: 'https://altinncdn.no/orgs/skd/skd.png',
   resourceType: 'GenericAccessResource',
-  authorizationReference: [],
   resourceReferences: [],
 };
 

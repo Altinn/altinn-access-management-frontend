@@ -6,11 +6,7 @@
   },
   "sector": null,
   "status": null,
-  "limitedByRRR": false,
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
   "homepage": null,
-  "isPartOf": null,
   "keywords": null,
   "identifier": "se_3225_1596",
   "contactPoints": [
@@ -46,16 +42,6 @@
       "referenceSource": "Altinn2",
       "reference": "1596",
       "referenceType": "ServiceEditionCode"
-    }
-  ],
-  "authorizationReference": [
-    {
-      "id": "urn:altinn:servicecode",
-      "value": "3225"
-    },
-    {
-      "id": "urn:altinn:serviceeditioncode",
-      "value": "1596"
     }
   ],
   "hasCompetentAuthority": {

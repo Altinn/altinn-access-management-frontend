@@ -18,7 +18,6 @@
       "rightDescription": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
       "homepage": null,
       "status": "Completed",
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Innrapportering",
@@ -36,12 +35,6 @@
       "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "GenericAccessResource",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "ske-innrapportering-boligsameie"
-        }
-      ],
       "keywords": []
     }
   ],

@@ -6,11 +6,7 @@
   },
   "sector": null,
   "status": null,
-  "limitedByRRR": false,
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
   "homepage": null,
-  "isPartOf": null,
   "keywords": null,
   "identifier": "appid-508",
   "contactPoints": [
@@ -37,12 +33,6 @@
     "nn": "Gir tilgang til brannbilen."
   },
   "resourceReferences": [],
-  "authorizationReference": [
-    {
-      "id": "urn:altinn:resource",
-      "value": "appid-508"
-    }
-  ],
   "hasCompetentAuthority": {
     "orgcode": "FD",
     "organization": "110110110",

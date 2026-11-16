@@ -13,7 +13,6 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
           rightDescription: 'Gir tilgang til Narnia.',
           homepage: null,
           status: null,
-          spatial: null,
           contactPoints: [
             {
               category: 'Some category',
@@ -36,12 +35,6 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
           ],
           priorityCounter: 2,
           resourceType: 'Default',
-          authorizationReference: [
-            {
-              id: 'urn:altinn:resource',
-              value: 'appid-502',
-            },
-          ],
           keywords: ['klesskapet_kw'],
         },
         {
@@ -52,7 +45,6 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
           resourceOwnerName: 'Snarveien',
           homepage: null,
           status: null,
-          spatial: null,
           contactPoints: [
             {
               category: 'Some category',
@@ -70,12 +62,6 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
           rightDescription: 'Denne ressursen krever spesifikke roller for tilgang.',
           delegable: true,
           resourceOwnerName: 'Manglende Rolle',
-          authorizationReference: [
-            {
-              id: 'urn:altinn:resource',
-              value: 'missing_role_access',
-            },
-          ],
         },
         {
           identifier: 'missing_right_access',
@@ -84,12 +70,6 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
           rightDescription: 'Denne ressursen krever spesifikke rettigheter for tilgang.',
           delegable: true,
           resourceOwnerName: 'Manglende Rettigheter',
-          authorizationReference: [
-            {
-              id: 'urn:altinn:resource',
-              value: 'missing_right_access',
-            },
-          ],
         },
         {
           identifier: 'missing_srr_rightAccess',
@@ -98,12 +78,6 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
           rightDescription: 'Denne ressursen krever SRR rettigheter for tilgang.',
           delegable: true,
           resourceOwnerName: 'Manglende SRR Rettigheter',
-          authorizationReference: [
-            {
-              id: 'urn:altinn:resource',
-              value: 'missing_srr_rightAccess',
-            },
-          ],
         },
         {
           identifier: 'delegation_error',
@@ -112,12 +86,6 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
           rightDescription: 'Denne ressursen feiler ved delegering.',
           delegable: true,
           resourceOwnerName: 'Delegeringsfeil',
-          authorizationReference: [
-            {
-              id: 'urn:altinn:resource',
-              value: 'delegation_error',
-            },
-          ],
         },
         {
           identifier: 'partial_delegation_error',
@@ -126,12 +94,6 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
           rightDescription: 'Denne ressursen feiler delvis ved delegering.',
           delegable: true,
           resourceOwnerName: 'Delegeringsfeil',
-          authorizationReference: [
-            {
-              id: 'urn:altinn:resource',
-              value: 'partial_delegation_error',
-            },
-          ],
         },
       ],
     });

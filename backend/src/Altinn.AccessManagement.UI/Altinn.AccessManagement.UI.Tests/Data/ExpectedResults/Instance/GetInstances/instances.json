@@ -7,7 +7,6 @@
       "rightDescription": null,
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": null,
       "delegable": true,
       "visible": true,
@@ -18,7 +17,6 @@
       "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": null,
       "keywords": []
     },
     "instance": {
@@ -80,7 +78,6 @@
       "rightDescription": null,
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": null,
       "delegable": true,
       "visible": true,
@@ -91,7 +88,6 @@
       "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": null,
       "keywords": []
     },
     "instance": {
@@ -157,7 +153,6 @@
       "rightDescription": null,
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": null,
       "delegable": true,
       "visible": true,
@@ -168,7 +163,6 @@
       "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": null,
       "keywords": []
     },
     "instance": {
@@ -222,7 +216,6 @@
       "rightDescription": null,
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": null,
       "delegable": true,
       "visible": true,
@@ -233,7 +226,6 @@
       "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": null,
       "keywords": []
     },
     "instance": {
@@ -295,7 +287,6 @@
       "rightDescription": null,
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": null,
       "delegable": true,
       "visible": true,
@@ -306,7 +297,6 @@
       "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": null,
       "keywords": []
     },
     "instance": {
@@ -360,7 +350,6 @@
       "rightDescription": null,
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": null,
       "delegable": true,
       "visible": true,
@@ -371,7 +360,6 @@
       "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "AltinnApp",
-      "authorizationReference": null,
       "keywords": []
     },
     "instance": {

@@ -122,11 +122,8 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.ResourceOwnerLogoUrl, actual.ResourceOwnerLogoUrl);
             Assert.Equal(expected.Homepage, actual.Homepage);
             Assert.Equal(expected.Status, actual.Status);
-            Assert.Equal(expected.Spatial, actual.Spatial);
             Assert.Equal(expected.ResourceType, actual.ResourceType);
-            AssertCollections(expected.AuthorizationReference, actual.AuthorizationReference, AssertEqual);
             AssertEqual(expected.ContactPoints, actual.ContactPoints);
-            Assert.Equal(expected.Spatial, actual.Spatial);
             Assert.Equal(expected.ResourceReferences?.Count, actual.ResourceReferences?.Count);
             AssertEqual(expected.ResourceReferences, actual.ResourceReferences);
         }
@@ -351,15 +348,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             Assert.Equal(expected.AuthorizedResources, actual.AuthorizedResources);
             Assert.Equal(expected.AuthorizedRoles, actual.AuthorizedRoles);
             AssertCollections(expected.Children, actual.Children, AssertEqual);
-        }
-
-        private static void AssertEqual(IdValuePair expected, IdValuePair actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.Value, actual.Value);
         }
 
         public static void AssertEqual(AccessAreaFE expected, AccessAreaFE actual)
