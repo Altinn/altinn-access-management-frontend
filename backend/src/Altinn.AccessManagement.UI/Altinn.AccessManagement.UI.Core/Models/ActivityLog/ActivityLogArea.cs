@@ -21,9 +21,16 @@ namespace Altinn.AccessManagement.UI.Core.Models.ActivityLog
         /// </summary>
         public const string Maskinporten = "maskinporten";
 
+        private static readonly string[] All = { Connections, Request, Maskinporten };
+
         /// <summary>
-        /// Regular expression matching the valid areas, for use as a route constraint.
+        /// Only known values are let through to be used in the API string.
         /// </summary>
-        public const string RouteConstraint = "^(connections|request|maskinporten)$";
+        /// <param name="area">The value to check.</param>
+        /// <returns>True when it is a known area.</returns>
+        public static bool IsValid(string area)
+        {
+            return All.Contains(area, StringComparer.OrdinalIgnoreCase);
+        }
     }
 }

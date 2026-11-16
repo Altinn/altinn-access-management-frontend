@@ -99,9 +99,43 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.Single(first.Items);
             Assert.NotNull(first.Links.Next);
+            Assert.Contains($"party={Party}", first.Links.Next);
+            Assert.Contains("direction=from", first.Links.Next);
+            Assert.Contains($"to={FysioPartner}", first.Links.Next);
+            Assert.Contains("pageNo=1", first.Links.Next);
+            Assert.Contains("pageSize=1", first.Links.Next);
             Assert.Single(second.Items);
             Assert.Null(second.Links.Next);
             Assert.All(first.Items.Concat(second.Items), entry => Assert.Equal(Guid.Parse(FysioPartner), entry.ToId));
+        }
+
+        /// <summary>
+        /// Test case: GetActivityLog narrows to entries after the given time.
+        /// </summary>
+        [Fact]
+        public async Task GetActivityLog_After_ReturnsOnlyLaterEntries()
+        {
+            SetAuthHeader();
+
+            PaginatedResult<ActivityLogDto> actual = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=from&after=2025-01-01T00:00:00Z");
+
+            Assert.Equal(2, actual.Items.Count());
+            Assert.All(actual.Items, entry => Assert.True(entry.When >= new DateTimeOffset(2025, 1, 1, 0, 0, 0, TimeSpan.Zero)));
+        }
+
+        /// <summary>
+        /// Test case: GetActivityLog narrows to entries of the given activity types.
+        /// </summary>
+        [Fact]
+        public async Task GetActivityLog_TypeId_ReturnsOnlyMatchingTypes()
+        {
+            SetAuthHeader();
+            Guid resourceRemoved = Guid.Parse("2cc78d26-16a1-4a88-95cd-3ca427fb0731");
+
+            PaginatedResult<ActivityLogDto> actual = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=from&typeId={resourceRemoved}");
+
+            Assert.Single(actual.Items);
+            Assert.Equal(resourceRemoved, actual.Items.First().ActivityTypeId);
         }
 
         /// <summary>

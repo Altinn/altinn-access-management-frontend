@@ -42,12 +42,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>The page of entries and a link to the next page when more entries exist.</returns>
         [HttpGet]
         [Authorize]
-        [Route("{area:regex(" + ActivityLogArea.RouteConstraint + ")}")]
+        [Route("{area}")]
         public async Task<ActionResult<PaginatedResult<ActivityLogDto>>> GetActivityLog(
             [FromRoute] string area,
             [FromQuery] ActivityLogQuery query,
             CancellationToken cancellationToken = default)
         {
+            if (!ActivityLogArea.IsValid(area))
+            {
+                return NotFound();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -79,13 +84,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>The page of values and a link to the next page when more values exist.</returns>
         [HttpGet]
         [Authorize]
-        [Route("{area:regex(" + ActivityLogArea.RouteConstraint + ")}/filter/{field}")]
+        [Route("{area}/filter/{field}")]
         public async Task<ActionResult<PaginatedResult<ActivityLogFilterValueDto>>> GetFilterValues(
             [FromRoute] string area,
             [FromRoute] string field,
             [FromQuery] ActivityLogFilterValuesQuery query,
             CancellationToken cancellationToken = default)
         {
+            if (!ActivityLogArea.IsValid(area))
+            {
+                return NotFound();
+            }
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -115,11 +125,16 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <returns>The catalog entries.</returns>
         [HttpGet]
         [Authorize]
-        [Route("{area:regex(" + ActivityLogArea.RouteConstraint + ")}/types")]
+        [Route("{area}/types")]
         public async Task<ActionResult<IEnumerable<ActivityTypeDto>>> GetActivityTypes(
             [FromRoute] string area,
             CancellationToken cancellationToken = default)
         {
+            if (!ActivityLogArea.IsValid(area))
+            {
+                return NotFound();
+            }
+
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);

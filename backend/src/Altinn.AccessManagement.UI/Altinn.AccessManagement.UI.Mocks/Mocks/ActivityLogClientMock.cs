@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ActivityLog;
 using Altinn.AccessManagement.UI.Core.Models.Common;
@@ -38,13 +39,19 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             Util.ThrowExceptionIfTriggerParty(query.Party.ToString());
 
-            // The field being looked up disregards its own filter.
+            // The values are looked up in the full search, except that the field being looked up
+            // disregards its own filter.
             ActivityLogQuery lookupQuery = new ActivityLogQuery
             {
                 Party = query.Party,
                 Direction = query.Direction,
                 From = string.Equals(field, "from", StringComparison.OrdinalIgnoreCase) ? new List<Guid>() : query.From,
                 To = string.Equals(field, "to", StringComparison.OrdinalIgnoreCase) ? new List<Guid>() : query.To,
+                Via = query.Via,
+                By = string.Equals(field, "by", StringComparison.OrdinalIgnoreCase) ? new List<Guid>() : query.By,
+                TypeId = query.TypeId,
+                After = query.After,
+                Before = query.Before,
             };
 
             IEnumerable<ActivityLogFilterValueDto> values = GetEntriesInSearch(area, lookupQuery)
@@ -57,7 +64,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 values = values.Where(value => value.Name?.Contains(query.Term, StringComparison.OrdinalIgnoreCase) == true);
             }
 
-            List<ActivityLogFilterValueDto> ordered = values.OrderBy(value => value.Name).ToList();
+            List<ActivityLogFilterValueDto> ordered = string.Equals(query.OrderBy, "When", StringComparison.OrdinalIgnoreCase)
+                ? values.ToList()
+                : values.OrderBy(value => value.Name).ToList();
             return Task.FromResult(Page(ordered, query));
         }
 
@@ -84,6 +93,31 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (query.To?.Count > 0)
             {
                 entries = entries.Where(entry => entry.ToId.HasValue && query.To.Contains(entry.ToId.Value));
+            }
+
+            if (query.Via?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.ViaId.HasValue && query.Via.Contains(entry.ViaId.Value));
+            }
+
+            if (query.By?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.ById.HasValue && query.By.Contains(entry.ById.Value));
+            }
+
+            if (query.TypeId?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.ActivityTypeId.HasValue && query.TypeId.Contains(entry.ActivityTypeId.Value));
+            }
+
+            if (query.After.HasValue)
+            {
+                entries = entries.Where(entry => entry.When >= query.After.Value);
+            }
+
+            if (query.Before.HasValue)
+            {
+                entries = entries.Where(entry => entry.When <= query.Before.Value);
             }
 
             return entries.OrderByDescending(entry => entry.When).ThenByDescending(entry => entry.Id);
@@ -118,7 +152,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             List<T> page = items.Skip(pageNo * pageSize).Take(pageSize).ToList();
             bool hasMore = (pageNo + 1) * pageSize < items.Count;
 
-            return PaginatedResult.Create(page, hasMore ? $"?pageNo={pageNo + 1}&pageSize={pageSize}" : null);
+            // The next link repeats the whole query, as the API does, so following it gives the next page
+            // of the same search.
+            string next = null;
+            if (hasMore)
+            {
+                string queryString = Regex.Replace(query.ToQueryString(), "&page(No|Size)=[^&]*", string.Empty);
+                next = $"?{queryString}&pageNo={pageNo + 1}&pageSize={pageSize}";
+            }
+
+            return PaginatedResult.Create(page, next);
         }
     }
 }
