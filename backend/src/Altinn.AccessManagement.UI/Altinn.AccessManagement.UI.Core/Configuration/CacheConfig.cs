@@ -18,6 +18,6 @@ namespace Altinn.AccessManagement.UI.Core.Configuration
         /// <summary>
         /// Gets or sets the cache timeout (in minutes) for lookup of resource owners
         /// </summary>
-        public int ResourceOwnerCacheTimeout { get; set; }     
+        public int ResourceOwnerCacheTimeout { get; set; }
     }
 }

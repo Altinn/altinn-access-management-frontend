@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of all pending system users for specified party</returns>
         Task<Result<List<SystemUserRequest>>> GetPendingSystemUserRequests(int partyId, string orgNo, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Escalates a system user request
         /// </summary>

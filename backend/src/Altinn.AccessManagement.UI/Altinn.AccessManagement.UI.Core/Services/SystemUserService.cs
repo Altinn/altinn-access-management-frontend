@@ -123,7 +123,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             {
                 return Problem.Reportee_Orgno_NotFound;
             }
-            
+
             Task<Result<List<SystemUserRequest>>> standardTask = _systemUserRequestClient.GetPendingSystemUserRequests(party.PartyId, party.OrgNumber, cancellationToken);
             Task<Result<List<SystemUserRequest>>> agentTask = _systemUserAgentRequestClient.GetPendingAgentSystemUserRequests(party.PartyId, party.OrgNumber, cancellationToken);
             await Task.WhenAll(standardTask, agentTask);

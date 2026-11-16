@@ -54,7 +54,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
         {
             PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, type, cancellationToken);
-            
+
             // filter approved and handled requests which are older than one year
             return RemoveHandledItemsOlderThanOneYear(response).Select(MapToRequestFE);
         }

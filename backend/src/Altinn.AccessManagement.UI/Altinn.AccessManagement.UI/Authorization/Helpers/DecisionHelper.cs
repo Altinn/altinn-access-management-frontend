@@ -30,7 +30,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
         {
             ArgumentNullException.ThrowIfNull(requirement, nameof(requirement));
             ArgumentException.ThrowIfNullOrEmpty(requirement.ResourceId, nameof(requirement.ResourceId));
-            
+
             XacmlJsonRequest request = new XacmlJsonRequest();
             request.AccessSubject = new List<XacmlJsonCategory>();
             request.Action = new List<XacmlJsonCategory>();
@@ -70,7 +70,7 @@ namespace Altinn.AccessManagement.UI.Authorization.Helpers
             ArgumentNullException.ThrowIfNull(user, nameof(user));
 
             // We request one thing and then only want one result
-            if (response.Response == null || response.Response.Count != 1) 
+            if (response.Response == null || response.Response.Count != 1)
             {
                 return false;
             }

@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             if (userIdAttribute?.Value?.Any() == true || partyUuidAttribute?.Value?.Any() == true)
             {
-               if (userIdAttribute?.Value?.Contains(denyUserId) == true || partyUuidAttribute?.Value?.Contains(denyPartyUuid) == true) 
+                if (userIdAttribute?.Value?.Contains(denyUserId) == true || partyUuidAttribute?.Value?.Contains(denyPartyUuid) == true)
                 {
                     response = new XacmlJsonResponse
                     {

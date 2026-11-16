@@ -1,7 +1,7 @@
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 
 namespace Altinn.AccessManagement.UI.Mocks.Mocks
-{ 
+{
     public class EncryptionServiceMock : IEncryptionService
     {
         /// <summary>

@@ -33,12 +33,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="httpContextAccessor">The HTTP context accessor instance.</param>
         /// <param name="platformSettings">The platform settings.</param>
         public SystemUserClient(
-            ILogger<SystemUserClient> logger, 
-            HttpClient httpClient, 
-            IHttpContextAccessor httpContextAccessor, 
+            ILogger<SystemUserClient> logger,
+            HttpClient httpClient,
+            IHttpContextAccessor httpContextAccessor,
             IOptions<PlatformSettings> platformSettings)
         {
-            _logger = logger;        
+            _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _platformSettings = platformSettings.Value;
             httpClient.BaseAddress = new Uri(_platformSettings.ApiAuthenticationEndpoint);
@@ -83,8 +83,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 var content = JsonContent.Create(newSystemUser);
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpointUrl, content, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-            
-                if (response.IsSuccessStatusCode) 
+
+                if (response.IsSuccessStatusCode)
                 {
                     return JsonSerializer.Deserialize<SystemUser>(responseContent, _jsonSerializerOptions);
                 }
@@ -109,7 +109,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 HttpResponseMessage response = await _httpClient.DeleteAsync(token, endpointUrl, null, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
@@ -213,7 +213,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 HttpResponseMessage response = await _httpClient.DeleteAsync(token, endpointUrl, null, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     return true;
@@ -240,7 +240,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpointUrl, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
-                
+
                 if (response.IsSuccessStatusCode)
                 {
                     return JsonSerializer.Deserialize<List<Customer>>(responseContent, _jsonSerializerOptions);

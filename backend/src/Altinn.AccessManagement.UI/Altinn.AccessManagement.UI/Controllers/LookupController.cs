@@ -87,7 +87,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 }
 
                 PartyFE party = await _lookupService.GetPartyFromLoggedInUser(userUuid.Value);
-    
+
                 if (party != null)
                 {
                     return party;

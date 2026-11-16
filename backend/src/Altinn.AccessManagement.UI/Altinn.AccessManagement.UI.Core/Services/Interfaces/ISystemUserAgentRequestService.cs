@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Boolean, result of the reject system user operation, or a ProblemDetails result with error</returns>
         Task<Result<bool>> RejectSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Escalates an agent delegation system user request
         /// </summary>

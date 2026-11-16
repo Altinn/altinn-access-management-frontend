@@ -31,12 +31,12 @@ public class RoleAssignment
     /// Role
     /// </summary>
     public Role Role { get; set; }
-    
+
     /// <summary>
     /// IsDelegable
     /// </summary>
     public bool IsDelegable { get; set; }
-    
+
     /// <summary>
     /// Inherited
     /// </summary>
