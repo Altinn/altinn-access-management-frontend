@@ -283,7 +283,8 @@
   },
   "role": {
     "roles_removed_heading": "Gamle Altinn-roller er fjernet",
-    "roles_removed_content": "Gamle Altinn-roller er nå fjernet og gir ikke lenger tilgang til noe i Altinn. Denne fanen vil snart forsvinne. Dersom du eller andre har mistet tilgang, gå til <packages>Tilgangspakker</packages> for å be om fullmakt eller gi fullmakt til andre. Hvis du kun trenger tilgang til én enkelt tjeneste, bruk gjerne <singleRights>Enkelttjenester</singleRights> i stedet.",
+    "roles_removed_content": "Det kan derfor være at du og andre brukere har mistet noen tilganger i Altinn.",
+    "roles_removed_content2": "Gå til fanen for <packages>Tilgangspakker</packages> for å be om nye, eller gi fullmakt til andre. Trenger du bare fullmakt til én enkelt tjeneste, kan fanen for <singleRights>Enkelttjenester</singleRights> benyttes i stedet.",
     "header_info": "Informasjon om roller i Altinn",
     "header_info_content": "Disse rollene er overført fra gamle Altinn og vil gradvis fases ut. Vær oppmerksom på at rollene kan være ufullstendige og at du ikke kan gi/be om nye fullmakter til roller. Bruk heller tilgangspakker eller enkelttjenester.",
     "provider_status": "Denne rollen er hentet fra ",
