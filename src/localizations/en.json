@@ -291,7 +291,7 @@
   "role": {
     "roles_removed_heading": "Old Altinn roles have been removed",
     "roles_removed_content": "As a result, you and other users may have lost some access rights in Altinn.",
-    "roles_removed_content2": "Go to the <packages>Access packages</packages> tab to request new ones, or delegate authority to others. If you only need authority for a single service, the <singleRights>Single Services</singleRights> tab can be used instead.",
+    "roles_removed_content2": "Go to the <packages>Access packages</packages> tab to request new ones, or delegate authority to others. If you only need authority for a single service, the <singleRights>Single services</singleRights> tab can be used instead.",
     "header_info": "Information about roles in Altinn",
     "header_info_content": "These roles have been transferred from the old Altinn and will gradually be phased out. Please note that the roles may be incomplete and that you cannot grant/request new powers of attorney for roles. Use access packages or single services instead.",
     "provider_status": "This role is fetched from ",
