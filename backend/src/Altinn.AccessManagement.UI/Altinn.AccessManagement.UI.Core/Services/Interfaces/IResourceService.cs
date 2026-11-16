@@ -1,4 +1,5 @@
 ﻿using Altinn.AccessManagement.UI.Core.Enums;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
@@ -56,6 +57,27 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">The language code.</param>
         /// <returns>The resource if it exists.</returns>
         Task<ServiceResourceFE> GetResource(string resourceRegistryId, string languageCode);
+
+        /// <summary>
+        ///     Looks up resources in the resource registry and maps them for frontend use, with the resource owner's
+        ///     logo resolved. Resources that cannot be found or fail to load are left out.
+        /// </summary>
+        /// <param name="resourceIds">Resource registry ids. Duplicates are looked up once.</param>
+        /// <param name="languageCode">The language code.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The found resources, keyed by resource registry id.</returns>
+        Task<Dictionary<string, ServiceResourceFE>> GetResourcesFE(IEnumerable<string> resourceIds, string languageCode, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        ///     Enriches Access Management resources with their resource registry counterpart (looked up by RefId) and
+        ///     maps them for frontend use, with the resource owner's logo resolved. A resource that is not in the
+        ///     resource registry is mapped from the Access Management data instead, so none are dropped.
+        /// </summary>
+        /// <param name="resources">Access Management resources.</param>
+        /// <param name="languageCode">The language code.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The enriched resources, keyed by the Access Management RefId.</returns>
+        Task<Dictionary<string, ServiceResourceFE>> GetResourcesFE(IEnumerable<ResourceAM> resources, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///     Gets list of all resource owners.

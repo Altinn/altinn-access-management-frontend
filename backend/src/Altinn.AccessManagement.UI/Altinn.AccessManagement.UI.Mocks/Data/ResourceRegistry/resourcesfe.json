@@ -313,7 +313,8 @@
     ],
     "resourceOwnerName": "NARNIA",
     "resourceOwnerOrgcode": "NRNA",
-    "resourceOwnerOrgNumber": "777777777"
+    "resourceOwnerOrgNumber": "777777777",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/nrna/nrna.png"
   },
   {
     "title": "Snarveien - lenketjeneste",
@@ -347,7 +348,8 @@
     ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgcode": "PAA",
-    "resourceOwnerOrgNumber": "130000000"
+    "resourceOwnerOrgNumber": "130000000",
+    "resourceOwnerLogoUrl": null
   },
   {
     "title": "A3 app",
@@ -390,8 +392,9 @@
       }
     ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "A2 skjema",
@@ -439,8 +442,9 @@
       }
     ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "A3 app 2",
@@ -483,8 +487,9 @@
       }
     ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "A2 skjema 2",
@@ -532,8 +537,9 @@
       }
     ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "Brannbilen i Brønnøysund",
@@ -567,7 +573,8 @@
     ],
     "resourceOwnerName": "Brannvesenet",
     "resourceOwnerOrgcode": "FD",
-    "resourceOwnerOrgNumber": "110110110"
+    "resourceOwnerOrgNumber": "110110110",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/fd/fd.svg"
   },
   {
     "title": "Kaffemaskinen i 4. etasje",
@@ -600,8 +607,9 @@
       }
     ],
     "resourceOwnerName": "ØkernPortal",
-    "resourceOwnerOrgcode": "okp",
-    "resourceOwnerOrgNumber": "904111111"
+    "resourceOwnerOrgcode": "OP",
+    "resourceOwnerOrgNumber": "904111111",
+    "resourceOwnerLogoUrl": null
   },
   {
     "title": "DigDir WiFi",
@@ -634,8 +642,9 @@
       }
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "DigDir Sommerfest",
@@ -668,8 +677,9 @@
       }
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "Lønningsoversikt",
@@ -702,8 +712,9 @@
       }
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "Inngangsdøra på kontoret",
@@ -736,8 +747,9 @@
       }
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "identifier": "jks-test-resource",
@@ -752,7 +764,7 @@
     "visible": true,
     "resourceOwnerName": "JK's Test departement",
     "resourceOwnerOrgNumber": "991825827",
-    "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg",
     "resourceOwnerOrgcode": "ttd",
     "resourceReferences": [],
     "priorityCounter": null,
@@ -785,7 +797,7 @@
     "visible": true,
     "resourceOwnerName": "Skatteetaten",
     "resourceOwnerOrgNumber": "974761076",
-    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.svg",
     "resourceOwnerOrgcode": "skd",
     "resourceReferences": [],
     "priorityCounter": null,
@@ -845,7 +857,8 @@
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
-    "keywords": []
+    "keywords": [],
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "Arkivert tjeneste - MigratedCorrespondence",
@@ -866,7 +879,8 @@
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
-    "keywords": []
+    "keywords": [],
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "Aktiv tjeneste - MigratedCorrespondence",
@@ -887,7 +901,8 @@
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
-    "keywords": []
+    "keywords": [],
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "GSI - Administrasjon",
@@ -920,8 +935,9 @@
       }
     ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "Regnskapstjenester for kommuner",
@@ -954,7 +970,8 @@
       }
     ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   }
 ]

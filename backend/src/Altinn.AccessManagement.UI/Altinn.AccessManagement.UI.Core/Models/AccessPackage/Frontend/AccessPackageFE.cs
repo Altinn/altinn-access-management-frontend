@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
 {
@@ -38,13 +39,48 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         public string Description { get; set; }
 
         /// <summary>
-        /// Resources
+        /// The area the package belongs to
         /// </summary>
-        public List<AccessPackageResourceFE> Resources { get; set; }
+        public AccessArea Area { get; set; }
+
+        /// <summary>
+        /// The type of the package
+        /// </summary>
+        public TypeDto Type { get; set; }
+
+        /// <summary>
+        /// Resources, enriched from the resource registry
+        /// </summary>
+        public List<ServiceResourceFE> Resources { get; set; }
 
         /// <summary>
         /// Permissions
         /// </summary>
         public List<PermissionFE> Permissions { get; set; }
+
+        /// <summary>
+        /// Maps an access package to the frontend model, replacing its resources with their enriched counterparts
+        /// </summary>
+        /// <param name="accessPackage">The access package</param>
+        /// <param name="resourcesByRefId">Enriched resources keyed by the Access Management resource RefId</param>
+        /// <returns>The mapped access package</returns>
+        public static AccessPackageFE FromAccessPackage(AccessPackage accessPackage, IReadOnlyDictionary<string, ServiceResourceFE> resourcesByRefId)
+        {
+            return new AccessPackageFE
+            {
+                Id = accessPackage.Id.ToString(),
+                Urn = accessPackage.Urn,
+                Name = accessPackage.Name,
+                Description = accessPackage.Description,
+                IsAssignable = accessPackage.IsAssignable,
+                IsDelegable = accessPackage.IsDelegable,
+                Area = accessPackage.Area,
+                Type = accessPackage.Type,
+                Resources = (accessPackage.Resources ?? [])
+                    .Where(resource => resource?.RefId != null && resourcesByRefId.ContainsKey(resource.RefId))
+                    .Select(resource => resourcesByRefId[resource.RefId])
+                    .ToList(),
+            };
+        }
     }
 }

@@ -4,6 +4,8 @@ import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { type CompactRole } from '@/dataObjects/dtos/Common';
 import { type PartyEntity } from '@/dataObjects/dtos/Party';
 
+import type { ServiceResource } from './singleRights/singleRightsApi';
+
 export interface ProviderType {
   id: string;
   name: string;
@@ -55,17 +57,6 @@ export interface RolePermission {
   permissions: Permission[];
 }
 
-export interface RoleResourceMetadata {
-  id: string;
-  providerId: string;
-  typeId: string;
-  name: string;
-  description: string;
-  refId: string;
-  provider?: Provider | null;
-  type?: ProviderType | null;
-}
-
 export interface RolePackageMetadata {
   id: string;
   name: string;
@@ -74,7 +65,7 @@ export interface RolePackageMetadata {
   isDelegable: boolean;
   isAssignable: boolean;
   isResourcePolicyAvailable: boolean;
-  resources: RoleResourceMetadata[];
+  resources: ServiceResource[];
 }
 
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/role`;
@@ -117,7 +108,7 @@ export const roleApi = createApi({
       },
     }),
     getRoleResources: builder.query<
-      RoleResourceMetadata[],
+      ServiceResource[],
       { roleCode: string; variant?: string; includePackageResources?: boolean }
     >({
       query: ({ roleCode, variant, includePackageResources = false }) => {

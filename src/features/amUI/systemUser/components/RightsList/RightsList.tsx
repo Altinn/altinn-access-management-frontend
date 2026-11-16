@@ -8,7 +8,6 @@ import {
   DsSkeleton,
 } from '@altinn/altinn-components';
 
-import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackageList/useAreaPackageList';
@@ -27,33 +26,6 @@ interface RightsListProps {
   headingLevel?: 2 | 3 | 4;
 }
 
-const mapSystemUserAccessPackageToExtended = (
-  accessPackage: SystemUserAccessPackage,
-): ExtendedAccessPackage => ({
-  ...accessPackage,
-  resources: accessPackage.resources.map((resource): PackageResource => ({
-    id: resource.identifier,
-    identifier: resource.identifier,
-    name: resource.title,
-    title: resource.title,
-    description: resource.description ?? '',
-    refId: resource.identifier,
-    provider: {
-      id: '',
-      name: resource.resourceOwnerName,
-      refId: '',
-      logoUrl: resource.resourceOwnerLogoUrl,
-      code: '',
-      typeId: '',
-    },
-    resourceOwnerName: resource.resourceOwnerName,
-    resourceOwnerLogoUrl: resource.resourceOwnerLogoUrl,
-    resourceOwnerOrgcode: resource.resourceOwnerOrgcode,
-    resourceOwnerOrgNumber: resource.resourceOwnerOrgNumber,
-    resourceOwnerType: '',
-  })),
-});
-
 export const RightsList = ({
   resources,
   accessPackages,
@@ -68,7 +40,7 @@ export const RightsList = ({
     React.useState<ExtendedAccessPackage | null>(null);
 
   const onSelectAccessPackage = (accessPackage: SystemUserAccessPackage): void => {
-    setSelectedAccessPackage(mapSystemUserAccessPackageToExtended(accessPackage));
+    setSelectedAccessPackage(accessPackage);
     modalRef.current?.showModal();
   };
 

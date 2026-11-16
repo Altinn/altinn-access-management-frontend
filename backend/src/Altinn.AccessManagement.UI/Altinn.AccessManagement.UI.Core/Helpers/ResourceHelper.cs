@@ -2,7 +2,6 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
@@ -15,68 +14,31 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     /// </summary>
     public class ResourceHelper
     {
-        private readonly IResourceRegistryClient _resourceRegistryClient;
+        private readonly IResourceService _resourceService;
 
         private readonly IAccessPackageClient _accessPackageClient;
-
-        private readonly IAltinnCdnService _altinnCdnService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceHelper"/> class.
         /// </summary>
-        /// <param name="resourceRegistryClient">Resource registry client</param>
+        /// <param name="resourceService">Resource service</param>
         /// <param name="accessPackageClient">Access package API client</param>
-        /// <param name="altinnCdnService">Altinn CDN service</param>
-        public ResourceHelper(IResourceRegistryClient resourceRegistryClient, IAccessPackageClient accessPackageClient, IAltinnCdnService altinnCdnService)
+        public ResourceHelper(IResourceService resourceService, IAccessPackageClient accessPackageClient)
         {
-            _resourceRegistryClient = resourceRegistryClient;
+            _resourceService = resourceService;
             _accessPackageClient = accessPackageClient;
-            _altinnCdnService = altinnCdnService;
         }
 
         /// <summary>
-        /// Maps a list of resource ids to list of <see cref="ServiceResourceFE"/>
+        /// Maps a list of resource ids to list of <see cref="ServiceResourceFE"/>. Resources that cannot be found are left out.
         /// </summary>
         /// <param name="resourceIds">List of resource ids to map</param>
         /// <param name="languageCode">Language code</param>
         public async Task<List<ServiceResourceFE>> EnrichResources(IEnumerable<string> resourceIds, string languageCode)
         {
-            List<ServiceResourceFE> resourcesFE = [];
-
-            if (resourceIds.Any())
-            {
-                // GET resources
-                List<ServiceResource> resources = [];
-
-                // Load resources one at a time to avoid starting all requests in parallel
-                foreach (var resourceId in resourceIds)
-                {
-                    try
-                    {
-                        var resource = await _resourceRegistryClient.GetResource(resourceId);
-                        if (resource != null)
-                        {
-                            resources.Add(resource);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        // Let cancellation-related exceptions propagate so callers can observe cancellation
-                        if (ex is TaskCanceledException || ex is OperationCanceledException)
-                        {
-                            throw;
-                        }
-
-                        // Log failures here to avoid silently swallowing exceptions and to include the resource id
-                        await Console.Error.WriteLineAsync($"Failed to load resource '{resourceId}': {ex}");
-                    }
-                }
-
-                Dictionary<string, Models.Common.OrgData> orgList = await _altinnCdnService.GetOrgData();
-                resourcesFE = ResourceUtils.MapToServiceResourcesFE(languageCode, resources, orgList);
-            }
-
-            return resourcesFE;
+            List<string> ids = resourceIds?.ToList() ?? [];
+            Dictionary<string, ServiceResourceFE> resources = await _resourceService.GetResourcesFE(ids, languageCode);
+            return ids.Where(resources.ContainsKey).Select(id => resources[id]).ToList();
         }
 
         /// <summary>
@@ -86,31 +48,33 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <param name="languageCode">Language code</param>
         public async Task<List<AccessPackageFE>> EnrichAccessPackages(IEnumerable<string> accessPackageIds, string languageCode)
         {
-            List<AccessPackageFE> accessPackagesFE = [];
-
-            if (accessPackageIds.Any())
+            if (!accessPackageIds.Any())
             {
-                var accessPackageSearchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty, null);
-                IEnumerable<AccessPackage> accessPackages = accessPackageSearchMatches.Select(x => x.Object);
-
-                IEnumerable<AccessPackage> usedAccessPackages = accessPackages.Where(package => accessPackageIds.Contains(package.Urn));
-
-                foreach (AccessPackage accessPackage in usedAccessPackages)
-                {
-                    accessPackagesFE.Add(new AccessPackageFE()
-                    {
-                        Id = accessPackage.Id.ToString(),
-                        Urn = accessPackage.Urn,
-                        Description = accessPackage.Description,
-                        Name = accessPackage.Name,
-                        IsAssignable = accessPackage.IsAssignable,
-                        IsDelegable = accessPackage.IsDelegable,
-                        Resources = ResourceUtils.MapToAccessPackageResourceFE(accessPackage.Resources)
-                    });
-                }
+                return [];
             }
 
-            return accessPackagesFE;
+            var accessPackageSearchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, string.Empty, null);
+            List<AccessPackage> usedAccessPackages = accessPackageSearchMatches
+                .Select(x => x.Object)
+                .Where(package => accessPackageIds.Contains(package.Urn))
+                .ToList();
+
+            return await MapToAccessPackagesFE(usedAccessPackages, languageCode);
+        }
+
+        /// <summary>
+        /// Maps access packages to <see cref="AccessPackageFE"/>, with the resources of all packages enriched in one pass
+        /// </summary>
+        /// <param name="accessPackages">The access packages to map</param>
+        /// <param name="languageCode">Language code</param>
+        public async Task<List<AccessPackageFE>> MapToAccessPackagesFE(IEnumerable<AccessPackage> accessPackages, string languageCode)
+        {
+            List<AccessPackage> packages = accessPackages?.Where(package => package != null).ToList() ?? [];
+            Dictionary<string, ServiceResourceFE> resourcesByRefId = await _resourceService.GetResourcesFE(
+                packages.SelectMany(package => package.Resources ?? []),
+                languageCode);
+
+            return packages.Select(package => AccessPackageFE.FromAccessPackage(package, resourcesByRefId)).ToList();
         }
 
         /// <summary>

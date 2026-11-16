@@ -309,9 +309,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
             List<AccessAreaFE> areas = await _accessPackageService.GetSearch(language, string.Empty, null);
             foreach (AccessAreaFE area in areas ?? new List<AccessAreaFE>())
             {
-                foreach (AccessPackage package in area.AccessPackages ?? new List<AccessPackage>())
+                foreach (AccessPackageFE package in area.AccessPackages ?? new List<AccessPackageFE>())
                 {
-                    map[package.Id] = package.Name;
+                    map[Guid.Parse(package.Id)] = package.Name;
                 }
             }
 

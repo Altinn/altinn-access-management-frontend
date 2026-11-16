@@ -62,10 +62,8 @@ export interface SystemUserChangeRequest extends SystemUserRequestBase {
   unwantedAccessPackages: SystemUserAccessPackage[];
 }
 
-// TODO: temp? type for access package with enriched resources
-export interface SystemUserAccessPackage extends Omit<AccessPackage, 'resources'> {
+export interface SystemUserAccessPackage extends AccessPackage {
   urn: string;
-  resources: ServiceResource[];
 }
 
 export interface AgentDelegationCustomer {

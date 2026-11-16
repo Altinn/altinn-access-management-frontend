@@ -3,17 +3,9 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import type { PackageResource, ResourceProvider } from '@/rtk/features/accessPackageApi';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { ResourceList } from './ResourceList';
-import type { ResourceListItemResource } from './types';
-
-vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
-  useProviderLogoUrl: () => ({
-    getProviderLogoUrl: () => undefined,
-    isLoading: false,
-  }),
-}));
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -21,37 +13,21 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const baseProvider: ResourceProvider = {
-  id: 'org',
-  name: 'Altinn',
-  refId: 'org',
-  logoUrl: 'logo.png',
-  code: 'org',
-  typeId: 'type',
-};
-
-const createResource = (overrides: Partial<PackageResource> = {}): PackageResource => {
-  const id = overrides.id ?? `resource-${Math.random().toString(36).slice(2, 8)}`;
-  const provider = overrides.provider ?? baseProvider;
-
-  return {
-    id,
-    name: overrides.name ?? 'Altinn Resource',
-    title: overrides.title ?? overrides.name ?? 'Altinn Resource',
-    description: overrides.description ?? 'Description',
-    type: {
-      id: '0197a840-2ee9-75f4-879e-9d9197683d88',
-      name: 'GenericAccessResource',
-    },
-    provider,
-    resourceOwnerName: overrides.resourceOwnerName ?? provider.name,
-    resourceOwnerLogoUrl: overrides.resourceOwnerLogoUrl ?? provider.logoUrl,
-    resourceOwnerOrgcode: overrides.resourceOwnerOrgcode ?? provider.code,
-    resourceOwnerOrgNumber: overrides.resourceOwnerOrgNumber ?? '123456789',
-    resourceOwnerType: overrides.resourceOwnerType ?? 'type',
-    ...overrides,
-  };
-};
+const createResource = (overrides: Partial<ServiceResource> = {}): ServiceResource => ({
+  identifier: `resource-${Math.random().toString(36).slice(2, 8)}`,
+  title: 'Altinn Resource',
+  description: 'Description',
+  rightDescription: '',
+  resourceOwnerName: 'Altinn',
+  resourceOwnerLogoUrl: 'logo.png',
+  resourceOwnerOrgcode: 'org',
+  resourceOwnerOrgNumber: '123456789',
+  resourceReferences: [],
+  authorizationReference: [],
+  resourceType: 'GenericAccessResource',
+  delegable: true,
+  ...overrides,
+});
 
 // Stands in for the router Link that consumers pass through getItemAs.
 const linkTo =
@@ -73,8 +49,8 @@ describe('ResourceList', () => {
     const user = userEvent.setup();
     const handleSelect = vi.fn();
     const resources = [
-      createResource({ name: 'Resource One' }),
-      createResource({ name: 'Resource Two' }),
+      createResource({ title: 'Resource One' }),
+      createResource({ title: 'Resource Two' }),
     ];
 
     render(
@@ -89,7 +65,7 @@ describe('ResourceList', () => {
   });
 
   it('renders custom controls provided via renderControls and getBadge', () => {
-    const resources = [createResource({ name: 'With Controls' })];
+    const resources = [createResource({ title: 'With Controls' })];
 
     render(
       <ResourceList
@@ -105,7 +81,7 @@ describe('ResourceList', () => {
   });
 
   it('uses custom description text while preserving ownerName', () => {
-    const resources = [createResource({ name: 'With Description Text' })];
+    const resources = [createResource({ title: 'With Description Text' })];
 
     render(
       <ResourceList
@@ -119,11 +95,33 @@ describe('ResourceList', () => {
     expect(screen.getByAltText('Altinn')).toBeInTheDocument();
   });
 
+  it('renders the owner logo resolved by the backend', () => {
+    const resources = [
+      createResource({
+        title: 'With Logo',
+        resourceOwnerName: 'Skatteetaten',
+        resourceOwnerLogoUrl: 'https://altinncdn.no/orgs/skd/skd.svg',
+      }),
+    ];
+
+    render(
+      <ResourceList
+        resources={resources}
+        enableSearch={false}
+      />,
+    );
+
+    expect(screen.getByAltText('Skatteetaten')).toHaveAttribute(
+      'src',
+      'https://altinncdn.no/orgs/skd/skd.svg',
+    );
+  });
+
   it('filters resources based on the search input', async () => {
     const user = userEvent.setup();
     const resources = [
-      createResource({ name: 'Alpha Service' }),
-      createResource({ name: 'Beta Service' }),
+      createResource({ title: 'Alpha Service' }),
+      createResource({ title: 'Beta Service' }),
     ];
 
     render(<ResourceList resources={resources} />);
@@ -140,12 +138,14 @@ describe('ResourceList', () => {
     const user = userEvent.setup();
     const resources = [
       createResource({
-        name: 'Skatt Service',
-        provider: { ...baseProvider, name: 'Skatteetaten', code: 'skd' },
+        title: 'Skatt Service',
+        resourceOwnerName: 'Skatteetaten',
+        resourceOwnerOrgcode: 'skd',
       }),
       createResource({
-        name: 'Nav Service',
-        provider: { ...baseProvider, name: 'Nav', code: 'nav' },
+        title: 'Nav Service',
+        resourceOwnerName: 'Nav',
+        resourceOwnerOrgcode: 'nav',
       }),
     ];
 
@@ -168,12 +168,14 @@ describe('ResourceList', () => {
     const user = userEvent.setup();
     const resources = [
       createResource({
-        name: 'Skatt Service',
-        provider: { ...baseProvider, name: 'Skatteetaten', code: 'skd' },
+        title: 'Skatt Service',
+        resourceOwnerName: 'Skatteetaten',
+        resourceOwnerOrgcode: 'skd',
       }),
       createResource({
-        name: 'Nav Service',
-        provider: { ...baseProvider, name: 'Nav', code: 'nav' },
+        title: 'Nav Service',
+        resourceOwnerName: 'Nav',
+        resourceOwnerOrgcode: 'nav',
       }),
     ];
 
@@ -200,9 +202,9 @@ describe('ResourceList', () => {
 
   it('renders the expired badge for a resource with resourceType MigratedApp', () => {
     const expiredResource = {
-      ...createResource({ name: 'Expired Service' }),
+      ...createResource({ title: 'Expired Service' }),
       resourceType: 'MigratedApp',
-    } as ResourceListItemResource;
+    };
 
     render(
       <ResourceList
@@ -216,9 +218,9 @@ describe('ResourceList', () => {
 
   it('does not render the expired badge for a migratedcorrespondence resource that is not deprecated', () => {
     const nonExpiredResource = {
-      ...createResource({ name: 'Migrated Correspondence Service' }),
+      ...createResource({ title: 'Migrated Correspondence Service' }),
       identifier: 'some-migratedcorrespondence-service',
-    } as ResourceListItemResource;
+    };
 
     render(
       <ResourceList
@@ -232,10 +234,10 @@ describe('ResourceList', () => {
 
   it('renders the expired badge for a migratedcorrespondence resource with deprecated status', () => {
     const expiredResource = {
-      ...createResource({ name: 'Migrated Correspondence Service' }),
+      ...createResource({ title: 'Migrated Correspondence Service' }),
       identifier: 'some-migratedcorrespondence-service',
       status: 'Deprecated',
-    } as ResourceListItemResource;
+    };
 
     render(
       <ResourceList
@@ -248,7 +250,7 @@ describe('ResourceList', () => {
   });
 
   it('does not render the expired badge for a non-expired resource', () => {
-    const normalResource = createResource({ name: 'Normal Service' });
+    const normalResource = createResource({ title: 'Normal Service' });
 
     render(
       <ResourceList
@@ -263,7 +265,7 @@ describe('ResourceList', () => {
   it('renders rows as the element from getItemAs and leaves onSelect alone', async () => {
     const user = userEvent.setup();
     const handleSelect = vi.fn();
-    const resources = [createResource({ name: 'Linked Service' })];
+    const resources = [createResource({ title: 'Linked Service' })];
 
     render(
       <ResourceList
@@ -286,7 +288,7 @@ describe('ResourceList', () => {
   it('does not open the details dialog for a row rendered via getItemAs', async () => {
     const user = userEvent.setup();
     const resources = [
-      createResource({ name: 'Linked Service', description: 'Only shown in the details dialog' }),
+      createResource({ title: 'Linked Service', description: 'Only shown in the details dialog' }),
     ];
 
     render(
@@ -306,8 +308,8 @@ describe('ResourceList', () => {
     const user = userEvent.setup();
     const handleSelect = vi.fn();
     const resources = [
-      createResource({ name: 'Linked Service' }),
-      createResource({ name: 'Plain Service' }),
+      createResource({ title: 'Linked Service' }),
+      createResource({ title: 'Plain Service' }),
     ];
 
     render(
@@ -316,7 +318,7 @@ describe('ResourceList', () => {
         enableSearch={false}
         onSelect={handleSelect}
         getItemAs={(resource) =>
-          resource.name === 'Linked Service' ? linkTo('/service/linked') : undefined
+          resource.title === 'Linked Service' ? linkTo('/service/linked') : undefined
         }
       />,
     );
@@ -326,6 +328,6 @@ describe('ResourceList', () => {
     await user.click(screen.getByRole('button', { name: /Plain Service/i }));
 
     expect(handleSelect).toHaveBeenCalledTimes(1);
-    expect(handleSelect).toHaveBeenCalledWith(expect.objectContaining({ name: 'Plain Service' }));
+    expect(handleSelect).toHaveBeenCalledWith(expect.objectContaining({ title: 'Plain Service' }));
   });
 });

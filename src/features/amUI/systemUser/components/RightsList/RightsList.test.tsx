@@ -5,14 +5,6 @@ import userEvent from '@testing-library/user-event';
 
 import { RightsList } from './RightsList';
 
-// Mock the useProviderLogoUrl hook
-vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
-  useProviderLogoUrl: () => ({
-    getProviderLogoUrl: () => undefined,
-    isLoading: false,
-  }),
-}));
-
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({

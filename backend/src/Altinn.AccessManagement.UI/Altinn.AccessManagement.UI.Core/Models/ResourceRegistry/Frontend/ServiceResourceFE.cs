@@ -156,32 +156,5 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Keywords = keywords ?? new List<string>();
             ResourceOwnerOrgcode = resourceOwnerOrgcode;
         }
-
-        /// <summary>
-        /// Constructor used when copying
-        /// </summary>
-        /// <param name="serviceResourceFE">The resource to be copied</param>
-        public ServiceResourceFE(ServiceResourceFE serviceResourceFE)
-        {
-            Identifier = serviceResourceFE.Identifier;
-            Title = serviceResourceFE.Title;
-            Description = serviceResourceFE.Description;
-            RightDescription = serviceResourceFE.RightDescription;
-            Homepage = serviceResourceFE.Homepage;
-            Status = serviceResourceFE.Status;
-            ResourceOwnerName = serviceResourceFE.ResourceOwnerName;
-            ResourceOwnerLogoUrl = serviceResourceFE.ResourceOwnerLogoUrl;
-            ResourceOwnerOrgNumber = serviceResourceFE.ResourceOwnerOrgNumber;
-            PriorityCounter = serviceResourceFE.PriorityCounter;
-            ResourceReferences = serviceResourceFE.ResourceReferences;
-            ResourceType = serviceResourceFE.ResourceType;
-            Visible = serviceResourceFE.Visible;
-            Delegable = serviceResourceFE.Delegable;
-            ContactPoints = serviceResourceFE.ContactPoints;
-            Spatial = serviceResourceFE.Spatial;
-            AuthorizationReference = serviceResourceFE.AuthorizationReference;
-            Keywords = serviceResourceFE.Keywords ?? new List<string>();
-            ResourceOwnerOrgcode = serviceResourceFE.ResourceOwnerOrgcode;
-        }
     }
 }

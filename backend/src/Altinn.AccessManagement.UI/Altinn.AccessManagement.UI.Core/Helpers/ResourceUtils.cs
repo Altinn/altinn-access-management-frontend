@@ -1,7 +1,7 @@
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
@@ -14,57 +14,98 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
     public static class ResourceUtils
     {
         /// <summary>
-        /// Map a list of resources to frontend resource objects
+        /// Resolves the service owner's mark from CDN org data: the emblem if present, otherwise the logo.
         /// </summary>
-        /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
-        /// <param name="resources">List of resources to map to frontend resource objects</param>
-        /// <param name="orgs">List resource owner organizations. Used to look up logo for resource owner</param>
-        /// <returns>Output result</returns>
-        public static List<ServiceResourceFE> MapToServiceResourcesFE(string languageCode, IEnumerable<ServiceResource> resources, Dictionary<string, Models.Common.OrgData> orgs)
+        /// <param name="orgs">CDN org data, keyed by org code</param>
+        /// <param name="orgCode">Org code of the service owner. Matched case-insensitively.</param>
+        /// <returns>The emblem or logo url, or null when the org is unknown or has neither</returns>
+        public static string ResolveOwnerLogoUrl(IReadOnlyDictionary<string, OrgData> orgs, string orgCode)
         {
-            return resources.Select(resource => 
+            if (orgs == null || string.IsNullOrWhiteSpace(orgCode))
             {
-                orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
-                return new ServiceResourceFE(
-                    resource.Identifier,
-                    resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                    resourceType: resource.ResourceType,
-                    status: resource.Status,
-                    resourceReferences: resource.ResourceReferences,
-                    resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
-                    resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                    resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                    rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                    description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                    visible: resource.Visible,
-                    delegable: resource.Delegable,
-                    contactPoints: resource.ContactPoints,
-                    spatial: resource.Spatial,
-                    authorizationReference: resource.AuthorizationReference,
-                    resourceOwnerLogoUrl: string.IsNullOrWhiteSpace(org?.Emblem) ? org?.Logo : org.Emblem);
-            }).ToList();
+                return null;
+            }
+
+            if (!orgs.TryGetValue(orgCode, out OrgData org) && !orgs.TryGetValue(orgCode.ToLowerInvariant(), out org))
+            {
+                return null;
+            }
+
+            if (!string.IsNullOrWhiteSpace(org?.Emblem))
+            {
+                return org.Emblem;
+            }
+
+            return string.IsNullOrWhiteSpace(org?.Logo) ? null : org.Logo;
         }
 
         /// <summary>
-        /// Map a list of resources in access packages to frontend resource objects
+        /// Map a resource from the resource registry to the frontend resource model
         /// </summary>
-        /// <param name="resources">List of resources to map to frontend resource objects</param>
-        /// <returns>Output result</returns>
-        public static List<AccessPackageResourceFE> MapToAccessPackageResourceFE(IEnumerable<ResourceAM> resources)
+        /// <param name="resource">Resource from the resource registry</param>
+        /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
+        /// <param name="orgs">CDN org data, used to look up the logo of the resource owner</param>
+        /// <returns>The mapped resource</returns>
+        public static ServiceResourceFE MapToServiceResourceFE(ServiceResource resource, string languageCode, IReadOnlyDictionary<string, OrgData> orgs)
         {
-            return resources.Select(resource =>
+            CompetentAuthority owner = resource.HasCompetentAuthority;
+            return new ServiceResourceFE(
+                resource.Identifier,
+                GetInLanguage(resource.Title, languageCode),
+                resourceType: resource.ResourceType,
+                status: resource.Status,
+                resourceReferences: resource.ResourceReferences,
+                resourceOwnerName: GetInLanguage(owner?.Name, languageCode),
+                resourceOwnerOrgNumber: owner?.Organization,
+                resourceOwnerOrgcode: owner?.Orgcode,
+                rightDescription: GetInLanguage(resource.RightDescription, languageCode),
+                description: GetInLanguage(resource.Description, languageCode),
+                visible: resource.Visible,
+                delegable: resource.Delegable,
+                contactPoints: resource.ContactPoints,
+                spatial: resource.Spatial,
+                authorizationReference: resource.AuthorizationReference,
+                keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList() ?? [],
+                resourceOwnerLogoUrl: ResolveOwnerLogoUrl(orgs, owner?.Orgcode));
+        }
+
+        /// <summary>
+        /// Map a list of resources from the resource registry to the frontend resource model
+        /// </summary>
+        /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
+        /// <param name="resources">List of resources to map to frontend resource objects</param>
+        /// <param name="orgs">CDN org data, used to look up the logo of the resource owner</param>
+        /// <returns>Output result</returns>
+        public static List<ServiceResourceFE> MapToServiceResourcesFE(string languageCode, IEnumerable<ServiceResource> resources, IReadOnlyDictionary<string, OrgData> orgs)
+        {
+            return resources
+                .Where(resource => resource != null)
+                .Select(resource => MapToServiceResourceFE(resource, languageCode, orgs))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Map an Access Management resource to the frontend resource model. Only used as a fallback
+        /// when the resource cannot be found in the resource registry. The provider's own logo url is
+        /// not trusted; the logo is resolved from CDN org data by provider code.
+        /// </summary>
+        /// <param name="resource">Resource from Access Management</param>
+        /// <param name="orgs">CDN org data, used to look up the logo of the resource owner</param>
+        /// <returns>The mapped resource</returns>
+        public static ServiceResourceFE MapToServiceResourceFE(ResourceAM resource, IReadOnlyDictionary<string, OrgData> orgs)
+        {
+            return new ServiceResourceFE
             {
-                return new AccessPackageResourceFE()
-                {
-                    Identifier = resource.RefId,
-                    Title = resource.Name,
-                    Description = resource.Description,
-                    ResourceOwnerName = resource.Provider.Name,
-                    ResourceOwnerLogoUrl = resource.Provider.LogoUrl,
-                    ResourceOwnerOrgcode = resource.Provider.Code,
-                    ResourceType = Enum.TryParse<ResourceType>(resource.Type?.Name, true, out var resourceType) ? resourceType : ResourceType.Default
-                };
-            }).ToList();
+                Identifier = resource.RefId,
+                Title = resource.Name,
+                Description = resource.Description,
+                ResourceOwnerName = resource.Provider?.Name,
+                ResourceOwnerOrgcode = resource.Provider?.Code,
+                ResourceOwnerOrgNumber = resource.Provider?.RefId,
+                ResourceOwnerLogoUrl = ResolveOwnerLogoUrl(orgs, resource.Provider?.Code),
+                ResourceType = Enum.TryParse<ResourceType>(resource.Type?.Name, true, out var resourceType) ? resourceType : ResourceType.Default,
+                Keywords = [],
+            };
         }
 
         /// <summary>
@@ -100,6 +141,11 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
             }
 
             return accessPackages.Select(accessPackage => accessPackage.Urn).ToList();
+        }
+
+        private static string GetInLanguage(Dictionary<string, string> texts, string languageCode)
+        {
+            return texts?.GetValueOrDefault(languageCode) ?? texts?.GetValueOrDefault("nb");
         }
     }
 }

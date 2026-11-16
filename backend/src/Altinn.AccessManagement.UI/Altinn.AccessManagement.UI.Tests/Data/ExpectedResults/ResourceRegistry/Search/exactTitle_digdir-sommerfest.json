@@ -30,7 +30,10 @@
           "id": "urn:altinn:resource",
           "value": "appid-511"
         }
-      ]
+      ],
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg",
+      "resourceOwnerOrgcode": "DIGDIR",
+      "keywords": []
     },
     {
       "identifier": "appid-510",
@@ -60,7 +63,10 @@
           "id": "urn:altinn:resource",
           "value": "appid-510"
         }
-      ]
+      ],
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg",
+      "resourceOwnerOrgcode": "DIGDIR",
+      "keywords": []
     }
   ]
 }

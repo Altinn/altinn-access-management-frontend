@@ -3,6 +3,7 @@ using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Exceptions;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Request;
@@ -210,7 +211,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<Request> list, string languageCode)
         {
-            Dictionary<Guid, AccessPackage> packageDictionary = [];
+            List<AccessPackage> packages = [];
             var uniquePackageIds = list
                 .Select(x => x.Package.Id)
                 .Distinct();
@@ -223,8 +224,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     throw new ResourceNotFoundException($"Access package not found for ID: {packageId}");
                 }
 
-                packageDictionary[packageId] = package;
+                packages.Add(package);
             }
+
+            Dictionary<Guid, AccessPackageFE> packageDictionary = (await _resourceHelper.MapToAccessPackagesFE(packages, languageCode))
+                .ToDictionary(package => Guid.Parse(package.Id));
 
             return list.Select(x =>
             {
