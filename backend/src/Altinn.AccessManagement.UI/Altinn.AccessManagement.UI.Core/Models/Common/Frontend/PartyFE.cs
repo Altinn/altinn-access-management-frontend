@@ -157,13 +157,15 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common.Frontend
                 Id = party.Uuid,
                 PartyId = party.PartyId.HasValue ? (int)party.PartyId.Value : null,
                 Name = party.DisplayName.HasValue ? party.DisplayName.Value : null,
-                Type = !party.Type.IsWellKnown ? PartyTypeFE.Person : party.Type.Value switch
-                {
-                    RegisterPartyType.Organization => PartyTypeFE.Organization,
-                    RegisterPartyType.SystemUser => PartyTypeFE.SystemUser,
-                    RegisterPartyType.SelfIdentifiedUser => PartyTypeFE.SelfIdentified,
-                    _ => PartyTypeFE.Person,
-                },
+                Type = !party.Type.IsWellKnown
+                    ? PartyTypeFE.Person
+                    : party.Type.Value switch
+                    {
+                        RegisterPartyType.Organization => PartyTypeFE.Organization,
+                        RegisterPartyType.SystemUser => PartyTypeFE.SystemUser,
+                        RegisterPartyType.SelfIdentifiedUser => PartyTypeFE.SelfIdentified,
+                        _ => PartyTypeFE.Person,
+                    },
                 IsDeleted = party.IsDeleted.HasValue && party.IsDeleted.Value,
             };
 
