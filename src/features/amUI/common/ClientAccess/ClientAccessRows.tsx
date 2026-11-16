@@ -174,10 +174,7 @@ export const ClientAccessRows = ({
               accessId: '',
               itemId: `generated-${identifier}`,
               kind: 'resource',
-              resource: {
-                identifier: identifier,
-                name: identifier,
-              },
+              resource: resource.details || { identifier: identifier },
               canAct: false,
               isMissingRight: true,
             };
