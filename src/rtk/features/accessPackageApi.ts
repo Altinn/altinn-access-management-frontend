@@ -20,7 +20,7 @@ export interface AccessPackage {
   id: string;
   name: string;
   description: string;
-  /** Enriched from the resource registry by the BFF, with the owner logo resolved. */
+  /** Mapped by the BFF from Access Management data (not the resource registry), with the owner logo resolved. */
   resources: ServiceResource[];
   isAssignable: boolean;
   isDelegable?: boolean;

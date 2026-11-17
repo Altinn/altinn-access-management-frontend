@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         public TypeDto Type { get; set; }
 
         /// <summary>
-        /// Resources, enriched from the resource registry
+        /// Resources, mapped from the data Access Management provides, with the owner logo looked up from the Altinn CDN
         /// </summary>
         public List<ServiceResourceFE> Resources { get; set; }
 
