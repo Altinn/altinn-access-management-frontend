@@ -4,11 +4,13 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - backend/**
+      - src/apps/Altinn.AccessManagement.UI/src/**
+      - src/apps/Altinn.AccessManagement.UI/test/**
   pull_request:
     types: [opened, synchronize, reopened]
     paths-ignore:
-      - backend/**
+      - src/apps/Altinn.AccessManagement.UI/src/**
+      - src/apps/Altinn.AccessManagement.UI/test/**
 jobs:
   ci:
     name: 'Continuous Integration'

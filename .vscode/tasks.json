@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln",
+                "${workspaceFolder}/src/apps/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.slnx",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln",
+                "${workspaceFolder}/src/apps/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.slnx",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln"
+                "${workspaceFolder}/src/apps/Altinn.AccessManagement.UI/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

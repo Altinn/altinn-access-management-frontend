@@ -350,44 +350,15 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# Yarn stuff; we're not using PnP/Zero installs
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
-
-# Really don't want that
-/node_modules/
+# JetBrains Rider
+.idea/
 
 # Mac files
 .DS_Store
-backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/encodings.xml
-.gitignore
-backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/indexLayout.xml
-.gitignore
-backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/projectSettingsUpdater.xml
-backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/vcs.xml
-.gitignore
-backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/workspace.xml
-backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/codeStyles/codeStyleConfig.xml
-backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/git_toolbox_prj.xml
-backend/src/Altinn.AccessManagement.UI/.idea/.idea.Altinn.AccessManagement.UI/.idea/codeStyles/Project.xml
 
-# Playwright report files
-playwright/playwright-report
-playwright/test-results
-playwright/jsonReports
-*storybook.log
-playwright/config/.env
-accessibility-violation*
-
-# Storybook build files
-storybook-static/
-test-results
-coverage
+# Tracked test data and certificates that the Visual Studio rules above would ignore
+!**/Data/**/[Pp]ackages/*
+!src/apps/Altinn.AccessManagement.UI/test/Altinn.AccessManagement.UI.Tests/*.pfx
 
 # Claude Code
 .claude/

@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Altinn.AccessManagement.UI/" />
+  <Folder Name="/Altinn.AccessManagement.UI/src/">
+    <Project Path="src/apps/Altinn.AccessManagement.UI/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj" />
+    <Project Path="src/apps/Altinn.AccessManagement.UI/src/Altinn.AccessManagement.UI.Core/Altinn.AccessManagement.UI.Core.csproj" />
+    <Project Path="src/apps/Altinn.AccessManagement.UI/src/Altinn.AccessManagement.UI.Integration/Altinn.AccessManagement.UI.Integration.csproj" />
+    <Project Path="src/apps/Altinn.AccessManagement.UI/src/Altinn.AccessManagement.UI.Mocks/Altinn.AccessManagement.UI.Mocks.csproj" />
+  </Folder>
+  <Folder Name="/Altinn.AccessManagement.UI/test/">
+    <Project Path="src/apps/Altinn.AccessManagement.UI/test/Altinn.AccessManagement.UI.Tests/Altinn.AccessManagement.UI.Tests.csproj" />
+  </Folder>
+</Solution>

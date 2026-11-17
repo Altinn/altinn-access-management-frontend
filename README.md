@@ -7,6 +7,12 @@
 
 # Frontend for access management
 
+The code lives in `src/apps/Altinn.AccessManagement.UI`:
+
+- `frontend/`: the React application (a yarn project). Run all `yarn` commands from this folder.
+- `src/`: the BFF (Backend For Frontend), a .NET application. Its tests are in `test/`.
+- `Altinn.AccessManagement.UI.slnx`: the solution file for the BFF.
+
 # Setting up your dev-environment 🚀
 
 ### Prerequisites
@@ -53,7 +59,7 @@ OBS: Note that overwriting this path in the host file will make you unable to re
 
 ### Step 2: Run the BFF
 
-Open Altinn.AccessManagement.UI.sln in Visual Studio (or another IDE).
+Open `src/apps/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.slnx` in Visual Studio (or another IDE).
 
 - In Visual Studio, log in with your ai-dev email (the user that has the necessary accesses)
 - Locate the Launch button
@@ -144,7 +150,7 @@ Try running your app again. It should now work correctly on port 443, with nginx
 
 ### Step 3: Run the React application
 
-Pull the newest version of this repo and navigate to its root
+Pull the newest version of this repo and navigate to `src/apps/Altinn.AccessManagement.UI/frontend`
 
 - Run `yarn` to install all necessary dependencies
 - Run `yarn start` to run the application
@@ -192,7 +198,7 @@ It can also help to fully close the browser or open a fresh private/incognito wi
 
 ### 2. Update `appsettings.Development.json`
 
-Temporarily change the following values in `./backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI/appsettings.Development.json`:
+Temporarily change the following values in `./src/apps/Altinn.AccessManagement.UI/src/Altinn.AccessManagement.UI/appsettings.Development.json`:
 
 - All `PlatformSettings` URLs from `at22` to `at23`
 - `GeneralSettings.FrontendBaseUrl` from `https://am.ui.at22.altinn.cloud` to `https://am.ui.at23.altinn.cloud`
@@ -270,7 +276,7 @@ Feature flags let us turn functionality on and off per environment without chang
 1. Our flags are defined in the backend repo: add the flag to the `feature_flags` list in [`src/apps/Altinn.AccessManagement/infra/frontend.tf`](https://github.com/Altinn/altinn-authorization-tmp/blob/main/src/apps/Altinn.AccessManagement/infra/frontend.tf) in [altinn-authorization-tmp](https://github.com/Altinn/altinn-authorization-tmp), keeping the `{environment}-access-management-ui` label. When that PR merges, their "CD: Apps" pipeline creates the flag (disabled) in the App Configuration store, environment by environment. Note that the pipeline requires manual deploy approval per environment ("Review deployments" on the run in that repo) — the flag is only created in the environments you approve. Terraform only owns the flag's existence and description — the on/off state is controlled in the Azure portal.
 2. Add a constant in `Altinn.AccessManagement.UI.Core/Configuration/FeatureFlags.cs`. Flag names use the `AccessManagementUI.` prefix followed by a PascalCase name, e.g. `AccessManagementUI.UseNewSingleRightsClientDelegation`.
 3. Add the flag with its default value (usually `false`) to the `FeatureManagement` section in `appsettings.json` and `appsettings.Development.json`.
-4. The flag is automatically exposed to the frontend as `window.featureFlags.<name>`, where `<name>` is the camelCased flag name without the prefix (e.g. `useNewSingleRightsClientDelegation`). Add it to the `featureFlags` type in `src/global.d.ts` so it can be used with type support.
+4. The flag is automatically exposed to the frontend as `window.featureFlags.<name>`, where `<name>` is the camelCased flag name without the prefix (e.g. `useNewSingleRightsClientDelegation`). Add it to the `featureFlags` type in `frontend/src/global.d.ts` so it can be used with type support.
 5. To read the flag in the BFF, inject `IFeatureManager` and call `IsEnabledAsync(FeatureFlags.YourFlag)`.
 
 When a feature becomes permanent, remove the flag again: the constant, the appsettings entries, the `global.d.ts` entry, all usages, and the Terraform definition.
@@ -281,7 +287,7 @@ When a feature becomes permanent, remove the flag again: the constant, the appse
 
 ## Building and deploying 🚚
 
-To create a distributable bundle, run `yarn build`. Environment variables set at build time will be baked into the bundle (e.g. `VITE_DEFAULT_LOCALE=en yarn build`). See the resulting `dist/index.html`. If the bundled files are to be served from a path other than the server root, you must pass the `--base=/path/to/folder/` argument to `yarn build`.
+To create a distributable bundle, run `yarn build`. Environment variables set at build time will be baked into the bundle (e.g. `VITE_DEFAULT_LOCALE=en yarn build`). See the resulting `frontend/dist/index.html`. If the bundled files are to be served from a path other than the server root, you must pass the `--base=/path/to/folder/` argument to `yarn build`.
 
 ## Pull Request Labels
 
@@ -298,6 +304,8 @@ The deploy in charge for the week, deploys the application to a specific environ
 
 ## yarn commands 🧨
 
+Run these from `src/apps/Altinn.AccessManagement.UI/frontend`.
+
 Run `yarn` to setup code.
 
 Run `yarn build` to create a build file.
@@ -306,7 +314,7 @@ Run `yarn lint` to run lint checks
 
 Run `yarn format` to format most of the codebase to set standard in config file
 
-The main entry point is `/src/main.jsx`. You'll find React components under `/src/components/`.
+The main entry point is `frontend/src/main.jsx`. You'll find React components under `frontend/src/components/`.
 
 The components can be placed 2 ways, either:
 
