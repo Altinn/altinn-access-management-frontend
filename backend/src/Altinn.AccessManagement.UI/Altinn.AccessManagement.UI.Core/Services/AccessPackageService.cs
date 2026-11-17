@@ -28,7 +28,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<AccessAreaFE>> GetSearch(string languageCode, string searchString, string typeName)
         {
             IEnumerable<SearchObject<AccessPackage>> searchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, searchString, typeName);
-            List<AccessPackageFE> packages = await _resourceHelper.MapToAccessPackagesFE(searchMatches.Select(match => match.Object), languageCode);
+            List<AccessPackageFE> packages = await _resourceHelper.MapToAccessPackagesFE(searchMatches.Select(match => match.Object));
 
             List<AccessAreaFE> sortedAreas = new List<AccessAreaFE>();
 
@@ -88,7 +88,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 // manual filter until it is fixed
                 PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
                 var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
-                AccessPackageFE packageFE = (await _resourceHelper.MapToAccessPackagesFE([package], languageCode)).Single();
+                AccessPackageFE packageFE = (await _resourceHelper.MapToAccessPackagesFE([package])).Single();
                 packageFE.Permissions = PermissionFE.FromPermissions(packagePermissions?.Permissions);
                 return packageFE;
             }

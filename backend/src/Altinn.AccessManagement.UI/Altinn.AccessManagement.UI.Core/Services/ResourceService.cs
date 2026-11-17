@@ -4,7 +4,6 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Configuration;
 using Altinn.AccessManagement.UI.Core.Enums;
 using Altinn.AccessManagement.UI.Core.Helpers;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
@@ -245,51 +244,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     result[resourceId] = ResourceUtils.MapToServiceResourceFE(resource, languageCode, orgs);
                 }
-            }
-
-            return result;
-        }
-
-        /// <inheritdoc />
-        public async Task<Dictionary<string, ServiceResourceFE>> GetResourcesFE(IEnumerable<ResourceAM> resources, string languageCode, CancellationToken cancellationToken = default)
-        {
-            Dictionary<string, ServiceResourceFE> result = [];
-            List<ResourceAM> uniqueResources = resources?
-                .Where(resource => !string.IsNullOrEmpty(resource?.RefId))
-                .DistinctBy(resource => resource.RefId)
-                .ToList() ?? [];
-            if (uniqueResources.Count == 0)
-            {
-                return result;
-            }
-
-            Dictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
-
-            // Payloads such as the access package search reference every resource of every package, so look
-            // them up in the cached full registry list first and only fetch the misses one by one.
-            Dictionary<string, ServiceResource> registryResources = [];
-            try
-            {
-                registryResources = (await GetResources() ?? [])
-                    .Where(resource => resource?.Identifier != null)
-                    .DistinctBy(resource => resource.Identifier)
-                    .ToDictionary(resource => resource.Identifier);
-            }
-            catch (Exception ex) when (ex is not OperationCanceledException)
-            {
-                _logger.LogError(ex, "ResourceService.GetResourcesFE failed to load the resource list from the resource registry");
-            }
-
-            foreach (ResourceAM resourceAM in uniqueResources)
-            {
-                if (!registryResources.TryGetValue(resourceAM.RefId, out ServiceResource resource))
-                {
-                    resource = await TryGetResource(resourceAM.RefId, cancellationToken);
-                }
-
-                result[resourceAM.RefId] = resource != null
-                    ? ResourceUtils.MapToServiceResourceFE(resource, languageCode, orgs)
-                    : ResourceUtils.MapToServiceResourceFE(resourceAM, orgs);
             }
 
             return result;

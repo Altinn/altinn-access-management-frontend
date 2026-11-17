@@ -59,12 +59,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         public List<PermissionFE> Permissions { get; set; }
 
         /// <summary>
-        /// Maps an access package to the frontend model, replacing its resources with their enriched counterparts
+        /// Maps an access package to the frontend model
         /// </summary>
         /// <param name="accessPackage">The access package</param>
-        /// <param name="resourcesByRefId">Enriched resources keyed by the Access Management resource RefId</param>
+        /// <param name="resources">The package's resources, already mapped to the frontend model</param>
         /// <returns>The mapped access package</returns>
-        public static AccessPackageFE FromAccessPackage(AccessPackage accessPackage, IReadOnlyDictionary<string, ServiceResourceFE> resourcesByRefId)
+        public static AccessPackageFE FromAccessPackage(AccessPackage accessPackage, List<ServiceResourceFE> resources)
         {
             return new AccessPackageFE
             {
@@ -76,10 +76,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
                 IsDelegable = accessPackage.IsDelegable,
                 Area = accessPackage.Area,
                 Type = accessPackage.Type,
-                Resources = (accessPackage.Resources ?? [])
-                    .Where(resource => resource?.RefId != null && resourcesByRefId.ContainsKey(resource.RefId))
-                    .Select(resource => resourcesByRefId[resource.RefId])
-                    .ToList(),
+                Resources = resources,
             };
         }
     }

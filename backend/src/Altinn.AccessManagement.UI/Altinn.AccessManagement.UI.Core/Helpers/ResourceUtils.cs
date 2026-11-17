@@ -83,14 +83,35 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         }
 
         /// <summary>
-        /// Map an Access Management resource to the frontend resource model. Only used as a fallback
-        /// when the resource cannot be found in the resource registry. The provider's own logo url is
-        /// not trusted; the logo is resolved from CDN org data by provider code.
+        /// Map an Access Management resource to the frontend resource model, using only the data Access
+        /// Management provides. Resources in access packages are not looked up in the resource registry, as
+        /// a package can hold hundreds of them. The provider's own logo url is not trusted; the logo is
+        /// resolved from CDN org data by provider code.
         /// </summary>
         /// <param name="resource">Resource from Access Management</param>
         /// <param name="orgs">CDN org data, used to look up the logo of the resource owner</param>
         /// <returns>The mapped resource</returns>
         public static ServiceResourceFE MapToServiceResourceFE(ResourceAM resource, IReadOnlyDictionary<string, OrgData> orgs)
+        {
+            return MapAccessManagementResource(resource, orgs);
+        }
+
+        /// <summary>
+        /// Map a list of Access Management resources to the frontend resource model.
+        /// See <see cref="MapToServiceResourceFE(ResourceAM, IReadOnlyDictionary{string, OrgData})"/>.
+        /// </summary>
+        /// <param name="resources">Resources from Access Management</param>
+        /// <param name="orgs">CDN org data, used to look up the logo of the resource owner</param>
+        /// <returns>The mapped resources, in the same order</returns>
+        public static List<ServiceResourceFE> MapToServiceResourcesFE(IEnumerable<ResourceAM> resources, IReadOnlyDictionary<string, OrgData> orgs)
+        {
+            return (resources ?? [])
+                .Where(resource => resource != null)
+                .Select(resource => MapAccessManagementResource(resource, orgs))
+                .ToList();
+        }
+
+        private static ServiceResourceFE MapAccessManagementResource(ResourceAM resource, IReadOnlyDictionary<string, OrgData> orgs)
         {
             return new ServiceResourceFE
             {

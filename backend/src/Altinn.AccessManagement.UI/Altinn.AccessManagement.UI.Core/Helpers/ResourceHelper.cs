@@ -2,6 +2,7 @@ using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser;
 using Altinn.AccessManagement.UI.Core.Models.SystemUser.Frontend;
@@ -18,15 +19,19 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
 
         private readonly IAccessPackageClient _accessPackageClient;
 
+        private readonly IAltinnCdnService _altinnCdnService;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ResourceHelper"/> class.
         /// </summary>
         /// <param name="resourceService">Resource service</param>
         /// <param name="accessPackageClient">Access package API client</param>
-        public ResourceHelper(IResourceService resourceService, IAccessPackageClient accessPackageClient)
+        /// <param name="altinnCdnService">Altinn CDN service, used to look up resource owner logos</param>
+        public ResourceHelper(IResourceService resourceService, IAccessPackageClient accessPackageClient, IAltinnCdnService altinnCdnService)
         {
             _resourceService = resourceService;
             _accessPackageClient = accessPackageClient;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <summary>
@@ -59,22 +64,33 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 .Where(package => accessPackageIds.Contains(package.Urn))
                 .ToList();
 
-            return await MapToAccessPackagesFE(usedAccessPackages, languageCode);
+            return await MapToAccessPackagesFE(usedAccessPackages);
         }
 
         /// <summary>
-        /// Maps access packages to <see cref="AccessPackageFE"/>, with the resources of all packages enriched in one pass
+        /// Maps access packages to <see cref="AccessPackageFE"/>. Package resources are mapped from the data Access
+        /// Management provides, with only the owner logo looked up, since a package can hold hundreds of resources.
         /// </summary>
         /// <param name="accessPackages">The access packages to map</param>
-        /// <param name="languageCode">Language code</param>
-        public async Task<List<AccessPackageFE>> MapToAccessPackagesFE(IEnumerable<AccessPackage> accessPackages, string languageCode)
+        public async Task<List<AccessPackageFE>> MapToAccessPackagesFE(IEnumerable<AccessPackage> accessPackages)
         {
             List<AccessPackage> packages = accessPackages?.Where(package => package != null).ToList() ?? [];
-            Dictionary<string, ServiceResourceFE> resourcesByRefId = await _resourceService.GetResourcesFE(
-                packages.SelectMany(package => package.Resources ?? []),
-                languageCode);
+            Dictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
 
-            return packages.Select(package => AccessPackageFE.FromAccessPackage(package, resourcesByRefId)).ToList();
+            return packages
+                .Select(package => AccessPackageFE.FromAccessPackage(package, ResourceUtils.MapToServiceResourcesFE(package.Resources, orgs)))
+                .ToList();
+        }
+
+        /// <summary>
+        /// Maps Access Management resources to <see cref="ServiceResourceFE"/> from the data Access Management provides,
+        /// with only the owner logo looked up.
+        /// </summary>
+        /// <param name="resources">Resources from Access Management</param>
+        public async Task<List<ServiceResourceFE>> MapToServiceResourcesFE(IEnumerable<ResourceAM> resources)
+        {
+            Dictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
+            return ResourceUtils.MapToServiceResourcesFE(resources, orgs);
         }
 
         /// <summary>

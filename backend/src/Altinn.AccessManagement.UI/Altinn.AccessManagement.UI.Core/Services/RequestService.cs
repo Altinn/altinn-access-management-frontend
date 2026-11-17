@@ -227,7 +227,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 packages.Add(package);
             }
 
-            Dictionary<Guid, AccessPackageFE> packageDictionary = (await _resourceHelper.MapToAccessPackagesFE(packages, languageCode))
+            Dictionary<Guid, AccessPackageFE> packageDictionary = (await _resourceHelper.MapToAccessPackagesFE(packages))
                 .ToDictionary(package => Guid.Parse(package.Id));
 
             return list.Select(x =>
