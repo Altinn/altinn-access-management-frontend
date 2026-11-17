@@ -6,7 +6,7 @@ on:
 env:
   dotnet_version: 10.0.x
   # renovate: datasource=nuget depName=Altinn.Authorization.RepoCtl.Cli
-  repoctlVersion: '2.1.0'
+  repoctlVersion: '2.2.1'
 
 jobs:
   check-repo:
