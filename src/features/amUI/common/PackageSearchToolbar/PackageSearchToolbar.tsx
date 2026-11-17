@@ -6,8 +6,6 @@ import { arraysEqual, debounce } from '@/resources/utils';
 
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 
-import classes from './PackageSearchToolbar.module.css';
-
 interface PackageSearchToolbarProps {
   searchString: string;
   setSearchString: (searchString: string) => void;
@@ -43,27 +41,25 @@ export const PackageSearchToolbar = ({
   useEffect(() => () => debouncedSetSearchString.cancel(), [debouncedSetSearchString]);
 
   return (
-    <div className={classes.toolbar}>
-      <ResourceFilterToolbar
-        search={searchInput}
-        setSearch={(value: string) => {
-          setSearchInput(value);
-          if (value) {
-            debouncedSetSearchString(value);
-          } else {
-            debouncedSetSearchString.cancel();
-            setSearchString('');
-          }
-        }}
-        searchPlaceholder={t('access_packages.search_label')}
-        filterState={serviceOwners}
-        setFilterState={(newServiceOwners: string[]) => {
-          if (!arraysEqual(newServiceOwners, serviceOwners)) {
-            setServiceOwners(newServiceOwners);
-          }
-        }}
-        serviceOwnerOptions={serviceOwnerOptions}
-      />
-    </div>
+    <ResourceFilterToolbar
+      search={searchInput}
+      setSearch={(value: string) => {
+        setSearchInput(value);
+        if (value) {
+          debouncedSetSearchString(value);
+        } else {
+          debouncedSetSearchString.cancel();
+          setSearchString('');
+        }
+      }}
+      searchPlaceholder={t('access_packages.search_label')}
+      filterState={serviceOwners}
+      setFilterState={(newServiceOwners: string[]) => {
+        if (!arraysEqual(newServiceOwners, serviceOwners)) {
+          setServiceOwners(newServiceOwners);
+        }
+      }}
+      serviceOwnerOptions={serviceOwnerOptions}
+    />
   );
 };

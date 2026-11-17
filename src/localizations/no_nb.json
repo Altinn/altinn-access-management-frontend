@@ -245,7 +245,7 @@
     "other_available": "Andre tilgjengelige",
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt",
-    "search_label": "Søk etter tilgangspakker",
+    "search_label": "Søk i tilgangspakker",
     "other_packages_in_area_title": "Andre tilgjengelige pakker i området:",
     "package_delegation_success": "{{name}} har nå fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikke mulig å gi {{name}} fullmakt til {{accessPackage}}.",
