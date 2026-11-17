@@ -12,7 +12,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// Responsible for presenting the list of registered system to UI. 
     /// </summary>
     [Route("accessmanagement/api/v1/systemregister")]
-    [ApiController] 
+    [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class SystemRegisterController : ControllerBase
     {

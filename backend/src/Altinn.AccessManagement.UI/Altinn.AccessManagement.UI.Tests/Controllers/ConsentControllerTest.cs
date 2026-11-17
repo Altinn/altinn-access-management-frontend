@@ -417,7 +417,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             // Assert
             Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
         }
-        
+
         /// <summary>
         ///     Test case: RevokeConsent checks error is returned when consent is not found
         ///     Expected: RevokeConsent returns not found
@@ -523,9 +523,9 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
                         .Select(kv => kv[1])
                         .FirstOrDefault();
 
-                    if (cookiePart  != null)
+                    if (cookiePart != null)
                     {
-                        myCookieValue = cookiePart ;
+                        myCookieValue = cookiePart;
                     }
                 }
             }

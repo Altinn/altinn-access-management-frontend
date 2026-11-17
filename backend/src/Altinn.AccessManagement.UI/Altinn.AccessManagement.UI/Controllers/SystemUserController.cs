@@ -37,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _systemUserService = systemUserService;
             _httpContextAccessor = httpContextAccessor;
         }
-        
+
         /// <summary>
         /// Used by the party
         /// </summary>
@@ -72,7 +72,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             Result<SystemUserFE> details = await _systemUserService.GetSpecificSystemUser(partyId, systemUserGuid, languageCode, cancellationToken);
-            
+
             if (details.IsProblem)
             {
                 return details.Problem.ToActionResult();
@@ -80,7 +80,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(details.Value);
         }
-        
+
         /// <summary>
         /// Get all agent system users for given party
         /// </summary>
@@ -140,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             Result<bool> result = await _systemUserService.DeleteAgentSystemUser(partyId, systemUserGuid, partyUuid, cancellationToken);
             if (result.IsProblem)
             {
-                return result.Problem.ToActionResult(); 
+                return result.Problem.ToActionResult();
             }
 
             return Accepted();
@@ -164,7 +164,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (systemUserResult.IsProblem)
             {
-                return systemUserResult.Problem.ToActionResult(); 
+                return systemUserResult.Problem.ToActionResult();
             }
 
             SystemUserCreateResponseFE createResponse = new SystemUserCreateResponseFE()

@@ -176,7 +176,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return await Task.FromResult(fallback);
             }
         }
-        
+
         /// <inheritdoc />
         public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
         {

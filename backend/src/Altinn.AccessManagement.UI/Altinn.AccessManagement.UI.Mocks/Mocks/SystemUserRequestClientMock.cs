@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserRequestClientMock).Assembly.Location).LocalPath), "Data");
         }
-        
+
         /// <inheritdoc />
         public Task<Result<SystemUserRequest>> GetSystemUserRequest(Guid requestId, CancellationToken cancellationToken)
         {
@@ -50,7 +50,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<Result<bool>> RejectSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)
         {
             return ValidateAndExecuteAction(requestId);
-        }        
+        }
 
         /// <inheritdoc />
         public Task<Result<bool>> EscalateSystemUserRequest(int partyId, Guid requestId, CancellationToken cancellationToken)

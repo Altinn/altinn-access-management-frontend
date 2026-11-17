@@ -175,7 +175,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
-        
+
         /// <inheritdoc/>
         public async Task<Result<bool>> IsSelfAdded(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {

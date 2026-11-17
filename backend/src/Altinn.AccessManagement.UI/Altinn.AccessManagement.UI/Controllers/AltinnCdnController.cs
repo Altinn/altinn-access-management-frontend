@@ -42,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 var orgData = await _altinnCdnService.GetOrgData();
-                
+
                 return Ok(orgData);
             }
             catch (Exception ex)

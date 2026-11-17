@@ -470,7 +470,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedResponse, httpResponse.StatusCode);
             Assert.True(actualResponse);
         }
-        
+
         /// <summary>
         ///     Test case: IsOwnOrganizationAddedToAgentSystemUser checks that error is set when removing own organization from agent system user fails
         ///     Expected: IsOwnOrganizationAddedToAgentSystemUser returns error

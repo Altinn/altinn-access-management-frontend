@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IAccessPackageService _accessPackageService;
         private readonly ISingleRightService _singleRightService;
         private readonly IInstanceService _instanceService;
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegationExportService"/> class.
         /// </summary>

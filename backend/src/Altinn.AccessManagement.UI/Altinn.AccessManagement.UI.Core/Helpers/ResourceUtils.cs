@@ -22,7 +22,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>Output result</returns>
         public static List<ServiceResourceFE> MapToServiceResourcesFE(string languageCode, IEnumerable<ServiceResource> resources, Dictionary<string, Models.Common.OrgData> orgs)
         {
-            return resources.Select(resource => 
+            return resources.Select(resource =>
             {
                 orgs.TryGetValue(resource.HasCompetentAuthority.Orgcode.ToLower(), out var org);
                 return new ServiceResourceFE(
@@ -94,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>List of access package ids</returns>
         public static List<string> GetAccessPackageIdsFromRights(IEnumerable<RegisteredSystemAccessPackage> accessPackages)
         {
-            if (accessPackages == null) 
+            if (accessPackages == null)
             {
                 return [];
             }

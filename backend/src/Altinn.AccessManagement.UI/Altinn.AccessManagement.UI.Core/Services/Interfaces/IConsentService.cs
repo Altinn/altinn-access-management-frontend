@@ -57,7 +57,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A consent</returns>
         Task<Result<ConsentFE>> GetConsent(Guid consentId, CancellationToken cancellationToken);
-        
+
         /// <summary>
         /// Revoke a consent
         /// </summary>

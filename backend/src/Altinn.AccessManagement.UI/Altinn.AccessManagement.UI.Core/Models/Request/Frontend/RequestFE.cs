@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.Request.Frontend
         /// Last updated
         /// </summary>
         public DateTimeOffset LastUpdated { get; set; }
-        
+
         /// <summary>
         /// Last updated by name
         /// </summary>
