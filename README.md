@@ -273,7 +273,7 @@ Feature flags let us turn functionality on and off per environment without chang
 
 ### Adding a new feature flag
 
-1. Our flags are defined in the backend repo: add the flag to the `feature_flags` list in [`src/apps/Altinn.AccessManagement/infra/frontend.tf`](https://github.com/Altinn/altinn-authorization-tmp/blob/main/src/apps/Altinn.AccessManagement/infra/frontend.tf) in [altinn-authorization-tmp](https://github.com/Altinn/altinn-authorization-tmp), keeping the `{environment}-access-management-ui` label. When that PR merges, their "CD: Apps" pipeline creates the flag (disabled) in the App Configuration store, environment by environment. Note that the pipeline requires manual deploy approval per environment ("Review deployments" on the run in that repo) — the flag is only created in the environments you approve. Terraform only owns the flag's existence and description — the on/off state is controlled in the Azure portal.
+1. Our flags are defined in the backend repo: add the flag to the `access_management_feature_flags_ui` map in [`infra/deploy/hub/feature_flags.tf`](https://github.com/Altinn/altinn-auth/blob/main/infra/deploy/hub/feature_flags.tf) in [altinn-auth](https://github.com/Altinn/altinn-auth). Terraform creates the flag (disabled) in the App Configuration store for every environment, with the label `{environment}-access-management-ui`. This happens when the "Terraform: Shared" workflow in that repo is run by hand with the `hub` environment. Terraform only owns the flag's existence and description. The on/off state is controlled in the Azure portal.
 2. Add a constant in `Altinn.AccessManagement.UI.Core/Configuration/FeatureFlags.cs`. Flag names use the `AccessManagementUI.` prefix followed by a PascalCase name, e.g. `AccessManagementUI.UseNewSingleRightsClientDelegation`.
 3. Add the flag with its default value (usually `false`) to the `FeatureManagement` section in `appsettings.json` and `appsettings.Development.json`.
 4. The flag is automatically exposed to the frontend as `window.featureFlags.<name>`, where `<name>` is the camelCased flag name without the prefix (e.g. `useNewSingleRightsClientDelegation`). Add it to the `featureFlags` type in `frontend/src/global.d.ts` so it can be used with type support.
@@ -292,13 +292,13 @@ To create a distributable bundle, run `yarn build`. Environment variables set at
 ## Pull Request Labels
 
 [pr-labeler](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/workflows/pr-labeler.yml) action is triggered for each pull request.
-Based on the branch name, this action adds a label to the pull request. The configuration for the labels can be found [here](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/pr-labeler.yml).
+Based on the branch name, this action adds a label to the pull request. The configuration for the labels can be found [here](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/pr-labels.yml).
 
 ## Release
 
 The application has a release every wednesday. [scheduled-release](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/workflows/scheduled-release.yml) action is triggered every wednesday 00.00. This action drafts a release, tags the latest package with the release version, f.ex this package has a release version [v2023.1](https://github.com/Altinn/altinn-access-management-frontend/pkgs/container/altinn-access-management-frontend/88857835?tag=14685620a8aaf7b867b5a346155ca09ef9c34f3d).
 The action drafts the release on different categories. The changes are categorized based on the pull request label. F.ex, A PR with a label bugfix is categorized under bug. The detailed release draft configuration can be found [here](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/release-drafter.yml)
-The deploy in charge for the week, deploys the application to a specific environment(TT02/Prod) using the action [deploy-to-environment](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/workflows/deploy-to-environment.yml). The drafted release is then reviewed manually and published by the deploy in charge.
+The deploy in charge for the week, deploys the application to a specific environment(TT02/Prod) using the action [deploy-release](https://github.com/Altinn/altinn-access-management-frontend/blob/main/.github/workflows/deploy-release.yml). The drafted release is then reviewed manually and published by the deploy in charge.
 
 # Project organisation and code conventions 🧩
 
@@ -393,8 +393,8 @@ You can define stories for components by adding a file with the *.stories.tsx ex
 yarn storybook
 ```
 
-This project uses [MSW (Mock Service Worker)](https://mswjs.io/) to mock API requests in Storybook. The mock handlers are defined in [`.mock/handlers.js`](.mock/handlers.js) and the worker is set up in [`.mock/browser.js`](.mock/browser.js).
+This project uses [MSW (Mock Service Worker)](https://mswjs.io/) to mock API requests in Storybook. The mock handlers are defined in [`.mock/handlers.ts`](src/apps/Altinn.AccessManagement.UI/frontend/.mock/handlers.ts) and the worker is set up in [`.mock/browser.ts`](src/apps/Altinn.AccessManagement.UI/frontend/.mock/browser.ts).
 
 ### Documentation: 
 *  For more information on writing stories, see the [Storybook Docs](https://storybook.js.org/docs/react/get-started/introduction).
-*  To learn about using MSW with Storybook, check out the [MSW documentation](https://mswjs.io/docs/getting-started/integrate/storybook).
+*  To learn about using MSW with Storybook, check out the [MSW documentation](https://mswjs.io/guides/integrations/storybook).

@@ -1,7 +1,7 @@
 # Tenor CLI
 
 Command-line tool for fetching synthetic test data (persons, businesses,
-facilitators) from Skatteetaten's [Tenor](https://skatteetaten.github.io/testnorge-dokumentasjon/)
+facilitators) from Skatteetaten's [Tenor](https://skatteetaten.github.io/testnorge-tenor-dokumentasjon/)
 testdata service, and for building Altinn test data from it. Also usable as a
 reference for integrating with Tenor from TypeScript/Node.
 
