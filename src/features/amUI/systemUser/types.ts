@@ -10,7 +10,7 @@ export interface RegisteredSystem {
 
 export interface RegisteredSystemRights {
   resources: ServiceResource[];
-  accessPackages: SystemUserAccessPackage[];
+  accessPackages: AccessPackage[];
 }
 
 export interface ProblemDetail {
@@ -34,7 +34,7 @@ export interface SystemUser {
   system: RegisteredSystem;
   userType: string;
   resources: ServiceResource[];
-  accessPackages: SystemUserAccessPackage[];
+  accessPackages: AccessPackage[];
 }
 
 type RequestStatus = 'New' | 'Accepted' | 'Rejected' | 'Denied' | 'Timedout';
@@ -52,18 +52,14 @@ interface SystemUserRequestBase {
 }
 export interface SystemUserRequest extends SystemUserRequestBase {
   resources: ServiceResource[];
-  accessPackages: SystemUserAccessPackage[];
+  accessPackages: AccessPackage[];
 }
 
 export interface SystemUserChangeRequest extends SystemUserRequestBase {
   requiredRights: ServiceResource[];
   unwantedRights: ServiceResource[];
-  requiredAccessPackages: SystemUserAccessPackage[];
-  unwantedAccessPackages: SystemUserAccessPackage[];
-}
-
-export interface SystemUserAccessPackage extends AccessPackage {
-  urn: string;
+  requiredAccessPackages: AccessPackage[];
+  unwantedAccessPackages: AccessPackage[];
 }
 
 export interface AgentDelegationCustomer {

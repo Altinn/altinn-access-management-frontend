@@ -13,14 +13,13 @@ import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackageList/useAreaPackageList';
 import { PackageHeader } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageMeta';
-
-import type { SystemUserAccessPackage } from '../../types';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import classes from './RightsList.module.css';
 
 interface RightsListProps {
   resources: ServiceResource[];
-  accessPackages: SystemUserAccessPackage[];
+  accessPackages: AccessPackage[];
   hideHeadings?: boolean;
   isLoading?: boolean;
   headingLevel?: 2 | 3 | 4;
@@ -39,7 +38,7 @@ export const RightsList = ({
   const [selectedAccessPackage, setSelectedAccessPackage] =
     React.useState<ExtendedAccessPackage | null>(null);
 
-  const onSelectAccessPackage = (accessPackage: SystemUserAccessPackage): void => {
+  const onSelectAccessPackage = (accessPackage: AccessPackage): void => {
     setSelectedAccessPackage(accessPackage);
     modalRef.current?.showModal();
   };
