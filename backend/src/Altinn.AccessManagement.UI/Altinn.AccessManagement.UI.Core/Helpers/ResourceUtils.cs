@@ -40,6 +40,21 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         }
 
         /// <summary>
+        /// Map a list of resources from the resource registry to the frontend resource model
+        /// </summary>
+        /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
+        /// <param name="resources">List of resources to map to frontend resource objects</param>
+        /// <param name="orgs">CDN org data, used to look up the logo of the resource owner</param>
+        /// <returns>Output result</returns>
+        public static List<ServiceResourceFE> MapToServiceResourcesFE(string languageCode, IEnumerable<ServiceResource> resources, IReadOnlyDictionary<string, OrgData> orgs)
+        {
+            return resources
+                .Where(resource => resource != null)
+                .Select(resource => MapToServiceResourceFE(resource, languageCode, orgs))
+                .ToList();
+        }
+
+        /// <summary>
         /// Map a resource from the resource registry to the frontend resource model
         /// </summary>
         /// <param name="resource">Resource from the resource registry</param>
@@ -65,21 +80,6 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 contactPoints: resource.ContactPoints,
                 keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList() ?? [],
                 resourceOwnerLogoUrl: ResolveOwnerLogoUrl(orgs, owner?.Orgcode));
-        }
-
-        /// <summary>
-        /// Map a list of resources from the resource registry to the frontend resource model
-        /// </summary>
-        /// <param name="languageCode">Language code. Can be either nb, nn or en</param>
-        /// <param name="resources">List of resources to map to frontend resource objects</param>
-        /// <param name="orgs">CDN org data, used to look up the logo of the resource owner</param>
-        /// <returns>Output result</returns>
-        public static List<ServiceResourceFE> MapToServiceResourcesFE(string languageCode, IEnumerable<ServiceResource> resources, IReadOnlyDictionary<string, OrgData> orgs)
-        {
-            return resources
-                .Where(resource => resource != null)
-                .Select(resource => MapToServiceResourceFE(resource, languageCode, orgs))
-                .ToList();
         }
 
         /// <summary>
