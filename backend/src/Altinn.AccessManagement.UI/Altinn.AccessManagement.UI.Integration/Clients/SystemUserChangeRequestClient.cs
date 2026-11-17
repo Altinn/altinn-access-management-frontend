@@ -34,12 +34,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="httpContextAccessor">The HTTP context accessor instance.</param>
         /// <param name="platformSettings">The platform settings.</param>
         public SystemUserChangeRequestClient(
-            ILogger<SystemUserChangeRequestClient> logger, 
-            HttpClient httpClient, 
-            IHttpContextAccessor httpContextAccessor, 
-            IOptions<PlatformSettings> platformSettings) 
+            ILogger<SystemUserChangeRequestClient> logger,
+            HttpClient httpClient,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<PlatformSettings> platformSettings)
         {
-            _logger = logger;        
+            _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _platformSettings = platformSettings.Value;
             httpClient.BaseAddress = new Uri(_platformSettings.ApiAuthenticationEndpoint);
@@ -49,7 +49,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
         /// <inheritdoc/>
         public async Task<Result<SystemUserChangeRequest>> GetSystemUserChangeRequest(Guid changeRequestId, CancellationToken cancellationToken)
-        {        
+        {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -59,11 +59,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
                     return Problem.RequestNotFound;
-                } 
+                }
 
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
-                if (response.IsSuccessStatusCode) 
+                if (response.IsSuccessStatusCode)
                 {
                     return JsonSerializer.Deserialize<SystemUserChangeRequest>(responseContent, _jsonSerializerOptions);
                 }
@@ -86,9 +86,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/changerequest/{partyId}/{changeRequestId}/approve";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null, cancellationToken);
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
-                
-                if (response.IsSuccessStatusCode) 
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
                 {
                     return true;
                 }
@@ -111,9 +111,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/changerequest/{partyId}/{changeRequestId}/reject";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null, cancellationToken);
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
-                
-                if (response.IsSuccessStatusCode) 
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
                 {
                     return true;
                 }

@@ -16,7 +16,7 @@ namespace Altinn.AccessManagement.UI.Controllers
     /// </summary>
     [Route("accessmanagement/api/v1/bankruptcyestate")]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
-    public class BankruptcyEstateController : ControllerBase    
+    public class BankruptcyEstateController : ControllerBase
     {
         private readonly ILogger<BankruptcyEstateController> _logger;
 

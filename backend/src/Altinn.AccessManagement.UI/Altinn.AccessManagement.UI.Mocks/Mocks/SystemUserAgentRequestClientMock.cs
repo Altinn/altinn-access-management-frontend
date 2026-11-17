@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserAgentRequestClientMock).Assembly.Location).LocalPath), "Data");
         }
-        
+
         /// <inheritdoc />
         public Task<Result<SystemUserRequest>> GetSystemUserAgentRequest(Guid agentRequestId, CancellationToken cancellationToken)
         {

@@ -206,7 +206,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string party = from;
             string packageId = "1dba50d6-f604-48e9-bd41-82321b13e85c";
-            
+
             var expectedResult = Util.GetMockData<AccessPackageFE>(_expectedDataPath + $"/AccessPackage/GetSinglePackagePermissions/{from}.json");
 
             // Act
@@ -214,7 +214,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            
+
             var result = JsonSerializer.Deserialize<AccessPackageFE>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertEqual(expectedResult, result);
         }

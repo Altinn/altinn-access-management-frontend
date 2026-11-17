@@ -157,7 +157,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(result.Value);
         }
-        
+
         /// <summary>
         /// Check if own organization is added to this systemuser
         /// </summary>

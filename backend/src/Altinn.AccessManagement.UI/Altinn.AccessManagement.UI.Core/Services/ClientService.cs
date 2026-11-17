@@ -14,22 +14,22 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// </summary>
     public class ClientService : IClientService
     {
-        private readonly IClientDelegationClientResolver _clientDelegationClientResolver;
+        private readonly IClientDelegationClient _clientDelegationClient;
         private readonly IResourceService _resourceService;
         private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientService"/> class.
         /// </summary>
-        /// <param name="clientDelegationClientResolver">Resolves the client delegation client matching the feature flag.</param>
+        /// <param name="clientDelegationClient">The client delegation client.</param>
         /// <param name="resourceService">Resource service, used to look up resource names.</param>
         /// <param name="logger">The logger.</param>
         public ClientService(
-            IClientDelegationClientResolver clientDelegationClientResolver,
+            IClientDelegationClient clientDelegationClient,
             IResourceService resourceService,
             ILogger<ClientService> logger)
         {
-            _clientDelegationClientResolver = clientDelegationClientResolver;
+            _clientDelegationClient = clientDelegationClient;
             _resourceService = resourceService;
             _logger = logger;
         }
@@ -37,8 +37,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<IEnumerable<MyClientDelegationFE>> GetMyClients(string languageCode, List<Guid> provider = null, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            IEnumerable<MyClientDelegation> myClients = await client.GetMyClients(provider, cancellationToken);
+            IEnumerable<MyClientDelegation> myClients = await _clientDelegationClient.GetMyClients(provider, cancellationToken);
             await EnrichResources(myClients.SelectMany(myClient => myClient.Clients).SelectMany(delegation => delegation.Access), languageCode);
             return myClients.Select(MyClientDelegationFE.FromMyClientDelegation).ToList();
         }
@@ -46,22 +45,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task RemoveMyClientProvider(Guid provider, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            await client.RemoveMyClientProvider(provider, cancellationToken);
+            await _clientDelegationClient.RemoveMyClientProvider(provider, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task RemoveMyClientAccessPackages(Guid provider, Guid from, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            await client.RemoveMyClientAccessPackages(provider, from, payload, cancellationToken);
+            await _clientDelegationClient.RemoveMyClientAccessPackages(provider, from, payload, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<ClientDelegationFE>> GetClients(Guid party, string languageCode, List<string> roles = null, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            IEnumerable<ClientDelegation> clients = await client.GetClients(party, roles, cancellationToken);
+            IEnumerable<ClientDelegation> clients = await _clientDelegationClient.GetClients(party, roles, cancellationToken);
             await EnrichResources(clients.SelectMany(delegation => delegation.Access), languageCode);
             return clients.Select(ClientDelegationFE.FromClientDelegation).ToList();
         }
@@ -69,8 +65,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<IEnumerable<AgentDelegationFE>> GetAgents(Guid party, string languageCode, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            IEnumerable<AgentDelegation> agents = await client.GetAgents(party, cancellationToken);
+            IEnumerable<AgentDelegation> agents = await _clientDelegationClient.GetAgents(party, cancellationToken);
             await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
             return agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
         }
@@ -78,8 +73,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<IEnumerable<ClientDelegationFE>> GetAgentAccessPackages(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            IEnumerable<ClientDelegation> clients = await client.GetAgentAccessPackages(party, to, cancellationToken);
+            IEnumerable<ClientDelegation> clients = await _clientDelegationClient.GetAgentAccessPackages(party, to, cancellationToken);
             await EnrichResources(clients.SelectMany(delegation => delegation.Access), languageCode);
             return clients.Select(ClientDelegationFE.FromClientDelegation).ToList();
         }
@@ -87,8 +81,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<IEnumerable<AgentDelegationFE>> GetClientAccessPackages(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            IEnumerable<AgentDelegation> agents = await client.GetClientAccessPackages(party, from, cancellationToken);
+            IEnumerable<AgentDelegation> agents = await _clientDelegationClient.GetClientAccessPackages(party, from, cancellationToken);
             await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
             return agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
         }
@@ -96,22 +89,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<DelegationDto>> AddAgentAccessPackages(Guid party, Guid from, Guid to, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            return await client.AddAgentAccessPackages(party, from, to, payload, cancellationToken);
+            return await _clientDelegationClient.AddAgentAccessPackages(party, from, to, payload, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task RemoveAgentAccessPackages(Guid party, Guid from, Guid to, DelegationBatchInputDto payload, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            await client.RemoveAgentAccessPackages(party, from, to, payload, cancellationToken);
+            await _clientDelegationClient.RemoveAgentAccessPackages(party, from, to, payload, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task<IEnumerable<ClientDelegationFE>> GetAgentResources(Guid party, Guid to, string languageCode, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            IEnumerable<ClientDelegation> clients = await client.GetAgentResources(party, to, cancellationToken);
+            IEnumerable<ClientDelegation> clients = await _clientDelegationClient.GetAgentResources(party, to, cancellationToken);
             await EnrichResources(clients.SelectMany(delegation => delegation.Access), languageCode);
             return clients.Select(ClientDelegationFE.FromClientDelegation).ToList();
         }
@@ -119,8 +109,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<IEnumerable<AgentDelegationFE>> GetClientResources(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            IEnumerable<AgentDelegation> agents = await client.GetClientResources(party, from, cancellationToken);
+            IEnumerable<AgentDelegation> agents = await _clientDelegationClient.GetClientResources(party, from, cancellationToken);
             await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
             return agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
         }
@@ -128,22 +117,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <inheritdoc />
         public async Task<List<ResourceDelegationDto>> AddAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            return await client.AddAgentResources(party, from, to, payload, cancellationToken);
+            return await _clientDelegationClient.AddAgentResources(party, from, to, payload, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task RemoveAgentResources(Guid party, Guid from, Guid to, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            await client.RemoveAgentResources(party, from, to, payload, cancellationToken);
+            await _clientDelegationClient.RemoveAgentResources(party, from, to, payload, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task RemoveMyClientResources(Guid provider, Guid from, ResourceDelegationBatchInputDto payload, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            await client.RemoveMyClientResources(provider, from, payload, cancellationToken);
+            await _clientDelegationClient.RemoveMyClientResources(provider, from, payload, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -175,19 +161,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PersonIdentifier = personIdentifierCleaned,
                 };
 
-                IClientDelegationClient clientForPerson = await _clientDelegationClientResolver.Resolve();
-                return await clientForPerson.AddAgent(party, to, cleanedInput, cancellationToken);
+                return await _clientDelegationClient.AddAgent(party, to, cleanedInput, cancellationToken);
             }
 
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            return await client.AddAgent(party, to, null, cancellationToken);
+            return await _clientDelegationClient.AddAgent(party, to, null, cancellationToken);
         }
 
         /// <inheritdoc />
         public async Task RemoveAgent(Guid party, Guid to, CancellationToken cancellationToken = default)
         {
-            IClientDelegationClient client = await _clientDelegationClientResolver.Resolve();
-            await client.RemoveAgent(party, to, cancellationToken);
+            await _clientDelegationClient.RemoveAgent(party, to, cancellationToken);
         }
 
         /// <summary>

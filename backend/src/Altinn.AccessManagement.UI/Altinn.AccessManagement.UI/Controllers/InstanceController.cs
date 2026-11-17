@@ -140,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 {
                     return Ok(await response.Content.ReadAsStringAsync());
                 }
-                
+
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
             }
             catch (HttpStatusException statusEx)

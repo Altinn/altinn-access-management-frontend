@@ -34,12 +34,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="httpContextAccessor">The HTTP context accessor instance.</param>
         /// <param name="platformSettings">The platform settings.</param>
         public SystemUserAgentRequestClient(
-            ILogger<SystemUserAgentRequestClient> logger, 
-            HttpClient httpClient, 
-            IHttpContextAccessor httpContextAccessor, 
-            IOptions<PlatformSettings> platformSettings) 
+            ILogger<SystemUserAgentRequestClient> logger,
+            HttpClient httpClient,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<PlatformSettings> platformSettings)
         {
-            _logger = logger;        
+            _logger = logger;
             _httpContextAccessor = httpContextAccessor;
             _platformSettings = platformSettings.Value;
             httpClient.BaseAddress = new Uri(_platformSettings.ApiAuthenticationEndpoint);
@@ -49,21 +49,21 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
         /// <inheritdoc/>
         public async Task<Result<SystemUserRequest>> GetSystemUserAgentRequest(Guid agentRequestId, CancellationToken cancellationToken)
-        {        
+        {
             try
             {
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/request/agent/{agentRequestId}";
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint, cancellationToken);
-                
+
                 if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
                     return Problem.RequestNotFound;
-                } 
-                
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
+                }
 
-                if (response.IsSuccessStatusCode) 
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
                 {
                     return JsonSerializer.Deserialize<SystemUserRequest>(responseContent, _jsonSerializerOptions);
                 }
@@ -86,9 +86,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}/approve";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null, cancellationToken);
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
-                
-                if (response.IsSuccessStatusCode) 
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
                 {
                     return true;
                 }
@@ -111,9 +111,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 string endpoint = $"systemuser/request/agent/{partyId}/{agentRequestId}/reject";
                 HttpResponseMessage response = await _httpClient.PostAsync(token, endpoint, null, cancellationToken);
-                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);    
-                
-                if (response.IsSuccessStatusCode) 
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
                 {
                     return true;
                 }
@@ -138,7 +138,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 HttpResponseMessage response = await _httpClient.GetAsync(token, endpoint, cancellationToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
-                if (response.IsSuccessStatusCode) 
+                if (response.IsSuccessStatusCode)
                 {
                     return JsonSerializer.Deserialize<List<SystemUserRequest>>(responseContent, _jsonSerializerOptions);
                 }

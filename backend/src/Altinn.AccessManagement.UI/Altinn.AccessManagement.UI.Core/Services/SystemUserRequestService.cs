@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<SystemUserRequestFE>> GetSystemUserRequest(Guid requestId, string languageCode, CancellationToken cancellationToken)
         {
             Result<SystemUserRequest> request = await _systemUserRequestClient.GetSystemUserRequest(requestId, cancellationToken);
-            
+
             if (request.IsProblem)
             {
                 return new Result<SystemUserRequestFE>(request.Problem);
@@ -46,13 +46,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             // GET resources & access packages
             RegisteredSystemRightsFE enrichedRights = await _resourceHelper.MapRightsToFrontendObjects(request.Value.Rights, request.Value.AccessPackages, languageCode);
-            
+
             // GET system
             RegisteredSystem system = await _systemRegisterClient.GetSystem(request.Value.SystemId, cancellationToken);
             var orgNames = await _registerClient.GetPartyNames([system.SystemVendorOrgNumber], cancellationToken);
             RegisteredSystemFE systemFE = SystemRegisterUtils.MapToRegisteredSystemFE(languageCode, system, orgNames);
 
-            return new SystemUserRequestFE() 
+            return new SystemUserRequestFE()
             {
                 Id = request.Value.Id,
                 PartyId = request.Value.PartyId,

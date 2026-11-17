@@ -25,12 +25,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             _systemUserAgentDelegationClient = systemUserAgentDelegationClient;
             _systemUserClient = systemUserClient;
         }
-        
+
         /// <inheritdoc /> 
         public async Task<Result<List<CustomerPartyFE>>> GetSystemUserCustomers(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
             SystemUser systemUser = await _systemUserClient.GetAgentSystemUser(partyId, systemUserGuid, cancellationToken);
-            if (systemUser is null) 
+            if (systemUser is null)
             {
                 return new Result<List<CustomerPartyFE>>(Problem.SystemUserNotFound);
             }
@@ -91,7 +91,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return response.Value;
         }
-        
+
         /// <inheritdoc />
         public async Task<Result<bool>> AddSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {
@@ -103,7 +103,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             return response.Value;
         }
-        
+
         /// <inheritdoc />
         public async Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
         {

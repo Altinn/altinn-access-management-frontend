@@ -17,7 +17,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
     /// <summary>
     /// Mock class for the <see cref="IClientDelegationClient"/> interface.
     /// </summary>
-    public class ClientDelegationClientMock : IClientDelegationClient, IClientDelegationClientResolver
+    public class ClientDelegationClientMock : IClientDelegationClient
     {
         private readonly string dataFolder;
 
@@ -31,9 +31,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(ClientDelegationClientMock).Assembly.Location).LocalPath), "Data");
         }
-
-        /// <inheritdoc />
-        public Task<IClientDelegationClient> Resolve() => Task.FromResult<IClientDelegationClient>(this);
 
         /// <inheritdoc />
         public Task<IEnumerable<MyClientDelegation>> GetMyClients(List<Guid> provider = null, CancellationToken cancellationToken = default)

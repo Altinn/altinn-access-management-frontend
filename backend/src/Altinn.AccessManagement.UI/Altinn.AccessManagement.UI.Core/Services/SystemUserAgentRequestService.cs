@@ -78,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return await _systemUserAgentRequestClient.RejectSystemUserAgentRequest(partyId, agentRequestId, cancellationToken);
         }
-        
+
         /// <inheritdoc />
         public async Task<Result<bool>> EscalateSystemUserAgentRequest(int partyId, Guid agentRequestId, CancellationToken cancellationToken)
         {

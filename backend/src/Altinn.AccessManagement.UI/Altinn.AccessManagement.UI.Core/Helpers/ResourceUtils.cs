@@ -154,7 +154,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         /// <returns>List of access package ids</returns>
         public static List<string> GetAccessPackageIdsFromRights(IEnumerable<RegisteredSystemAccessPackage> accessPackages)
         {
-            if (accessPackages == null) 
+            if (accessPackages == null)
             {
                 return [];
             }

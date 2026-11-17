@@ -19,11 +19,11 @@ namespace Altinn.AccessManagement.UI.Controllers
     [ApiController]
     [AutoValidateAntiforgeryTokenIfAuthCookie]
     public class SystemUserChangeRequestController(
-        ISystemUserChangeRequestService _systemUserChangeRequestService, 
-        IOptions<PlatformSettings> _platformSettings, 
+        ISystemUserChangeRequestService _systemUserChangeRequestService,
+        IOptions<PlatformSettings> _platformSettings,
         IHttpContextAccessor _httpContextAccessor,
         IOptions<GeneralSettings> _generalSettings) : ControllerBase
-    {       
+    {
         /// <summary>
         /// Gets a SystemUserChangeRequestFE by Id
         /// </summary>
@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return req.Problem.ToActionResult();
             }
-            
+
             return Ok(req.Value);
         }
 
@@ -75,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             return Ok(req.Value);
         }
-        
+
         /// <summary>
         /// Logout and store change request id in cookie
         /// </summary>
@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             // store cookie value for redirect
             HttpContext.Response.Cookies.Append("AltinnLogoutInfo", $"SystemuserChangeRequestId={changeRequestId}", cookieOptions);
-            
+
             string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
             return Redirect(logoutUrl);
         }

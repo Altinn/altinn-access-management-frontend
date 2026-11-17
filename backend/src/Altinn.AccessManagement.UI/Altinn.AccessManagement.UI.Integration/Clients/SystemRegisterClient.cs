@@ -34,10 +34,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         /// <param name="platformSettings"> platform settings configuration</param>
         /// <param name="accessTokenProvider">the handler for access token generator</param>
         public SystemRegisterClient(
-            HttpClient httpClient, 
+            HttpClient httpClient,
             ILogger<SystemRegisterClient> logger,
-            IHttpContextAccessor httpContextAccessor, 
-            IOptions<PlatformSettings> platformSettings, 
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<PlatformSettings> platformSettings,
             IAccessTokenProvider accessTokenProvider)
         {
             _logger = logger;
@@ -65,7 +65,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 {
                     return JsonSerializer.Deserialize<List<RegisteredSystem>>(responseContent, _jsonSerializerOptions);
                 }
-                
+
                 _logger.LogError("AccessManagement.UI // SystemRegisterClient // GetSystems // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 if (response.IsSuccessStatusCode)
                 {
-                    return JsonSerializer.Deserialize<RegisteredSystem>(responseContent, _jsonSerializerOptions);   
+                    return JsonSerializer.Deserialize<RegisteredSystem>(responseContent, _jsonSerializerOptions);
                 }
 
                 _logger.LogError("AccessManagement.UI // SystemRegisterClient // GetSystem // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);

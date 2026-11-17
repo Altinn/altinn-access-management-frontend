@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { afterEach, beforeEach, describe, it, expect } from 'vitest';
 
 import { type RolePermission } from '@/rtk/features/roleApi';
 import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
@@ -6,6 +6,7 @@ import { PartyType, type PartyEntity } from '@/dataObjects/dtos/Party';
 import {
   A2_PROVIDER_CODE,
   A3_PROVIDER_CODE,
+  BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE,
   CRA_PROVIDER_CODE,
   ECC_PROVIDER_CODE,
 } from '../UserRoles/useRoleMetadata';
@@ -13,6 +14,7 @@ import {
 import {
   AGENT_ROLE_REASON,
   AGENT_ROLE,
+  BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON,
   ER_ROLE_REASON,
   GUARDIANSHIP_ROLE_REASON,
   getDeleteUserDialogModel,
@@ -594,5 +596,49 @@ describe('getDeleteUserDialogModelFromStatus', () => {
     expect(model.partialConfirmationMessageKey).toBe(
       'delete_user.reportee_partial_confirmation_message',
     );
+  });
+});
+
+describe('bankruptcy estate administrator role', () => {
+  const setFeatureFlag = (enabled: boolean) => {
+    window.featureFlags = {
+      enableBankruptcyEstateAdministration: enabled,
+    } as Window['featureFlags'];
+  };
+
+  const administratorRole = {
+    code: BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE,
+    via: [null],
+    providerCode: A3_PROVIDER_CODE,
+  };
+  const directDelegation = { code: RIGHTHOLDER_ROLE, via: [null] };
+
+  beforeEach(() => setFeatureFlag(true));
+  afterEach(() => setFeatureFlag(false));
+
+  it('is a reason the user cannot be deleted', () => {
+    const rolePermissions = mockRolePermissions([administratorRole]);
+
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([
+      BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON,
+    ]);
+    expect(getDeletionStatus(rolePermissions, false, false).level).toBe(DeletionLevel.None);
+  });
+
+  it('leaves other delegations deletable', () => {
+    const rolePermissions = mockRolePermissions([administratorRole, directDelegation]);
+
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([
+      BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON,
+    ]);
+    expect(getDeletionStatus(rolePermissions, false, false).level).toBe(DeletionLevel.Limited);
+  });
+
+  it('is not a reason while the feature is turned off', () => {
+    setFeatureFlag(false);
+    const rolePermissions = mockRolePermissions([administratorRole, directDelegation]);
+
+    expect(getNonDeletableReasons(rolePermissions)).toEqual([]);
+    expect(getDeletionStatus(rolePermissions, false, false).level).toBe(DeletionLevel.Full);
   });
 });
