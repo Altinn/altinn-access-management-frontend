@@ -77,6 +77,24 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Search filtered on a service owner
+        ///     Expected: Search returns only the access packages with resources from that service owner
+        /// </summary>
+        [Fact]
+        public async Task GetSearch_WithResourceProviderCode()
+        {
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/accesspackage/search?resourceProviderCode=skd");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<AccessAreaFE> actualResources = JsonSerializer.Deserialize<List<AccessAreaFE>>(await response.Content.ReadAsStringAsync(), options);
+            AccessPackage accessPackage = Assert.Single(Assert.Single(actualResources).AccessPackages);
+            Assert.Equal("Regnskapsfører med signeringsrettighet", accessPackage.Name);
+        }
+
+        /// <summary>
         ///     Test case: Get all access packages for a valid right holder on behalf of a valid party 
         ///     Expected: Returns the right holders active access package delegations, sorted into the areas they belong to
         /// </summary>

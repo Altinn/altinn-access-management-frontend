@@ -124,7 +124,9 @@ export const PartyRepresentationProvider = ({
       ? actingParty
       : fromPartyUuid === reportee?.id
         ? reportee
-        : fromConnectedParty;
+        : fromPartyUuid === currentUser?.id
+          ? currentUser
+          : fromConnectedParty;
 
   const toParty = toPartyOverride
     ? toPartyOverride

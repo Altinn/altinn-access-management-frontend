@@ -29,6 +29,7 @@ interface AccessPackageListProps {
   availableActions?: DelegationAction[];
   showAvailableToggle?: boolean;
   searchString?: string;
+  serviceOwners?: string[];
   showPermissions?: boolean;
   showPackagesCount?: boolean;
   onSelect?: (accessPackage: AccessPackage) => void;
@@ -59,6 +60,7 @@ export const AccessPackageList = ({
   onRevokeSuccess,
   onRevokeError,
   searchString,
+  serviceOwners,
   showPermissions,
   showPackagesCount,
   packageAs,
@@ -86,6 +88,7 @@ export const AccessPackageList = ({
     showAllPackages,
     showOnlyGuardianships,
     searchString,
+    serviceOwners,
     filterByType,
   });
 
@@ -120,6 +123,7 @@ export const AccessPackageList = ({
   });
 
   const combinedAreas = [...assignedAreas, ...availableAreas];
+  const isSearching = !!searchString || !!serviceOwners?.length;
   const localExpandedState = useAreaExpandedState();
   const { toggleExpandedArea, isExpanded } = expandedState ?? localExpandedState;
 
@@ -131,7 +135,7 @@ export const AccessPackageList = ({
     );
   }
 
-  if (fetchingSearch && searchString && searchString.length > 0) {
+  if (fetchingSearch && isSearching) {
     return (
       <div className={classes.loadingSpinner}>
         <SearchHitsStatus />
@@ -158,7 +162,7 @@ export const AccessPackageList = ({
     );
   }
 
-  const displayAreas = searchString
+  const displayAreas = isSearching
     ? combinedAreas
     : [...combinedAreas].sort((a, b) => a.name.localeCompare(b.name));
 
@@ -223,8 +227,7 @@ export const AccessPackageList = ({
   };
 
   if (
-    searchString &&
-    searchString.length > 0 &&
+    isSearching &&
     (allPackageAreas === undefined || allPackageAreas.length === 0 || displayAreas.length === 0)
   ) {
     return (
@@ -254,7 +257,7 @@ export const AccessPackageList = ({
   return (
     <div className={classes.accessAreaList}>
       <SearchHitsStatus
-        hits={searchString ? countPackages(displayAreas) : undefined}
+        hits={isSearching ? countPackages(displayAreas) : undefined}
         searchString={searchString}
         message={searchHitsText}
       />
