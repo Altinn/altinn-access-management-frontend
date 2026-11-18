@@ -530,6 +530,48 @@ describe('PartyRepresentationProvider - Acting Party Logic', () => {
     });
   });
 
+  test('Case 7: fromParty is currentUser when fromPartyUuid matches the logged-in user and acting as reportee', async () => {
+    vi.mocked(lookupApi.useGetPartyFromLoggedInUserQuery).mockReturnValue({
+      data: mockCurrentUser,
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+    } as unknown as ReturnType<typeof lookupApi.useGetPartyFromLoggedInUserQuery>);
+
+    vi.mocked(useReporteeParty).mockReturnValue({
+      party: mockReporteeParty,
+      isLoading: false,
+      error: undefined,
+    });
+
+    // Lookup is skipped for the logged-in user, so no connected party is returned
+    vi.mocked(useConnectedParty).mockReturnValue({
+      party: undefined,
+      isLoading: false,
+      error: undefined,
+      isError: false,
+    });
+
+    vi.mocked(connectionApi.useGetRightHoldersQuery).mockReturnValue({
+      data: [mockConnection],
+      isLoading: false,
+      isSuccess: true,
+      isError: false,
+    } as unknown as ReturnType<typeof connectionApi.useGetRightHoldersQuery>);
+
+    renderWithProvider(<TestConsumer />, {
+      fromPartyUuid: mockCurrentUser.id,
+      toPartyUuid: mockReporteeParty.id,
+      actingPartyUuid: mockReporteeParty.id,
+    });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('from-party')).toHaveTextContent('Current User');
+      expect(screen.getByTestId('to-party')).toHaveTextContent('Reportee Organization');
+      expect(screen.getByTestId('acting-party')).toHaveTextContent('Reportee Organization');
+    });
+  });
+
   test('should show loading state while data is being fetched', async () => {
     vi.mocked(lookupApi.useGetPartyFromLoggedInUserQuery).mockReturnValue({
       data: undefined,
