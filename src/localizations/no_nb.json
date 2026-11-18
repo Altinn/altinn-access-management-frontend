@@ -243,6 +243,8 @@
     "given_packages_title": "Mottatte tilgangspakker",
     "available_packages_title": "Tilgjengelige tilgangspakker",
     "other_available": "Andre tilgjengelige",
+    "packages_with_poa": "Tilgangspakker noen har fullmakt til",
+    "packages_without_poa": "Tilgangspakker ingen har fullmakt til",
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakker",
     "give_new_button": "Gi fullmakt",
     "search_label": "Søk etter tilgangspakker",
