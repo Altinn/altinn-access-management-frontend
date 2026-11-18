@@ -25,9 +25,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<AccessAreaFE>> GetSearch(string languageCode, string searchString, string typeName)
+        public async Task<List<AccessAreaFE>> GetSearch(string languageCode, string searchString, string typeName, IEnumerable<string> resourceProviderCodes = null)
         {
-            IEnumerable<SearchObject<AccessPackage>> searchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, searchString, typeName);
+            IEnumerable<SearchObject<AccessPackage>> searchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, searchString, typeName, resourceProviderCodes);
             List<AccessPackageFE> packages = await _resourceHelper.MapToAccessPackagesFE(searchMatches.Select(match => match.Object));
 
             List<AccessAreaFE> sortedAreas = new List<AccessAreaFE>();

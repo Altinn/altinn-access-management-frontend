@@ -49,11 +49,14 @@ export const accessPackageApi = createApi({
   endpoints: (builder) => ({
     search: builder.query<
       AccessArea[],
-      { searchString: string; language: string; typeName?: string }
+      { searchString: string; language: string; typeName?: string; serviceOwners?: string[] }
     >({
-      query: ({ searchString, typeName }) => {
+      query: ({ searchString, typeName, serviceOwners }) => {
         const typeNameParam = typeName ? `&typeName=${typeName}` : '';
-        return `search?searchString=${searchString}${typeNameParam}`;
+        const serviceOwnerParams = (serviceOwners ?? [])
+          .map((code) => `&resourceProviderCode=${encodeURIComponent(code)}`)
+          .join('');
+        return `search?searchString=${encodeURIComponent(searchString)}${typeNameParam}${serviceOwnerParams}`;
       },
     }),
     getUserDelegations: builder.query<

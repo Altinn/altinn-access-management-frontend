@@ -243,11 +243,18 @@ export const useAccessPackageActions = ({
   };
 
   const onRequest = async (accessPackage: AccessPackage) => {
-    if (!fromParty || !actingParty) {
+    const showRequestError = () =>
+      openSnackbar({
+        message: t('delegation_modal.request.sent_request_error', {
+          resource: accessPackage.name,
+        }),
+        color: 'danger',
+      });
+    const packageId = accessPackage.urn;
+    if (!fromParty || !actingParty || !packageId) {
+      showRequestError();
       return;
     }
-    const packageId = accessPackage.urn;
-    if (!packageId) return;
     if (loadingByPackageId[packageId]) return;
 
     const request = async () => {
@@ -280,12 +287,7 @@ export const useAccessPackageActions = ({
           ...prev,
           [packageId]: false,
         }));
-        openSnackbar({
-          message: t('delegation_modal.request.sent_request_error', {
-            resource: accessPackage.name,
-          }),
-          color: 'danger',
-        });
+        showRequestError();
       }
     };
 

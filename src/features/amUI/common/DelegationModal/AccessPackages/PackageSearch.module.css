@@ -27,13 +27,6 @@
   scrollbar-width: thin;
 }
 
-.resultCountAndChips {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  gap: var(--fds-spacing-2);
-}
-
 .pagination {
   margin: auto;
   margin-top: 16px;

@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { DsParagraph } from '@altinn/altinn-components';
 
 import { AccessPackageList } from '../common/AccessPackageList/AccessPackageList';
-import { DebouncedSearchField } from '../common/DebouncedSearchField/DebouncedSearchField';
+import { PackageSearchToolbar } from '../common/PackageSearchToolbar/PackageSearchToolbar';
 import { AccessPackageInfoPopover } from '../common/AccessPackageInfoPopover/AccessPackageInfoPopover';
 
 import classes from './AccessPackagePermissions.module.css';
@@ -12,7 +12,8 @@ import classes from './AccessPackagePermissions.module.css';
 export const AccessPackagePermissions = () => {
   const { t } = useTranslation();
 
-  const [debouncedSearchString, setDebouncedSearchString] = useState('');
+  const [searchString, setSearchString] = useState('');
+  const [serviceOwners, setServiceOwners] = useState<string[]>([]);
 
   return (
     <>
@@ -26,12 +27,15 @@ export const AccessPackagePermissions = () => {
           </div>
         </DsParagraph>
       </div>
-      <DebouncedSearchField
-        placeholder={t('access_packages.search_label')}
-        setDebouncedSearchString={setDebouncedSearchString}
+      <PackageSearchToolbar
+        searchString={searchString}
+        setSearchString={setSearchString}
+        serviceOwners={serviceOwners}
+        setServiceOwners={setServiceOwners}
       />
       <AccessPackageList
-        searchString={debouncedSearchString}
+        searchString={searchString}
+        serviceOwners={serviceOwners}
         minimizeAvailablePackages={false}
         showAvailableToggle={false}
         showPermissions

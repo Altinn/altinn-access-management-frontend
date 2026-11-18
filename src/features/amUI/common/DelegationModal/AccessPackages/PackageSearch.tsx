@@ -8,7 +8,7 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { useDelegationModalContext } from '../DelegationModalContext';
 import { type DelegationAction } from '../EditModal';
-import { DebouncedSearchField } from '../../DebouncedSearchField/DebouncedSearchField';
+import { PackageSearchToolbar } from '../../PackageSearchToolbar/PackageSearchToolbar';
 import { AccessPackageInfoPopover } from '../../AccessPackageInfoPopover/AccessPackageInfoPopover';
 
 import classes from './PackageSearch.module.css';
@@ -29,7 +29,8 @@ export const PackageSearch = ({
   expandedState,
 }: PackageSearchProps) => {
   const { t } = useTranslation();
-  const { searchString, setSearchString, setActionError } = useDelegationModalContext();
+  const { searchString, setSearchString, filters, setFilters, setActionError } =
+    useDelegationModalContext();
 
   return (
     toParty && (
@@ -40,10 +41,11 @@ export const PackageSearch = ({
         </div>
         <search>
           <div className={classes.searchInputs}>
-            <DebouncedSearchField
-              placeholder={t('access_packages.search_label')}
-              setDebouncedSearchString={setSearchString}
-              initialValue={searchString}
+            <PackageSearchToolbar
+              searchString={searchString}
+              setSearchString={setSearchString}
+              serviceOwners={filters}
+              setServiceOwners={setFilters}
             />
           </div>
           <div className={classes.searchResults}>
@@ -53,6 +55,7 @@ export const PackageSearch = ({
               showPackagesCount={true}
               onSelect={onSelection}
               searchString={searchString}
+              serviceOwners={filters}
               availableActions={availableActions}
               expandedState={expandedState}
               onDelegateError={(accessPackage, errorInfo) => {

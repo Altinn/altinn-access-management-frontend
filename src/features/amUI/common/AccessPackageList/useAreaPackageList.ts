@@ -34,6 +34,7 @@ interface useAreaPackagesProps {
   showAllPackages?: boolean;
   showOnlyGuardianships?: boolean;
   searchString?: string;
+  serviceOwners?: string[];
   filterByType?: boolean;
 }
 
@@ -45,6 +46,7 @@ export enum DeletableStatus {
 
 export const useAreaPackageList = ({
   searchString,
+  serviceOwners,
   showAllAreas,
   showAllPackages,
   showOnlyGuardianships,
@@ -68,6 +70,7 @@ export const useAreaPackageList = ({
       searchString: searchString ?? '',
       language: i18n.language,
       typeName: filterByType ? typeName : undefined,
+      serviceOwners,
     },
     {
       skip: !actingParty,

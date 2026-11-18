@@ -15,16 +15,22 @@ import {
 
 interface ActiveDelegationsProps {
   searchString?: string;
+  serviceOwners?: string[];
   availableActions: DelegationAction[];
 }
 
-export const ActiveDelegations = ({ searchString, availableActions }: ActiveDelegationsProps) => {
+export const ActiveDelegations = ({
+  searchString,
+  serviceOwners,
+  availableActions,
+}: ActiveDelegationsProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
   const { isLoading } = usePartyRepresentation();
   const { t } = useTranslation();
   const restoreFocus = useRestoreFocus();
+  const isSearching = !!searchString || !!serviceOwners?.length;
 
   return (
     <RestoreFocusProvider restoreFocus={restoreFocus}>
@@ -33,10 +39,11 @@ export const ActiveDelegations = ({ searchString, availableActions }: ActiveDele
           isLoading={isLoading}
           showPackagesCount
           showAllPackages
-          showAllAreas={!!searchString}
-          showUnassignedAvailableAreas={!!searchString}
-          minimizeAvailablePackages={!searchString}
+          showAllAreas={isSearching}
+          showUnassignedAvailableAreas={isSearching}
+          minimizeAvailablePackages={!isSearching}
           searchString={searchString}
+          serviceOwners={serviceOwners}
           onSelect={(accessPackage) => {
             setModalItem(accessPackage);
             modalRef.current?.showModal();
