@@ -90,7 +90,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             List<AccessAreaFE> actualResources = JsonSerializer.Deserialize<List<AccessAreaFE>>(await response.Content.ReadAsStringAsync(), options);
-            AccessPackage accessPackage = Assert.Single(Assert.Single(actualResources).AccessPackages);
+            AccessPackageFE accessPackage = Assert.Single(Assert.Single(actualResources).AccessPackages);
             Assert.Equal("Regnskapsfører med signeringsrettighet", accessPackage.Name);
         }
 
