@@ -24,8 +24,9 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="languageCode">languageCode.</param>
         /// <param name="searchString">searchString.</param>
         /// <param name="typeName">Package type name (e.g. Organization, Person).</param>
+        /// <param name="resourceProviderCodes">Service owner org codes to filter on.</param>
         /// <returns>the resources that match the filters and search string corresponding to the provided page.</returns>
-        Task<List<AccessAreaFE>> GetSearch(string languageCode, string searchString, string typeName);
+        Task<List<AccessAreaFE>> GetSearch(string languageCode, string searchString, string typeName, IEnumerable<string> resourceProviderCodes = null);
 
         /// <summary>
         ///     Gets all access package delegations one specified right holder (or all right holders) has on behalf of one specified party (or all reportee parties)

@@ -15,8 +15,9 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="languageCode">the language to use in texts returned and searched in</param>
         /// <param name="searchString">the text to be searched for</param>
         /// <param name="typeName">Package type name (e.g. Organization, Person).</param>
+        /// <param name="resourceProviderCodes">Service owner org codes. When set, only packages with resources from these service owners are returned</param>
         /// <returns>List of access packages matching the search parameters</returns>
-        Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName);
+        Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName, IEnumerable<string> resourceProviderCodes = null);
 
         /// <summary>
         ///     Gets all access package delegations from someone to someone (or multiple someones)

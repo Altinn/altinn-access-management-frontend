@@ -76,7 +76,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName)
+        public async Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName, IEnumerable<string> resourceProviderCodes = null)
         {
             string safeSearchTerm = Uri.EscapeDataString(searchString ?? string.Empty);
             string endpointUrl = $"meta/info/accesspackages/search/?term={safeSearchTerm}&searchInResources=true";
@@ -84,6 +84,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             {
                 string safeTypeName = Uri.EscapeDataString(typeName);
                 endpointUrl = $"{endpointUrl}&typeName={safeTypeName}";
+            }
+
+            foreach (string code in resourceProviderCodes?.Where(c => !string.IsNullOrWhiteSpace(c)) ?? Enumerable.Empty<string>())
+            {
+                endpointUrl = $"{endpointUrl}&resourceProviderCode={Uri.EscapeDataString(code)}";
             }
 
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);

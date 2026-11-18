@@ -141,6 +141,12 @@ export const resourceHandler = (ACCESSMANAGEMENT_BASE_URL: string) => [
       {
         organisationName: 'NARNIA',
         organisationNumber: '889640782',
+        organisationCode: 'narnia',
+      },
+      {
+        organisationName: 'Skatteetaten',
+        organisationNumber: '974761076',
+        organisationCode: 'skd',
       },
     ]);
   }),

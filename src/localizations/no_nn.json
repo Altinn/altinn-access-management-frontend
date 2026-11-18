@@ -246,7 +246,7 @@
     "packages_without_poa": "Tilgangspakkar ingen har fullmakt til",
     "current_access_packages_title": "Fullmakt til {{count}} tilgangspakkar",
     "give_new_button": "Gi fullmakt",
-    "search_label": "Søk etter tilgangspakkar",
+    "search_label": "Søk i tilgangspakkar",
     "other_packages_in_area_title": "Andre tilgjengelige pakkar i området:",
     "package_delegation_success": "{{name}} har no fått fullmakt til {{accessPackage}}.",
     "package_delegation_error": "Det var ikkje mogleg å gi {{name}} fullmakt til {{accessPackage}}.",
