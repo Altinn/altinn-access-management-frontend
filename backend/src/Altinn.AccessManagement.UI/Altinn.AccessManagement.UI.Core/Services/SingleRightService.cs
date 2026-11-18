@@ -1,5 +1,7 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
@@ -13,6 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IResourceService _resourceService;
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly ISingleRightClient _singleRightClient;
+        private readonly IAltinnCdnService _altinnCdnService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleRightService"/> class.
@@ -20,11 +23,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceService">The resource service.</param>
         /// <param name="resourceRegistryClient">The resource registry client.</param>
         /// <param name="singleRightClient">The single rights client.</param>
-        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient)
+        /// <param name="altinnCdnService">The Altinn CDN service, used to look up resource owner logos.</param>
+        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient, IAltinnCdnService altinnCdnService)
         {
             _resourceService = resourceService;
             _resourceRegistryClient = resourceRegistryClient;
             _singleRightClient = singleRightClient;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
@@ -76,7 +81,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<ResourceRightFE> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
         {
             ResourceRight resourceRight = await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
-            return ResourceRightFE.FromResourceRight(resourceRight);
+            if (resourceRight == null)
+            {
+                return null;
+            }
+
+            Dictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
+            ServiceResourceFE resourceFE = resourceRight.Resource == null ? null : ResourceUtils.MapToServiceResourceFE(resourceRight.Resource, orgs);
+            return ResourceRightFE.FromResourceRight(resourceRight, resourceFE);
         }
 
         /// <inheritdoc />

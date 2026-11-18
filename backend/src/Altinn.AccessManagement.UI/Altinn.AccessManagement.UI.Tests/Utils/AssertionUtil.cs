@@ -144,29 +144,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        ///     Assert that two <see cref="ResourceAM" /> have the same property in the same positions.
-        /// </summary>
-        /// <param name="expected">An instance with the expected values.</param>
-        /// <param name="actual">The instance to verify.</param>
-        public static void AssertEqual(ResourceAM expected, ResourceAM actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.Description, actual.Description);
-            Assert.Equal(expected.ProviderId, actual.ProviderId);
-            Assert.Equal(expected.RefId, actual.RefId);
-            Assert.Equal(expected.TypeId, actual.TypeId);
-            Assert.Equal(expected.Type.Name, actual.Type.Name);
-            Assert.Equal(expected.Type.Id, actual.Type.Id);
-            Assert.NotNull(expected.Provider);
-            Assert.NotNull(actual.Provider);
-            AssertEqual(expected.Provider, actual.Provider);
-        }
-
-        /// <summary>
         ///     Assert that two <see cref="InstanceRightsFE" /> have the same property values.
         /// </summary>
         /// <param name="expected">An instance with the expected values.</param>
@@ -476,18 +453,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
             AssertCollections(expected.Resources, actual.Resources, AssertEqual);
             AssertCollections(expected.AccessPackages, actual.AccessPackages, AssertEqual);
         }
-
-        public static void AssertEqual(AccessPackage expected, AccessPackage actual)
-        {
-            Assert.NotNull(actual);
-            Assert.NotNull(expected);
-
-            Assert.Equal(expected.Id, actual.Id);
-            Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.Description, actual.Description);
-            AssertCollections(expected.Resources.ToList(), actual.Resources.ToList(), AssertEqual);
-        }
-
 
         public static void AssertEqual(RoleAssignment expected, RoleAssignment actual)
         {
