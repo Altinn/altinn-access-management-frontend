@@ -108,7 +108,13 @@ export const AreaItemContent = ({
         {t('access_packages.access_packages_in_area_title')}
       </DsHeading>
       {packages.assigned.length > 0 && (
-        <List aria-label={t('access_packages.given_packages_title')}>
+        <List
+          aria-label={
+            showPermissions
+              ? t('access_packages.packages_with_poa')
+              : t('access_packages.given_packages_title')
+          }
+        >
           {packages.assigned.map((pkg) => {
             return (
               <AssignedPackageItem
@@ -144,7 +150,13 @@ export const AreaItemContent = ({
       )}
 
       {packages.available.length > 0 && showAvailablePackages && (
-        <List aria-label={t('access_packages.available_packages_title')}>
+        <List
+          aria-label={
+            showPermissions
+              ? t('access_packages.packages_without_poa')
+              : t('access_packages.available_packages_title')
+          }
+        >
           {packages.available.map((pkg) => {
             const canDelegate = canDelegatePackage(pkg.id);
             return (
