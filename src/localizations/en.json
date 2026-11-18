@@ -1249,6 +1249,13 @@
     "new_requests_zero": "{{reportee}} has no new requests",
     "new_requests_one": "{{reportee}} has one new request",
     "new_requests_other": "{{reportee}} has {{count}} new requests",
+    "subunit_requests_title": "Subunits of {{reportee}} have new requests",
+    "subunit_requests_action": "Process the requests",
+    "subunit_requests_modal_heading": "Requests for subunits of {{reportee}}",
+    "subunit_requests_modal_intro": "Requests must be processed on each subunit. Choose from the list below.",
+    "subunit_requests_count_one": "{{count}} request",
+    "subunit_requests_count_other": "{{count}} requests",
+    "subunit_requests_switch": "Switch to subunit",
     "bankruptcy_estate_admin_item_description": "Let others administer the bankruptcy estates of {{reportee}}."
   },
   "request_page": {

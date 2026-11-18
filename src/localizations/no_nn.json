@@ -1239,6 +1239,13 @@
     "new_requests_zero": "{{reportee}} har ingen nye førespurnader",
     "new_requests_one": "{{reportee}} har en ny førespurnad",
     "new_requests_other": "{{reportee}} har {{count}} nye førespurnader",
+    "subunit_requests_title": "Undereiningar av {{reportee}} har nye førespurnader",
+    "subunit_requests_action": "Behandle førespurnadene",
+    "subunit_requests_modal_heading": "Førespurnader hos undereiningar av {{reportee}}",
+    "subunit_requests_modal_intro": "Førespurnader må behandlast på kvar enkelt undereining. Vel frå lista under.",
+    "subunit_requests_count_one": "{{count}} førespurnad",
+    "subunit_requests_count_other": "{{count}} førespurnader",
+    "subunit_requests_switch": "Byt til undereining",
     "bankruptcy_estate_admin_item_description": "Gi andre tilgang til å administrere konkursbua til {{reportee}}."
   },
   "request_page": {

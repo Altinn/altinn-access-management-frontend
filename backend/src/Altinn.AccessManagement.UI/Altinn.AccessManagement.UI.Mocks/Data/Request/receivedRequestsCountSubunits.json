@@ -1,0 +1,24 @@
+[
+  {
+    "party": {
+      "id": "0195efb8-7c80-7cb0-a2b6-8f5c1e4b2a11",
+      "name": "BAKER AS AVD OSLO",
+      "type": "Organization",
+      "variant": "BEDR",
+      "organizationIdentifier": "910000001",
+      "personIdentifier": null
+    },
+    "count": 3
+  },
+  {
+    "party": {
+      "id": "0195efb8-7c80-7cb0-a2b6-8f5c1e4b2a12",
+      "name": "BAKER AS AVD BERGEN",
+      "type": "Organization",
+      "variant": "BEDR",
+      "organizationIdentifier": "910000002",
+      "personIdentifier": null
+    },
+    "count": 0
+  }
+]

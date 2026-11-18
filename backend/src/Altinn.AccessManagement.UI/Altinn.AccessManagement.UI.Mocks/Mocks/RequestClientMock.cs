@@ -217,6 +217,16 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return await Task.FromResult(3);
         }
 
+        /// <inheritdoc />
+        public async Task<List<ReceivedRequestCountSubunit>> GetReceivedRequestsCountForSubunits(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            ThrowExceptionIfTriggerParty(party.ToString());
+            ThrowHttpStatusExceptionIfTriggerParty(party.ToString());
+
+            string dataPath = Path.Combine(dataFolder, "Request", "receivedRequestsCountSubunits.json");
+            return await Task.FromResult(Util.GetMockData<List<ReceivedRequestCountSubunit>>(dataPath));
+        }
+
         // Loads the handled-requests test data and stamps the "recent" handled request with the current
         // time, so the one-year filter test stays deterministic regardless of when it runs.
         private PaginatedResult<Request> GetHandledRequestsMockData()

@@ -305,6 +305,37 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        ///     Endpoint for getting count of requests received by each subunit of a party
+        /// </summary>
+        /// <param name="party">The acting party</param>
+        /// <param name="from">The party who sent the requests</param>
+        /// <param name="status">Status filter</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("received/count/subunits")]
+        public async Task<ActionResult> GetReceivedRequestsCountForSubunits([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var returnVal = await _requestService.GetReceivedRequestsCountForSubunits(party, from, status, cancellationToken);
+                return Ok(returnVal);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during GetReceivedRequestsCountForSubunits: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
         ///     Endpoint for getting a single request by id
         /// </summary>
         /// <param name="party">The acting party</param>
