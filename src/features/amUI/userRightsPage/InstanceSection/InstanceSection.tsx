@@ -6,6 +6,7 @@ import { useParams } from 'react-router';
 import { InstanceList } from '@/features/amUI/common/InstanceList/InstanceList';
 import { instanceRowId } from '@/features/amUI/common/InstanceList/instanceListUtils';
 import { DelegationAction, EditModal } from '@/features/amUI/common/DelegationModal/EditModal';
+import { InstanceInfo } from '@/features/amUI/common/DelegationModal/Instance/InstanceInfo';
 import { type InstanceDelegation, useGetInstancesQuery } from '@/rtk/features/instanceApi';
 import {
   RestoreFocusFallback,
@@ -79,15 +80,7 @@ const InstanceSectionContent = ({ isReportee = false }: { isReportee?: boolean }
       )}
       <EditModal
         ref={modalRef}
-        resource={selectedInstance?.resource}
-        instance={
-          selectedInstance
-            ? {
-                instanceUrn: selectedInstance.instance.refId,
-                dialogLookup: selectedInstance.dialogLookup,
-              }
-            : undefined
-        }
+        ariaLabel={t('delegation_modal.aria_label.instance')}
         onClose={() => {
           // Request focus synchronously before clearing state. If the instance was revoked inside
           // the modal its row is gone, so fall back to the section heading instead of <body>.
@@ -99,11 +92,19 @@ const InstanceSectionContent = ({ isReportee = false }: { isReportee?: boolean }
           }
           setSelectedInstance(null);
         }}
-        availableActions={[
-          ...(canGiveAccess ? [DelegationAction.DELEGATE] : []),
-          DelegationAction.REVOKE,
-        ]}
-      />
+      >
+        {selectedInstance && (
+          <InstanceInfo
+            resource={selectedInstance.resource}
+            instanceUrn={selectedInstance.instance.refId}
+            dialogLookup={selectedInstance.dialogLookup}
+            availableActions={[
+              ...(canGiveAccess ? [DelegationAction.DELEGATE] : []),
+              DelegationAction.REVOKE,
+            ]}
+          />
+        )}
+      </EditModal>
     </div>
   );
 };
