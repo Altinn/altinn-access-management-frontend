@@ -56,20 +56,41 @@ export const SubunitRequestsAlert = ({ reportee }: SubunitRequestsAlertProps) =>
         onClick={() => setIsModalOpen(true)}
       />
       <DsDialog
+        className={classes.subunitRequestsDialog}
         open={isModalOpen}
         closedby='any'
         closeButton={t('common.close')}
         onClose={() => setIsModalOpen(false)}
       >
         <div className={classes.subunitRequestsModal}>
-          <DsHeading
-            level={2}
-            data-size='xs'
-          >
-            {t('landing_page.subunit_requests_modal_heading', { reportee: reporteeName })}
-          </DsHeading>
+          <div>
+            <DsHeading
+              level={2}
+              data-size='xs'
+            >
+              {t('landing_page.subunit_requests_modal_heading', { reportee: reporteeName })}
+            </DsHeading>
+            <DsParagraph data-size='sm'>
+              {t('landing_page.subunit_requests_modal_subheading', {
+                orgNumber: formatOrgNr(reportee?.organizationIdentifier),
+              })}
+            </DsParagraph>
+          </div>
           <DsParagraph data-size='sm'>{t('landing_page.subunit_requests_modal_intro')}</DsParagraph>
           <ul className={classes.subunitRequestsList}>
+            <li>
+              <UserListItem
+                id={reportee?.id ?? ''}
+                name={reporteeName}
+                description={`${t('common.org_nr')} ${formatOrgNr(reportee?.organizationIdentifier)}`}
+                type='company'
+                titleAs='h3'
+                size='sm'
+                interactive={false}
+                shadow='none'
+                containerAs='div'
+              />
+            </li>
             {subunitsWithRequests.map(({ party, count }) => (
               <li
                 key={party.id}
@@ -77,8 +98,11 @@ export const SubunitRequestsAlert = ({ reportee }: SubunitRequestsAlertProps) =>
               >
                 <UserListItem
                   id={party.id}
-                  name={party.name}
-                  description={`${t('common.org_nr')} ${formatOrgNr(party.organizationIdentifier)}`}
+                  name={formatEntityDisplayName(party)}
+                  description={t('landing_page.subunit_requests_subunit_description', {
+                    orgNumber: formatOrgNr(party.organizationIdentifier),
+                    reportee: reporteeName,
+                  })}
                   type='company'
                   subUnit
                   titleAs='h3'

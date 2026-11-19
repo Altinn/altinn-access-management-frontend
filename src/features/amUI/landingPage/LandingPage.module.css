@@ -64,6 +64,10 @@
   font-weight: 500;
 }
 
+.subunitRequestsDialog {
+  max-width: 992px;
+}
+
 .subunitRequestsModal {
   display: flex;
   flex-direction: column;
