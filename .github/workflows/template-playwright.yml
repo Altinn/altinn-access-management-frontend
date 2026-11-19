@@ -96,11 +96,13 @@ jobs:
           echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> "$GITHUB_ENV"
       - name: Show report URL
         if: always()
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
         run: |
           NOTICE="Playwright-rapport: $REPORT_URL"
           # The UU reporter only writes uu/ when the run had axe scans.
-          if [ -f "src/apps/Altinn.AccessManagement.UI/frontend/playwright/playwright-report/${{ inputs.environment }}/uu/index.html" ]; then
+          if [ -f "src/apps/Altinn.AccessManagement.UI/frontend/playwright/playwright-report/${ENVIRONMENT}/uu/index.html" ]; then
             NOTICE="$NOTICE%0APlaywright Universell Utforming-rapport: ${REPORT_URL}uu/index.html"
           fi
           # The only place the report links are printed: an annotation at the top of the run page.
-          echo "::notice title=Rapporter ${{ inputs.environment }}::$NOTICE"
+          echo "::notice title=Rapporter ${ENVIRONMENT}::$NOTICE"
