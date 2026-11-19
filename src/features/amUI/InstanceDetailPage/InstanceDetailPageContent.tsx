@@ -19,6 +19,7 @@ import {
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
+import { InstanceInfo } from '../common/DelegationModal/Instance/InstanceInfo';
 import type { UserActionTarget } from '../common/UserSearch/types';
 import {
   getInboxLinkData,
@@ -267,11 +268,8 @@ export const InstanceDetailPageContent = () => {
       {resource && selectedUser && (
         <EditModal
           ref={modalRef}
-          resource={resource}
-          instance={{ instanceUrn }}
-          toParty={selectedUser}
+          ariaLabel={t('delegation_modal.aria_label.instance')}
           openWithError={actionError}
-          onSuccess={selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined}
           onClose={() => {
             // Restore focus synchronously to the row that opened the modal before clearing state.
             // If the user was revoked inside the modal their row is gone, so the fallback catches it.
@@ -281,8 +279,17 @@ export const InstanceDetailPageContent = () => {
             setSelectedUser(null);
             setActionError(null);
           }}
-          availableActions={selectedUserAvailableActions}
-        />
+        >
+          <InstanceInfo
+            resource={resource}
+            instanceUrn={instanceUrn}
+            toParty={selectedUser}
+            availableActions={selectedUserAvailableActions}
+            onSuccess={
+              selectedUserMode === 'delegate' ? () => modalRef.current?.close() : undefined
+            }
+          />
+        </EditModal>
       )}
     </>
   );

@@ -5,6 +5,7 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
 import { type DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
+import { AccessPackageInfo } from '../../common/DelegationModal/AccessPackages/AccessPackageInfo';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 import {
@@ -58,15 +59,21 @@ export const ActiveDelegations = ({ searchString, availableActions }: ActiveDele
       </RestoreFocusFallback>
       <EditModal
         ref={modalRef}
-        accessPackage={modalItem}
+        ariaLabel={t('delegation_modal.aria_label.access_package')}
         onClose={() => {
           if (modalItem) {
             restoreFocus.requestFocus(modalItem.id);
           }
           setModalItem(undefined);
         }}
-        availableActions={availableActions}
-      />
+      >
+        {modalItem && (
+          <AccessPackageInfo
+            accessPackage={modalItem}
+            availableActions={availableActions}
+          />
+        )}
+      </EditModal>
     </RestoreFocusProvider>
   );
 };
