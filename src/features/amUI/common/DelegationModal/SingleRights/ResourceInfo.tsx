@@ -90,7 +90,7 @@ export const ResourceInfo = ({
     rightsMetaTechnicalErrorDetails,
   } = useSingleRightsDelegationRightsData({ resource, isRequest: isSingleRightRequest });
 
-  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
+  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest, isLoadingRequests } =
     useSingleRightRequests({
       canRequestRights: isSingleRightRequest,
       actingPartyUuid: actingParty?.id,
@@ -199,6 +199,7 @@ export const ResourceInfo = ({
       !isPartyRepresentationLoading &&
       !isRightsSectionLoading &&
       !isResourceDelegationsLoading &&
+      !isLoadingRequests &&
       !isLoadingSingleRightRequest,
     requestWhen: isActionLoading || isLoadingSingleRightRequest,
     onRestore: () => focusFirstEnabledButton(actionsRef.current),
@@ -221,7 +222,10 @@ export const ResourceInfo = ({
           />
         ) : isPartyRepresentationLoading ||
           isRightsSectionLoading ||
-          isResourceDelegationsLoading ? (
+          isResourceDelegationsLoading ||
+          // Only fetched in the request flow; until it arrives the dialog can't tell whether to
+          // offer "request" or "withdraw request".
+          isLoadingRequests ? (
           <ResourceInfoSkeleton />
         ) : (
           <>
