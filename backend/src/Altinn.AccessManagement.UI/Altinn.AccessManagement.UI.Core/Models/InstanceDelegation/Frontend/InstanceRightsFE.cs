@@ -1,4 +1,4 @@
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend
@@ -11,7 +11,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend
         /// <summary>
         /// Gets or sets the resource
         /// </summary>
-        public ResourceAM Resource { get; set; }
+        public ServiceResourceFE Resource { get; set; }
 
         /// <summary>
         /// Gets or sets the delegated instance
@@ -31,7 +31,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend
         /// <summary>
         /// Maps instance rights from the access management instance endpoints
         /// </summary>
-        public static InstanceRightsFE FromInstanceRights(InstanceRights instanceRights)
+        /// <param name="instanceRights">The instance rights from Access Management</param>
+        /// <param name="resource">The resource, already mapped to the frontend model</param>
+        public static InstanceRightsFE FromInstanceRights(InstanceRights instanceRights, ServiceResourceFE resource)
         {
             if (instanceRights == null)
             {
@@ -40,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.InstanceDelegation.Frontend
 
             return new InstanceRightsFE
             {
-                Resource = instanceRights.Resource,
+                Resource = resource,
                 Instance = instanceRights.Instance,
                 DirectRights = RightAccessFE.FromRightAccesses(instanceRights.DirectRights),
                 IndirectRights = RightAccessFE.FromRightAccesses(instanceRights.IndirectRights),

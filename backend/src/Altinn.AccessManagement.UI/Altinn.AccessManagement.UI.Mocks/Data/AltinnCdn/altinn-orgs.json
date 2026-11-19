@@ -6,11 +6,13 @@
         "nb": "Digitaliseringsdirektoratet",
         "nn": "Digitaliseringsdirektoratet"
       },
-      "logo": "/orgs/digdir/digdir.png",
-      "emblem": "/orgs/digdir/digdir.svg",
+      "logo": "https://altinncdn.no/orgs/digdir/digdir.png",
+      "emblem": "https://altinncdn.no/orgs/digdir/digdir.svg",
       "orgnr": "991825827",
       "homepage": "",
-      "environments": ["tt02"],
+      "environments": [
+        "tt02"
+      ],
       "contact": {
         "phone": "+47123456",
         "url": "/digdir/kontakt-oss/943"
@@ -22,11 +24,13 @@
         "nb": "Skatteetaten",
         "nn": "Skatteetaten"
       },
-      "logo": "/orgs/skd/skd.png",
-      "emblem": "/orgs/skd/skd.svg",
+      "logo": "https://altinncdn.no/orgs/skd/skd.png",
+      "emblem": "https://altinncdn.no/orgs/skd/skd.svg",
       "orgnr": "974761076",
       "homepage": "",
-      "environments": ["tt02"],
+      "environments": [
+        "tt02"
+      ],
       "contact": {
         "phone": "+47123456",
         "url": "/kontakt"
@@ -38,14 +42,88 @@
         "nb": "ZZZ Demo Organisasjon",
         "nn": "ZZZ Demo Organisasjon"
       },
-      "logo": "/orgs/zzzdemo/zzzdemo.png",
-      "emblem": "/orgs/zzzdemo/zzzdemo.svg",
+      "logo": "https://altinncdn.no/orgs/zzzdemo/zzzdemo.png",
+      "emblem": "https://altinncdn.no/orgs/zzzdemo/zzzdemo.svg",
       "orgnr": "123456789",
       "homepage": "",
-      "environments": ["tt02"],
+      "environments": [
+        "tt02"
+      ],
       "contact": {
         "phone": "+47123456",
         "url": "/zzzdemo/kontakt-oss"
+      }
+    },
+    "ttd": {
+      "name": {
+        "en": "Test Ministry",
+        "nb": "Testdepartementet",
+        "nn": "Testdepartementet"
+      },
+      "logo": "https://altinncdn.no/orgs/ttd/ttd.png",
+      "emblem": "https://altinncdn.no/orgs/ttd/ttd.svg",
+      "orgnr": "991825827",
+      "homepage": "",
+      "environments": [
+        "tt02"
+      ],
+      "contact": {
+        "phone": "+47123456",
+        "url": "/kontakt"
+      }
+    },
+    "nav": {
+      "name": {
+        "en": "Norwegian Labour and Welfare Administration",
+        "nb": "Arbeids- og velferdsetaten",
+        "nn": "Arbeids- og velferdsetaten"
+      },
+      "logo": "https://altinncdn.no/orgs/nav/nav.png",
+      "emblem": "https://altinncdn.no/orgs/nav/nav.svg",
+      "orgnr": "889640782",
+      "homepage": "",
+      "environments": [
+        "tt02"
+      ],
+      "contact": {
+        "phone": "+47123456",
+        "url": "/kontakt"
+      }
+    },
+    "fd": {
+      "name": {
+        "en": "Ministry of Finance",
+        "nb": "Finansdepartementet",
+        "nn": "Finansdepartementet"
+      },
+      "logo": "https://altinncdn.no/orgs/fd/fd.png",
+      "emblem": "https://altinncdn.no/orgs/fd/fd.svg",
+      "orgnr": "972417807",
+      "homepage": "",
+      "environments": [
+        "tt02"
+      ],
+      "contact": {
+        "phone": "+47123456",
+        "url": "/kontakt"
+      }
+    },
+    "nrna": {
+      "name": {
+        "en": "Norwegian Radiation and Nuclear Safety Authority",
+        "nb": "Direktoratet for strålevern og atomsikkerhet",
+        "nn": "Direktoratet for strålevern og atomsikkerhet"
+      },
+      "logo": "https://altinncdn.no/orgs/nrna/nrna.png",
+      "emblem": "",
+      "orgnr": "974761025",
+      "homepage": "",
+      "environments": [
+        "tt02"
+      ],
+      "contact": {
+        "phone": "+47123456",
+        "url": "/kontakt"
       }
     }
   }

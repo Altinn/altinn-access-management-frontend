@@ -2,14 +2,7 @@ import React from 'react';
 import { List, ResourceListItem, type ResourceListItemProps } from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
 
-import {
-  extractLogoUrl,
-  extractOrgCode,
-  extractOwnerName,
-  extractResourceName,
-} from '../ResourceList/utils';
 import { useRestoreFocusTarget } from '../RestoreFocus';
 
 export interface ClientResourceListItemData {
@@ -27,19 +20,16 @@ interface ClientResourceListItemsProps {
 }
 
 const ClientResourceListRow = (item: ClientResourceListItemData) => {
-  const { getProviderLogoUrl } = useProviderLogoUrl();
   useRestoreFocusTarget(item.id);
 
   return (
     <ResourceListItem
       id={item.id}
       size='sm'
-      resourceName={extractResourceName(item.resource)}
-      ownerName={extractOwnerName(item.resource)}
-      ownerLogoUrl={
-        getProviderLogoUrl(extractOrgCode(item.resource)) ?? extractLogoUrl(item.resource)
-      }
-      ownerLogoUrlAlt={extractOwnerName(item.resource)}
+      resourceName={item.resource.title ?? ''}
+      ownerName={item.resource.resourceOwnerName ?? ''}
+      ownerLogoUrl={item.resource.resourceOwnerLogoUrl || undefined}
+      ownerLogoUrlAlt={item.resource.resourceOwnerName ?? ''}
       titleAs={item.titleAs}
       interactive={!!item.onClick}
       as={item.onClick ? 'button' : 'div'}

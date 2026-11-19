@@ -6,11 +6,7 @@
   },
   "sector": null,
   "status": null,
-  "limitedByRRR": false,
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
   "homepage": null,
-  "isPartOf": null,
   "keywords": null,
   "identifier": "appid-503",
   "contactPoints": [
@@ -37,12 +33,6 @@
     "nn": "Gir tilgang til snarveger."
   },
   "resourceReferences": [],
-  "authorizationReference": [
-    {
-      "id": "urn:altinn:resource",
-      "value": "appid-503"
-    }
-  ],
   "hasCompetentAuthority": {
     "orgcode": "PAA",
     "organization": "130000000",

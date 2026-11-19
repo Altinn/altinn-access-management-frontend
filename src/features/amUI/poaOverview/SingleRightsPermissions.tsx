@@ -20,14 +20,7 @@ import { ResourceFilterToolbar } from '../common/ResourceFilterToolbar/ResourceF
 import { PermissionsBadge } from '../common/PermissionsBadge/PermissionsBadge';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useFilteredResources } from '../common/ResourceList/useFilteredResources';
-import {
-  extractResourceName,
-  extractOwnerName,
-  extractOrgCode,
-  extractDescription,
-  isExpiredResource,
-  matchesAnySearchWord,
-} from '../common/ResourceList/utils';
+import { matchesAnySearchWord } from '../common/ResourceList/utils';
 
 import classes from './SingleRightsPermissions.module.css';
 
@@ -146,11 +139,6 @@ export const SingleRightsPermissions = () => {
     serviceOwnerFilter: filterState,
     searchString: debouncedSearch,
     includeExpiredResources: true,
-    getResourceName: extractResourceName,
-    getOwnerName: extractOwnerName,
-    getOwnerOrgCode: extractOrgCode,
-    getDescription: extractDescription,
-    isExpiredResource: isExpiredResource,
     matchesSearch: matchesAnySearchWord,
   });
 

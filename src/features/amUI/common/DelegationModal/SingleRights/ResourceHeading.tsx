@@ -1,41 +1,25 @@
 import { Avatar, Badge, type Color, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
-import { useProviderLogoUrl } from '@/resources/hooks';
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
-import type { ResourceListItemResource } from '../../ResourceList/types';
-import {
-  extractLogoUrl,
-  extractOrgCode,
-  extractOwnerName,
-  extractResourceName,
-  isExpiredResource,
-} from '../../ResourceList/utils';
+import { isExpiredResource } from '../../ResourceList/utils';
 
 import classes from './ResourceInfo.module.css';
 
 interface ResourceHeadingProps {
-  resource: ResourceListItemResource;
+  resource: ServiceResource;
   /** Heading level for the resource title. Defaults to 3, which fits the dialogs it is used in. */
   level?: 1 | 2 | 3 | 4 | 5 | 6;
-  /**
-   * Already resolved owner logo, for callers that have looked it up themselves.
-   * `null` means the caller resolved it and there is no logo, which suppresses the lookup below.
-   */
-  providerLogoUrl?: string | null;
 }
 
-export const ResourceHeading = ({ resource, level = 3, providerLogoUrl }: ResourceHeadingProps) => {
+export const ResourceHeading = ({ resource, level = 3 }: ResourceHeadingProps) => {
   const { t } = useTranslation();
-  const { getProviderLogoUrl } = useProviderLogoUrl();
   const isSmall = useIsMobileOrSmaller();
 
-  const ownerName = extractOwnerName(resource);
-  const logoUrl =
-    providerLogoUrl !== undefined
-      ? (providerLogoUrl ?? undefined)
-      : (getProviderLogoUrl(extractOrgCode(resource)) ?? extractLogoUrl(resource));
+  const ownerName = resource.resourceOwnerName ?? '';
+  const logoUrl = resource.resourceOwnerLogoUrl || undefined;
 
   const icon = (small: boolean) =>
     logoUrl ? (
@@ -67,7 +51,7 @@ export const ResourceHeading = ({ resource, level = 3, providerLogoUrl }: Resour
             level={level}
             data-size={isSmall ? '2xs' : 'sm'}
           >
-            {extractResourceName(resource)}
+            {resource.title}
           </DsHeading>
           {titleBadge && (
             <Badge

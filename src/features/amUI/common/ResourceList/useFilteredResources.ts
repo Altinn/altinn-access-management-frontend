@@ -1,53 +1,49 @@
 import { useMemo } from 'react';
 
-interface UseFilteredResourcesProps<TResource> {
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
+import { isExpiredResource } from './utils';
+
+interface UseFilteredResourcesProps<TResource extends ServiceResource> {
   resources?: TResource[];
   searchString: string;
   serviceOwnerFilter?: string[];
   includeExpiredResources?: boolean;
-  getResourceName: (resource: TResource) => string;
-  getOwnerName: (resource: TResource) => string;
-  getOwnerOrgCode: (resource: TResource) => string;
+  /** Text matched by the default search besides title and owner. Defaults to the description. */
   getDescription?: (resource: TResource) => string;
-  isExpiredResource?: (resource: TResource) => boolean;
+  /** Replaces the default search, which matches the whole search string on title, owner and description. */
   matchesSearch?: (resource: TResource, normalizedSearch: string) => boolean;
 }
 
-export const useFilteredResources = <TResource>({
+export const useFilteredResources = <TResource extends ServiceResource>({
   resources,
   searchString,
   serviceOwnerFilter,
   includeExpiredResources,
-  getResourceName,
-  getOwnerName,
-  getOwnerOrgCode,
   getDescription,
-  isExpiredResource,
   matchesSearch,
 }: UseFilteredResourcesProps<TResource>) => {
   const normalizedSearch = searchString.trim().toLowerCase();
 
   const filteredResources = useMemo(() => {
     let list = resources ?? [];
-    if (!includeExpiredResources && isExpiredResource) {
+    if (!includeExpiredResources) {
       list = list.filter((x) => !isExpiredResource(x));
     }
     if (!normalizedSearch && !serviceOwnerFilter) return list;
+    const owners = serviceOwnerFilter?.map((owner) => owner.toLowerCase()) ?? [];
     return list.filter((resource) => {
-      const nameOrTitle = getResourceName(resource).toLowerCase();
-      const ownerName = getOwnerName(resource).toLowerCase();
-      const description = getDescription?.(resource)?.toLowerCase() ?? '';
       const serviceOwnerMatch =
-        serviceOwnerFilter && serviceOwnerFilter.length > 0
-          ? serviceOwnerFilter
-              .map((owner) => owner.toLowerCase())
-              .includes(getOwnerOrgCode(resource).toLowerCase())
-          : true;
-      const searchMatch = matchesSearch
-        ? matchesSearch(resource, normalizedSearch)
-        : nameOrTitle.includes(normalizedSearch) ||
-          ownerName.includes(normalizedSearch) ||
-          description.includes(normalizedSearch);
+        owners.length === 0 || owners.includes(resource.resourceOwnerOrgcode?.toLowerCase() ?? '');
+      const searchMatch = !normalizedSearch
+        ? true
+        : matchesSearch
+          ? matchesSearch(resource, normalizedSearch)
+          : [
+              resource.title,
+              resource.resourceOwnerName,
+              getDescription ? getDescription(resource) : resource.description,
+            ].some((field) => field?.toLowerCase().includes(normalizedSearch));
       return searchMatch && serviceOwnerMatch;
     });
   }, [
@@ -56,8 +52,6 @@ export const useFilteredResources = <TResource>({
     serviceOwnerFilter,
     includeExpiredResources,
     getDescription,
-    getOwnerName,
-    getResourceName,
     matchesSearch,
   ]);
 

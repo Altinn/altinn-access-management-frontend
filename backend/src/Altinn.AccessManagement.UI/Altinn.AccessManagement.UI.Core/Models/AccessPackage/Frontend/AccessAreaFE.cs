@@ -38,12 +38,12 @@
         /// <summary>
         /// The packages that are in this group
         /// </summary>
-        public List<AccessPackage> AccessPackages { get; set; }
+        public List<AccessPackageFE> AccessPackages { get; set; }
 
         /// <summary>
         /// Constructor for enritching an area with access packages to make it into an AccessAreaFE
         /// </summary>
-        public AccessAreaFE(AccessArea area, List<AccessPackage> packages)
+        public AccessAreaFE(AccessArea area, List<AccessPackageFE> packages)
         {
             Id = area.Id;
             Urn = area.Urn;

@@ -179,12 +179,16 @@ export const roleHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/role/resources`, () => {
     return HttpResponse.json([
       {
-        id: 'resource-1',
-        providerId: 'provider-ccr',
-        typeId: 'role-resource',
-        name: 'Registrering av styre',
+        identifier: 'resource-1',
+        title: 'Registrering av styre',
         description: 'Eksempletjeneste knyttet til rollen.',
-        refId: 'resource-1',
+        resourceOwnerName: 'Brønnøysundregistrene',
+        resourceOwnerOrgcode: 'brg',
+        resourceOwnerOrgNumber: '974760673',
+        resourceOwnerLogoUrl: 'https://altinncdn.no/orgs/brg/brg.svg',
+        resourceType: 'GenericAccessResource',
+        delegable: true,
+        keywords: [],
       },
     ]);
   }),

@@ -11,34 +11,38 @@ namespace Altinn.AccessManagement.UI.Core.Services
     public class AccessPackageService : IAccessPackageService
     {
         private readonly IAccessPackageClient _accessPackageClient;
+        private readonly ResourceHelper _resourceHelper;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="SingleRightService"/> class.
+        /// Initializes a new instance of the <see cref="AccessPackageService"/> class.
         /// </summary>
         /// <param name="accessPackageClient">The access package client.</param>
-        public AccessPackageService(IAccessPackageClient accessPackageClient)
+        /// <param name="resourceHelper">The resource helper, used to enrich package resources.</param>
+        public AccessPackageService(IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper)
         {
             _accessPackageClient = accessPackageClient;
+            _resourceHelper = resourceHelper;
         }
 
         /// <inheritdoc />
         public async Task<List<AccessAreaFE>> GetSearch(string languageCode, string searchString, string typeName, IEnumerable<string> resourceProviderCodes = null)
         {
             IEnumerable<SearchObject<AccessPackage>> searchMatches = await _accessPackageClient.GetAccessPackageSearchMatches(languageCode, searchString, typeName, resourceProviderCodes);
+            List<AccessPackageFE> packages = await _resourceHelper.MapToAccessPackagesFE(searchMatches.Select(match => match.Object));
 
             List<AccessAreaFE> sortedAreas = new List<AccessAreaFE>();
 
-            foreach (SearchObject<AccessPackage> searchMatch in searchMatches)
+            foreach (AccessPackageFE package in packages)
             {
-                int premadeAreaIndex = sortedAreas.FindIndex(area => area.Id == searchMatch.Object.Area.Id);
+                int premadeAreaIndex = sortedAreas.FindIndex(area => area.Id == package.Area.Id);
 
                 if (premadeAreaIndex < 0)
                 {
-                    sortedAreas.Add(new AccessAreaFE(searchMatch.Object.Area, new List<AccessPackage> { searchMatch.Object }));
+                    sortedAreas.Add(new AccessAreaFE(package.Area, new List<AccessPackageFE> { package }));
                 }
                 else
                 {
-                    sortedAreas[premadeAreaIndex].AccessPackages.Add(searchMatch.Object);
+                    sortedAreas[premadeAreaIndex].AccessPackages.Add(package);
                 }
             }
 
@@ -84,18 +88,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 // manual filter until it is fixed
                 PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
                 var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
-                {
-                    return new AccessPackageFE
-                    {
-                        Id = package.Id.ToString(),
-                        Urn = package.Urn,
-                        Name = package.Name,
-                        IsAssignable = package.IsAssignable,
-                        Description = package.Description,
-                        Resources = ResourceUtils.MapToAccessPackageResourceFE(package.Resources),
-                        Permissions = PermissionFE.FromPermissions(packagePermissions?.Permissions)
-                    };
-                }
+                AccessPackageFE packageFE = (await _resourceHelper.MapToAccessPackagesFE([package])).Single();
+                packageFE.Permissions = PermissionFE.FromPermissions(packagePermissions?.Permissions);
+                return packageFE;
             }
         }
 

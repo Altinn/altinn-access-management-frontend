@@ -10,7 +10,6 @@
   "status": "Active",
   "validTo": "2022-12-24T23:59:59",
   "homepage": "https://www.nav.no/",
-  "isPartOf": "navportal",
   "keywords": [
     {
       "word": "delegation",

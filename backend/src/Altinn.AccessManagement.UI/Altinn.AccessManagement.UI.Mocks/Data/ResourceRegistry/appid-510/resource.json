@@ -6,11 +6,7 @@
   },
   "sector": null,
   "status": null,
-  "limitedByRRR": false,
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
   "homepage": null,
-  "isPartOf": null,
   "keywords": null,
   "identifier": "appid-510",
   "contactPoints": [
@@ -37,12 +33,6 @@
     "nn": "Her er en beskrivelse."
   },
   "resourceReferences": [],
-  "authorizationReference": [
-    {
-      "id": "urn:altinn:resource",
-      "value": "appid-510"
-    }
-  ],
   "hasCompetentAuthority": {
     "orgcode": "DIGDIR",
     "organization": "991825827",

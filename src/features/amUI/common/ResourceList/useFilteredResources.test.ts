@@ -4,13 +4,7 @@ import { renderHook } from '@testing-library/react';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { useFilteredResources } from './useFilteredResources';
-import {
-  extractDescription,
-  extractOrgCode,
-  extractOwnerName,
-  extractResourceName,
-  matchesAnySearchWord,
-} from './utils';
+import { matchesAnySearchWord } from './utils';
 
 const resource = (overrides: Partial<ServiceResource>) =>
   ({
@@ -39,10 +33,6 @@ const filter = (
       resources,
       searchString,
       serviceOwnerFilter: options.serviceOwnerFilter,
-      getResourceName: extractResourceName,
-      getOwnerName: extractOwnerName,
-      getOwnerOrgCode: extractOrgCode,
-      getDescription: extractDescription,
       matchesSearch: options.anyWord ? matchesAnySearchWord : undefined,
     }),
   ).result.current.resources.map((r) => r.identifier);
