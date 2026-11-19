@@ -82,14 +82,6 @@ export const systemUserApi = createApi({
       }),
       invalidatesTags: [Tags.SystemUsers],
     }),
-    updateSystemuser: builder.mutation<SystemUser, SystemUser & { partyId: string }>({
-      query: ({ partyId, ...systemUser }) => ({
-        url: `systemuser/${partyId}/${systemUser.id}`,
-        method: 'PUT',
-        body: systemUser,
-      }),
-      invalidatesTags: [Tags.SystemUsers],
-    }),
     deleteSystemuser: builder.mutation<void, { partyId: string; systemUserId: string }>({
       query: ({ partyId, systemUserId }) => ({
         url: `systemuser/${partyId}/${systemUserId}`,
@@ -341,7 +333,6 @@ export const {
   useGetAgentSystemUsersQuery,
   useGetAgentSystemUserQuery,
   useDeleteAgentSystemuserMutation,
-  useUpdateSystemuserMutation,
   useGetRegisteredSystemsQuery,
   useGetRegisteredSystemRightsQuery,
   useGetSystemUserRequestQuery,

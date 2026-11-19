@@ -76,10 +76,6 @@ export const requestApi = createApi({
       },
       providesTags: ['receivedRequests'],
     }),
-    getRequest: builder.query<RequestDto, { party: string; id: string }>({
-      query: ({ party, id }) => `${id}?party=${party}`,
-      providesTags: ['request'],
-    }),
 
     // delegation modal queries and mutations
     getEnrichedSentResourceRequests: builder.query<
@@ -226,7 +222,6 @@ export const requestApi = createApi({
 export const {
   useGetSentRequestsQuery,
   useGetReceivedRequestsQuery,
-  useGetRequestQuery,
   useCreateResourceRequestMutation,
   useCreatePackageRequestMutation,
   useWithdrawRequestMutation,

@@ -86,19 +86,6 @@ export const connectionApi = createApi({
         return { status: response.status, data: new Date().toISOString() };
       },
     }),
-    // This endpoint is not currently in use.
-    validateNewUserPerson: builder.mutation<string, { ssn: string; lastName: string }>({
-      query: ({ ssn, lastName }) => ({
-        url: `reportee/${getCookie('AltinnPartyUuid')}/rightholder/validateperson`,
-        method: 'POST',
-        body: JSON.stringify({ ssn, lastName }),
-      }),
-      transformErrorResponse: (response: {
-        status: string | number;
-      }): { status: string | number } => {
-        return { status: response.status };
-      },
-    }),
     getSimplifiedConnections: builder.query<SimplifiedConnection[], { partyUuid: string }>({
       query: ({ partyUuid }) => `simplified?party=${partyUuid}`,
       providesTags: ['Connections'],
@@ -110,7 +97,6 @@ export const {
   useGetRightHoldersQuery,
   useAddRightHolderMutation,
   useRemoveRightHolderMutation,
-  useValidateNewUserPersonMutation,
   useGetSimplifiedConnectionsQuery,
 } = connectionApi;
 
