@@ -58,6 +58,16 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         Task<ServiceResourceFE> GetResource(string resourceRegistryId, string languageCode);
 
         /// <summary>
+        ///     Looks up resources in the resource registry and maps them for frontend use, with the resource owner's
+        ///     logo resolved. Resources that cannot be found or fail to load are left out.
+        /// </summary>
+        /// <param name="resourceIds">Resource registry ids. Duplicates are looked up once.</param>
+        /// <param name="languageCode">The language code.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The found resources, keyed by resource registry id.</returns>
+        Task<Dictionary<string, ServiceResourceFE>> GetResourcesFE(IEnumerable<string> resourceIds, string languageCode, CancellationToken cancellationToken = default);
+
+        /// <summary>
         ///     Gets list of all resource owners.
         /// </summary>
         /// <returns>Simplified list of resource owners for frontend.</returns>

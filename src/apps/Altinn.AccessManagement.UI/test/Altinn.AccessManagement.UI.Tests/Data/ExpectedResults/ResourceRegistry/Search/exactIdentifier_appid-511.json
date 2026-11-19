@@ -9,7 +9,6 @@
       "rightDescription": "Her er en beskrivelse.",
       "homepage": null,
       "status": null,
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Some category",
@@ -25,12 +24,9 @@
       "resourceReferences": [],
       "priorityCounter": 3,
       "resourceType": "Default",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "appid-511"
-        }
-      ]
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg",
+      "resourceOwnerOrgcode": "DIGDIR",
+      "keywords": []
     }
   ]
 }

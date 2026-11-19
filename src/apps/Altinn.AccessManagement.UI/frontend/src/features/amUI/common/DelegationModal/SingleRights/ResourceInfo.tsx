@@ -53,7 +53,15 @@ export const ResourceInfo = ({
 }: ResourceInfoProps) => {
   const isSmall = useIsMobileOrSmaller();
   const { t } = useTranslation();
-  const { actingParty, fromParty, toParty } = usePartyRepresentation();
+  // The provider renders its children while it is still resolving the parties. Until then toParty is
+  // undefined, so every query below is skipped and reports not-loading; without this the content
+  // would flash with empty data before the skeleton appears.
+  const {
+    actingParty,
+    fromParty,
+    toParty,
+    isLoading: isPartyRepresentationLoading,
+  } = usePartyRepresentation();
 
   const isSingleRightRequest = availableActions?.includes(DelegationAction.REQUEST);
   const hasDelegateAction = availableActions?.includes(DelegationAction.DELEGATE);
@@ -82,7 +90,7 @@ export const ResourceInfo = ({
     rightsMetaTechnicalErrorDetails,
   } = useSingleRightsDelegationRightsData({ resource, isRequest: isSingleRightRequest });
 
-  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
+  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest, isLoadingRequests } =
     useSingleRightRequests({
       canRequestRights: isSingleRightRequest,
       actingPartyUuid: actingParty?.id,
@@ -188,8 +196,10 @@ export const ResourceInfo = ({
     isSettled:
       !isActionLoading &&
       !isActionSuccess &&
+      !isPartyRepresentationLoading &&
       !isRightsSectionLoading &&
       !isResourceDelegationsLoading &&
+      !isLoadingRequests &&
       !isLoadingSingleRightRequest,
     requestWhen: isActionLoading || isLoadingSingleRightRequest,
     onRestore: () => focusFirstEnabledButton(actionsRef.current),
@@ -210,7 +220,12 @@ export const ResourceInfo = ({
             isLoading={isActionLoading}
             displaySuccess={isActionSuccess}
           />
-        ) : isRightsSectionLoading || isResourceDelegationsLoading ? (
+        ) : isPartyRepresentationLoading ||
+          isRightsSectionLoading ||
+          isResourceDelegationsLoading ||
+          // Only fetched in the request flow; until it arrives the dialog can't tell whether to
+          // offer "request" or "withdraw request".
+          isLoadingRequests ? (
           <ResourceInfoSkeleton />
         ) : (
           <>

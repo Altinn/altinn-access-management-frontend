@@ -2,6 +2,7 @@ using System.Net;
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Common.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Dialogporten;
 using Altinn.AccessManagement.UI.Core.Models.InstanceDelegation;
@@ -22,6 +23,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IInstanceClient _instanceClient;
         private readonly ILogger<InstanceService> _logger;
         private readonly IResourceService _resourceService;
+        private readonly IAltinnCdnService _altinnCdnService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InstanceService"/> class.
@@ -31,18 +33,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="instanceClient">Client for instance delegation data.</param>
         /// <param name="logger">Logger instance.</param>
         /// <param name="resourceService">Service for resource data.</param>
+        /// <param name="altinnCdnService">Altinn CDN service, used to look up resource owner logos.</param>
         public InstanceService(
             IAuthenticationClient authenticationClient,
             IDialogportClient dialogportClient,
             IInstanceClient instanceClient,
             ILogger<InstanceService> logger,
-            IResourceService resourceService)
+            IResourceService resourceService,
+            IAltinnCdnService altinnCdnService)
         {
             _authenticationClient = authenticationClient;
             _dialogportClient = dialogportClient;
             _instanceClient = instanceClient;
             _logger = logger;
             _resourceService = resourceService;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
@@ -66,15 +71,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 .Where(p => !string.IsNullOrEmpty(p.Resource?.RefId))
                 .ToList();
 
-            // Fan out all resource lookups in parallel instead of one-by-one
-            ServiceResourceFE[] resources = await Task.WhenAll(
-                validPermissions.Select(p => _resourceService.GetResource(p.Resource.RefId, languageCode)));
+            // Many instances can share a resource, so each resource is looked up once. Resources that cannot be found are left out.
+            Dictionary<string, ServiceResourceFE> resources = await _resourceService.GetResourcesFE(
+                validPermissions.Select(p => p.Resource.RefId),
+                languageCode);
 
-            // Pair each permission with its resolved resource, drop any where the lookup returned null
             List<InstanceDelegation> delegations = validPermissions
-                .Zip(resources, (permission, resourceFe) => (permission, resourceFe))
-                .Where(x => x.resourceFe != null)
-                .Select(x => new InstanceDelegation(x.resourceFe, x.permission.Instance, PermissionFE.FromPermissions(x.permission.Permissions)))
+                .Where(p => resources.ContainsKey(p.Resource.RefId))
+                .Select(p => new InstanceDelegation(resources[p.Resource.RefId], p.Instance, PermissionFE.FromPermissions(p.Permissions)))
                 .ToList();
 
             if (string.IsNullOrWhiteSpace(enrichedToken))
@@ -128,7 +132,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<InstanceRightsFE> GetInstanceRights(string languageCode, Guid party, Guid from, Guid to, string resource, string instance)
         {
             InstanceRights instanceRights = await _instanceClient.GetInstanceRights(languageCode, party, from, to, resource, instance);
-            return InstanceRightsFE.FromInstanceRights(instanceRights);
+            if (instanceRights == null)
+            {
+                return null;
+            }
+
+            Dictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
+            ServiceResourceFE resourceFE = instanceRights.Resource == null ? null : ResourceUtils.MapToServiceResourceFE(instanceRights.Resource, orgs);
+            return InstanceRightsFE.FromInstanceRights(instanceRights, resourceFE);
         }
 
         /// <inheritdoc />

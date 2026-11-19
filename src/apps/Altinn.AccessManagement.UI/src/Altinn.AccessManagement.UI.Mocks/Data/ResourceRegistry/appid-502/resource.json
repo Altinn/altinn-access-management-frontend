@@ -6,11 +6,7 @@
   },
   "sector": null,
   "status": null,
-  "limitedByRRR": false,
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
   "homepage": null,
-  "isPartOf": null,
   "keywords": [
     { "language": "nb", "word": "klesskapet_kw" },
     { "language": "en", "word": "closet_kw" }
@@ -40,12 +36,6 @@
     "nn": "Gir tilgang til Narnia."
   },
   "resourceReferences": [],
-  "authorizationReference": [
-    {
-      "id": "urn:altinn:resource",
-      "value": "appid-502"
-    }
-  ],
   "hasCompetentAuthority": {
     "orgcode": "NRNA",
     "organization": "777777777",

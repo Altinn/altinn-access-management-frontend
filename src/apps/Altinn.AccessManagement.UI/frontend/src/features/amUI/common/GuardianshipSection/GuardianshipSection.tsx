@@ -9,6 +9,7 @@ import { usePartyRepresentation } from '../../common/PartyRepresentationContext/
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
 import { DebouncedSearchField } from '../DebouncedSearchField/DebouncedSearchField';
 import { EditModal } from '../DelegationModal/EditModal';
+import { AccessPackageInfo } from '../DelegationModal/AccessPackages/AccessPackageInfo';
 
 export const GuardianshipSection = () => {
   const { t } = useTranslation();
@@ -71,10 +72,16 @@ export const GuardianshipSection = () => {
       />
       <EditModal
         ref={modalRef}
-        accessPackage={modalItem}
+        ariaLabel={t('delegation_modal.aria_label.access_package')}
         onClose={() => setModalItem(undefined)}
-        availableActions={[]}
-      />
+      >
+        {modalItem && (
+          <AccessPackageInfo
+            accessPackage={modalItem}
+            availableActions={[]}
+          />
+        )}
+      </EditModal>
     </>
   );
 };

@@ -3,15 +3,16 @@ import { useTranslation } from 'react-i18next';
 import { DsAlert, DsListItem, DsListUnordered } from '@altinn/altinn-components';
 
 import { type ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 
-import type { ProblemDetail, SystemUserAccessPackage } from '../../types';
+import type { ProblemDetail } from '../../types';
 import { mapErrorCodeToErrorMessage } from '../../errorHandling';
 
 import classes from './DelegationCheckError.module.css';
 
 interface DelegationCheckErrorProps {
   defaultError: string;
-  accessPackages: SystemUserAccessPackage[];
+  accessPackages: AccessPackage[];
   resources: ServiceResource[];
   error: {
     data: ProblemDetail;
@@ -156,7 +157,7 @@ const parseNotDelegableResources = (notDelegableResources?: string): string[] =>
 
 interface DelegationReasonDetailsProps {
   reasons: Reason[];
-  accessPackages: SystemUserAccessPackage[];
+  accessPackages: AccessPackage[];
   resources: ServiceResource[];
 }
 

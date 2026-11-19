@@ -1,7 +1,8 @@
 using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
-using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.ResourceOwner;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight;
 using Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
@@ -14,6 +15,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         private readonly IResourceService _resourceService;
         private readonly IResourceRegistryClient _resourceRegistryClient;
         private readonly ISingleRightClient _singleRightClient;
+        private readonly IAltinnCdnService _altinnCdnService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SingleRightService"/> class.
@@ -21,11 +23,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceService">The resource service.</param>
         /// <param name="resourceRegistryClient">The resource registry client.</param>
         /// <param name="singleRightClient">The single rights client.</param>
-        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient)
+        /// <param name="altinnCdnService">The Altinn CDN service, used to look up resource owner logos.</param>
+        public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient, IAltinnCdnService altinnCdnService)
         {
             _resourceService = resourceService;
             _resourceRegistryClient = resourceRegistryClient;
             _singleRightClient = singleRightClient;
+            _altinnCdnService = altinnCdnService;
         }
 
         /// <inheritdoc />
@@ -56,44 +60,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             List<ResourceDelegation> delegationsFE = new List<ResourceDelegation>();
 
-            // Create a Lookup to map orgnr to org details
-            OrgList orgList = await _resourceRegistryClient.GetAllResourceOwners();
+            Dictionary<string, ServiceResourceFE> resources = await _resourceService.GetResourcesFE(
+                resourcePermissions.Select(permission => permission.Resource?.RefId),
+                languageCode);
 
             foreach (var resourcePermission in resourcePermissions)
             {
                 var resourceId = resourcePermission.Resource?.RefId;
 
-                if (string.IsNullOrEmpty(resourceId))
+                if (!string.IsNullOrEmpty(resourceId) && resources.TryGetValue(resourceId, out ServiceResourceFE resourceFE))
                 {
-                    continue;
-                }
-
-                var resource = await _resourceService.GetResource(resourceId);
-
-                if (resource != null)
-                {
-                    // Find the logo based on the orgnr in the orgnrToOrgLookup
-                    orgList.Orgs.TryGetValue(resource.HasCompetentAuthority?.Orgcode?.ToLower() ?? string.Empty, out var org);
-
-                    ServiceResourceFE resourceFE = new ServiceResourceFE(
-                        resource.Identifier,
-                        resource.Title?.GetValueOrDefault(languageCode) ?? resource.Title?.GetValueOrDefault("nb"),
-                        resourceType: resource.ResourceType,
-                        status: resource.Status,
-                        resourceReferences: resource.ResourceReferences,
-                        resourceOwnerName: resource.HasCompetentAuthority?.Name?.GetValueOrDefault(languageCode) ?? resource.HasCompetentAuthority?.Name?.GetValueOrDefault("nb"),
-                        resourceOwnerOrgNumber: resource.HasCompetentAuthority?.Organization,
-                        resourceOwnerOrgcode: resource.HasCompetentAuthority?.Orgcode,
-                        rightDescription: resource.RightDescription?.GetValueOrDefault(languageCode) ?? resource.RightDescription?.GetValueOrDefault("nb"),
-                        description: resource.Description?.GetValueOrDefault(languageCode) ?? resource.Description?.GetValueOrDefault("nb"),
-                        visible: resource.Visible,
-                        delegable: resource.Delegable,
-                        contactPoints: resource.ContactPoints,
-                        spatial: resource.Spatial,
-                        authorizationReference: resource.AuthorizationReference,
-                        resourceOwnerLogoUrl: org?.Logo,
-                        keywords: resource.Keywords?.FindAll(kw => kw.Language == languageCode).Select(kw => kw.Word).ToList());
-
                     delegationsFE.Add(new ResourceDelegation(resourceFE, PermissionFE.FromPermissions(resourcePermission.Permissions)));
                 }
             }
@@ -105,7 +81,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<ResourceRightFE> GetDelegatedResourceRights(string languageCode, Guid party, Guid from, Guid to, string resource)
         {
             ResourceRight resourceRight = await _singleRightClient.GetDelegatedResourceRights(languageCode, party, from, to, resource);
-            return ResourceRightFE.FromResourceRight(resourceRight);
+            if (resourceRight == null)
+            {
+                return null;
+            }
+
+            Dictionary<string, OrgData> orgs = await _altinnCdnService.GetOrgData();
+            ServiceResourceFE resourceFE = resourceRight.Resource == null ? null : ResourceUtils.MapToServiceResourceFE(resourceRight.Resource, orgs);
+            return ResourceRightFE.FromResourceRight(resourceRight, resourceFE);
         }
 
         /// <inheritdoc />

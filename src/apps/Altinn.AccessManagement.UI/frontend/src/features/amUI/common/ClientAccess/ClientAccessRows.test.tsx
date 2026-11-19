@@ -13,10 +13,6 @@ import { ClientAccessRows, type ClientAccessRow } from './ClientAccessRows';
 
 vi.mock('lottie-react', () => ({ Lottie: () => null }));
 
-vi.mock('@/resources/hooks/useProviderLogoUrl', () => ({
-  useProviderLogoUrl: () => ({ getProviderLogoUrl: () => undefined }),
-}));
-
 // Labels are the translation keys, per the convention in the other component tests. Interpolation
 // values are appended so assertions can tell the variants apart.
 vi.mock('react-i18next', () => ({

@@ -15,12 +15,6 @@ export const singlerightHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
           resourceOwnerOrgNumber: '777777777',
           resourceOwnerOrgcode: 'digdir',
           resourceReferences: [],
-          authorizationReference: [
-            {
-              id: 'urn:altinn:resource',
-              value: 'appid-502',
-            },
-          ],
           resourceType: 'Default',
           delegable: true,
         },

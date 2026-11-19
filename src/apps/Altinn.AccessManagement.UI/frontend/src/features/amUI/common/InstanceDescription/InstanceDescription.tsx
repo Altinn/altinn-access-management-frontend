@@ -3,7 +3,6 @@ import { Avatar, DsHeading, DsParagraph, Icon } from '@altinn/altinn-components'
 import { useTranslation } from 'react-i18next';
 
 import { useIsMobileOrSmaller } from '@/resources/utils/screensizeUtils';
-import { useProviderLogoUrl } from '@/resources/hooks';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import type { PartyEntity } from '@/dataObjects/dtos/Party';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
@@ -31,14 +30,10 @@ export const InstanceDescription = ({
   titleLevel = 2,
   statusSection,
 }: InstanceDescriptionProps) => {
-  const { getProviderLogoUrl } = useProviderLogoUrl();
   const { t, i18n } = useTranslation();
   const shortId = getInstanceShortId(instanceData?.instance.refId);
   const title = resolveInstanceTitle(instanceData, resource, t, i18n.language);
   const isSmall = useIsMobileOrSmaller();
-  const providerLogoUrl = resource.resourceOwnerOrgcode
-    ? getProviderLogoUrl(resource.resourceOwnerOrgcode)
-    : undefined;
   const fromName = formatEntityDisplayName(fromParty);
 
   return (
@@ -51,9 +46,9 @@ export const InstanceDescription = ({
       </DsHeading>
       <div className={classes.metadataRows}>
         <div className={classes.resourceOwner}>
-          {providerLogoUrl || resource.resourceOwnerLogoUrl ? (
+          {resource.resourceOwnerLogoUrl ? (
             <Icon
-              iconUrl={providerLogoUrl ?? resource.resourceOwnerLogoUrl}
+              iconUrl={resource.resourceOwnerLogoUrl}
               size='sm'
             />
           ) : (

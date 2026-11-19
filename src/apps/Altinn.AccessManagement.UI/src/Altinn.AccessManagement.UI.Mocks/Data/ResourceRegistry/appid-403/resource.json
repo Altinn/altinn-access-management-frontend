@@ -6,11 +6,7 @@
   },
   "sector": null,
   "status": null,
-  "limitedByRRR": false,
-  "SelfIdentifiedUserEnabled": false,
-  "EnterpriseUserEnabled": false,
   "homepage": null,
-  "isPartOf": null,
   "keywords": null,
   "identifier": "appid-403",
   "contactPoints": [
@@ -54,12 +50,6 @@
       "reference": "1",
       "referenceType": "ServiceEditionCode",
       "referenceSource": "Altinn2"
-    }
-  ],
-  "authorizationReference": [
-    {
-      "id": "urn:altinn:resource",
-      "value": "appid-403"
     }
   ],
   "hasCompetentAuthority": {

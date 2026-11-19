@@ -1,4 +1,5 @@
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
 {
@@ -38,13 +39,45 @@ namespace Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend
         public string Description { get; set; }
 
         /// <summary>
-        /// Resources
+        /// The area the package belongs to
         /// </summary>
-        public List<AccessPackageResourceFE> Resources { get; set; }
+        public AccessArea Area { get; set; }
+
+        /// <summary>
+        /// The type of the package
+        /// </summary>
+        public TypeDto Type { get; set; }
+
+        /// <summary>
+        /// Resources, mapped from the data Access Management provides, with the owner logo looked up from the Altinn CDN
+        /// </summary>
+        public List<ServiceResourceFE> Resources { get; set; }
 
         /// <summary>
         /// Permissions
         /// </summary>
         public List<PermissionFE> Permissions { get; set; }
+
+        /// <summary>
+        /// Maps an access package to the frontend model
+        /// </summary>
+        /// <param name="accessPackage">The access package</param>
+        /// <param name="resources">The package's resources, already mapped to the frontend model</param>
+        /// <returns>The mapped access package</returns>
+        public static AccessPackageFE FromAccessPackage(AccessPackage accessPackage, List<ServiceResourceFE> resources)
+        {
+            return new AccessPackageFE
+            {
+                Id = accessPackage.Id.ToString(),
+                Urn = accessPackage.Urn,
+                Name = accessPackage.Name,
+                Description = accessPackage.Description,
+                IsAssignable = accessPackage.IsAssignable,
+                IsDelegable = accessPackage.IsDelegable,
+                Area = accessPackage.Area,
+                Type = accessPackage.Type,
+                Resources = resources,
+            };
+        }
     }
 }

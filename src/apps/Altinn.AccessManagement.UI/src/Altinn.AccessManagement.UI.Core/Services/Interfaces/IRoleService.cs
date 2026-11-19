@@ -1,5 +1,6 @@
 using System.Collections.Generic;
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.AccessPackage.Frontend;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.Role.Frontend;
 using RoleMetadata = Altinn.AccessManagement.UI.Core.Models.Common.Role;
 
@@ -32,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="variant">Optional variant filter.</param>
         /// <param name="includeResources">Whether to include resources for each package.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode);
+        Task<IEnumerable<AccessPackageFE>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode);
 
         /// <summary>
         /// Gets resource metadata for a role.
@@ -41,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="variant">Optional variant filter.</param>
         /// <param name="includePackageResources">Whether to include resources assigned via packages.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode);
+        Task<IEnumerable<ServiceResourceFE>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode);
 
         /// <summary>
         /// Removes an Altinn 2 role assignment between two parties.

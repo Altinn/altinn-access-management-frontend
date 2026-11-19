@@ -13,9 +13,10 @@ import {
 } from '@/rtk/features/systemUserApi';
 import { useDocumentTitle } from '@/resources/hooks/useDocumentTitle';
 import { useGetIsAdminQuery, useGetReporteeQuery } from '@/rtk/features/userInfoApi';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { RequestPageBase } from './components/RequestPageBase/RequestPageBase';
-import type { ProblemDetail, SystemUserAccessPackage } from './types';
+import type { ProblemDetail } from './types';
 import { RightsList } from './components/RightsList/RightsList';
 import { ButtonRow } from './components/ButtonRow/ButtonRow';
 import { DelegationCheckError } from './components/DelegationCheckError/DelegationCheckError';
@@ -207,7 +208,7 @@ export const SystemUserChangeRequestPage = () => {
 
 interface ChangeListProps {
   resources?: ServiceResource[];
-  accessPackages?: SystemUserAccessPackage[];
+  accessPackages?: AccessPackage[];
   isRemove?: boolean;
 }
 export const ChangeList = ({ resources, accessPackages, isRemove }: ChangeListProps) => {

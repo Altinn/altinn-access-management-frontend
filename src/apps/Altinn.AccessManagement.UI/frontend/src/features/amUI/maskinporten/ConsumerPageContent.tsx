@@ -25,6 +25,7 @@ import {
   useRestoreFocusOnDataChange,
 } from '../common/RestoreFocus';
 
+import { ScopeInfo } from './ScopeInfo';
 import { useMaskinportenResourceActions } from './hooks/useMaskinportenResourceActions';
 import { MaskinportenDeleteDialog } from './MaskinportenDeleteDialog';
 import {
@@ -148,8 +149,7 @@ const ConsumerPageContentInner = () => {
           editModal={
             <EditModal
               ref={scopeModalRef}
-              maskinportenScope={selectedResource ?? undefined}
-              availableActions={[DelegationAction.REVOKE]}
+              ariaLabel={t('delegation_modal.aria_label.maskinporten')}
               onClose={() => {
                 // Restore focus to the row that opened the modal before clearing state. If the
                 // resource was revoked inside the modal its row is gone, so the heading catches it.
@@ -161,7 +161,14 @@ const ConsumerPageContentInner = () => {
                 }
                 setSelectedResource(null);
               }}
-            />
+            >
+              {selectedResource && (
+                <ScopeInfo
+                  resource={selectedResource}
+                  availableActions={[DelegationAction.REVOKE]}
+                />
+              )}
+            </EditModal>
           }
         />
       </RestoreFocusFallback>
