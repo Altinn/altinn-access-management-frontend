@@ -62,20 +62,20 @@ export const SubunitRequestsAlert = ({ reportee }: SubunitRequestsAlertProps) =>
         closeButton={t('common.close')}
         onClose={() => setIsModalOpen(false)}
       >
-        <div className={classes.subunitRequestsModal}>
-          <div>
-            <DsHeading
-              level={2}
-              data-size='xs'
-            >
-              {t('landing_page.subunit_requests_modal_heading', { reportee: reporteeName })}
-            </DsHeading>
-            <DsParagraph data-size='sm'>
-              {t('landing_page.subunit_requests_modal_subheading', {
-                orgNumber: formatOrgNr(reportee?.organizationIdentifier),
-              })}
-            </DsParagraph>
-          </div>
+        <DsDialog.Block>
+          <DsHeading
+            level={2}
+            data-size='xs'
+          >
+            {t('landing_page.subunit_requests_modal_heading', { reportee: reporteeName })}
+          </DsHeading>
+          <DsParagraph data-size='sm'>
+            {t('landing_page.subunit_requests_modal_subheading', {
+              orgNumber: formatOrgNr(reportee?.organizationIdentifier),
+            })}
+          </DsParagraph>
+        </DsDialog.Block>
+        <DsDialog.Block className={classes.subunitRequestsModal}>
           <DsParagraph data-size='sm'>{t('landing_page.subunit_requests_modal_intro')}</DsParagraph>
           <ul className={classes.subunitRequestsList}>
             <li>
@@ -130,7 +130,7 @@ export const SubunitRequestsAlert = ({ reportee }: SubunitRequestsAlertProps) =>
               </li>
             ))}
           </ul>
-        </div>
+        </DsDialog.Block>
       </DsDialog>
     </>
   );
