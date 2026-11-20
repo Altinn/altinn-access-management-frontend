@@ -62,8 +62,10 @@ export const ClientAccessSections = ({ entries, emptyText }: ClientAccessSection
     return {
       id: entry.itemId,
       resource: entry.resource,
-      hasAccess: entryHasAccess,
       titleAs: 'div',
+      color: entryHasAccess ? 'company' : 'neutral',
+      variant: entry.isMissingRight ? 'default' : undefined,
+      badge: entry.isMissingRight ? { theme: 'subtle', label: 'Mangler fullmakt' } : undefined,
       onClick: () => openModal(entry),
       controls: renderControl(entry, entryHasAccess),
     };
