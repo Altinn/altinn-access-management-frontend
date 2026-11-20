@@ -62,6 +62,7 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 import classes from './LandingPage.module.css';
 import { LandingPageInfoCard } from './LandingPageInfoCard';
+import { SubunitRequestsAlert } from './SubunitRequestsAlert';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -303,6 +304,9 @@ export const LandingPage = () => {
             isLoading={isLoading}
             isOrganization={isOrganization(reportee)}
           />
+          {isAdmin && isOrganization(reportee) && !isReporteeSubUnit && (
+            <SubunitRequestsAlert reportee={reportee} />
+          )}
           <ListItemContainer
             heading={t('landing_page.your_content_heading')}
             items={getYourAccessesItems()}

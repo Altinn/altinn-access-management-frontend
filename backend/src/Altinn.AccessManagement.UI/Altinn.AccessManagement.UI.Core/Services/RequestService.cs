@@ -160,6 +160,17 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return await _requestClient.GetReceivedRequestsCount(party, from, status, cancellationToken);
         }
 
+        /// <inheritdoc />
+        public async Task<IEnumerable<ReceivedRequestCountSubunitFE>> GetReceivedRequestsCountForSubunits(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            List<ReceivedRequestCountSubunit> response = await _requestClient.GetReceivedRequestsCountForSubunits(party, from, status, cancellationToken);
+            return response.Select(x => new ReceivedRequestCountSubunitFE()
+            {
+                Party = PartyFE.FromEntity(x.Party),
+                Count = x.Count
+            });
+        }
+
         private static RequestFE MapToRequestFE(Request x)
         {
             return new RequestFE()

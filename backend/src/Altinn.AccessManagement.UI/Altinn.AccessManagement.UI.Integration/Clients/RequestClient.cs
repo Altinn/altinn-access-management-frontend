@@ -317,5 +317,35 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 throw;
             }
         }
+
+        /// <inheritdoc />
+        public async Task<List<ReceivedRequestCountSubunit>> GetReceivedRequestsCountForSubunits(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var queryParams = new Dictionary<string, string>
+                {
+                    { "party", party.ToString() }
+                };
+
+                if (from.HasValue)
+                {
+                    queryParams.Add("from", from.Value.ToString());
+                }
+
+                var statusParams = status?.Select(s => new KeyValuePair<string, string>("status", s.ToString())) ?? [];
+
+                string endpointUrl = QueryHelpers.AddQueryString("enduser/request/received/count/subunits", queryParams.Concat(statusParams));
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+                var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<List<ReceivedRequestCountSubunit>>(httpResponse);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // RequestClient // GetReceivedRequestsCountForSubunits // Exception");
+                throw;
+            }
+        }
     }
 }
