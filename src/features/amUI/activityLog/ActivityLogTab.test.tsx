@@ -54,9 +54,17 @@ const setActivityLog = ({
 describe('ActivityLogTab', () => {
   beforeEach(() => {
     fetchNextPage.mockReset();
-    mockHookResult(activityLogApi.useGetActivityLogFilterValuesQuery, {
-      data: { data: [{ id: 'lise-larsen-as', name: 'Lise Larsen AS' }], links: {} },
-    });
+    (activityLogApi.useGetActivityLogFilterValuesQuery as Mock).mockImplementation(
+      ({ field }: { field: string }) => ({
+        data: {
+          data:
+            field === 'by'
+              ? [{ id: 'helle-hovedadmin', name: 'Helle Hovedadmin' }]
+              : [{ id: 'lise-larsen-as', name: 'Lise Larsen AS' }],
+          links: {},
+        },
+      }),
+    );
     mockHookResult(activityLogApi.useGetActivityTypesQuery, { data: [] });
   });
 
@@ -69,16 +77,25 @@ describe('ActivityLogTab', () => {
       />,
     );
 
-    expect(activityLogApi.useGetActivityLogInfiniteQuery).toHaveBeenCalledWith({
+    const search = {
       area: 'maskinporten',
       direction: 'from',
       to: [],
+      by: [],
+      after: undefined,
+      before: undefined,
+    };
+    expect(activityLogApi.useGetActivityLogInfiniteQuery).toHaveBeenCalledWith({
+      ...search,
       pageSize: ACTIVITY_LOG_PAGE_SIZE,
     });
     expect(activityLogApi.useGetActivityLogFilterValuesQuery).toHaveBeenCalledWith({
-      area: 'maskinporten',
-      direction: 'from',
+      ...search,
       field: 'to',
+    });
+    expect(activityLogApi.useGetActivityLogFilterValuesQuery).toHaveBeenCalledWith({
+      ...search,
+      field: 'by',
     });
   });
 
@@ -115,8 +132,11 @@ describe('ActivityLogTab', () => {
     expect(activityLogApi.useGetActivityLogInfiniteQuery).toHaveBeenLastCalledWith(
       expect.objectContaining({ direction: 'to', from: [] }),
     );
-    expect(activityLogApi.useGetActivityLogFilterValuesQuery).toHaveBeenLastCalledWith(
+    expect(activityLogApi.useGetActivityLogFilterValuesQuery).toHaveBeenCalledWith(
       expect.objectContaining({ direction: 'to', field: 'from' }),
+    );
+    expect(activityLogApi.useGetActivityLogFilterValuesQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({ direction: 'to', from: [], field: 'by' }),
     );
   });
 

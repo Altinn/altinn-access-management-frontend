@@ -9,7 +9,7 @@ import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
 
 import { ActivityLogTabPanel } from './ActivityLogTabPanel';
 import type { ActivityLogArea } from './types';
-import { useActivityLogQueryState } from './useActivityLogQueryState';
+import { useActivityLogFilterOptions, useActivityLogQueryState } from './useActivityLogQueryState';
 
 export const ACTIVITY_LOG_PAGE_SIZE = 50;
 
@@ -28,22 +28,33 @@ export const ActivityLogTab = ({
     filterState,
     changeFilterState,
     selectedPartyIds,
+    selectedByIds,
+    after,
+    before,
     counterpartField,
   } = useActivityLogQueryState();
 
-  const { currentData, isFetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useGetActivityLogInfiniteQuery({
-      area,
-      direction,
-      [counterpartField]: selectedPartyIds,
-      pageSize: ACTIVITY_LOG_PAGE_SIZE,
-    });
-  const isLoading = isFetching && !isFetchingNextPage;
-  const { data: partyValues } = useGetActivityLogFilterValuesQuery({
+  // The same search for the entries and the filter pickers, so the pickers only offer values that
+  // give hits; the API disregards the filter for the field being looked up.
+  const search = {
     area,
     direction,
+    [counterpartField]: selectedPartyIds,
+    by: selectedByIds,
+    after,
+    before,
+  };
+
+  const { currentData, isFetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useGetActivityLogInfiniteQuery({ ...search, pageSize: ACTIVITY_LOG_PAGE_SIZE });
+  const isLoading = isFetching && !isFetchingNextPage;
+  const { data: partyValues } = useGetActivityLogFilterValuesQuery({
+    ...search,
     field: counterpartField,
   });
+  const { data: byValues } = useGetActivityLogFilterValuesQuery({ ...search, field: 'by' });
+  const partyOptions = useActivityLogFilterOptions(partyValues?.data, selectedPartyIds);
+  const byOptions = useActivityLogFilterOptions(byValues?.data, selectedByIds);
   const { data: activityTypes } = useGetActivityTypesQuery({ area, language });
 
   return (
@@ -54,7 +65,8 @@ export const ActivityLogTab = ({
       reporteeName={reporteeName}
       filterState={filterState}
       onFilterStateChange={changeFilterState}
-      partyOptions={partyValues?.data ?? []}
+      partyOptions={partyOptions}
+      byOptions={byOptions}
       entries={currentData?.pages.flatMap((page) => page.data) ?? []}
       activityTypes={activityTypes}
       isLoading={isLoading}

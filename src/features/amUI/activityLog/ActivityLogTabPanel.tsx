@@ -7,8 +7,12 @@ import {
   type FilterProps,
   type FilterState,
   RadioOptions,
+  SelectDateFilter,
   Toolbar,
 } from '@altinn/altinn-components';
+import { CalendarIcon } from '@navikt/aksel-icons';
+
+import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
 
 import type {
   ActivityLogArea,
@@ -17,8 +21,17 @@ import type {
   ActivityLogFilterValueDto,
   ActivityTypeDto,
 } from './types';
-import { ACTIVITY_LOG_PARTY_FILTER } from './useActivityLogQueryState';
-import { getActivityLogPartyFilterLabel, getActivityLogPartyOptions } from './activityLogUtils';
+import {
+  ACTIVITY_LOG_BY_FILTER,
+  ACTIVITY_LOG_DATE_FILTER,
+  ACTIVITY_LOG_PARTY_FILTER,
+} from './useActivityLogQueryState';
+import {
+  getActivityLogDateFilterLabel,
+  getActivityLogLocale,
+  getActivityLogPartyFilterLabel,
+  getActivityLogPartyOptions,
+} from './activityLogUtils';
 import { ActivityLogTimeline } from './ActivityLogTimeline';
 import classes from './ActivityLogTabPanel.module.css';
 
@@ -28,7 +41,7 @@ export interface ActivityLogTabPanelProps {
   onDirectionChange: (direction: ActivityLogDirection) => void;
   /** Display name of the reportee the log is shown for. */
   reporteeName: string;
-  /** The toolbar's filter state; the party filter is keyed by `ACTIVITY_LOG_PARTY_FILTER`. */
+  /**The toolbar's filter state */
   filterState: FilterState;
   onFilterStateChange: (filterState: FilterState) => void;
   /**
@@ -36,6 +49,8 @@ export interface ActivityLogTabPanelProps {
    * names for one id (a renamed party); they are folded into one option.
    */
   partyOptions: ActivityLogFilterValueDto[];
+  /** Users and systems to offer in the "performed by" filter, from `GET {area}/filter/by`. */
+  byOptions: ActivityLogFilterValueDto[];
   /** Entries as returned by the API for the current direction and filter, newest first. */
   entries: ActivityLogDto[];
   /** The area's catalog (`GET {area}/types`). */
@@ -47,6 +62,30 @@ export interface ActivityLogTabPanelProps {
   onLoadMore?: () => void;
 }
 
+const FILTER_NAMES = [ACTIVITY_LOG_PARTY_FILTER, ACTIVITY_LOG_BY_FILTER, ACTIVITY_LOG_DATE_FILTER];
+
+/** A searchable multi-select over (id, name) pairs, for the party and "performed by" filters. */
+const toValueFilter = (
+  name: string,
+  title: string,
+  values: ActivityLogFilterValueDto[],
+): FilterProps => ({
+  id: name,
+  name,
+  title,
+  label: title,
+  removable: true,
+  searchable: true,
+  items: values.map((value) => ({
+    id: `${name}-${value.id}`,
+    value: value.id,
+    name,
+    role: 'checkbox',
+    label: value.name,
+    searchWords: [value.name],
+  })),
+});
+
 export const ActivityLogTabPanel = ({
   area,
   direction,
@@ -55,6 +94,7 @@ export const ActivityLogTabPanel = ({
   filterState,
   onFilterStateChange,
   partyOptions,
+  byOptions,
   entries,
   activityTypes,
   isLoading = false,
@@ -64,37 +104,65 @@ export const ActivityLogTabPanel = ({
   onLoadMore,
 }: ActivityLogTabPanelProps) => {
   const { t } = useTranslation();
+  const locale = getActivityLogLocale(useLanguageCode());
 
   const partyLabelPrefix =
     direction === 'from'
       ? t('activity_log_page.filter_party_to')
       : t('activity_log_page.filter_party_from');
-  const hasPartyFilter = (filterState[ACTIVITY_LOG_PARTY_FILTER] ?? []).length > 0;
+  const byLabelPrefix = t('activity_log_page.filter_by');
+  const dateLabelPrefix = t('activity_log_page.filter_date');
+  const hasActiveFilter = FILTER_NAMES.some((name) => (filterState[name] ?? []).length > 0);
 
   const partyFilterOptions = useMemo(
     () => getActivityLogPartyOptions(partyOptions),
     [partyOptions],
   );
+  const byFilterOptions = useMemo(() => getActivityLogPartyOptions(byOptions), [byOptions]);
 
-  const partyFilter: FilterProps = {
-    id: ACTIVITY_LOG_PARTY_FILTER,
-    name: ACTIVITY_LOG_PARTY_FILTER,
-    title: partyLabelPrefix,
-    label: partyLabelPrefix,
+  const partyFilter = toValueFilter(
+    ACTIVITY_LOG_PARTY_FILTER,
+    partyLabelPrefix,
+    partyFilterOptions,
+  );
+  const byFilter = toValueFilter(ACTIVITY_LOG_BY_FILTER, byLabelPrefix, byFilterOptions);
+  const dateFilter: FilterProps = {
+    id: ACTIVITY_LOG_DATE_FILTER,
+    name: ACTIVITY_LOG_DATE_FILTER,
+    title: dateLabelPrefix,
+    label: dateLabelPrefix,
     removable: true,
-    items: partyFilterOptions.map((party) => ({
-      id: party.id,
-      value: party.id,
-      name: ACTIVITY_LOG_PARTY_FILTER,
-      role: 'checkbox',
-      label: party.name,
-    })),
+    as: SelectDateFilter,
+    items: [
+      {
+        id: `${ACTIVITY_LOG_DATE_FILTER}-picker`,
+        name: 'datepicker',
+        role: 'datepicker',
+        icon: CalendarIcon,
+        title: t('activity_log_page.filter_date_pick'),
+        linkIcon: true,
+      },
+    ],
   };
 
-  const getFilterLabel = (name: string, values?: (string | number)[]) =>
-    name === ACTIVITY_LOG_PARTY_FILTER
-      ? getActivityLogPartyFilterLabel(partyLabelPrefix, values, partyFilterOptions)
-      : undefined;
+  const getFilterLabel = (name: string, values?: (string | number)[]) => {
+    switch (name) {
+      case ACTIVITY_LOG_PARTY_FILTER:
+        return getActivityLogPartyFilterLabel(partyLabelPrefix, values, partyFilterOptions);
+      case ACTIVITY_LOG_BY_FILTER:
+        return getActivityLogPartyFilterLabel(byLabelPrefix, values, byFilterOptions);
+      case ACTIVITY_LOG_DATE_FILTER:
+        return getActivityLogDateFilterLabel({
+          prefix: dateLabelPrefix,
+          fromDate: filterState.fromDate?.[0]?.toString(),
+          toDate: filterState.toDate?.[0]?.toString(),
+          locale,
+          t,
+        });
+      default:
+        return undefined;
+    }
+  };
 
   return (
     <div className={classes.panel}>
@@ -126,10 +194,11 @@ export const ActivityLogTabPanel = ({
           filterState,
           onFilterStateChange,
           addLabel: t('activity_log_page.add_filter'),
+          addNextLabel: t('activity_log_page.add_another_filter'),
           removeLabel: t('activity_log_page.remove_filter'),
           resetLabel: t('activity_log_page.reset_filters'),
           getFilterLabel,
-          filters: [partyFilter],
+          filters: [partyFilter, byFilter, dateFilter],
         }}
       />
       {isError ? (
@@ -151,7 +220,7 @@ export const ActivityLogTabPanel = ({
           onLoadMore={onLoadMore}
           emptyState={
             <DsParagraph data-color='info'>
-              {hasPartyFilter ? t('activity_log_page.no_results') : t('activity_log_page.empty')}
+              {hasActiveFilter ? t('activity_log_page.no_results') : t('activity_log_page.empty')}
             </DsParagraph>
           }
         />
