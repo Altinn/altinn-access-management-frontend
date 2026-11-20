@@ -3,8 +3,8 @@ import { DsSearch, DsParagraph } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import { PartyType } from '@/dataObjects/dtos/Party';
 import { useDebouncedValue } from '@/resources/hooks';
+import { PartyType } from '@/dataObjects/dtos/Party';
 
 import { useFilteredUsers } from '../UserList/useFilteredUsers';
 import { DelegationAction } from '../DelegationModal/EditModal';
@@ -44,8 +44,12 @@ export interface UserSearchProps {
 }
 
 const filterAvailableUserTypes = (items?: UserSearchNode[]) =>
-  items?.filter((item) => item.type === PartyType.Person || item.type === PartyType.Organization) ||
-  [];
+  items?.filter(
+    (item) =>
+      item.type === PartyType.Person ||
+      item.type === PartyType.Organization ||
+      (window.featureFlags?.showSystemUsersAsRightHolders && item.type === PartyType.SystemUser),
+  ) || [];
 
 export const UserSearch: React.FC<UserSearchProps> = ({
   includeSelfAsChild,
