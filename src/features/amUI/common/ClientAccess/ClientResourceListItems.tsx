@@ -14,7 +14,7 @@ export interface ClientResourceListItemData {
   id: string;
   resource: ServiceResource;
   variant?: string;
-  color: string;
+  color?: string;
   titleAs?: ResourceListItemProps['titleAs'];
   controls?: React.ReactNode;
   badge?: BadgeProps;
