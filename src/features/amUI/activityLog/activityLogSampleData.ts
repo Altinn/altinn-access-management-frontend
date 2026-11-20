@@ -128,7 +128,9 @@ export const getSampleActivityLog = (
       direction === 'from' ? item.toName : item.fromName,
     ]),
   );
-  const byOptions = distinctParties(inDirection.map((item) => [item.byId ?? '', item.byName]));
+  const byOptions = distinctParties(
+    inDirection.filter((item) => item.byId).map((item) => [item.byId ?? '', item.byName]),
+  );
   const filtered = inDirection.filter(
     (item) =>
       (selectedPartyIds.length === 0 ||

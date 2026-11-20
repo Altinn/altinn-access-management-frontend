@@ -9,7 +9,7 @@ import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
 
 import { ActivityLogTabPanel } from './ActivityLogTabPanel';
 import type { ActivityLogArea } from './types';
-import { useActivityLogQueryState } from './useActivityLogQueryState';
+import { useActivityLogFilterOptions, useActivityLogQueryState } from './useActivityLogQueryState';
 
 export const ACTIVITY_LOG_PAGE_SIZE = 50;
 
@@ -53,6 +53,8 @@ export const ActivityLogTab = ({
     field: counterpartField,
   });
   const { data: byValues } = useGetActivityLogFilterValuesQuery({ ...search, field: 'by' });
+  const partyOptions = useActivityLogFilterOptions(partyValues?.data, selectedPartyIds);
+  const byOptions = useActivityLogFilterOptions(byValues?.data, selectedByIds);
   const { data: activityTypes } = useGetActivityTypesQuery({ area, language });
 
   return (
@@ -63,8 +65,8 @@ export const ActivityLogTab = ({
       reporteeName={reporteeName}
       filterState={filterState}
       onFilterStateChange={changeFilterState}
-      partyOptions={partyValues?.data ?? []}
-      byOptions={byValues?.data ?? []}
+      partyOptions={partyOptions}
+      byOptions={byOptions}
       entries={currentData?.pages.flatMap((page) => page.data) ?? []}
       activityTypes={activityTypes}
       isLoading={isLoading}

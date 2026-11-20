@@ -1,7 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { FilterState } from '@altinn/altinn-components';
 
-import type { ActivityLogDirection } from './types';
+import { parseActivityLogPickerDate } from './activityLogUtils';
+import type { ActivityLogDirection, ActivityLogFilterValueDto } from './types';
 
 /** Filter key for the counterpart: the receivers when the reportee gave access, else the givers. */
 export const ACTIVITY_LOG_PARTY_FILTER = 'party';
@@ -22,26 +23,63 @@ export interface ActivityLogDateBounds {
   before?: string;
 }
 
-const toInstant = (localDateTime: string): string | undefined => {
-  const date = new Date(localDateTime);
-  return isNaN(date.getTime()) ? undefined : date.toISOString();
+const endOfDay = (date: Date): Date => {
+  const end = new Date(date);
+  end.setHours(23, 59, 59, 999);
+  return end;
 };
 
 /**
- * The `after` and `before` bounds for the chosen period. Removing the date filter clears only its
- * marker, so the dates count only while the marker is set. The days are taken in the user's time
- * zone.
+ * The `after` and `before` bounds for the chosen period: the whole first and last day in the
+ * user's time zone. The dates count only while the date filter's marker is set.
  */
 export const getActivityLogDateBounds = (filterState: FilterState): ActivityLogDateBounds => {
   if (filterState[ACTIVITY_LOG_DATE_FILTER]?.[0] !== DATE_FILTER_RANGE) {
     return {};
   }
-  const fromDate = filterState.fromDate?.[0];
-  const toDate = filterState.toDate?.[0];
+  const from = parseActivityLogPickerDate(filterState.fromDate?.[0]?.toString());
+  const to = parseActivityLogPickerDate(filterState.toDate?.[0]?.toString());
   return {
-    after: fromDate ? toInstant(`${fromDate}T00:00:00`) : undefined,
-    before: toDate ? toInstant(`${toDate}T23:59:59.999`) : undefined,
+    after: from?.toISOString(),
+    before: to ? endOfDay(to).toISOString() : undefined,
   };
+};
+
+/**
+ * Removing the date filter deletes only its marker, and `SelectDateFilter` would pick the dates
+ * left behind up again the next time it opens. Drop them together with the marker.
+ */
+export const withoutStaleDates = (filterState: FilterState): FilterState => {
+  if (filterState[ACTIVITY_LOG_DATE_FILTER] || (!filterState.fromDate && !filterState.toDate)) {
+    return filterState;
+  }
+  const next = { ...filterState };
+  delete next.fromDate;
+  delete next.toDate;
+  return next;
+};
+
+/**
+ * The options to offer in a filter picker: the values the lookup returned, plus any selected value
+ * the lookup no longer returns.
+ */
+export const useActivityLogFilterOptions = (
+  fetched: ActivityLogFilterValueDto[] | undefined,
+  selectedIds: string[],
+): ActivityLogFilterValueDto[] => {
+  // A cache of the names seen so far, not render state: nothing re-renders when it grows, and it
+  // only ever gains entries from `fetched`, which the memo already depends on.
+  const [seen] = useState(() => new Map<string, ActivityLogFilterValueDto>());
+
+  return useMemo(() => {
+    const values = fetched ?? [];
+    values.forEach((value) => seen.set(value.id, value));
+    const missing = selectedIds
+      .filter((id) => !values.some((value) => value.id === id))
+      .map((id) => seen.get(id))
+      .filter((value): value is ActivityLogFilterValueDto => value !== undefined);
+    return missing.length > 0 ? [...values, ...missing] : values;
+  }, [fetched, selectedIds, seen]);
 };
 
 const selectedIds = (filterState: FilterState, name: string): string[] =>
@@ -66,6 +104,11 @@ export const useActivityLogQueryState = () => {
   );
   const { after, before } = useMemo(() => getActivityLogDateBounds(filterState), [filterState]);
 
+  const changeFilterState = useCallback(
+    (newFilterState: FilterState) => setFilterState(withoutStaleDates(newFilterState)),
+    [],
+  );
+
   const changeDirection = useCallback((newDirection: ActivityLogDirection) => {
     setDirection(newDirection);
     setFilterState((current) => {
@@ -79,7 +122,7 @@ export const useActivityLogQueryState = () => {
     direction,
     changeDirection,
     filterState,
-    changeFilterState: setFilterState,
+    changeFilterState,
     selectedPartyIds,
     selectedByIds,
     after,

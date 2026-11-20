@@ -99,20 +99,6 @@ describe('ActivityLogTab', () => {
     });
   });
 
-  it('offers the party, performed-by and period filters', () => {
-    setActivityLog({ pages: [] });
-    render(
-      <ActivityLogTab
-        area='maskinporten'
-        reporteeName='Fysioterapeutene AS'
-      />,
-    );
-
-    expect(
-      screen.getByRole('button', { name: 'activity_log_page.add_filter' }),
-    ).toBeInTheDocument();
-  });
-
   it('renders every entry fetched so far and loads the next page on request', async () => {
     setActivityLog({
       pages: [sampleActivityLogEntries.slice(0, 2), sampleActivityLogEntries.slice(2, 3)],

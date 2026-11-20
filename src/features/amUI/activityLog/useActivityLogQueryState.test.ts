@@ -6,7 +6,9 @@ import {
   ACTIVITY_LOG_DATE_FILTER,
   ACTIVITY_LOG_PARTY_FILTER,
   getActivityLogDateBounds,
+  useActivityLogFilterOptions,
   useActivityLogQueryState,
+  withoutStaleDates,
 } from './useActivityLogQueryState';
 
 const localInstant = (localDateTime: string) => new Date(localDateTime).toISOString();
@@ -50,6 +52,53 @@ describe('getActivityLogDateBounds', () => {
   });
 });
 
+describe('withoutStaleDates', () => {
+  it('drops the dates once the date filter is gone', () => {
+    expect(
+      withoutStaleDates({ fromDate: ['2025-01-01'], toDate: ['2025-01-31'], by: ['helle'] }),
+    ).toEqual({ by: ['helle'] });
+  });
+
+  it('keeps the dates while the date filter is set, and leaves other state alone', () => {
+    const withDates = {
+      [ACTIVITY_LOG_DATE_FILTER]: ['fromAndToDate'],
+      fromDate: ['2025-01-01'],
+    };
+    expect(withoutStaleDates(withDates)).toBe(withDates);
+    const noDates = { by: ['helle'] };
+    expect(withoutStaleDates(noDates)).toBe(noDates);
+  });
+});
+
+describe('useActivityLogFilterOptions', () => {
+  const lise = { id: 'lise', name: 'Lise Larsen AS' };
+  const fysio = { id: 'fysio', name: 'Fysio Partner AS' };
+
+  it('offers what the lookup returned', () => {
+    const { result } = renderHook(() => useActivityLogFilterOptions([lise, fysio], []));
+
+    expect(result.current).toEqual([lise, fysio]);
+  });
+
+  it('keeps a selected value offered after a narrowed lookup stops returning it', () => {
+    const { result, rerender } = renderHook(
+      ({ fetched, selected }: { fetched: (typeof lise)[]; selected: string[] }) =>
+        useActivityLogFilterOptions(fetched, selected),
+      { initialProps: { fetched: [lise, fysio], selected: ['lise'] } },
+    );
+
+    rerender({ fetched: [fysio], selected: ['lise'] });
+
+    expect(result.current).toEqual([fysio, lise]);
+  });
+
+  it('cannot offer a selected value it has never seen', () => {
+    const { result } = renderHook(() => useActivityLogFilterOptions([fysio], ['unknown']));
+
+    expect(result.current).toEqual([fysio]);
+  });
+});
+
 describe('useActivityLogQueryState', () => {
   it('starts with access given by the reportee and no filter', () => {
     const { result } = renderHook(() => useActivityLogQueryState());
@@ -89,6 +138,25 @@ describe('useActivityLogQueryState', () => {
 
     act(() => result.current.changeDirection('to'));
     expect(result.current.counterpartField).toBe('from');
+  });
+
+  it('drops the dates left behind when the date filter is removed', () => {
+    const { result } = renderHook(() => useActivityLogQueryState());
+
+    act(() =>
+      result.current.changeFilterState({
+        [ACTIVITY_LOG_DATE_FILTER]: ['fromAndToDate'],
+        fromDate: ['2025-01-01'],
+        toDate: ['2025-01-31'],
+      }),
+    );
+    act(() =>
+      result.current.changeFilterState({ fromDate: ['2025-01-01'], toDate: ['2025-01-31'] }),
+    );
+
+    expect(result.current.filterState).toEqual({});
+    expect(result.current.after).toBeUndefined();
+    expect(result.current.before).toBeUndefined();
   });
 
   it('clears only the party filter when the direction changes', () => {

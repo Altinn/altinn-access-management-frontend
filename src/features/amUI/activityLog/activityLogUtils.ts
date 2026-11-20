@@ -120,7 +120,8 @@ interface GetActivityLogDateFilterLabelParams {
   t: TranslateFunction;
 }
 
-const toLocalDate = (date: string | undefined): Date | undefined => {
+/** The start of the day the date picker chose (YYYY-MM-DD), in the user's time zone. */
+export const parseActivityLogPickerDate = (date: string | undefined): Date | undefined => {
   if (!date) {
     return undefined;
   }
@@ -141,8 +142,8 @@ export const getActivityLogDateFilterLabel = ({
     month: 'short',
     year: 'numeric',
   });
-  const from = toLocalDate(fromDate);
-  const to = toLocalDate(toDate);
+  const from = parseActivityLogPickerDate(fromDate);
+  const to = parseActivityLogPickerDate(toDate);
   if (from && to) {
     return `${prefix}: ${format.formatRange(from, to)}`;
   }
