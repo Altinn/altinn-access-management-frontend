@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import { skipToken } from '@reduxjs/toolkit/query';
 
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
-import type { Client } from '@/rtk/features/clientApi';
+import type { Client, ClientAccess, ClientResource } from '@/rtk/features/clientApi';
 import {
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
@@ -17,6 +17,7 @@ import {
 } from '@/rtk/features/clientApi';
 import { useGetIsClientAdminQuery } from '@/rtk/features/userInfoApi';
 import { amUIPath } from '@/routes/paths';
+import { type CompactPackage } from '@/dataObjects/dtos/accessPackage';
 
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -45,7 +46,15 @@ import { useAgentDetailsAccessClientLists } from './useAgentDetailsAccessClientL
 import { AgentDetailsClientsList } from './AgentDetailsClientsList';
 import classes from './AgentDetails.module.css';
 
-export const AgentDetails = () => {
+interface AgentDetailsProps {
+  systemUserSets?: {
+    name: string;
+    accessPackages: CompactPackage[];
+    resources: ClientResource[];
+  }[];
+}
+
+export const AgentDetails = ({ systemUserSets }: AgentDetailsProps) => {
   const { t } = useTranslation();
   const { id } = useParams();
   const { toParty, actingParty } = usePartyRepresentation();
@@ -62,6 +71,8 @@ export const AgentDetails = () => {
     isFetching: isFetchingAgentResources,
     error: agentResourcesError,
   } = useGetAgentResourcesQuery(id ? { to: id } : skipToken);
+
+  // TODO: laste systembruker-sett her? I stedet for å berike agent med de?
   const { data: clients, isLoading: isLoadingClients, error: clientsError } = useGetClientsQuery();
   const [showDeleted, setShowDeleted] = useState(false);
   const visibleClients = useMemo(
@@ -129,9 +140,9 @@ export const AgentDetails = () => {
     removeAgentResources,
   });
   const renderClientActions = useCallback(
-    (client: Client, restoreFocusFallbackId?: string) => {
+    (client: Client, overrideItems?: ClientAccess[], restoreFocusFallbackId?: string) => {
       const clientId = client.client.id;
-      const items = bulk.getItems(client.access, clientId);
+      const items = bulk.getItems(overrideItems ? overrideItems : client.access, clientId);
       if (items.missing.length === 0 && items.held.length === 0) return null;
       return (
         <ClientBulkActions
@@ -264,6 +275,7 @@ export const AgentDetails = () => {
                         expandedIds={expandedIds}
                         onToggleExpanded={toggleExpanded}
                         restoreFocusFallbackId={assignedSectionId}
+                        systemUserSets={systemUserSets}
                       />
                     </CollapsibleContainer>
                   </section>
@@ -290,6 +302,7 @@ export const AgentDetails = () => {
                         expandedIds={expandedIds}
                         onToggleExpanded={toggleExpanded}
                         restoreFocusFallbackId={unassignedSectionId}
+                        systemUserSets={systemUserSets}
                       />
                     </CollapsibleContainer>
                   </section>

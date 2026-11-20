@@ -49,6 +49,8 @@ export const ClientAccessSections = ({ entries, emptyText }: ClientAccessSection
         count: entry.accessPackage.resources?.length ?? 0,
       }),
       color: entryHasAccess ? 'company' : 'neutral',
+      variant: entry.isMissingRight ? 'default' : 'tinted',
+      badge: entry.isMissingRight ? { theme: 'subtle', label: 'Mangler fullmakt' } : undefined,
       onClick: () => openModal(entry),
       controls: renderControl(entry, entryHasAccess),
     };
@@ -60,8 +62,10 @@ export const ClientAccessSections = ({ entries, emptyText }: ClientAccessSection
     return {
       id: entry.itemId,
       resource: entry.resource,
-      hasAccess: entryHasAccess,
       titleAs: 'div',
+      color: entryHasAccess ? 'company' : 'neutral',
+      variant: entry.isMissingRight ? 'default' : 'tinted',
+      badge: entry.isMissingRight ? { theme: 'subtle', label: 'Mangler fullmakt' } : undefined,
       onClick: () => openModal(entry),
       controls: renderControl(entry, entryHasAccess),
     };
@@ -75,22 +79,24 @@ export const ClientAccessSections = ({ entries, emptyText }: ClientAccessSection
     return <AccessPackageListItems items={packageItems} />;
   }
 
+  if (packageItems.length === 0) {
+    return <ClientResourceListItems items={resourceItems} />;
+  }
+
   return (
     <div className={classes.sections}>
-      {packageItems.length > 0 && (
-        <div>
-          <DsParagraph
-            id={packagesLabelId}
-            className={classes.sectionLabel}
-          >
-            {t('client_administration_page.packages_heading')}
-          </DsParagraph>
-          <AccessPackageListItems
-            items={packageItems}
-            labelledBy={packagesLabelId}
-          />
-        </div>
-      )}
+      <div>
+        <DsParagraph
+          id={packagesLabelId}
+          className={classes.sectionLabel}
+        >
+          {t('client_administration_page.packages_heading')}
+        </DsParagraph>
+        <AccessPackageListItems
+          items={packageItems}
+          labelledBy={packagesLabelId}
+        />
+      </div>
       <div>
         <DsParagraph
           id={resourcesLabelId}

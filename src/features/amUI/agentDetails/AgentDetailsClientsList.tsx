@@ -5,9 +5,12 @@ import type {
   AddAgentAccessPackagesFn,
   AddAgentResourcesFn,
   Client,
+  ClientAccess,
+  ClientResource,
   RemoveAgentAccessPackagesFn,
   RemoveAgentResourcesFn,
 } from '@/rtk/features/clientApi';
+import { type CompactPackage } from '@/dataObjects/dtos/accessPackage';
 
 import { ClientAccessList } from '../common/ClientAccessList/ClientAccessList';
 import { useClientAccessAction } from '../common/ClientAccess/useClientAccessAction';
@@ -18,7 +21,11 @@ type AgentDetailsClientsListProps = {
   agentAccessPackages: Client[];
   agentResources?: Client[];
   isLoading: boolean;
-  renderClientActions: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
+  renderClientActions: (
+    client: Client,
+    overrideItems?: ClientAccess[],
+    restoreFocusFallbackId?: string,
+  ) => React.ReactNode;
   toPartyUuid?: string;
   actingPartyUuid?: string;
   addAgentAccessPackages: AddAgentAccessPackagesFn;
@@ -30,6 +37,11 @@ type AgentDetailsClientsListProps = {
   expandedIds?: string[];
   onToggleExpanded?: (id: string) => void;
   restoreFocusFallbackId?: string;
+  systemUserSets?: {
+    name: string;
+    accessPackages: CompactPackage[];
+    resources: ClientResource[];
+  }[];
 };
 
 export const AgentDetailsClientsList = ({
@@ -49,6 +61,7 @@ export const AgentDetailsClientsList = ({
   expandedIds,
   onToggleExpanded,
   restoreFocusFallbackId,
+  systemUserSets,
 }: AgentDetailsClientsListProps) => {
   const actionDisabled = isLoading || !toPartyUuid || !actingPartyUuid;
   const { toParty } = usePartyRepresentation();
@@ -80,6 +93,7 @@ export const AgentDetailsClientsList = ({
       onToggleExpanded={onToggleExpanded}
       restoreFocusFallbackId={restoreFocusFallbackId}
       renderClientActions={renderClientActions}
+      systemUserSets={systemUserSets}
     />
   );
 };
