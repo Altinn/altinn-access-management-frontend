@@ -18,7 +18,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend
         /// </summary>
         public DateTimeOffset AgentAddedAt { get; set; }
 
-        public List<SystemUserSet> SystemUserSets { get; set; }
+        /// <summary>
+        /// Gets or sets fixed system user right sets
+        /// </summary>
+        public List<SystemUserSet> SystemUserSets { get; set; } = new();
 
         /// <summary>
         /// Gets or sets the access per role
@@ -81,12 +84,24 @@ namespace Altinn.AccessManagement.UI.Core.Models.ClientDelegation.Frontend
         }
     }
 
+    /// <summary>
+    /// List of access packages and resources required in this right set
+    /// </summary>
     public class SystemUserSet
     {
+        /// <summary>
+        /// Gets or sets set name
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Gets or sets set access packages
+        /// </summary>
         public List<CompactPackage> AccessPackages { get; set; }
 
+        /// <summary>
+        /// Gets or sets set resource
+        /// </summary>
         public List<CompactResource> Resources { get; set; }
     }
 }
