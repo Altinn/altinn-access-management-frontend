@@ -24,6 +24,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 const fetchNextPage = vi.fn();
+const reporteeUuid = 'cd35779b-b174-4ecc-bbef-ece13611be7f';
 
 /** The query hooks are mocked with only the fields the tab reads. */
 const mockHookResult = (hook: unknown, result: object) => (hook as Mock).mockReturnValue(result);
@@ -54,13 +55,14 @@ const setActivityLog = ({
 describe('ActivityLogTab', () => {
   beforeEach(() => {
     fetchNextPage.mockReset();
+    document.cookie = `AltinnPartyUuid=${reporteeUuid}`;
     mockHookResult(activityLogApi.useGetActivityLogFilterValuesQuery, {
       data: { data: [{ id: 'lise-larsen-as', name: 'Lise Larsen AS' }], links: {} },
     });
     mockHookResult(activityLogApi.useGetActivityTypesQuery, { data: [] });
   });
 
-  it('queries the area for access given by the reportee, with the party filter on the receivers', () => {
+  it('queries the area for the reportee and access it gave, with the party filter on the receivers', () => {
     setActivityLog({ pages: [sampleActivityLogEntries.slice(0, 2)] });
     render(
       <ActivityLogTab
@@ -71,12 +73,14 @@ describe('ActivityLogTab', () => {
 
     expect(activityLogApi.useGetActivityLogInfiniteQuery).toHaveBeenCalledWith({
       area: 'maskinporten',
+      party: reporteeUuid,
       direction: 'from',
       to: [],
       pageSize: ACTIVITY_LOG_PAGE_SIZE,
     });
     expect(activityLogApi.useGetActivityLogFilterValuesQuery).toHaveBeenCalledWith({
       area: 'maskinporten',
+      party: reporteeUuid,
       direction: 'from',
       field: 'to',
     });

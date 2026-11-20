@@ -1,4 +1,3 @@
-using System.Net;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.ActivityLog;
 using Altinn.AccessManagement.UI.Core.Models.Common;
@@ -18,19 +17,14 @@ namespace Altinn.AccessManagement.UI.Controllers
     public class ActivityLogController : ControllerBase
     {
         private readonly IActivityLogService _activityLogService;
-        private readonly ILogger _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ActivityLogController"/> class.
         /// </summary>
         /// <param name="activityLogService">Activity log service.</param>
-        /// <param name="logger">Logger.</param>
-        public ActivityLogController(
-            IActivityLogService activityLogService,
-            ILogger<ActivityLogController> logger)
+        public ActivityLogController(IActivityLogService activityLogService)
         {
             _activityLogService = activityLogService;
-            _logger = logger;
         }
 
         /// <summary>
@@ -65,11 +59,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (HttpStatusException ex)
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetActivityLog failed unexpectedly");
-                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
 
@@ -109,11 +98,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetFilterValues failed unexpectedly");
-                return StatusCode((int)HttpStatusCode.InternalServerError);
-            }
         }
 
         /// <summary>
@@ -143,11 +127,6 @@ namespace Altinn.AccessManagement.UI.Controllers
             catch (HttpStatusException ex)
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "GetActivityTypes failed unexpectedly");
-                return StatusCode((int)HttpStatusCode.InternalServerError);
             }
         }
     }

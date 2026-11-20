@@ -1,12 +1,22 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Net.Sockets;
 using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
+using Altinn.AccessManagement.UI.Core.ClientInterfaces;
 using Altinn.AccessManagement.UI.Core.Models.ActivityLog;
 using Altinn.AccessManagement.UI.Core.Models.Common;
+using Altinn.AccessManagement.UI.Mocks.Mocks;
 using Altinn.AccessManagement.UI.Mocks.Utils;
 using Altinn.AccessManagement.UI.Tests.Utils;
+using AltinnCore.Authentication.JwtCookie;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Moq;
 
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
@@ -21,6 +31,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private const string FysioPartner = "21cc8752-4801-490d-a6ab-ab3266a0f748";
         private const string BaseUrl = "accessmanagement/api/v1/activitylog";
 
+        private readonly CustomWebApplicationFactory<ActivityLogController> _factory;
         private readonly HttpClient _client;
         private readonly string _mockDataFolder;
         private readonly JsonSerializerOptions _options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -31,6 +42,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         /// <param name="factory">CustomWebApplicationFactory</param>
         public ActivityLogControllerTest(CustomWebApplicationFactory<ActivityLogController> factory)
         {
+            _factory = factory;
             _client = SetupUtils.GetTestClient(factory);
             _mockDataFolder = Path.Combine(
                 Path.GetDirectoryName(new Uri(typeof(ActivityLogControllerTest).Assembly.Location).LocalPath),
@@ -257,6 +269,42 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.NotNull(actual);
             Assert.Equivalent(expected, actual);
+        }
+        /// <summary>
+        /// Test case: a socket error towards the access management API is transient. The controller must not
+        /// swallow it, so that the global filter can turn it into a 503 the caller may retry on.
+        /// </summary>
+        [Fact]
+        public async Task GetActivityLog_SocketExceptionFromClient_ReturnsServiceUnavailable()
+        {
+            Mock<IActivityLogClient> client = new();
+            client
+                .Setup(c => c.GetActivityLog(It.IsAny<string>(), It.IsAny<ActivityLogQuery>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new HttpRequestException(
+                    "An error occurred while sending the request.",
+                    new IOException("The response ended prematurely.", new SocketException((int)SocketError.ConnectionReset))));
+
+            HttpClient throwingClient = GetTestClient(client.Object);
+            throwingClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", PrincipalUtil.GetToken(1234, 1234, 2));
+
+            HttpResponseMessage response = await throwingClient.GetAsync($"{BaseUrl}/maskinporten?party={Party}&direction=from");
+
+            Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+        }
+
+        private HttpClient GetTestClient(IActivityLogClient activityLogClient)
+        {
+            WebApplicationFactory<ActivityLogController> factory = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient(_ => activityLogClient);
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(new WebApplicationFactoryClientOptions { AllowAutoRedirect = false });
         }
     }
 }

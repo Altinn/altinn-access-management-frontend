@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   useGetActivityLogFilterValuesQuery,
@@ -6,6 +6,7 @@ import {
   useGetActivityTypesQuery,
 } from '@/rtk/features/activityLogApi';
 import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { ActivityLogTabPanel } from './ActivityLogTabPanel';
 import type { ActivityLogArea } from './types';
@@ -22,6 +23,8 @@ export const ActivityLogTab = ({
   reporteeName: string;
 }) => {
   const language = useLanguageCode();
+  // Read once per mounted view and passed explicitly, so the reportee is part of the cache key
+  const [party] = useState(() => getCookie('AltinnPartyUuid'));
   const {
     direction,
     changeDirection,
@@ -34,6 +37,7 @@ export const ActivityLogTab = ({
   const { currentData, isFetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useGetActivityLogInfiniteQuery({
       area,
+      party,
       direction,
       [counterpartField]: selectedPartyIds,
       pageSize: ACTIVITY_LOG_PAGE_SIZE,
@@ -41,6 +45,7 @@ export const ActivityLogTab = ({
   const isLoading = isFetching && !isFetchingNextPage;
   const { data: partyValues } = useGetActivityLogFilterValuesQuery({
     area,
+    party,
     direction,
     field: counterpartField,
   });

@@ -45,6 +45,13 @@ const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/activitylog`
 
 const listParams = ['from', 'to', 'via', 'by', 'typeId'] as const;
 
+/**
+ * The filter picker shows one page of values, so it asks for the largest page the API allows.
+ * Reportees with more distinct counterparts than this need a search-backed picker (the endpoint's
+ * `term` parameter) to reach the rest.
+ */
+export const ACTIVITY_LOG_FILTER_VALUES_PAGE_SIZE = 1000;
+
 const buildQueryString = (
   { party, direction, after, before, pageSize, ...rest }: ActivityLogQueryArgs,
   extra: Record<string, string | number | undefined> = {},
@@ -88,8 +95,8 @@ export const activityLogApi = createApi({
       PaginatedResult<ActivityLogFilterValueDto>,
       ActivityLogFilterValuesArgs
     >({
-      query: ({ field, term, orderBy, ...args }) =>
-        `${args.area}/filter/${encodeURIComponent(field)}?${buildQueryString(args, { term, orderBy })}`,
+      query: ({ field, term, orderBy, pageSize = ACTIVITY_LOG_FILTER_VALUES_PAGE_SIZE, ...args }) =>
+        `${args.area}/filter/${encodeURIComponent(field)}?${buildQueryString({ ...args, pageSize }, { term, orderBy })}`,
     }),
     /**
      * The activity type catalog entries the area accepts. The BFF translates them to the selected
