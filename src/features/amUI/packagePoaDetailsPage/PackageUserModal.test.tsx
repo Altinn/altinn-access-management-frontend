@@ -5,7 +5,6 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PartyType } from '@/dataObjects/dtos/Party';
 
-import { DelegationAction } from '../common/DelegationModal/EditModal';
 import type { UserActionTarget } from '../common/UserSearch/types';
 
 import { PackageUserModal, type PackageUserModalHandle } from './PackageUserModal';
@@ -57,7 +56,6 @@ const renderModal = (permissions: unknown[] = []) => {
     <PackageUserModal
       ref={ref}
       accessPackage={{ ...accessPackage, permissions } as never}
-      availableActions={[DelegationAction.DELEGATE, DelegationAction.REVOKE]}
       isActionLoading={false}
       onDelegate={onDelegate}
       onRevoke={onRevoke}

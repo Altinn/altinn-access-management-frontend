@@ -55,6 +55,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.Common.Frontend
         public bool IsDeleted { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the party's rights are locked and cannot be added or revoked.
+        /// Only set for system users the vendor has locked.
+        /// </summary>
+        public bool IsRightsLocked { get; set; }
+
+        /// <summary>
         /// Gets or sets the child parties (subunits)
         /// </summary>
         public List<PartyFE> Children { get; set; }

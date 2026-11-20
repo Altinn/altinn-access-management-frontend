@@ -33,7 +33,11 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
   const canGiveAccess = useCanGiveAccess(partyId, isReportee);
   const canRequestAccess = useCanRequestAccess(isReportee) && !canGiveAccess;
 
-  const availableActions = getAvailableActions({ canGiveAccess, canRequestAccess });
+  const availableActions = getAvailableActions({
+    canGiveAccess,
+    canRequestAccess,
+    isRightsLocked: toParty?.isRightsLocked,
+  });
 
   const { data: accesses, isLoading: loadingAccesses } = useGetUserDelegationsQuery(
     {
