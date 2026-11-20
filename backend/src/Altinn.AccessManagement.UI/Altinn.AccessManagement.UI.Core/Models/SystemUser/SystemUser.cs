@@ -75,6 +75,12 @@ namespace Altinn.AccessManagement.UI.Core.Models.SystemUser
         public string UserType { get; set; }
 
         /// <summary>
+        /// Whether the vendor has locked the system user's rights, so the end user cannot add or revoke them
+        /// </summary>
+        [JsonPropertyName("vendorLocked")]
+        public bool VendorLocked { get; set; }
+
+        /// <summary>
         /// Access packages set on the system user
         /// </summary>
         [JsonPropertyName("accessPackages")]

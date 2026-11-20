@@ -263,12 +263,12 @@ describe('mapPermissionsToUserSearchNodes', () => {
     [true, true],
     [false, false],
   ])(
-    'marks a direct system user permission as inherited when isVendorFixedRights is %s',
-    (isVendorFixedRights, expectedInherited) => {
+    'marks a direct system user permission as inherited when isRightsLocked is %s',
+    (isRightsLocked, expectedInherited) => {
       const systemUser: PartyEntity = {
         ...person('456', 'Systembruker'),
         type: PartyType.SystemUser,
-        isVendorFixedRights,
+        isRightsLocked,
       };
       const permissions = [
         {
@@ -283,7 +283,7 @@ describe('mapPermissionsToUserSearchNodes', () => {
       const res = run(permissions);
 
       expect(res[0].isInherited).toBe(expectedInherited);
-      expect(res[0].isVendorFixedRights).toBe(isVendorFixedRights);
+      expect(res[0].isRightsLocked).toBe(isRightsLocked);
     },
   );
 });

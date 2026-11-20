@@ -312,7 +312,7 @@ export const ServiceUsersSection = ({ resource, isLoading }: ServiceUsersSection
             user={selectedUser}
             partyUuid={fromParty?.id ?? ''}
             availableActions={
-              selectedUser.isVendorFixedRights
+              selectedUser.isRightsLocked
                 ? []
                 : [DelegationAction.DELEGATE, DelegationAction.REVOKE]
             }

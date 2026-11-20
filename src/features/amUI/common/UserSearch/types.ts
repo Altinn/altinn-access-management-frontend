@@ -10,7 +10,7 @@ export interface UserSearchNode extends Pick<
   | 'organizationIdentifier'
   | 'dateOfBirth'
   | 'isDeleted'
-  | 'isVendorFixedRights'
+  | 'isRightsLocked'
 > {
   children: UserSearchNode[] | null;
   roles: RoleInfo[];

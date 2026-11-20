@@ -43,29 +43,30 @@ namespace Altinn.AccessManagement.UI.Tests.Services
         }
 
         /// <summary>
-        /// Only standard system users have rights fixed by the vendor
+        /// Rights are locked only when the vendor has locked the system user, regardless of its type
         /// </summary>
         [Theory]
-        [InlineData("standard", true)]
-        [InlineData("agent", false)]
-        [InlineData("someOtherType", false)]
-        public async Task ApplyVendorFixedRights_UsesSystemUserType(string userType, bool expected)
+        [InlineData("standard", true, true)]
+        [InlineData("standard", false, false)]
+        [InlineData("agent", true, true)]
+        [InlineData("agent", false, false)]
+        public async Task ApplyRightsLocks_UsesVendorLocked(string userType, bool vendorLocked, bool expected)
         {
             PartyFE party = SystemUserParty();
             _systemUserClient
                 .Setup(c => c.GetSpecificSystemUser(OwnerPartyId, party.Id, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new SystemUser { Id = party.Id.ToString(), UserType = userType });
+                .ReturnsAsync(new SystemUser { Id = party.Id.ToString(), UserType = userType, VendorLocked = vendorLocked });
 
-            await _resolver.ApplyVendorFixedRights(OwnerPartyUuid, [party]);
+            await _resolver.ApplyRightsLocks(OwnerPartyUuid, [party]);
 
-            Assert.Equal(expected, party.IsVendorFixedRights);
+            Assert.Equal(expected, party.IsRightsLocked);
         }
 
         /// <summary>
         /// A system user that cannot be found or fails to load is not flagged
         /// </summary>
         [Fact]
-        public async Task ApplyVendorFixedRights_LookupFails_LeavesUnflagged()
+        public async Task ApplyRightsLocks_LookupFails_LeavesUnflagged()
         {
             PartyFE notFound = SystemUserParty();
             PartyFE failing = SystemUserParty();
@@ -76,29 +77,29 @@ namespace Altinn.AccessManagement.UI.Tests.Services
                 .Setup(c => c.GetSpecificSystemUser(OwnerPartyId, failing.Id, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new HttpRequestException());
 
-            await _resolver.ApplyVendorFixedRights(OwnerPartyUuid, [notFound, failing]);
+            await _resolver.ApplyRightsLocks(OwnerPartyUuid, [notFound, failing]);
 
-            Assert.False(notFound.IsVendorFixedRights);
-            Assert.False(failing.IsVendorFixedRights);
+            Assert.False(notFound.IsRightsLocked);
+            Assert.False(failing.IsRightsLocked);
         }
 
         /// <summary>
         /// A system user appearing several times is looked up once, and every occurrence is updated
         /// </summary>
         [Fact]
-        public async Task ApplyVendorFixedRights_DuplicateParties_LooksUpOnce()
+        public async Task ApplyRightsLocks_DuplicateParties_LooksUpOnce()
         {
             Guid id = Guid.NewGuid();
             PartyFE first = SystemUserParty(id);
             PartyFE second = SystemUserParty(id);
             _systemUserClient
                 .Setup(c => c.GetSpecificSystemUser(OwnerPartyId, id, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new SystemUser { Id = id.ToString(), UserType = "standard" });
+                .ReturnsAsync(new SystemUser { Id = id.ToString(), UserType = "standard", VendorLocked = true });
 
-            await _resolver.ApplyVendorFixedRights(OwnerPartyUuid, [first, second]);
+            await _resolver.ApplyRightsLocks(OwnerPartyUuid, [first, second]);
 
-            Assert.True(first.IsVendorFixedRights);
-            Assert.True(second.IsVendorFixedRights);
+            Assert.True(first.IsRightsLocked);
+            Assert.True(second.IsRightsLocked);
             _systemUserClient.Verify(c => c.GetSpecificSystemUser(OwnerPartyId, id, It.IsAny<CancellationToken>()), Times.Once);
         }
 
@@ -106,13 +107,13 @@ namespace Altinn.AccessManagement.UI.Tests.Services
         /// Without system users no lookups are made, and other parties are untouched
         /// </summary>
         [Fact]
-        public async Task ApplyVendorFixedRights_NoSystemUsers_MakesNoCalls()
+        public async Task ApplyRightsLocks_NoSystemUsers_MakesNoCalls()
         {
             PartyFE person = new PartyFE { Id = Guid.NewGuid(), Type = PartyTypeFE.Person };
 
-            await _resolver.ApplyVendorFixedRights(OwnerPartyUuid, [person]);
+            await _resolver.ApplyRightsLocks(OwnerPartyUuid, [person]);
 
-            Assert.False(person.IsVendorFixedRights);
+            Assert.False(person.IsRightsLocked);
             _registerClient.VerifyNoOtherCalls();
             _systemUserClient.VerifyNoOtherCalls();
         }

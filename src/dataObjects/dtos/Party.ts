@@ -17,7 +17,7 @@ export interface PartyEntity {
   dateOfBirth?: string | null;
   isDeleted: boolean;
   /** True for standard system users, whose rights are set by the vendor and can't be added or revoked */
-  isVendorFixedRights?: boolean;
+  isRightsLocked?: boolean;
   children?: PartyEntity[] | null;
   /** The main unit, for a subunit */
   parent?: PartyEntity | null;

@@ -28,10 +28,10 @@ export const UserListActions = ({
   const isSmall = useIsMobileOrSmaller();
   const displayName = formatEntityDisplayName(user);
 
-  // An action is offered when its handler is passed. Inherited access and rights fixed by the vendor
-  // (standard system users) can't be given, requested or revoked.
+  // An action is offered when its handler is passed. Inherited access and locked rights
+  // (system users locked by the vendor) can't be given, requested or revoked.
   const hasAction = !!(onDelegate || onRequest || onRevoke);
-  if (!hasAction || isSmall || user.isInherited || user.isVendorFixedRights) {
+  if (!hasAction || isSmall || user.isInherited || user.isRightsLocked) {
     return null;
   }
   if (isLoading) {
