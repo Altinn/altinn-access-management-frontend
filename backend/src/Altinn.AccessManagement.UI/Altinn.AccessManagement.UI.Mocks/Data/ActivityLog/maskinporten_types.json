@@ -1,0 +1,38 @@
+[
+  {
+    "id": "228ceaa6-0213-4673-94d2-d12572869e99",
+    "type": "Assignment",
+    "subtype": null,
+    "trigger": "Created",
+    "status": null,
+    "name": "Rolletildeling opprettet",
+    "description": "En part fikk en rolle hos en annen part, f.eks. som rettighetshaver eller tilgangsstyrer."
+  },
+  {
+    "id": "1ad8e8b5-cd6e-49d6-9de8-6118dab071e7",
+    "type": "Assignment",
+    "subtype": null,
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Rolletildeling fjernet",
+    "description": "Rolletildelingen mellom partene ble fjernet."
+  },
+  {
+    "id": "cdb21c9c-efe9-4dd8-a4ff-05e6ed85b363",
+    "type": "Assignment",
+    "subtype": "Resource",
+    "trigger": "Created",
+    "status": null,
+    "name": "Enkelttjeneste tildelt",
+    "description": "Det ble gitt tilgang til en enkelttjeneste."
+  },
+  {
+    "id": "2cc78d26-16a1-4a88-95cd-3ca427fb0731",
+    "type": "Assignment",
+    "subtype": "Resource",
+    "trigger": "Deleted",
+    "status": null,
+    "name": "Enkelttjeneste fjernet",
+    "description": "Tilgangen til enkelttjenesten ble fjernet."
+  }
+]
