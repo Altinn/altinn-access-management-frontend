@@ -26,6 +26,10 @@ vi.mock('react-i18next', () => ({
 const fetchNextPage = vi.fn();
 const reporteeUuid = 'cd35779b-b174-4ecc-bbef-ece13611be7f';
 
+vi.mock('@/resources/Cookie/CookieMethods', () => ({
+  getCookie: (name: string) => (name === 'AltinnPartyUuid' ? reporteeUuid : ''),
+}));
+
 /** The query hooks are mocked with only the fields the tab reads. */
 const mockHookResult = (hook: unknown, result: object) => (hook as Mock).mockReturnValue(result);
 
@@ -55,7 +59,6 @@ const setActivityLog = ({
 describe('ActivityLogTab', () => {
   beforeEach(() => {
     fetchNextPage.mockReset();
-    document.cookie = `AltinnPartyUuid=${reporteeUuid}`;
     mockHookResult(activityLogApi.useGetActivityLogFilterValuesQuery, {
       data: { data: [{ id: 'lise-larsen-as', name: 'Lise Larsen AS' }], links: {} },
     });
