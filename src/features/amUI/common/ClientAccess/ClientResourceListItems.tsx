@@ -1,5 +1,10 @@
 import React from 'react';
-import { List, ResourceListItem, type ResourceListItemProps } from '@altinn/altinn-components';
+import {
+  type BadgeProps,
+  List,
+  ResourceListItem,
+  type ResourceListItemProps,
+} from '@altinn/altinn-components';
 
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
@@ -8,9 +13,11 @@ import { useRestoreFocusTarget } from '../RestoreFocus';
 export interface ClientResourceListItemData {
   id: string;
   resource: ServiceResource;
-  hasAccess: boolean;
+  variant?: string;
+  color: string;
   titleAs?: ResourceListItemProps['titleAs'];
   controls?: React.ReactNode;
+  badge?: BadgeProps;
   onClick?: () => void;
 }
 
@@ -33,7 +40,9 @@ const ClientResourceListRow = (item: ClientResourceListItemData) => {
       titleAs={item.titleAs}
       interactive={!!item.onClick}
       as={item.onClick ? 'button' : 'div'}
-      variant={item.hasAccess ? 'tinted' : 'default'}
+      variant={item.variant}
+      color={item.color}
+      badge={item.badge}
       onClick={item.onClick}
       controls={item.controls}
     />
