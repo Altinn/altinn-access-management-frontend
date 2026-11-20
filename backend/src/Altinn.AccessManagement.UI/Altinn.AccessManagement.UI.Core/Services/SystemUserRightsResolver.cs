@@ -13,8 +13,6 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <inheritdoc />
     public class SystemUserRightsResolver : ISystemUserRightsResolver
     {
-        private const string StandardUserType = "standard";
-
         private readonly ISystemUserClient _systemUserClient;
         private readonly IRegisterClient _registerClient;
         private readonly IMemoryCache _memoryCache;
@@ -44,7 +42,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task ApplyVendorFixedRights(Guid actingPartyUuid, IEnumerable<PartyFE> parties, CancellationToken cancellationToken = default)
+        public async Task ApplyRightsLocks(Guid actingPartyUuid, IEnumerable<PartyFE> parties, CancellationToken cancellationToken = default)
         {
             List<PartyFE> systemUsers = parties?
                 .Where(p => p != null && p.Type == PartyTypeFE.SystemUser)
@@ -63,12 +61,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
 
             Guid[] ids = systemUsers.Select(p => p.Id).Distinct().ToArray();
-            bool[] vendorFixed = await Task.WhenAll(ids.Select(id => IsVendorFixed(ownerPartyId.Value, id, cancellationToken)));
-            Dictionary<Guid, bool> vendorFixedById = ids.Zip(vendorFixed).ToDictionary(x => x.First, x => x.Second);
+            bool[] locked = await Task.WhenAll(ids.Select(id => IsVendorLocked(ownerPartyId.Value, id, cancellationToken)));
+            Dictionary<Guid, bool> lockedById = ids.Zip(locked).ToDictionary(x => x.First, x => x.Second);
 
             foreach (PartyFE party in systemUsers)
             {
-                party.IsVendorFixedRights = vendorFixedById[party.Id];
+                party.IsRightsLocked = lockedById[party.Id];
             }
         }
 
@@ -99,12 +97,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
             }
         }
 
-        private async Task<bool> IsVendorFixed(int ownerPartyId, Guid systemUserId, CancellationToken cancellationToken)
+        private async Task<bool> IsVendorLocked(int ownerPartyId, Guid systemUserId, CancellationToken cancellationToken)
         {
-            string cacheKey = $"systemuser-vendorfixedrights-{systemUserId}";
-            if (_memoryCache.TryGetValue(cacheKey, out bool cachedVendorFixed))
+            string cacheKey = $"systemuser-vendorlocked-{systemUserId}";
+            if (_memoryCache.TryGetValue(cacheKey, out bool cachedVendorLocked))
             {
-                return cachedVendorFixed;
+                return cachedVendorLocked;
             }
 
             try
@@ -116,9 +114,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     return false;
                 }
 
-                bool vendorFixed = string.Equals(systemUser.UserType, StandardUserType, StringComparison.OrdinalIgnoreCase);
-                _memoryCache.Set(cacheKey, vendorFixed, TimeSpan.FromMinutes(_cacheConfig.PartyCacheTimeout));
-                return vendorFixed;
+                _memoryCache.Set(cacheKey, systemUser.VendorLocked, TimeSpan.FromMinutes(_cacheConfig.PartyCacheTimeout));
+                return systemUser.VendorLocked;
             }
             catch (Exception ex)
             {

@@ -70,8 +70,8 @@ export const PackageUserModal = forwardRef<PackageUserModalHandle, PackageUserMo
     );
 
     const selectedUserHasAccess = selectedUserPermissions.length > 0;
-    // Inherited access and rights fixed by the vendor (standard system users) can't be changed here
-    const selectedUserIsEditable = !selectedUser?.isInherited && !selectedUser?.isVendorFixedRights;
+    // Inherited access and locked rights (system users locked by the vendor) can't be changed here
+    const selectedUserIsEditable = !selectedUser?.isInherited && !selectedUser?.isRightsLocked;
 
     const selectedUserInheritedStatus = useMemo(
       () =>

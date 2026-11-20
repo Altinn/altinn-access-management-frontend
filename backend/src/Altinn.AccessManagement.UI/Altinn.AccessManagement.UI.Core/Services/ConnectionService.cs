@@ -27,7 +27,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="logger">handler for logger</param>
         /// <param name="registerClient">handler for register client</param>
         /// <param name="connectionClient">handler for right holder client</param>
-        /// <param name="systemUserRightsResolver">resolves which system users have rights fixed by the vendor</param>
+        /// <param name="systemUserRightsResolver">resolves which system users have rights locked by the vendor</param>
         public ConnectionService(
             ILogger<ConnectionService> logger,
             IRegisterClient registerClient,
@@ -132,7 +132,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     includeClientDelegations,
                     includeAgentConnections);
                 List<ConnectionFE> result = connections?.Select(ConnectionFE.FromConnection).ToList();
-                await _systemUserRightsResolver.ApplyVendorFixedRights(party, result.FlattenParties());
+                await _systemUserRightsResolver.ApplyRightsLocks(party, result.FlattenParties());
                 return result;
             }
             catch (Exception ex)

@@ -102,7 +102,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
   const availableActions = getAvailableActions({
     canGiveAccess,
     canRequestAccess,
-    isVendorFixedRights: toParty?.isVendorFixedRights,
+    isRightsLocked: toParty?.isRightsLocked,
   });
 
   return (

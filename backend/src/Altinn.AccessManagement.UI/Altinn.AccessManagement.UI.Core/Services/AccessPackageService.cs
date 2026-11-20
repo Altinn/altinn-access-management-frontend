@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// </summary>
         /// <param name="accessPackageClient">The access package client.</param>
         /// <param name="resourceHelper">The resource helper, used to enrich package resources.</param>
-        /// <param name="systemUserRightsResolver">Resolves which system users have rights fixed by the vendor.</param>
+        /// <param name="systemUserRightsResolver">Resolves which system users have rights locked by the vendor.</param>
         public AccessPackageService(IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper, ISystemUserRightsResolver systemUserRightsResolver)
         {
             _accessPackageClient = accessPackageClient;
@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             PaginatedResult<PackagePermission> paginatedAccesses = await _accessPackageClient.GetAccessPackageAccesses(party, to, from, languageCode);
             List<PackagePermissionFE> accesses = paginatedAccesses.Items.Select(PackagePermissionFE.FromPackagePermission).ToList();
-            await _systemUserRightsResolver.ApplyVendorFixedRights(party, accesses.SelectMany(a => a.Permissions).FlattenParties());
+            await _systemUserRightsResolver.ApplyRightsLocks(party, accesses.SelectMany(a => a.Permissions).FlattenParties());
 
             var sortedAccesses = new Dictionary<Guid, List<PackagePermissionFE>>();
             foreach (PackagePermissionFE access in accesses)
@@ -95,7 +95,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 var packagePermissions = paginatedAccesses.Items.FirstOrDefault(x => x.Package.Id == packageId);
                 AccessPackageFE packageFE = (await _resourceHelper.MapToAccessPackagesFE([package])).Single();
                 packageFE.Permissions = PermissionFE.FromPermissions(packagePermissions?.Permissions);
-                await _systemUserRightsResolver.ApplyVendorFixedRights(party, packageFE.Permissions.FlattenParties());
+                await _systemUserRightsResolver.ApplyRightsLocks(party, packageFE.Permissions.FlattenParties());
                 return packageFE;
             }
         }

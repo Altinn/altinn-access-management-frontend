@@ -73,8 +73,8 @@ export const mapPermissionsToUserSearchNodes = (
   };
 
   for (const permission of sortedPermissions) {
-    // Standard system users have rights fixed by the vendor, so they are shown read-only like inherited ones
-    const isLocked = !!permission.to.isVendorFixedRights;
+    // System users locked by the vendor have rights that cannot be changed, so they are shown read-only like inherited ones
+    const isLocked = !!permission.to.isRightsLocked;
     const inherited = isInherited(permission);
 
     if (hasViaEntity(permission)) {

@@ -26,7 +26,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// <param name="resourceRegistryClient">The resource registry client.</param>
         /// <param name="singleRightClient">The single rights client.</param>
         /// <param name="altinnCdnService">The Altinn CDN service, used to look up resource owner logos.</param>
-        /// <param name="systemUserRightsResolver">Resolves which system users have rights fixed by the vendor.</param>
+        /// <param name="systemUserRightsResolver">Resolves which system users have rights locked by the vendor.</param>
         public SingleRightService(IResourceService resourceService, IResourceRegistryClient resourceRegistryClient, ISingleRightClient singleRightClient, IAltinnCdnService altinnCdnService, ISystemUserRightsResolver systemUserRightsResolver)
         {
             _resourceService = resourceService;
@@ -78,7 +78,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 }
             }
 
-            await _systemUserRightsResolver.ApplyVendorFixedRights(party, delegationsFE.SelectMany(d => d.Permissions).FlattenParties());
+            await _systemUserRightsResolver.ApplyRightsLocks(party, delegationsFE.SelectMany(d => d.Permissions).FlattenParties());
             return delegationsFE;
         }
 

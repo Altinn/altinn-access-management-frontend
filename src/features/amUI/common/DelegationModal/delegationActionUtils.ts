@@ -3,17 +3,17 @@ import { DelegationAction } from './EditModal';
 interface GetAvailableActionsParams {
   canGiveAccess?: boolean;
   canRequestAccess?: boolean;
-  /** True when the right holder's rights are fixed by the vendor (standard system users) */
-  isVendorFixedRights?: boolean;
+  /** True when the right holder's rights are locked (system users locked by the vendor) */
+  isRightsLocked?: boolean;
 }
 
 /** Returns the delegation actions available on a rights section.  */
 export const getAvailableActions = ({
   canGiveAccess,
   canRequestAccess,
-  isVendorFixedRights,
+  isRightsLocked,
 }: GetAvailableActionsParams): DelegationAction[] => {
-  if (isVendorFixedRights) {
+  if (isRightsLocked) {
     return [];
   }
   return [
