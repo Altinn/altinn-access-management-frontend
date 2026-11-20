@@ -28,22 +28,31 @@ export const ActivityLogTab = ({
     filterState,
     changeFilterState,
     selectedPartyIds,
+    selectedByIds,
+    after,
+    before,
     counterpartField,
   } = useActivityLogQueryState();
 
-  const { currentData, isFetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useGetActivityLogInfiniteQuery({
-      area,
-      direction,
-      [counterpartField]: selectedPartyIds,
-      pageSize: ACTIVITY_LOG_PAGE_SIZE,
-    });
-  const isLoading = isFetching && !isFetchingNextPage;
-  const { data: partyValues } = useGetActivityLogFilterValuesQuery({
+  // The same search for the entries and the filter pickers, so the pickers only offer values that
+  // give hits; the API disregards the filter for the field being looked up.
+  const search = {
     area,
     direction,
+    [counterpartField]: selectedPartyIds,
+    by: selectedByIds,
+    after,
+    before,
+  };
+
+  const { currentData, isFetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useGetActivityLogInfiniteQuery({ ...search, pageSize: ACTIVITY_LOG_PAGE_SIZE });
+  const isLoading = isFetching && !isFetchingNextPage;
+  const { data: partyValues } = useGetActivityLogFilterValuesQuery({
+    ...search,
     field: counterpartField,
   });
+  const { data: byValues } = useGetActivityLogFilterValuesQuery({ ...search, field: 'by' });
   const { data: activityTypes } = useGetActivityTypesQuery({ area, language });
 
   return (
@@ -55,6 +64,7 @@ export const ActivityLogTab = ({
       filterState={filterState}
       onFilterStateChange={changeFilterState}
       partyOptions={partyValues?.data ?? []}
+      byOptions={byValues?.data ?? []}
       entries={currentData?.pages.flatMap((page) => page.data) ?? []}
       activityTypes={activityTypes}
       isLoading={isLoading}

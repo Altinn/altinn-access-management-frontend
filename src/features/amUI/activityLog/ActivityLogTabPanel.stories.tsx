@@ -15,12 +15,28 @@ interface StoryArgs {
 }
 
 const ActivityLogTabPanelStory = ({ isLoading, isError, empty }: StoryArgs) => {
-  const { direction, changeDirection, filterState, changeFilterState, selectedPartyIds } =
-    useActivityLogQueryState();
+  const {
+    direction,
+    changeDirection,
+    filterState,
+    changeFilterState,
+    selectedPartyIds,
+    selectedByIds,
+    after,
+    before,
+  } = useActivityLogQueryState();
   const [pageNo, setPageNo] = useState(0);
 
-  const { entries, partyOptions, hasMore } = getSampleActivityLog(
-    { direction, selectedPartyIds, pageNo, pageSize: STORY_PAGE_SIZE },
+  const { entries, partyOptions, byOptions, hasMore } = getSampleActivityLog(
+    {
+      direction,
+      selectedPartyIds,
+      selectedByIds,
+      after,
+      before,
+      pageNo,
+      pageSize: STORY_PAGE_SIZE,
+    },
     empty ? [] : undefined,
   );
 
@@ -39,6 +55,7 @@ const ActivityLogTabPanelStory = ({ isLoading, isError, empty }: StoryArgs) => {
         setPageNo(0);
       }}
       partyOptions={partyOptions}
+      byOptions={byOptions}
       entries={entries}
       isLoading={isLoading}
       isError={isError}

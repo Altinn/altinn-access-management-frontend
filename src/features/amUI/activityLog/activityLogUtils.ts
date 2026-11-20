@@ -110,6 +110,51 @@ export const getActivityLogPartyFilterLabel = (
   return names.length > 0 ? `${prefix}: ${names.join(', ')}` : prefix;
 };
 
+interface GetActivityLogDateFilterLabelParams {
+  prefix: string;
+  /** The first day of the period, YYYY-MM-DD. */
+  fromDate?: string;
+  /** The last day of the period, YYYY-MM-DD. */
+  toDate?: string;
+  locale: string;
+  t: TranslateFunction;
+}
+
+const toLocalDate = (date: string | undefined): Date | undefined => {
+  if (!date) {
+    return undefined;
+  }
+  const parsed = new Date(`${date}T00:00:00`);
+  return isNaN(parsed.getTime()) ? undefined : parsed;
+};
+
+/** The date filter chip text: the prefix alone, or the prefix followed by the chosen period. */
+export const getActivityLogDateFilterLabel = ({
+  prefix,
+  fromDate,
+  toDate,
+  locale,
+  t,
+}: GetActivityLogDateFilterLabelParams): string => {
+  const format = new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
+  const from = toLocalDate(fromDate);
+  const to = toLocalDate(toDate);
+  if (from && to) {
+    return `${prefix}: ${format.formatRange(from, to)}`;
+  }
+  if (from) {
+    return `${prefix}: ${t('activity_log_page.filter_date_from', { date: format.format(from) })}`;
+  }
+  if (to) {
+    return `${prefix}: ${t('activity_log_page.filter_date_to', { date: format.format(to) })}`;
+  }
+  return prefix;
+};
+
 /** The translation key for the entry's event: `events.<type>.<trigger>`. */
 export const getActivityLogEventKey = (entry: ActivityLogDto): string =>
   `${EVENTS_KEY}.${entry.type.toLowerCase()}.${entry.trigger.toLowerCase()}`;
