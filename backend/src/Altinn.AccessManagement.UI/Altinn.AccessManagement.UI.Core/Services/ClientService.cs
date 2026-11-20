@@ -67,10 +67,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             IEnumerable<AgentDelegation> agents = await _clientDelegationClient.GetAgents(party, cancellationToken);
             List<AgentDelegationFE> retVal = agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
-            await EnrichResources(
-                ResourcesOf(retVal.SelectMany(agent => agent.Access))
-                    .Concat(ResourcesOf(retVal.SelectMany(agent => agent.SystemUserSets))),
-                languageCode);
+            IEnumerable<CompactResource> enrichData = [
+                .. ResourcesOf(retVal.SelectMany(agent => agent.Access)), 
+                .. ResourcesOf(retVal.SelectMany(agent => agent.SystemUserSets))
+            ];
+            await EnrichResources(enrichData, languageCode);
             return retVal;
         }
 
@@ -115,10 +116,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             IEnumerable<AgentDelegation> agents = await _clientDelegationClient.GetClientResources(party, from, cancellationToken);
             List<AgentDelegationFE> retVal = agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
-            await EnrichResources(
-                ResourcesOf(retVal.SelectMany(agent => agent.Access))
-                    .Concat(ResourcesOf(retVal.SelectMany(agent => agent.SystemUserSets))),
-                languageCode);
+            IEnumerable<CompactResource> enrichData = [
+                .. ResourcesOf(retVal.SelectMany(agent => agent.Access)), 
+                .. ResourcesOf(retVal.SelectMany(agent => agent.SystemUserSets))
+            ];
+            await EnrichResources(enrichData, languageCode);
             return retVal;
         }
 
