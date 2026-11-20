@@ -5,12 +5,18 @@ on:
   push:
     branches: [ main ]
     paths:
-      - backend/**
+      - .repo.jsonc
+      - Altinn.AccessManagement.UI.slnx
+      - src/apps/Altinn.AccessManagement.UI/**
+      - '!src/apps/Altinn.AccessManagement.UI/frontend/**'
 
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - backend/**
+      - .repo.jsonc
+      - Altinn.AccessManagement.UI.slnx
+      - src/apps/Altinn.AccessManagement.UI/**
+      - '!src/apps/Altinn.AccessManagement.UI/frontend/**'
 
 jobs:
   ci:

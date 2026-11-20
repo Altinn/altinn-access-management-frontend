@@ -32,6 +32,8 @@ jobs:
       - uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         name: Build and Push Docker image
         with:
+          context: .
+          file: src/apps/Altinn.AccessManagement.UI/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.tag }}
   

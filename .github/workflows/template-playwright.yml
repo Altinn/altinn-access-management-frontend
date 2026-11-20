@@ -38,9 +38,10 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - name: Install dependencies
+        working-directory: src/apps/Altinn.AccessManagement.UI/frontend
         run: yarn --immutable
       - name: Running yarn tests
-        working-directory: playwright
+        working-directory: src/apps/Altinn.AccessManagement.UI/frontend/playwright
         env:
           USERNAME_TEST_API: ${{ secrets.USERNAME_TEST_API }}
           PASSWORD_TEST_API: ${{ secrets.PASSWORD_TEST_API }}
@@ -61,7 +62,7 @@ jobs:
         if: always()
         with:
           name: playwright-report-${{ inputs.environment }}
-          path: playwright/playwright-report/${{ inputs.environment }}
+          path: src/apps/Altinn.AccessManagement.UI/frontend/playwright/playwright-report/${{ inputs.environment }}
           retention-days: 30
 
       - name: Azure CLI Login
@@ -85,7 +86,7 @@ jobs:
               --account-name "$ACCOUNT_NAME" \
               --destination "\$web" \
               --destination-path "$REPORT_ID/$REPORT_NAME" \
-              --source "playwright/playwright-report/$REPORT_NAME" \
+              --source "src/apps/Altinn.AccessManagement.UI/frontend/playwright/playwright-report/$REPORT_NAME" \
               --overwrite \
               --auth-mode login \
               --no-progress \
@@ -95,11 +96,13 @@ jobs:
           echo "REPORT_URL=https://playwrightreporting.z1.web.core.windows.net/$REPORT_ID/$REPORT_NAME/" >> "$GITHUB_ENV"
       - name: Show report URL
         if: always()
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
         run: |
           NOTICE="Playwright-rapport: $REPORT_URL"
           # The UU reporter only writes uu/ when the run had axe scans.
-          if [ -f "playwright/playwright-report/${{ inputs.environment }}/uu/index.html" ]; then
+          if [ -f "src/apps/Altinn.AccessManagement.UI/frontend/playwright/playwright-report/${ENVIRONMENT}/uu/index.html" ]; then
             NOTICE="$NOTICE%0APlaywright Universell Utforming-rapport: ${REPORT_URL}uu/index.html"
           fi
           # The only place the report links are printed: an annotation at the top of the run page.
-          echo "::notice title=Rapporter ${{ inputs.environment }}::$NOTICE"
+          echo "::notice title=Rapporter ${ENVIRONMENT}::$NOTICE"
