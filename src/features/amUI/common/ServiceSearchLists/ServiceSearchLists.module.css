@@ -1,0 +1,18 @@
+.toolbarRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ds-size-2);
+}
+
+.showMoreButton {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--ds-spacing-3);
+}
+
+.resourceList {
+  margin-top: var(--ds-spacing-5);
+  margin-bottom: var(--ds-spacing-12);
+}

@@ -54,7 +54,6 @@ export interface ResourceListProps<TResource extends ServiceResource = ServiceRe
   as?: ResourceListItemProps['as'];
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
-  getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
   getDescriptionText?: (resource: TResource, index: number) => string | undefined;
   /** Text matched by the search field besides name and owner. Defaults to the description. */
   getSearchableText?: (resource: TResource) => string;
@@ -80,7 +79,6 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
   as,
   enableMaxHeight = false,
   renderControls,
-  getBadge,
   getDescriptionText,
   getSearchableText,
   getHasAccess,
@@ -227,7 +225,6 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
                       titleAs='div'
                       interactive={itemInteractive}
                       onClick={handleClick}
-                      badge={getBadge?.(resource, index)}
                       titleBadge={titleBadge}
                       variant={getHasAccess?.(resource) ? 'tinted' : 'default'}
                       controls={renderControls?.(resource)}

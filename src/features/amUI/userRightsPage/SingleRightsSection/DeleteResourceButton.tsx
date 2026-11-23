@@ -72,6 +72,7 @@ export const DeleteResourceButton = ({
       <Button
         aria-label={t('common.delete') + ' ' + resource.title}
         variant='tertiary'
+        data-size='sm'
         className={classes.deleteButton}
         disabled={disabled || isLoading}
         onClick={() => confirmDelete(resource, deleteResource)}

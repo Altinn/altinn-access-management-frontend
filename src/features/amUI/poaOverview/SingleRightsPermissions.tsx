@@ -1,54 +1,23 @@
-import { useCallback, useEffect, useMemo, useState, type ElementType } from 'react';
+import { useCallback, useMemo, type ElementType } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsParagraph } from '@altinn/altinn-components';
 
 import {
-  useSearchResourcesInfiniteQuery,
   useGetSingleRightsForRightholderQuery,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
-import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import type { Permissions } from '@/dataObjects/dtos/accessPackage';
-import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
 import { amUIPath } from '@/routes/paths/amUIPath';
-import { useDebouncedValue, usePermissionOverview } from '@/resources/hooks';
+import { usePermissionOverview } from '@/resources/hooks';
 
-import { CollapsibleContainer } from '../common/CollapsibleContainer/CollapsibleContainer';
-import { SearchHitsStatus } from '../common/SearchHitsStatus/SearchHitsStatus';
-import { ResourceFilterToolbar } from '../common/ResourceFilterToolbar/ResourceFilterToolbar';
 import { PermissionsBadge } from '../common/PermissionsBadge/PermissionsBadge';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
-import { useFilteredResources } from '../common/ResourceList/useFilteredResources';
-import { matchesAnySearchWord } from '../common/ResourceList/utils';
-
-import classes from './SingleRightsPermissions.module.css';
-
-const searchResultsPerPage = 7;
-const ASSIGNED_SERVICES_SECTION = 'assigned-services-section';
-const UNASSIGNED_SERVICES_SECTION = 'unassigned-services-section';
+import { ServiceSearchLists } from '../common/ServiceSearchLists/ServiceSearchLists';
 
 export const SingleRightsPermissions = () => {
   const { t } = useTranslation();
   const { actingParty, fromParty, isLoading: isPartyLoading } = usePartyRepresentation();
-
-  // Only the debounced search value lives here. The raw, per-keystroke value is owned by
-  // ServicesToolbar so that typing does not re-render the service lists below.
-  const [debouncedSearch, setDebouncedSearch] = useState('');
-  const [filterState, setFilterState] = useState<string[]>([]);
-  // How many non-delegated results the "other services" list should try to display. Grows by
-  // one page per "show more" click, reset to one page whenever the search changes below.
-  const [targetResultCount, setTargetResultCount] = useState(searchResultsPerPage);
-
-  const handleSearchChange = useCallback((search: string) => {
-    setDebouncedSearch(search);
-    setTargetResultCount(searchResultsPerPage);
-  }, []);
-
-  const handleFilterChange = useCallback((filters: string[]) => {
-    setFilterState(filters);
-    setTargetResultCount(searchResultsPerPage);
-  }, []);
 
   // Both lists link to the service's own details page.
   const getResourceItemAs = useCallback(
@@ -77,91 +46,10 @@ export const SingleRightsPermissions = () => {
     },
   );
 
-  const {
-    data: searchData,
-    currentData: currentSearchData,
-    isFetching: isSearchFetching,
-    isError: isSearchError,
-    hasNextPage,
-    fetchNextPage,
-  } = useSearchResourcesInfiniteQuery({
-    searchString: debouncedSearch,
-    ROfilters: filterState,
-    resultsPerPage: searchResultsPerPage,
-    includeExpired: true,
-  });
-
-  const delegatedIds = useMemo(
-    () => new Set((delegations ?? []).map((d) => d.resource.identifier)),
-    [delegations],
-  );
-
-  // `pages` accumulates every page fetched so far for the current search arguments.
-  const searchResources = useMemo(() => {
-    return (searchData?.pages.flatMap((p) => p.pageList) ?? []).filter(
-      (r) => !delegatedIds.has(r.identifier),
-    );
-  }, [searchData, delegatedIds]);
-
-  // Resources already assigned are filtered out of each fetched page above, so a fetched page can
-  // contribute fewer results than `searchResultsPerPage`. Keep fetching until enough non-delegated
-  // results have been found to reach the target, or there is nothing more to fetch.
-  useEffect(() => {
-    if (
-      searchResources.length < targetResultCount &&
-      hasNextPage &&
-      !isSearchFetching &&
-      !isSearchError
-    ) {
-      void fetchNextPage();
-    }
-  }, [
-    searchResources.length,
-    targetResultCount,
-    hasNextPage,
-    isSearchFetching,
-    fetchNextPage,
-    isSearchError,
-  ]);
-
-  const resources = useMemo(
-    () => (delegations ?? []).map((delegation) => delegation.resource).filter(Boolean),
-    [delegations],
-  );
-
   const permissionsByResource = useMemo(
     () => new Map((delegations ?? []).map((d) => [d.resource?.identifier, d.permissions])),
     [delegations],
   );
-
-  const { resources: filteredResources } = useFilteredResources({
-    resources,
-    serviceOwnerFilter: filterState,
-    searchString: debouncedSearch,
-    includeExpiredResources: true,
-    matchesSearch: matchesAnySearchWord,
-  });
-
-  const hasSearch = debouncedSearch || filterState.length > 0;
-
-  // The backend total also counts delegated services, which are listed under assigned services.
-  // currentData is undefined while a new search loads.
-  const searchHits =
-    hasSearch && currentSearchData && !isLoadingDelegations && !isPartyLoading
-      ? [
-          {
-            count: filteredResources.length,
-            listHeading: t('poa_overview_page.services_tab.assigned_services_title'),
-          },
-          {
-            count: Math.max(
-              0,
-              (currentSearchData.pages[0]?.numEntriesTotal ?? 0) - filteredResources.length,
-            ),
-            listHeading: t('poa_overview_page.services_tab.other_services_title'),
-          },
-        ]
-      : undefined;
 
   if (isError) {
     return (
@@ -177,140 +65,21 @@ export const SingleRightsPermissions = () => {
   return (
     <>
       <DsParagraph>{t('poa_overview_page.services_tab.description')}</DsParagraph>
-      <ServicesToolbar
-        onSearchChange={handleSearchChange}
-        filterState={filterState}
-        setFilterState={handleFilterChange}
+      <ServiceSearchLists
+        delegations={delegations}
+        isLoading={isLoadingDelegations || isPartyLoading}
+        assignedList={{
+          getItemAs: getResourceItemAs,
+          renderControls: (resource) => {
+            const permissions = permissionsByResource.get(resource.identifier);
+            return permissions?.length ? (
+              <SingleRightsPermissionBadge permissions={permissions} />
+            ) : null;
+          },
+        }}
+        otherList={{ getItemAs: getResourceItemAs }}
       />
-      <div>
-        <SearchHitsStatus
-          hits={searchHits}
-          searchString={debouncedSearch + filterState.join('')}
-        />
-        <section aria-labelledby={ASSIGNED_SERVICES_SECTION}>
-          <CollapsibleContainer
-            heading={t('poa_overview_page.services_tab.assigned_services_title')}
-            searchString={debouncedSearch}
-            id={ASSIGNED_SERVICES_SECTION}
-            defaultOpen
-          >
-            <ResourceList
-              className={classes.resourceList}
-              resources={filteredResources}
-              isLoading={isLoadingDelegations || isPartyLoading}
-              enableSearch={false}
-              showDetails={false}
-              getItemAs={getResourceItemAs}
-              noResourcesText={
-                hasSearch
-                  ? t('poa_overview_page.services_tab.no_services_found')
-                  : t('poa_overview_page.services_tab.no_services')
-              }
-              renderControls={(resource) => {
-                const permissions = permissionsByResource.get(resource.identifier);
-                return permissions?.length ? (
-                  <SingleRightsPermissionBadge permissions={permissions} />
-                ) : null;
-              }}
-              size='md'
-            />
-          </CollapsibleContainer>
-        </section>
-      </div>
-      <section aria-labelledby={UNASSIGNED_SERVICES_SECTION}>
-        <CollapsibleContainer
-          heading={t('poa_overview_page.services_tab.other_services_title')}
-          searchString={debouncedSearch + filterState.join('')}
-          id={UNASSIGNED_SERVICES_SECTION}
-        >
-          {isSearchError ? (
-            <DsAlert
-              role='alert'
-              data-color='danger'
-            >
-              <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-            </DsAlert>
-          ) : (
-            <>
-              <ResourceList
-                className={classes.resourceList}
-                resources={searchResources}
-                isLoading={
-                  isLoadingDelegations ||
-                  isPartyLoading ||
-                  (isSearchFetching && searchResources.length === 0)
-                }
-                enableSearch={false}
-                showDetails={false}
-                getItemAs={getResourceItemAs}
-                noResourcesText={t('poa_overview_page.services_tab.no_other_services')}
-                size='md'
-              />
-              {hasNextPage && (
-                <div className={classes.showMoreButton}>
-                  <DsButton
-                    variant='secondary'
-                    data-size='sm'
-                    onClick={() => {
-                      if (!isSearchFetching) {
-                        setTargetResultCount((count) => count + searchResultsPerPage);
-                      }
-                    }}
-                    aria-disabled={isSearchFetching}
-                  >
-                    {t('common.show_more')}
-                  </DsButton>
-                </div>
-              )}
-            </>
-          )}
-        </CollapsibleContainer>
-      </section>
     </>
-  );
-};
-
-interface ServicesToolbarProps {
-  onSearchChange: (search: string) => void;
-  filterState: string[];
-  setFilterState: (filters: string[]) => void;
-}
-
-/**
- * Owns the raw search input value and reports it upwards only once debounced.
- *
- * Keeping the per-keystroke value out of SingleRightsPermissions matters for more than the
- * request count: everything below the toolbar (both service lists, and a popover plus avatar
- * group per row) is keyed on the debounced value, so re-rendering it on each keystroke is
- * work that cannot change the output. Clearing the field applies immediately.
- */
-const ServicesToolbar = ({ onSearchChange, filterState, setFilterState }: ServicesToolbarProps) => {
-  const [search, setSearch] = useState('');
-  const debouncedSearch = useDebouncedValue(search, search ? 300 : 0);
-  const { data: ROdata } = useGetResourceOwnersQuery();
-
-  // Memoised so typing, which re-renders only this component, doesn't rebuild the service
-  // owner list on every keystroke: ResourceFilterToolbar turns it into one filter item per
-  // owner, and altinn-components clones that list again on each render.
-  const serviceOwnerOptions = useMemo(() => {
-    return (ROdata ?? []).map((ro) => ({
-      label: ro.organisationName || ro.organisationCode,
-      value: ro.organisationCode,
-    }));
-  }, [ROdata]);
-
-  useEffect(() => {
-    onSearchChange(debouncedSearch);
-  }, [debouncedSearch, onSearchChange]);
-
-  return (
-    <ResourceFilterToolbar
-      search={search}
-      setSearch={setSearch}
-      filterState={filterState}
-      setFilterState={setFilterState}
-      serviceOwnerOptions={serviceOwnerOptions}
-    />
   );
 };
 

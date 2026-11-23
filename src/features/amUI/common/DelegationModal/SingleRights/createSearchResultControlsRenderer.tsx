@@ -70,7 +70,7 @@ export const useRenderSearchResultControl = ({
       );
     }
 
-    if (!isAlreadyDelegated && canDelegate) {
+    if (resource.delegable && !isAlreadyDelegated && canDelegate) {
       return (
         <DsButton
           id={resourceActionControlId(resource.identifier)}
