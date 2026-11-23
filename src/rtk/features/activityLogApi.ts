@@ -7,7 +7,6 @@ import type {
   ActivityLogDirection,
   ActivityLogDto,
   ActivityLogFilterValueDto,
-  ActivityTypeDto,
   PaginatedResult,
 } from '@/features/amUI/activityLog/types';
 
@@ -98,20 +97,8 @@ export const activityLogApi = createApi({
       query: ({ field, term, orderBy, pageSize = ACTIVITY_LOG_FILTER_VALUES_PAGE_SIZE, ...args }) =>
         `${args.area}/filter/${encodeURIComponent(field)}?${buildQueryString({ ...args, pageSize }, { term, orderBy })}`,
     }),
-    /**
-     * The activity type catalog entries the area accepts. The BFF translates them to the selected
-     * language cookie; `language` is only part of the cache key so a language change refetches.
-     */
-    getActivityTypes: builder.query<ActivityTypeDto[], { area: ActivityLogArea; language: string }>(
-      {
-        query: ({ area }) => `${area}/types`,
-      },
-    ),
   }),
 });
 
-export const {
-  useGetActivityLogInfiniteQuery,
-  useGetActivityLogFilterValuesQuery,
-  useGetActivityTypesQuery,
-} = activityLogApi;
+export const { useGetActivityLogInfiniteQuery, useGetActivityLogFilterValuesQuery } =
+  activityLogApi;

@@ -10,7 +10,7 @@ import {
 
 import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
 
-import type { ActivityLogDirection, ActivityLogDto, ActivityTypeDto } from './types';
+import type { ActivityLogDirection, ActivityLogDto } from './types';
 import {
   formatActivityLogTimestamp,
   getActivityLogColor,
@@ -25,8 +25,6 @@ interface ActivityLogTimelineProps {
   reporteeName: string;
   /** Entries as returned by the API, newest first. */
   entries: ActivityLogDto[];
-  /** The area's catalog (`GET {area}/types`), used to name events without a sentence template. */
-  activityTypes?: ActivityTypeDto[];
   isLoading?: boolean;
   /** Whether more entries can be fetched with `onLoadMore`. */
   hasMore?: boolean;
@@ -40,7 +38,6 @@ export const ActivityLogTimeline = ({
   direction,
   reporteeName,
   entries,
-  activityTypes,
   isLoading = false,
   hasMore = false,
   isLoadingMore = false,
@@ -69,7 +66,6 @@ export const ActivityLogTimeline = ({
             reporteeName,
             t,
             exists: (key) => i18n.exists(key),
-            activityTypes,
           });
           return (
             <TimelineSegment

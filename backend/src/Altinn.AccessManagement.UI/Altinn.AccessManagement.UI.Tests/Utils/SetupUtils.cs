@@ -568,9 +568,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 AllowAutoRedirect = false,
             };
             factory.Server.AllowSynchronousIO = true;
-            HttpClient client = factory.CreateClient(opts);
-            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
-            return client;
+            return factory.CreateClient(opts);
         }
 
         /// <summary>

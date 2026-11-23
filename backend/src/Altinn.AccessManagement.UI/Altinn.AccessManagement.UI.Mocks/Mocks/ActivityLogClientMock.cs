@@ -69,13 +69,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(Page(ordered, query));
         }
 
-        /// <inheritdoc />
-        public Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(string area, string languageCode, CancellationToken cancellationToken = default)
-        {
-            string dataPath = Path.Combine(dataFolder, $"{area}_types.json");
-            return Task.FromResult<IEnumerable<ActivityTypeDto>>(Util.GetMockData<List<ActivityTypeDto>>(dataPath));
-        }
-
         private IEnumerable<ActivityLogDto> GetEntriesInSearch(string area, ActivityLogQuery query)
         {
             string dataPath = Path.Combine(dataFolder, $"{area}.json");

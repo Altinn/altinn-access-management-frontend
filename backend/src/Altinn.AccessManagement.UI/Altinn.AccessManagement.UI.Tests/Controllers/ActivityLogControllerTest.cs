@@ -257,20 +257,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetActivityTypes returns the area's catalog.
-        /// </summary>
-        [Fact]
-        public async Task GetActivityTypes_ReturnsCatalog()
-        {
-            SetAuthHeader();
-            List<ActivityTypeDto> expected = Util.GetMockData<List<ActivityTypeDto>>(Path.Combine(_mockDataFolder, "maskinporten_types.json"));
-
-            List<ActivityTypeDto> actual = await GetOk<List<ActivityTypeDto>>($"{BaseUrl}/maskinporten/types");
-
-            Assert.NotNull(actual);
-            Assert.Equivalent(expected, actual);
-        }
-        /// <summary>
         /// Test case: a socket error towards the access management API is transient. The controller must not
         /// swallow it, so that the global filter can turn it into a 503 the caller may retry on.
         /// </summary>

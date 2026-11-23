@@ -11,7 +11,6 @@ import { sampleActivityLogEntries } from './activityLogSampleData';
 vi.mock('@/rtk/features/activityLogApi', () => ({
   useGetActivityLogInfiniteQuery: vi.fn(),
   useGetActivityLogFilterValuesQuery: vi.fn(),
-  useGetActivityTypesQuery: vi.fn(),
 }));
 
 // No i18n instance is initialised in tests; `t` returns the key, and every sentence template exists.
@@ -62,7 +61,6 @@ describe('ActivityLogTab', () => {
     mockHookResult(activityLogApi.useGetActivityLogFilterValuesQuery, {
       data: { data: [{ id: 'lise-larsen-as', name: 'Lise Larsen AS' }], links: {} },
     });
-    mockHookResult(activityLogApi.useGetActivityTypesQuery, { data: [] });
   });
 
   it('queries the area for the reportee and access it gave, with the party filter on the receivers', () => {

@@ -99,35 +99,5 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
         }
-
-        /// <summary>
-        /// Endpoint for getting the activity type catalog entries the area accepts, with name and
-        /// description in the user's selected language.
-        /// </summary>
-        /// <param name="area">The area: connections, request or maskinporten.</param>
-        /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>The catalog entries.</returns>
-        [HttpGet]
-        [Authorize]
-        [Route("{area}/types")]
-        public async Task<ActionResult<IEnumerable<ActivityTypeDto>>> GetActivityTypes(
-            [FromRoute] string area,
-            CancellationToken cancellationToken = default)
-        {
-            if (!ActivityLogArea.IsValid(area))
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext);
-                return Ok(await _activityLogService.GetActivityTypes(area, languageCode, cancellationToken));
-            }
-            catch (HttpStatusException ex)
-            {
-                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
-            }
-        }
     }
 }

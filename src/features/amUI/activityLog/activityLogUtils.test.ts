@@ -118,40 +118,17 @@ describe('getActivityLogSentence', () => {
     });
   });
 
-  it('uses the catalog name when no template exists', () => {
+  it('falls back to naming the event by its trigger when no template exists', () => {
     const sentence = getActivityLogSentence({
-      entry: { ...baseEntry, activityTypeId: 'type-1', byName: null },
+      entry: { ...baseEntry, type: 'Delegation', byName: null },
       direction: 'from',
       reporteeName: 'Fysioterapeutene AS',
       t,
       exists: (key) => key.startsWith('activity_log_page.events.fallback'),
-      activityTypes: [
-        {
-          id: 'type-1',
-          type: 'Assignment',
-          subtype: 'Resource',
-          trigger: 'Created',
-          name: 'Scope tildelt',
-          description: '',
-        },
-      ],
     });
 
     expect(sentence.key).toBe('activity_log_page.events.fallback.from');
     expect(sentence.byKey).toBeUndefined();
-    expect(sentence.values.typeName).toBe('Scope tildelt');
-  });
-
-  it('names the event by its trigger when neither a template nor a catalog entry exists', () => {
-    const sentence = getActivityLogSentence({
-      entry: { ...baseEntry, type: 'Delegation', activityTypeId: 'unknown' },
-      direction: 'from',
-      reporteeName: 'Fysioterapeutene AS',
-      t,
-      exists: (key) => key.startsWith('activity_log_page.events.fallback'),
-      activityTypes: [],
-    });
-
     expect(sentence.values.typeName).toBe('activity_log_page.trigger.created');
   });
 });

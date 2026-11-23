@@ -26,14 +26,5 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The page of values and the link to the next page, if any.</returns>
         Task<PaginatedResult<ActivityLogFilterValueDto>> GetFilterValues(string area, string field, ActivityLogFilterValuesQuery query, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Gets the activity type catalog entries the area accepts, translated to the given language.
-        /// </summary>
-        /// <param name="area">The area: connections, request or maskinporten.</param>
-        /// <param name="languageCode">The language code in backend standard (nb, nn or en).</param>
-        /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>The catalog entries.</returns>
-        Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(string area, string languageCode, CancellationToken cancellationToken = default);
     }
 }
