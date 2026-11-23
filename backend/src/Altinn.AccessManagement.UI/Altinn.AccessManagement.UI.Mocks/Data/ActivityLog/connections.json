@@ -1,0 +1,26 @@
+[
+  {
+    "id": "a2000000-0000-4000-8000-000000000001",
+    "type": "Assignment",
+    "subtype": "Package",
+    "trigger": "Created",
+    "status": null,
+    "when": "2025-03-10T09:30:00+01:00",
+    "byId": "b0000000-0000-4000-8000-000000000001",
+    "byName": "Helle Hovedadmin",
+    "operationId": "op-10",
+    "fromId": "cd35779b-b174-4ecc-bbef-ece13611be7f",
+    "fromName": "Fysioterapeutene AS",
+    "fromType": "Organisasjon",
+    "toId": "167536b5-f8ed-4c5a-8f48-0279507e53ae",
+    "toName": "Lise Larsen AS",
+    "toType": "Organisasjon",
+    "roleId": "c0000000-0000-4000-8000-000000000002",
+    "roleName": "Rettighetshaver",
+    "packageId": "d0000000-0000-4000-8000-000000000010",
+    "packageName": "Lønn",
+    "itemId": "e0000000-0000-4000-8000-000000000010",
+    "parentId": "f0000000-0000-4000-8000-000000000010",
+    "activityTypeId": "00000000-0000-4000-8000-000000000010"
+  }
+]

@@ -57,34 +57,16 @@ export interface ActivityLogDto {
   activityTypeId?: string | null;
 }
 
-/** A catalog entry from `GET {area}/types` (`ActivityTypeDto`), translated by the API. */
-export interface ActivityTypeDto {
-  id: string;
-  type: ActivityLogType;
-  subtype?: ActivityLogSubtype | null;
-  trigger: ActivityLogTrigger;
-  status?: RequestStatus | null;
-  name: string;
-  description: string;
-}
-
 /** A value from `GET {area}/filter/{field}` (`ActivityLogFilterValueDto`). */
 export interface ActivityLogFilterValueDto {
   id: string;
   name: string;
 }
 
-/** Query parameters for `GET {area}`. Repeatable parameters are OR'ed; different parameters are AND'ed. */
-export interface ActivityLogQueryParams {
-  party: string;
-  direction: ActivityLogDirection;
-  from?: string[];
-  to?: string[];
-  via?: string[];
-  by?: string[];
-  typeId?: string[];
-  after?: string;
-  before?: string;
-  pageNo?: number;
-  pageSize?: number;
+/** The paginated envelope of the list endpoints. `links.next` is present only when more entries exist. */
+export interface PaginatedResult<T> {
+  data: T[];
+  links: {
+    next?: string | null;
+  };
 }
