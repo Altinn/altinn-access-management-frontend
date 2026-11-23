@@ -60,7 +60,7 @@ export const SubunitRequestsAlert = ({
             : t('landing_page.subunit_requests_title', { reportee: reporteeName })
         }
         icon={InformationSquareIcon}
-        linkIcon
+        linkIcon={!hasSubunitRequests}
         color='info'
         variant='tinted'
         border='solid'
@@ -76,6 +76,11 @@ export const SubunitRequestsAlert = ({
               )
         }
         containerAs='div'
+        description={
+          isSmallScreen && hasSubunitRequests
+            ? t('landing_page.subunit_requests_action')
+            : undefined
+        }
         badge={isSmallScreen ? undefined : <div>{t('landing_page.subunit_requests_action')}</div>}
         onClick={hasSubunitRequests ? () => setIsModalOpen(true) : undefined}
       />
