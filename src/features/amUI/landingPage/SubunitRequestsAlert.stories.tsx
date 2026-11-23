@@ -22,6 +22,8 @@ const meta: Meta<typeof SubunitRequestsAlert> = {
       authorizedRoles: [],
       onlyHierarchyElementWithNoAccess: false,
     },
+    requestCount: 2,
+    includeSubunits: true,
   },
   decorators: [
     (Story) => (
@@ -41,3 +43,5 @@ export default meta;
 type Story = StoryObj<typeof SubunitRequestsAlert>;
 
 export const Default: Story = {};
+
+export const WithoutSubunits: Story = { args: { includeSubunits: false } };

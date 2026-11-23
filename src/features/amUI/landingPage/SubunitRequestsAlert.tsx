@@ -9,7 +9,8 @@ import {
   UserListItem,
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
-import { ExclamationmarkTriangleIcon } from '@navikt/aksel-icons';
+import { Link } from 'react-router';
+import { ArrowRightIcon, InformationSquareIcon } from '@navikt/aksel-icons';
 
 import type { AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 import { useGetReceivedRequestsCountForSubunitsQuery } from '@/rtk/features/requestApi';
@@ -22,38 +23,61 @@ import classes from './LandingPage.module.css';
 
 interface SubunitRequestsAlertProps {
   reportee?: AuthorizedPartyEntity;
+  requestCount: number;
+  isCurrentUserReportee?: boolean;
+  includeSubunits?: boolean;
 }
 
-export const SubunitRequestsAlert = ({ reportee }: SubunitRequestsAlertProps) => {
+export const SubunitRequestsAlert = ({
+  reportee,
+  requestCount,
+  isCurrentUserReportee = false,
+  includeSubunits = false,
+}: SubunitRequestsAlertProps) => {
   const { t } = useTranslation();
   const isSmallScreen = useIsTabletOrSmaller();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: subunitCounts = [] } = useGetReceivedRequestsCountForSubunitsQuery(
+  const { data: subunitCounts = [], isLoading } = useGetReceivedRequestsCountForSubunitsQuery(
     { party: reportee?.id ?? '', status: ['Pending'] },
-    { skip: !reportee?.id },
+    { skip: !reportee?.id || !includeSubunits },
   );
   const subunitsWithRequests = subunitCounts.filter((subunit) => subunit.count > 0);
+  const hasSubunitRequests = subunitsWithRequests.length > 0;
   const reporteeName = formatEntityDisplayName(reportee);
+  const requestsPath = `/${amUIPath.Requests}`;
 
-  if (subunitsWithRequests.length === 0) {
+  if (isLoading || (requestCount === 0 && !hasSubunitRequests)) {
     return null;
   }
 
   return (
     <>
       <ListItem
-        title={t('landing_page.subunit_requests_title', { reportee: reporteeName })}
-        icon={ExclamationmarkTriangleIcon}
+        title={
+          isCurrentUserReportee
+            ? t('landing_page.subunit_requests_title_self')
+            : t('landing_page.subunit_requests_title', { reportee: reporteeName })
+        }
+        icon={InformationSquareIcon}
         linkIcon
-        color='warning'
+        color='info'
         variant='tinted'
         border='solid'
         interactive
-        as='button'
+        as={
+          hasSubunitRequests
+            ? 'button'
+            : (props) => (
+                <Link
+                  {...props}
+                  to={requestsPath}
+                />
+              )
+        }
         containerAs='div'
         badge={isSmallScreen ? undefined : <div>{t('landing_page.subunit_requests_action')}</div>}
-        onClick={() => setIsModalOpen(true)}
+        onClick={hasSubunitRequests ? () => setIsModalOpen(true) : undefined}
       />
       <DsDialog
         className={classes.subunitRequestsDialog}
@@ -69,16 +93,11 @@ export const SubunitRequestsAlert = ({ reportee }: SubunitRequestsAlertProps) =>
           >
             {t('landing_page.subunit_requests_modal_heading', { reportee: reporteeName })}
           </DsHeading>
-          <DsParagraph data-size='sm'>
-            {t('landing_page.subunit_requests_modal_subheading', {
-              orgNumber: formatOrgNr(reportee?.organizationIdentifier),
-            })}
-          </DsParagraph>
         </DsDialog.Block>
         <DsDialog.Block className={classes.subunitRequestsModal}>
           <DsParagraph data-size='sm'>{t('landing_page.subunit_requests_modal_intro')}</DsParagraph>
           <ul className={classes.subunitRequestsList}>
-            <li>
+            <li className={classes.subunitRequestsRow}>
               <UserListItem
                 id={reportee?.id ?? ''}
                 name={reporteeName}
@@ -89,7 +108,26 @@ export const SubunitRequestsAlert = ({ reportee }: SubunitRequestsAlertProps) =>
                 interactive={false}
                 shadow='none'
                 containerAs='div'
+                className={classes.subunitRequestsParty}
               />
+              <div className={classes.subunitRequestsControls}>
+                <Badge
+                  label={t('landing_page.subunit_requests_count', { count: requestCount })}
+                  color={requestCount > 0 ? 'info' : 'neutral'}
+                />
+                <DsLink
+                  asChild
+                  data-size='sm'
+                >
+                  <Link to={requestsPath}>
+                    {t('landing_page.subunit_requests_handle')}
+                    <ArrowRightIcon
+                      aria-hidden='true'
+                      fontSize='1.3rem'
+                    />
+                  </Link>
+                </DsLink>
+              </div>
             </li>
             {subunitsWithRequests.map(({ party, count }) => (
               <li
@@ -125,6 +163,10 @@ export const SubunitRequestsAlert = ({ reportee }: SubunitRequestsAlertProps) =>
                     )}
                   >
                     {t('landing_page.subunit_requests_switch')}
+                    <ArrowRightIcon
+                      aria-hidden='true'
+                      fontSize='1.3rem'
+                    />
                   </DsLink>
                 </div>
               </li>
