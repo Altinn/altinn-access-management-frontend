@@ -7,10 +7,7 @@ import { env } from 'playwright/util/helper';
  */
 
 /**
- * Én fast adresse per miljø: MinID rate-limiter innlogging per e-postadresse på tvers av
- * testmiljøene ("For mange forsøk"), så en felles adresse ville fått kjøringene til å
- * spise av samme kvote. Registrert i AT23 og TT02; i et nytt miljø registreres den ved
- * første innlogging.
+ * Én fast bruker per miljø
  */
 const KNOWN_SELF_IDENTIFIED_EMAIL = `playwright-e2e-si-${env('ENV_NAME').toLowerCase()}@example.com`;
 
