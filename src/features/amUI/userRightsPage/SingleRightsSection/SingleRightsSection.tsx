@@ -145,6 +145,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
             <ServiceSearchLists
               delegations={delegatedResources}
               size={isSmallScreen ? 'sm' : 'md'}
+              hideListHeadingsUntilSearch
               // Same wording as the access package search on this page.
               getSearchHitsMessage={({ assigned, other }) =>
                 `${t('access_packages.search_hits_active', { count: assigned })}. ${t('access_packages.search_other_hits', { count: other })}`

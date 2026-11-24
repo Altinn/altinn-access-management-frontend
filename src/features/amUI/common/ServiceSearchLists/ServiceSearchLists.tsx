@@ -47,6 +47,11 @@ interface ServiceSearchListsProps {
    * "{count} treff i {heading}" per list.
    */
   getSearchHitsMessage?: (hits: { assigned: number; other: number }) => string;
+  /**
+   * Until a search or service owner filter is active, show only the assigned list and without a
+   * heading. The other services list, and its server search, start with the first search.
+   */
+  hideListHeadingsUntilSearch?: boolean;
 }
 
 /**
@@ -61,6 +66,7 @@ export const ServiceSearchLists = ({
   toolbarAction,
   size = 'md',
   getSearchHitsMessage,
+  hideListHeadingsUntilSearch = false,
 }: ServiceSearchListsProps) => {
   const { t } = useTranslation();
   const assignedSectionId = useId();
@@ -89,6 +95,9 @@ export const ServiceSearchLists = ({
     setTargetResultCount(searchResultsPerPage);
   }, []);
 
+  const hasSearch = debouncedSearch !== '' || filterState.length > 0;
+  const showListHeadings = hasSearch || !hideListHeadingsUntilSearch;
+
   const {
     data: searchData,
     currentData: currentSearchData,
@@ -96,12 +105,15 @@ export const ServiceSearchLists = ({
     isError: isSearchError,
     hasNextPage,
     fetchNextPage,
-  } = useSearchResourcesInfiniteQuery({
-    searchString: debouncedSearch,
-    ROfilters: filterState,
-    resultsPerPage: searchResultsPerPage,
-    includeExpired: true,
-  });
+  } = useSearchResourcesInfiniteQuery(
+    {
+      searchString: debouncedSearch,
+      ROfilters: filterState,
+      resultsPerPage: searchResultsPerPage,
+      includeExpired: true,
+    },
+    { skip: !showListHeadings },
+  );
 
   const resources = useMemo(
     () => (delegations ?? []).map((delegation) => delegation.resource).filter(Boolean),
@@ -146,8 +158,6 @@ export const ServiceSearchLists = ({
     matchesSearch: matchesAnySearchWord,
   });
 
-  const hasSearch = debouncedSearch || filterState.length > 0;
-
   // The backend total also counts delegated services, which are listed under assigned services.
   // currentData is undefined while a new search loads.
   const otherHitsCount = Math.max(
@@ -166,6 +176,24 @@ export const ServiceSearchLists = ({
     other: otherHitsCount,
   });
 
+  const assignedResourceList = (
+    <ResourceList
+      resources={filteredResources}
+      isLoading={isLoading}
+      enableSearch={false}
+      showDetails={false}
+      onSelect={assignedList.onSelect}
+      getItemAs={assignedList.getItemAs}
+      renderControls={assignedList.renderControls}
+      noResourcesText={
+        hasSearch
+          ? t('poa_overview_page.services_tab.no_services_found')
+          : (assignedList.noResourcesText ?? t('poa_overview_page.services_tab.no_services'))
+      }
+      size={size}
+    />
+  );
+
   return (
     <>
       <div className={classes.toolbarRow}>
@@ -181,84 +209,77 @@ export const ServiceSearchLists = ({
         message={searchHitsMessage}
         searchString={debouncedSearch + filterState.join('')}
       />
-      <section
-        aria-labelledby={assignedSectionId}
-        className={classes.resourceList}
-      >
-        <CollapsibleContainer
-          heading={assignedHeading}
-          searchString={debouncedSearch}
-          id={assignedSectionId}
-          defaultOpen
+      {showListHeadings ? (
+        <section
+          aria-labelledby={assignedSectionId}
+          className={classes.resourceList}
         >
-          <ResourceList
-            resources={filteredResources}
-            isLoading={isLoading}
-            enableSearch={false}
-            showDetails={false}
-            onSelect={assignedList.onSelect}
-            getItemAs={assignedList.getItemAs}
-            renderControls={assignedList.renderControls}
-            noResourcesText={
-              hasSearch
-                ? t('poa_overview_page.services_tab.no_services_found')
-                : (assignedList.noResourcesText ?? t('poa_overview_page.services_tab.no_services'))
-            }
-            size={size}
-          />
-        </CollapsibleContainer>
-      </section>
-      <section
-        aria-labelledby={otherSectionId}
-        className={classes.resourceList}
-      >
-        <CollapsibleContainer
-          heading={otherHeading}
-          searchString={debouncedSearch + filterState.join('')}
-          id={otherSectionId}
+          <CollapsibleContainer
+            heading={assignedHeading}
+            searchString={debouncedSearch}
+            id={assignedSectionId}
+            defaultOpen
+          >
+            {assignedResourceList}
+          </CollapsibleContainer>
+        </section>
+      ) : (
+        <div className={classes.resourceList}>{assignedResourceList}</div>
+      )}
+      {showListHeadings && (
+        <section
+          aria-labelledby={otherSectionId}
+          className={classes.resourceList}
         >
-          {isSearchError ? (
-            <DsAlert
-              role='alert'
-              data-color='danger'
-            >
-              <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
-            </DsAlert>
-          ) : (
-            <>
-              <ResourceList
-                resources={searchResources}
-                isLoading={isLoading || (isSearchFetching && searchResources.length === 0)}
-                enableSearch={false}
-                showDetails={false}
-                onSelect={otherList.onSelect}
-                getItemAs={otherList.getItemAs}
-                renderControls={otherList.renderControls}
-                noResourcesText={
-                  otherList.noResourcesText ?? t('poa_overview_page.services_tab.no_other_services')
-                }
-                size={size}
-              />
-              {hasNextPage && (
-                <div className={classes.showMoreButton}>
-                  <DsButton
-                    variant='secondary'
-                    data-size='sm'
-                    onClick={() => {
-                      if (!isSearchFetching) {
-                        setTargetResultCount((count) => count + searchResultsPerPage);
-                      }
-                    }}
-                    aria-disabled={isSearchFetching}
-                  >
-                    {t('common.show_more')}
-                  </DsButton>
-                </div>
-              )}
-            </>
-          )}
-        </CollapsibleContainer>
-      </section>
+          <CollapsibleContainer
+            heading={otherHeading}
+            searchString={debouncedSearch + filterState.join('')}
+            id={otherSectionId}
+          >
+            {isSearchError ? (
+              <DsAlert
+                role='alert'
+                data-color='danger'
+              >
+                <DsParagraph>{t('common.general_error_paragraph')}</DsParagraph>
+              </DsAlert>
+            ) : (
+              <>
+                <ResourceList
+                  resources={searchResources}
+                  isLoading={isLoading || (isSearchFetching && searchResources.length === 0)}
+                  enableSearch={false}
+                  showDetails={false}
+                  onSelect={otherList.onSelect}
+                  getItemAs={otherList.getItemAs}
+                  renderControls={otherList.renderControls}
+                  noResourcesText={
+                    otherList.noResourcesText ??
+                    t('poa_overview_page.services_tab.no_other_services')
+                  }
+                  size={size}
+                />
+                {hasNextPage && (
+                  <div className={classes.showMoreButton}>
+                    <DsButton
+                      variant='secondary'
+                      data-size='sm'
+                      onClick={() => {
+                        if (!isSearchFetching) {
+                          setTargetResultCount((count) => count + searchResultsPerPage);
+                        }
+                      }}
+                      aria-disabled={isSearchFetching}
+                    >
+                      {t('common.show_more')}
+                    </DsButton>
+                  </div>
+                )}
+              </>
+            )}
+          </CollapsibleContainer>
+        </section>
+      )}
     </>
   );
 };
