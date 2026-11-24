@@ -90,6 +90,7 @@ export const SubunitRequestsAlert = ({
         onClick={hasSubunitRequests ? () => setIsModalOpen(true) : undefined}
       />
       <DsDialog
+        aria-label={t('landing_page.subunit_requests_modal_heading', { reportee: reporteeName })}
         className={classes.subunitRequestsDialog}
         open={isModalOpen}
         closedby='any'
