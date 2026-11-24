@@ -1252,7 +1252,7 @@
     "subunit_requests_count_one": "{{count}} request",
     "subunit_requests_count_other": "{{count}} requests",
     "subunit_requests_switch": "Switch to subunit",
-    "subunit_requests_handle": "Process requests",
+    "subunit_requests_handle": "Go to requests",
     "bankruptcy_estate_admin_item_description": "Let others administer the bankruptcy estates of {{reportee}}."
   },
   "request_page": {

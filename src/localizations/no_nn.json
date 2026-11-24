@@ -1242,7 +1242,7 @@
     "subunit_requests_count_one": "{{count}} førespurnad",
     "subunit_requests_count_other": "{{count}} førespurnader",
     "subunit_requests_switch": "Byt til undereining",
-    "subunit_requests_handle": "Behandle førespurnader",
+    "subunit_requests_handle": "Gå til førespurnader",
     "bankruptcy_estate_admin_item_description": "Gi andre tilgang til å administrere konkursbua til {{reportee}}."
   },
   "request_page": {

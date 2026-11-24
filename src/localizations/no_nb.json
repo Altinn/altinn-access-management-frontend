@@ -1244,7 +1244,7 @@
     "subunit_requests_count_one": "{{count}} forespørsel",
     "subunit_requests_count_other": "{{count}} forespørsler",
     "subunit_requests_switch": "Bytt til underenhet",
-    "subunit_requests_handle": "Behandle forespørsler",
+    "subunit_requests_handle": "Gå til forespørsler",
     "bankruptcy_estate_admin_item_description": "Gi andre tilgang til å administrere konkursboene til {{reportee}}."
   },
   "request_page": {
