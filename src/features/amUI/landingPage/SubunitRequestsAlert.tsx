@@ -42,7 +42,11 @@ export const SubunitRequestsAlert = ({
     { party: reportee?.id ?? '', status: ['Pending'] },
     { skip: !reportee?.id || !includeSubunits },
   );
-  const subunitsWithRequests = subunitCounts.filter((subunit) => subunit.count > 0);
+  const subunitsWithRequests = subunitCounts
+    .filter((subunit) => subunit.count > 0)
+    .sort((a, b) =>
+      formatEntityDisplayName(a.party).localeCompare(formatEntityDisplayName(b.party)),
+    );
   const hasSubunitRequests = subunitsWithRequests.length > 0;
   const reporteeName = formatEntityDisplayName(reportee);
   const requestsPath = `/${amUIPath.Requests}`;
