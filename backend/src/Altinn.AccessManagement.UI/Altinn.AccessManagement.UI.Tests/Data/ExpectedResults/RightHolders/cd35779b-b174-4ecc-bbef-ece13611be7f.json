@@ -18,5 +18,51 @@
       }
     ],
     "connections": []
+  },
+  {
+    "party": {
+      "id": "6c6a3f1e-0b8a-4a5e-9d3e-2f4b1c7d8e90",
+      "partyId": 51234567,
+      "name": "RAKRYGGET UNG TIGER AS",
+      "type": "Organization",
+      "unitType": "AS",
+      "organizationIdentifier": "313523497",
+      "dateOfBirth": null,
+      "isDeleted": false,
+      "children": null
+    },
+    "roles": [
+      {
+        "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+        "code": "styreleder"
+      }
+    ],
+    "connections": [
+      {
+        "party": {
+          "id": "1f2e3d4c-5b6a-4978-8a9b-0c1d2e3f4a5b",
+          "partyId": 51234568,
+          "name": "INTELLIGENT ALBATROSS",
+          "type": "Person",
+          "unitType": null,
+          "organizationIdentifier": null,
+          "dateOfBirth": "1951-09-19",
+          "isDeleted": false,
+          "children": null
+        },
+        "roles": [],
+        "viaRoles": [
+          {
+            "id": "55bd7d4d-08dd-46ee-ac8e-3a44d800d752",
+            "code": "daglig-leder"
+          },
+          {
+            "id": "9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4",
+            "code": "styreleder"
+          }
+        ],
+        "connections": []
+      }
+    ]
   }
 ]

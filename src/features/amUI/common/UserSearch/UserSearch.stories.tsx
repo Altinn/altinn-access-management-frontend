@@ -123,6 +123,36 @@ const mockConnections: Connection[] = [
     roles: [],
     connections: [],
   },
+  {
+    party: {
+      id: 'o2',
+      name: 'RAKRYGGET UNG TIGER AS',
+      type: PartyType.Organization,
+      isDeleted: false,
+      unitType: 'AS',
+      organizationIdentifier: '313523497',
+      children: null,
+    },
+    roles: [],
+    connections: [
+      {
+        party: {
+          id: 'u6',
+          name: 'Intelligent Albatross',
+          type: PartyType.Person,
+          isDeleted: false,
+          children: null,
+          dateOfBirth: '1951-09-19',
+        },
+        roles: [],
+        viaRoles: [
+          { id: '123', code: 'daglig-leder' },
+          { id: '9e5d3acf-cef7-4bbe-b101-8e9ab7b8b3e4', code: 'styreleder' },
+        ],
+        connections: [],
+      },
+    ],
+  },
 ];
 
 const meta = {
