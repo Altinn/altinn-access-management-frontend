@@ -10,7 +10,7 @@ import {
 } from '@altinn/altinn-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { ArrowRightIcon, InformationSquareIcon } from '@navikt/aksel-icons';
+import { ArrowRightIcon, BellFillIcon } from '@navikt/aksel-icons';
 
 import type { AuthorizedPartyEntity } from '@/dataObjects/dtos/Party';
 import { useGetReceivedRequestsCountForSubunitsQuery } from '@/rtk/features/requestApi';
@@ -19,7 +19,7 @@ import { formatEntityDisplayName, formatOrgNr } from '@/resources/utils/reportee
 import { useIsTabletOrSmaller } from '@/resources/utils/screensizeUtils';
 import { amUIPath, GeneralPath } from '@/routes/paths';
 
-import classes from './LandingPage.module.css';
+import classes from './SubunitRequestsAlert.module.css';
 
 interface SubunitRequestsAlertProps {
   reportee?: AuthorizedPartyEntity;
@@ -54,13 +54,14 @@ export const SubunitRequestsAlert = ({
   return (
     <>
       <ListItem
-        title={
-          isCurrentUserReportee
+        title={{
+          size: 'md',
+          children: isCurrentUserReportee
             ? t('landing_page.subunit_requests_title_self')
-            : t('landing_page.subunit_requests_title', { reportee: reporteeName })
-        }
-        icon={InformationSquareIcon}
-        linkIcon={!hasSubunitRequests}
+            : t('landing_page.subunit_requests_title', { reportee: reporteeName }),
+        }}
+        icon={BellFillIcon}
+        linkIcon
         color='info'
         variant='tinted'
         border='solid'
@@ -81,7 +82,11 @@ export const SubunitRequestsAlert = ({
             ? t('landing_page.subunit_requests_action')
             : undefined
         }
-        badge={isSmallScreen ? undefined : <div>{t('landing_page.subunit_requests_action')}</div>}
+        badge={
+          isSmallScreen ? undefined : (
+            <div data-size='sm'>{t('landing_page.subunit_requests_action')}</div>
+          )
+        }
         onClick={hasSubunitRequests ? () => setIsModalOpen(true) : undefined}
       />
       <DsDialog
@@ -102,7 +107,7 @@ export const SubunitRequestsAlert = ({
         <DsDialog.Block className={classes.subunitRequestsModal}>
           <DsParagraph data-size='sm'>{t('landing_page.subunit_requests_modal_intro')}</DsParagraph>
           <ul className={classes.subunitRequestsList}>
-            <li className={classes.subunitRequestsRow}>
+            <li className={classes.mainunitRequestsRow}>
               <UserListItem
                 id={reportee?.id ?? ''}
                 name={reporteeName}
@@ -124,7 +129,10 @@ export const SubunitRequestsAlert = ({
                   asChild
                   data-size='sm'
                 >
-                  <Link to={requestsPath}>
+                  <Link
+                    to={requestsPath}
+                    className={classes.subunitRequestsLink}
+                  >
                     {t('landing_page.subunit_requests_handle')}
                     <ArrowRightIcon
                       aria-hidden='true'
@@ -144,7 +152,6 @@ export const SubunitRequestsAlert = ({
                   name={formatEntityDisplayName(party)}
                   description={t('landing_page.subunit_requests_subunit_description', {
                     orgNumber: formatOrgNr(party.organizationIdentifier),
-                    reportee: reporteeName,
                   })}
                   type='company'
                   subUnit
@@ -162,6 +169,7 @@ export const SubunitRequestsAlert = ({
                   />
                   <DsLink
                     data-size='sm'
+                    className={classes.subunitRequestsLink}
                     href={getChangeReporteeAndRedirectUrl(
                       party.id,
                       `${window.location.origin}${GeneralPath.BasePath}/${amUIPath.Requests}`,

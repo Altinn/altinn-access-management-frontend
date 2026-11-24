@@ -1,0 +1,58 @@
+.subunitRequestsDialog {
+  max-width: 900px;
+}
+
+.subunitRequestsModal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
+}
+
+.subunitRequestsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-size-4);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mainunitRequestsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-size-2) var(--ds-size-4);
+  border-bottom: var(--ds-border-width-default) solid var(--ds-color-neutral-border-subtle);
+}
+
+.subunitRequestsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ds-size-2) var(--ds-size-4);
+}
+
+.subunitRequestsParty {
+  flex: 1 1 15rem;
+}
+
+.subunitRequestsControls {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-size-6);
+  padding-left: var(--ds-size-2);
+}
+
+.subunitRequestsLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-size-1);
+}
+
+@media (max-width: 768px) {
+  .mainunitRequestsRow {
+    padding-bottom: var(--ds-size-4);
+  }
+}

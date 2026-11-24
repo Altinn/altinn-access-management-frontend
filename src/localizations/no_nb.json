@@ -1239,7 +1239,7 @@
     "subunit_requests_title_self": "Du har nye forespørsler",
     "subunit_requests_action": "Behandle forespørslene",
     "subunit_requests_modal_heading": "Forespørsler hos {{reportee}}",
-    "subunit_requests_subunit_description": "Org.nr. {{orgNumber}}, underenhet av {{reportee}}",
+    "subunit_requests_subunit_description": "↳ Org.nr. {{orgNumber}}, underenhet",
     "subunit_requests_modal_intro": "Forespørsler må behandles på hver enkelt enhet. Velg fra listen under.",
     "subunit_requests_count_one": "{{count}} forespørsel",
     "subunit_requests_count_other": "{{count}} forespørsler",

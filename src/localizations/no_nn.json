@@ -1237,7 +1237,7 @@
     "subunit_requests_title_self": "Du har nye førespurnader",
     "subunit_requests_action": "Behandle førespurnadene",
     "subunit_requests_modal_heading": "Førespurnader hos {{reportee}}",
-    "subunit_requests_subunit_description": "Org.nr. {{orgNumber}}, undereining av {{reportee}}",
+    "subunit_requests_subunit_description": "↳ Org.nr. {{orgNumber}}, undereining",
     "subunit_requests_modal_intro": "Førespurnader må behandlast på kvar enkelt eining. Vel frå lista under.",
     "subunit_requests_count_one": "{{count}} førespurnad",
     "subunit_requests_count_other": "{{count}} førespurnader",
