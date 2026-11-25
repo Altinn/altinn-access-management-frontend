@@ -56,12 +56,13 @@ export const DeleteUserModal = ({ direction = 'to' }: DeleteUserModalProps) => {
       { skip },
     );
 
-  const hasClientDelegation = [
+  const clientDelegationPermissions = [
     ...Object.values(packageDelegations ?? {}).flat(),
     ...(resourceDelegations ?? []),
-  ].some(({ permissions }) =>
-    permissions?.some((permission) => permission.viaRole?.code === AGENT_ROLE),
-  );
+  ]
+    .flatMap(({ permissions }) => permissions ?? [])
+    .filter((permission) => permission.viaRole?.code === AGENT_ROLE);
+  const hasClientDelegation = clientDelegationPermissions.length > 0;
 
   const status = getDeletionStatus(
     rolePermissions,
@@ -70,7 +71,7 @@ export const DeleteUserModal = ({ direction = 'to' }: DeleteUserModalProps) => {
     hasClientDelegation,
   );
   const nonDeletableReasons = getNonDeletableReasons(rolePermissions, hasClientDelegation);
-  const viaParties = getViaParties(rolePermissions);
+  const viaParties = getViaParties(rolePermissions, clientDelegationPermissions);
 
   return (
     <DeleteUserModalContent
