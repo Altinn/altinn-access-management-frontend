@@ -28,6 +28,11 @@ export interface EnrichedPackageRequest extends RequestDto {
   package: AccessPackage;
 }
 
+export interface SubunitRequestCount {
+  party: PartyEntity;
+  count: number;
+}
+
 export type EnrichedRequest = EnrichedResourceRequest | EnrichedPackageRequest;
 
 export const isEnrichedPackageRequest = (
@@ -197,6 +202,17 @@ export const requestApi = createApi({
       },
       providesTags: ['receivedRequests'],
     }),
+    getReceivedRequestsCountForSubunits: builder.query<
+      SubunitRequestCount[],
+      { party: string; status?: RequestStatus[] }
+    >({
+      query: ({ party, status = [] }) => {
+        let params = `?party=${party}`;
+        for (const s of status) params += `&status=${s}`;
+        return `received/count/subunits${params}`;
+      },
+      providesTags: ['receivedRequests'],
+    }),
 
     // draft request page query
     getEnrichedDraftRequest: builder.query<EnrichedRequest, { id: string }>({
@@ -235,6 +251,7 @@ export const {
   useGetEnrichedDraftRequestQuery,
   useGetSentRequestsCountQuery,
   useGetReceivedRequestsCountQuery,
+  useGetReceivedRequestsCountForSubunitsQuery,
 } = requestApi;
 
 export const { endpoints, reducerPath, reducer, middleware } = requestApi;

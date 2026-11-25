@@ -582,6 +582,65 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: GetReceivedRequestsCountForSubunits returns count for each subunit of the party
+        ///     Expected: GetReceivedRequestsCountForSubunits returns the subunits with their counts
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedRequestsCountForSubunits_ReturnsCountForSubunits()
+        {
+            // Arrange
+            string party = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/count/subunits?party={party}&status=Pending");
+            List<ReceivedRequestCountSubunitFE> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ReceivedRequestCountSubunitFE>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.Equal(2, actualResponse.Count);
+            Assert.Equal(Guid.Parse("0195efb8-7c80-7cb0-a2b6-8f5c1e4b2a11"), actualResponse[0].Party.Id);
+            Assert.Equal("BAKER AS AVD OSLO", actualResponse[0].Party.Name);
+            Assert.Equal("910000001", actualResponse[0].Party.OrganizationIdentifier);
+            Assert.Equal("BEDR", actualResponse[0].Party.UnitType);
+            Assert.Equal(3, actualResponse[0].Count);
+            Assert.Equal(0, actualResponse[1].Count);
+        }
+
+        /// <summary>
+        ///     Test case: GetReceivedRequestsCountForSubunits encounters an unexpected internal error
+        ///     Expected: Returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedRequestsCountForSubunits_InternalServerError()
+        {
+            // Arrange
+            string party = "00000000-0000-0000-0000-000000000000";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/count/subunits?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: GetReceivedRequestsCountForSubunits encounters an HttpStatusException
+        ///     Expected: Returns the status code from the exception (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetReceivedRequestsCountForSubunits_HttpStatusException()
+        {
+            // Arrange
+            string party = "11111111-1111-1111-1111-111111111111";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/request/received/count/subunits?party={party}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
         ///     Test case: GetSentRequests encounters an unexpected internal error
         ///     Expected: Returns 500 Internal Server Error
         /// </summary>

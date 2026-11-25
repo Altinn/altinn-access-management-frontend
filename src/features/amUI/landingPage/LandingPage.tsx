@@ -33,7 +33,6 @@ import {
   getMaskinportenMenuItem,
   getPoaOverviewMenuItem,
   getReporteesMenuItem,
-  getRequestsMenuItem,
   getClientAdministrationMenuItem,
   getSettingsMenuItem,
   getSystemUserMenuItem,
@@ -62,6 +61,7 @@ import { Breadcrumbs } from '../common/Breadcrumbs/Breadcrumbs';
 
 import classes from './LandingPage.module.css';
 import { LandingPageInfoCard } from './LandingPageInfoCard';
+import { SubunitRequestsAlert } from './SubunitRequestsAlert';
 
 export const LandingPage = () => {
   const { t } = useTranslation();
@@ -210,27 +210,8 @@ export const LandingPage = () => {
     return items;
   };
 
-  const getRequestCountText = (requestCount: number): string => {
-    const textKey = isCurrentUserReportee
-      ? 'landing_page.new_requests_self'
-      : 'landing_page.new_requests';
-
-    return t(textKey, {
-      reportee: reporteeName,
-      count: requestCount,
-    });
-  };
-
   const getOtherItems = (): MenuItemProps[] => {
     const items: MenuItemProps[] = [];
-
-    if (isAdmin) {
-      items.push({
-        ...getRequestsMenuItem(),
-        title: getRequestCountText(isLoadingRequestsBadge ? 0 : requestsBadgeCount),
-        loading: isLoading || isLoadingRequestsBadge,
-      });
-    }
 
     if (canAccessSettings) {
       items.push({ ...getSettingsMenuItem(), loading: isLoading });
@@ -303,6 +284,14 @@ export const LandingPage = () => {
             isLoading={isLoading}
             isOrganization={isOrganization(reportee)}
           />
+          {isAdmin && !isLoadingRequestsBadge && (
+            <SubunitRequestsAlert
+              reportee={reportee}
+              requestCount={requestsBadgeCount}
+              isCurrentUserReportee={isCurrentUserReportee}
+              includeSubunits={isOrganization(reportee) && !isReporteeSubUnit}
+            />
+          )}
           <ListItemContainer
             heading={t('landing_page.your_content_heading')}
             items={getYourAccessesItems()}

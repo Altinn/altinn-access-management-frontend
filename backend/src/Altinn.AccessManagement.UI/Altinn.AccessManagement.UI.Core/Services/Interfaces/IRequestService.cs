@@ -167,5 +167,15 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Count of received requests</returns>
         Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get count of requests received by each subunit of a party
+        /// </summary>
+        /// <param name="party">The acting party (main unit) whose subunits are counted</param>
+        /// <param name="from">The party who sent the requests</param>
+        /// <param name="status">The statuses to count</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Count of received requests for each subunit</returns>
+        Task<IEnumerable<ReceivedRequestCountSubunitFE>> GetReceivedRequestsCountForSubunits(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken);
     }
 }

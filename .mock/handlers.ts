@@ -8,6 +8,7 @@ import { lookupHandlers } from './handlers/lookup';
 import { systemUserHandlers } from './handlers/systemUser';
 import { settingsHandler } from './handlers/settings';
 import { roleHandlers } from './handlers/role';
+import { requestHandlers } from './handlers/request';
 
 export const ACCESSMANAGEMENT_BASE_URL = '/accessmanagement/api/v1';
 
@@ -20,6 +21,7 @@ export const handlers = [
   ...roleHandlers(ACCESSMANAGEMENT_BASE_URL),
   ...systemUserHandlers(ACCESSMANAGEMENT_BASE_URL),
   ...settingsHandler(ACCESSMANAGEMENT_BASE_URL),
+  ...requestHandlers(ACCESSMANAGEMENT_BASE_URL),
 
   http.get('*', () => {
     return passthrough();
