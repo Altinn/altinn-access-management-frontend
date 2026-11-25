@@ -12,10 +12,6 @@
   padding: 8px 0 5px;
 }
 
-.searchField {
-  min-width: 0; /* allow flex child to shrink */
-}
-
 .delegateButton {
   display: flex;
   align-items: center;
