@@ -65,8 +65,8 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
   const { actionError, setActionError } = useDelegationModalContext();
 
   // Rows in both lists open the same modal; ResourceInfo offers give/request/revoke as allowed.
-  // `error` is set when a give/request from a row failed: actionError is then already set and is
-  // shown in the modal.
+  // `error` is set when a give or revoke from a row failed: actionError is then already set and is
+  // shown in the modal. A failed request from a row is reported with a snackbar instead.
   const openResource = (resource: ServiceResource, error = false) => {
     if (!error) {
       setActionError(null);

@@ -19,8 +19,10 @@ interface UseSingleRightsListControlsProps {
   delegatedResources?: ResourceDelegation[];
   availableActions?: DelegationAction[];
   /**
-   * Opens the service's info view. Called with `error = true` when a give/request/revoke from the
-   * row failed; the error is then already set in DelegationModalContext's `actionError`.
+   * Opens the service's info view. Called with `error = true` when a give or revoke from the row
+   * failed; the error is then already set in DelegationModalContext's `actionError`. Also called
+   * without an error when the user lacks access to every action on the service. Failed requests
+   * are reported with a snackbar instead and do not open the info view.
    */
   onSelect: (resource: ServiceResource, error?: boolean) => void;
   /** Called after a give or revoke from the row succeeded, e.g. to restore focus. */
@@ -43,13 +45,13 @@ export const useSingleRightsListControls = ({
   const { setActionError } = useDelegationModalContext();
   const { actingParty, fromParty, toParty } = usePartyRepresentation();
 
+  // Without error callbacks, a failed send or withdraw of a request shows an error snackbar. The
+  // request mutations carry no error details that the info view could show.
   const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
     useSingleRightRequests({
       canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
       actingPartyUuid: actingParty?.id,
       fromPartyUuid: fromParty?.id,
-      onCreateRequestError: (resource) => onSelect(resource),
-      onDeleteRequestError: (resource) => onSelect(resource),
     });
 
   const { canRedelegateResource } = useCanRedelegateResource();

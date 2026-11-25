@@ -130,7 +130,6 @@ export const ServiceSearchLists = ({
     skip: !showListHeadings || searchSource !== 'maskinportenScopes',
   });
   const {
-    data: searchData,
     currentData: currentSearchData,
     isFetching: isSearchFetching,
     isError: isSearchError,
@@ -145,12 +144,14 @@ export const ServiceSearchLists = ({
 
   const delegatedIds = useMemo(() => new Set(resources.map((r) => r.identifier)), [resources]);
 
-  // `pages` accumulates every page fetched so far for the current search arguments.
+  // `pages` accumulates every page fetched so far for the current search arguments. currentData,
+  // unlike data, is undefined while a new search loads, so rows from the previous search are not
+  // shown (and cannot be acted on) under the new one; it is kept while fetching further pages.
   const searchResources = useMemo(() => {
-    return (searchData?.pages.flatMap((p) => p.pageList) ?? []).filter(
+    return (currentSearchData?.pages.flatMap((p) => p.pageList) ?? []).filter(
       (r) => !delegatedIds.has(r.identifier),
     );
-  }, [searchData, delegatedIds]);
+  }, [currentSearchData, delegatedIds]);
 
   // Resources already assigned are filtered out of each fetched page above, so a fetched page can
   // contribute fewer results than `searchResultsPerPage`. Keep fetching until enough non-delegated
@@ -301,7 +302,12 @@ export const ServiceSearchLists = ({
                       data-size='sm'
                       onClick={() => {
                         if (!isSearchFetching) {
-                          setTargetResultCount((count) => count + searchResultsPerPage);
+                          // Count from what is shown: cached pages, or a page fetched to fill
+                          // up for skipped delegated services, can already exceed the target.
+                          setTargetResultCount(
+                            (count) =>
+                              Math.max(count, searchResources.length) + searchResultsPerPage,
+                          );
                         }
                       }}
                       aria-disabled={isSearchFetching}

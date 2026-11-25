@@ -50,7 +50,10 @@ const getScopeSearchText = (resource: ServiceResource) =>
 const matchesScopeSearch = (resource: ServiceResource, normalizedSearch: string) => {
   if (matchesAnySearchWord(resource, normalizedSearch)) return true;
   const scopes = getScopeSearchText(resource).toLowerCase();
-  return normalizedSearch.split(/\s/).some((word) => scopes.includes(word));
+  return normalizedSearch
+    .split(/\s/)
+    .filter(Boolean)
+    .some((word) => scopes.includes(word));
 };
 
 export const DelegatedResourcesSection = ({

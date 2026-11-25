@@ -15,6 +15,7 @@ export const matchesAnySearchWord = (
   ];
   return normalizedSearch
     .split(/\s/)
+    .filter(Boolean)
     .some((word) => fields.some((field) => field?.toLowerCase().includes(word)));
 };
 
