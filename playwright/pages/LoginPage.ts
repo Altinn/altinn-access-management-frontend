@@ -31,6 +31,12 @@ export class LoginPage {
   readonly autentiserButton: Locator;
   readonly tilgangsstyringLink: Locator;
   readonly testIdLinkText: Locator;
+  readonly internationalButton: Locator;
+  readonly emailLoginLink: Locator;
+  readonly emailInput: Locator;
+  readonly nextButton: Locator;
+  readonly oneTimeCodeInput: Locator;
+  readonly confirmButton: Locator;
 
   constructor(page: Page, api: LoginApi, language: Language = Language.NB) {
     this.page = page;
@@ -57,6 +63,27 @@ export class LoginPage {
     this.testIdLinkText = this.page.getByRole('link', {
       name: /TestID Lag din egen testbruker/i,
     });
+    this.internationalButton = this.page.getByRole('button', { name: 'International' });
+    this.emailLoginLink = this.page.getByRole('link', { name: /Email login/ });
+    this.emailInput = this.page.getByRole('textbox', { name: 'E-postadresse' });
+    this.nextButton = this.page.getByRole('button', { name: 'Neste' });
+    this.oneTimeCodeInput = this.page.getByRole('textbox', { name: 'Engangskode' });
+    this.confirmButton = this.page.getByRole('button', { name: 'Bekreft' });
+  }
+
+  /**
+   * Logger inn som selvidentifisert bruker (e-post i stedet for fødselsnummer).
+   * I testmiljøene er engangskoden alltid 12345, og en ny adresse registreres
+   * automatisk ved første innlogging.
+   */
+  async loginAsSelfIdentifiedUser(email: string) {
+    await this.page.goto(env('BASE_URL'));
+    await this.internationalButton.click();
+    await this.emailLoginLink.click();
+    await this.emailInput.fill(email);
+    await this.nextButton.click();
+    await this.oneTimeCodeInput.fill('12345');
+    await this.confirmButton.click();
   }
 
   async LoginToAccessManagement(pid: string) {
