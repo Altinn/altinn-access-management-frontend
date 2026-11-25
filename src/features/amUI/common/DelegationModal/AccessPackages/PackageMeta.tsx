@@ -41,7 +41,6 @@ export const PackageMeta = ({ accessPackage }: PackageMetaProps) => {
             enableMaxHeight={true}
             interactive={false}
             size='xs'
-            as='div'
           />
         </div>
       </div>

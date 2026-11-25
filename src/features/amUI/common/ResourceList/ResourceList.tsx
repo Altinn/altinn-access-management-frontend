@@ -50,8 +50,8 @@ export interface ResourceListProps<TResource extends ServiceResource = ServiceRe
    */
   getItemAs?: (resource: TResource) => React.ElementType | undefined;
   size?: ResourceListItemProps['size'];
-  interactive?: boolean | ((resource: TResource) => boolean);
-  as?: ResourceListItemProps['as'];
+  /** Rows are interactive unless set to false: they either call onSelect or open the details dialog. */
+  interactive?: boolean;
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getDescriptionText?: (resource: TResource, index: number) => string | undefined;
@@ -73,8 +73,7 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
   onSelect,
   getItemAs,
   size,
-  interactive,
-  as,
+  interactive = true,
   enableMaxHeight = false,
   renderControls,
   getDescriptionText,
@@ -95,10 +94,6 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
     () => resources && resources.some(isExpiredResource),
     [resources],
   );
-
-  // Rows are interactive unless told otherwise: they either call onSelect or open the details dialog.
-  const derivedInteractive = (resource: TResource) =>
-    typeof interactive === 'function' ? interactive(resource) : (interactive ?? true);
 
   const handleSelect = React.useCallback(
     (resource: TResource) => (onSelect ? onSelect(resource) : setSelected(resource)),
@@ -181,8 +176,8 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
                   const ownerName = resource.resourceOwnerName ?? '';
                   const description = getDescriptionText?.(resource, index);
                   const customAs = getItemAs?.(resource);
-                  const itemInteractive = customAs ? true : derivedInteractive(resource);
-                  const itemAs = customAs ?? as ?? (itemInteractive ? 'button' : 'div');
+                  const itemInteractive = !!customAs || interactive;
+                  const itemAs = customAs ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';
                   const handleClick =
                     !customAs && itemInteractive ? () => handleSelect(resource) : undefined;
