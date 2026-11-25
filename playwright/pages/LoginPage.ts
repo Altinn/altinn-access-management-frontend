@@ -84,6 +84,7 @@ export class LoginPage {
     await this.nextButton.click();
     await this.oneTimeCodeInput.fill('12345');
     await this.confirmButton.click();
+    await this.page.waitForURL(/\/accessmanagement\/ui/);
   }
 
   async LoginToAccessManagement(pid: string) {

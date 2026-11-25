@@ -30,9 +30,13 @@ test.describe('Selvidentifisert bruker', () => {
   });
 
   test('Ny bruker skal registreres ved første innlogging og komme inn på Tilgangsstyring', async ({
+    page,
     login,
     accessManagementFrontPage,
   }) => {
+    // Ny bruker synkroniseres asynkront til Tilgangsstyring etter registrering
+    test.slow();
+
     // Ny adresse hver kjøring, så Altinn må opprette identiteten under innloggingen
     const newEmail = `playwright-e2e-si-${Date.now()}@example.com`;
 
@@ -41,7 +45,13 @@ test.describe('Selvidentifisert bruker', () => {
     });
 
     await test.step('Verifiser at Tilgangsstyring vises for den nye brukeren', async () => {
-      await expect(accessManagementFrontPage.pageHeading(newEmail)).toBeVisible();
+      // Aktørlisten hentes kun ved sidelasting, så vi laster på nytt til synkroniseringen er ferdig
+      await expect(async () => {
+        await page.reload();
+        await expect(accessManagementFrontPage.pageHeading(newEmail)).toBeVisible({
+          timeout: 5_000,
+        });
+      }).toPass({ timeout: 90_000, intervals: [5_000, 10_000] });
       await expect(accessManagementFrontPage.usersLink).toBeVisible();
     });
   });
