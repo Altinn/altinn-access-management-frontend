@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { useGetResourceOwnersQuery } from '@/rtk/features/resourceApi';
+import { useGetResourceOwnersQuery, type ResourceType } from '@/rtk/features/resourceApi';
 import { useDebouncedValue } from '@/resources/hooks';
 
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
@@ -9,6 +9,9 @@ interface ServicesToolbarProps {
   onSearchChange: (search: string) => void;
   filterState: string[];
   setFilterState: (filters: string[]) => void;
+  /** Limits the service owner filter to owners of these resource types. */
+  resourceTypes?: ResourceType[];
+  searchPlaceholder?: string;
 }
 
 /**
@@ -23,10 +26,12 @@ export const ServicesToolbar = ({
   onSearchChange,
   filterState,
   setFilterState,
+  resourceTypes,
+  searchPlaceholder,
 }: ServicesToolbarProps) => {
   const [search, setSearch] = useState('');
   const debouncedSearch = useDebouncedValue(search, search ? 300 : 0);
-  const { data: ROdata } = useGetResourceOwnersQuery();
+  const { data: ROdata } = useGetResourceOwnersQuery(resourceTypes);
 
   // Memoised so typing, which re-renders only this component, doesn't rebuild the service
   // owner list on every keystroke: ResourceFilterToolbar turns it into one filter item per
@@ -49,6 +54,7 @@ export const ServicesToolbar = ({
       filterState={filterState}
       setFilterState={setFilterState}
       serviceOwnerOptions={serviceOwnerOptions}
+      searchPlaceholder={searchPlaceholder}
     />
   );
 };

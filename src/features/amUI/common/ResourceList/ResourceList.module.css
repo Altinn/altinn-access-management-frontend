@@ -16,10 +16,6 @@
   margin-bottom: var(--ds-spacing-1);
 }
 
-.delegationModalButton {
-  margin-left: auto;
-}
-
 .resourceListContainer {
   padding-top: var(--ds-size-1);
 }

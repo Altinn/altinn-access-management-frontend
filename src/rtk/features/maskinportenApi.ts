@@ -38,6 +38,22 @@ interface MaskinportenResourceDelegationCheckResult {
   rights: DelegationCheckedRight[];
 }
 
+const buildScopeSearchUrl = ({
+  searchString,
+  ROfilters,
+  page,
+  resultsPerPage,
+}: MaskinportenScopeSearchParams) => {
+  const params = new URLSearchParams({
+    Page: String(page),
+    ResultsPerPage: String(resultsPerPage),
+    SearchString: searchString,
+  });
+  ROfilters.forEach((filter) => params.append('ROFilters', filter));
+
+  return `scopes/search?${params.toString()}`;
+};
+
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/maskinporten`;
 
 export const maskinportenApi = createApi({
@@ -77,16 +93,26 @@ export const maskinportenApi = createApi({
       PaginatedMaskinportenScopeSearchResult,
       MaskinportenScopeSearchParams
     >({
-      query: ({ searchString, ROfilters, page, resultsPerPage }) => {
-        const params = new URLSearchParams({
-          Page: String(page),
-          ResultsPerPage: String(resultsPerPage),
-          SearchString: searchString,
-        });
-        ROfilters.forEach((filter) => params.append('ROFilters', filter));
-
-        return `scopes/search?${params.toString()}`;
+      query: buildScopeSearchUrl,
+    }),
+    /**
+     * Same search as `searchMaskinportenScopes`, but pages are accumulated instead of replaced.
+     * Use with a "load more" button: `data.pages` holds every page fetched so far for the
+     * current search arguments, and changing those arguments starts a fresh cache entry.
+     */
+    searchMaskinportenScopesPages: builder.infiniteQuery<
+      PaginatedMaskinportenScopeSearchResult,
+      Omit<MaskinportenScopeSearchParams, 'page'>,
+      number
+    >({
+      infiniteQueryOptions: {
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, allPages, lastPageParam) => {
+          const loadedCount = allPages.reduce((count, page) => count + page.pageList.length, 0);
+          return loadedCount >= lastPage.numEntriesTotal ? undefined : lastPageParam + 1;
+        },
       },
+      query: ({ queryArg, pageParam }) => buildScopeSearchUrl({ ...queryArg, page: pageParam }),
     }),
     maskinportenResourceDelegationCheck: builder.query<
       MaskinportenResourceDelegationCheckResult,
@@ -198,6 +224,7 @@ export const {
   useGetMaskinportenSuppliersQuery,
   useGetMaskinportenConsumersQuery,
   useSearchMaskinportenScopesQuery,
+  useSearchMaskinportenScopesPagesInfiniteQuery,
   useMaskinportenResourceDelegationCheckQuery,
   useLazyMaskinportenResourceDelegationCheckQuery,
   useAddMaskinportenSupplierResourceMutation,

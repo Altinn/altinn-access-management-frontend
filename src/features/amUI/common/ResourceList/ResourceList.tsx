@@ -42,13 +42,13 @@ export interface ResourceListProps<TResource extends ServiceResource = ServiceRe
   noResourcesText?: string;
   enableSearch?: boolean;
   searchPlaceholder?: string;
+  /** Called when a row is clicked. Without it, clicking a row opens the resource's details dialog. */
   onSelect?: (resource: TResource) => void;
   /**
    * Renders each row as a custom element, e.g. a router Link pointing at the resource's own page.
    * A row with a custom element is always interactive and never opens the details dialog.
    */
   getItemAs?: (resource: TResource) => React.ElementType | undefined;
-  showDetails?: boolean;
   size?: ResourceListItemProps['size'];
   interactive?: boolean | ((resource: TResource) => boolean);
   as?: ResourceListItemProps['as'];
@@ -59,7 +59,6 @@ export interface ResourceListProps<TResource extends ServiceResource = ServiceRe
   getSearchableText?: (resource: TResource) => string;
   getHasAccess?: (resource: TResource) => boolean;
   getActionControlId?: (resource: TResource) => string;
-  delegationModal?: React.ReactNode;
   border?: ResourceListItemProps['border'];
   ariaLabelledBy?: string;
   className?: string;
@@ -73,7 +72,6 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
   searchPlaceholder,
   onSelect,
   getItemAs,
-  showDetails,
   size,
   interactive,
   as,
@@ -83,7 +81,6 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
   getSearchableText,
   getHasAccess,
   getActionControlId,
-  delegationModal,
   border = 'none',
   ariaLabelledBy,
   className,
@@ -99,26 +96,13 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
     [resources],
   );
 
-  const shouldShowDetails = showDetails ?? !onSelect;
-  const derivedInteractive = (resource: TResource) => {
-    if (typeof interactive === 'function') {
-      return interactive(resource);
-    }
-    return interactive ?? Boolean(onSelect || shouldShowDetails);
-  };
+  // Rows are interactive unless told otherwise: they either call onSelect or open the details dialog.
+  const derivedInteractive = (resource: TResource) =>
+    typeof interactive === 'function' ? interactive(resource) : (interactive ?? true);
 
   const handleSelect = React.useCallback(
-    (resource: TResource) => {
-      if (onSelect) {
-        onSelect(resource);
-        return;
-      }
-
-      if (shouldShowDetails) {
-        setSelected(resource);
-      }
-    },
-    [onSelect, shouldShowDetails],
+    (resource: TResource) => (onSelect ? onSelect(resource) : setSelected(resource)),
+    [onSelect],
   );
 
   const closeDetails = React.useCallback(() => setSelected(null), []);
@@ -164,7 +148,6 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
                 : undefined
             }
           />
-          <div className={classes.delegationModalButton}>{delegationModal}</div>
         </div>
       )}
       {enableSearch && (
@@ -240,7 +223,7 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
         </>
       )}
 
-      {shouldShowDetails && (
+      {!onSelect && (
         <ResourceDetails
           resource={selected}
           onClose={closeDetails}

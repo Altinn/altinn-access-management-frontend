@@ -71,6 +71,5 @@ export const NonInteractive: Story = {
     resources: sampleResources,
     enableSearch: false,
     interactive: false,
-    showDetails: false,
   },
 };

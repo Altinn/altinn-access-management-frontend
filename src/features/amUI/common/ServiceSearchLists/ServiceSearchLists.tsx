@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useId, useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { DsAlert, DsButton, DsParagraph } from '@altinn/altinn-components';
+import { DsAlert, DsButton, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
 import {
   useSearchResourcesInfiniteQuery,
   type ResourceDelegation,
   type ServiceResource,
 } from '@/rtk/features/singleRights/singleRightsApi';
+import { useSearchMaskinportenScopesPagesInfiniteQuery } from '@/rtk/features/maskinportenApi';
+import { ResourceType } from '@/rtk/features/resourceApi';
 import {
   ResourceList,
   type ResourceListProps,
 } from '@/features/amUI/common/ResourceList/ResourceList';
 
-import { CollapsibleContainer } from '../CollapsibleContainer/CollapsibleContainer';
 import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
 import { useFilteredResources } from '../ResourceList/useFilteredResources';
 import { matchesAnySearchWord } from '../ResourceList/utils';
@@ -25,9 +26,9 @@ const searchResultsPerPage = 7;
 /** Row behaviour for one of the two lists. */
 export type ServiceListConfig = Pick<
   ResourceListProps,
-  'onSelect' | 'getItemAs' | 'renderControls'
+  'onSelect' | 'getItemAs' | 'renderControls' | 'getDescriptionText'
 > & {
-  /** Collapsible heading; also names the list in the default search hits message. */
+  /** List heading; also names the list in the default search hits message. */
   heading?: string;
   /** Shown when the list is empty and no search or filter is active. */
   noResourcesText?: string;
@@ -52,6 +53,19 @@ interface ServiceSearchListsProps {
    * heading. The other services list, and its server search, start with the first search.
    */
   hideListHeadingsUntilSearch?: boolean;
+  /** Level of the two list headings. Defaults to 2. */
+  headingLevel?: 2 | 3 | 4;
+  /**
+   * What the other list searches: all services (default), or Maskinporten scopes. Also limits
+   * the service owner filter to owners of that kind of resource.
+   */
+  searchSource?: 'resources' | 'maskinportenScopes';
+  searchPlaceholder?: string;
+  /**
+   * Decides which delegated services match the search. Defaults to matching any search word in
+   * title, description, owner, identifier or keywords.
+   */
+  matchesSearch?: (resource: ServiceResource, normalizedSearch: string) => boolean;
 }
 
 /**
@@ -67,6 +81,10 @@ export const ServiceSearchLists = ({
   size = 'md',
   getSearchHitsMessage,
   hideListHeadingsUntilSearch = false,
+  headingLevel = 2,
+  searchSource = 'resources',
+  searchPlaceholder,
+  matchesSearch = matchesAnySearchWord,
 }: ServiceSearchListsProps) => {
   const { t } = useTranslation();
   const assignedSectionId = useId();
@@ -98,6 +116,19 @@ export const ServiceSearchLists = ({
   const hasSearch = debouncedSearch !== '' || filterState.length > 0;
   const showListHeadings = hasSearch || !hideListHeadingsUntilSearch;
 
+  const searchArgs = {
+    searchString: debouncedSearch,
+    ROfilters: filterState,
+    resultsPerPage: searchResultsPerPage,
+  };
+  // Both hooks are always called; only the one matching `searchSource` runs.
+  const resourceSearch = useSearchResourcesInfiniteQuery(
+    { ...searchArgs, includeExpired: true },
+    { skip: !showListHeadings || searchSource !== 'resources' },
+  );
+  const scopeSearch = useSearchMaskinportenScopesPagesInfiniteQuery(searchArgs, {
+    skip: !showListHeadings || searchSource !== 'maskinportenScopes',
+  });
   const {
     data: searchData,
     currentData: currentSearchData,
@@ -105,15 +136,7 @@ export const ServiceSearchLists = ({
     isError: isSearchError,
     hasNextPage,
     fetchNextPage,
-  } = useSearchResourcesInfiniteQuery(
-    {
-      searchString: debouncedSearch,
-      ROfilters: filterState,
-      resultsPerPage: searchResultsPerPage,
-      includeExpired: true,
-    },
-    { skip: !showListHeadings },
-  );
+  } = searchSource === 'maskinportenScopes' ? scopeSearch : resourceSearch;
 
   const resources = useMemo(
     () => (delegations ?? []).map((delegation) => delegation.resource).filter(Boolean),
@@ -155,7 +178,7 @@ export const ServiceSearchLists = ({
     serviceOwnerFilter: filterState,
     searchString: debouncedSearch,
     includeExpiredResources: true,
-    matchesSearch: matchesAnySearchWord,
+    matchesSearch,
   });
 
   // The backend total also counts delegated services, which are listed under assigned services.
@@ -181,10 +204,10 @@ export const ServiceSearchLists = ({
       resources={filteredResources}
       isLoading={isLoading}
       enableSearch={false}
-      showDetails={false}
       onSelect={assignedList.onSelect}
       getItemAs={assignedList.getItemAs}
       renderControls={assignedList.renderControls}
+      getDescriptionText={assignedList.getDescriptionText}
       noResourcesText={
         hasSearch
           ? t('poa_overview_page.services_tab.no_services_found')
@@ -195,47 +218,56 @@ export const ServiceSearchLists = ({
   );
 
   return (
-    <>
-      <div className={classes.toolbarRow}>
-        <ServicesToolbar
-          onSearchChange={handleSearchChange}
-          filterState={filterState}
-          setFilterState={handleFilterChange}
+    <div>
+      <div className={classes.searchBar}>
+        <div className={classes.toolbarRow}>
+          <ServicesToolbar
+            onSearchChange={handleSearchChange}
+            filterState={filterState}
+            setFilterState={handleFilterChange}
+            resourceTypes={
+              searchSource === 'maskinportenScopes' ? [ResourceType.MaskinportenSchema] : undefined
+            }
+            searchPlaceholder={searchPlaceholder}
+          />
+          {toolbarAction}
+        </div>
+        <SearchHitsStatus
+          hits={searchHits}
+          message={searchHitsMessage}
+          searchString={debouncedSearch + filterState.join('')}
         />
-        {toolbarAction}
       </div>
-      <SearchHitsStatus
-        hits={searchHits}
-        message={searchHitsMessage}
-        searchString={debouncedSearch + filterState.join('')}
-      />
       {showListHeadings ? (
         <section
           aria-labelledby={assignedSectionId}
           className={classes.resourceList}
         >
-          <CollapsibleContainer
-            heading={assignedHeading}
-            searchString={debouncedSearch}
+          <DsHeading
+            level={headingLevel}
+            data-size='xs'
             id={assignedSectionId}
-            defaultOpen
+            className={classes.listHeading}
           >
-            {assignedResourceList}
-          </CollapsibleContainer>
+            {assignedHeading}:
+          </DsHeading>
+          {assignedResourceList}
         </section>
       ) : (
         <div className={classes.resourceList}>{assignedResourceList}</div>
       )}
       {showListHeadings && (
-        <section
-          aria-labelledby={otherSectionId}
-          className={classes.resourceList}
-        >
-          <CollapsibleContainer
-            heading={otherHeading}
-            searchString={debouncedSearch + filterState.join('')}
-            id={otherSectionId}
-          >
+        <>
+          <hr className={classes.listDivider} />
+          <section aria-labelledby={otherSectionId}>
+            <DsHeading
+              level={headingLevel}
+              data-size='xs'
+              id={otherSectionId}
+              className={classes.listHeading}
+            >
+              {otherHeading}:
+            </DsHeading>
             {isSearchError ? (
               <DsAlert
                 role='alert'
@@ -249,10 +281,10 @@ export const ServiceSearchLists = ({
                   resources={searchResources}
                   isLoading={isLoading || (isSearchFetching && searchResources.length === 0)}
                   enableSearch={false}
-                  showDetails={false}
                   onSelect={otherList.onSelect}
                   getItemAs={otherList.getItemAs}
                   renderControls={otherList.renderControls}
+                  getDescriptionText={otherList.getDescriptionText}
                   noResourcesText={
                     otherList.noResourcesText ??
                     t('poa_overview_page.services_tab.no_other_services')
@@ -277,9 +309,9 @@ export const ServiceSearchLists = ({
                 )}
               </>
             )}
-          </CollapsibleContainer>
-        </section>
+          </section>
+        </>
       )}
-    </>
+    </div>
   );
 };

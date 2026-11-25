@@ -146,6 +146,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
               delegations={delegatedResources}
               size={isSmallScreen ? 'sm' : 'md'}
               hideListHeadingsUntilSearch
+              headingLevel={3}
               // Same wording as the access package search on this page.
               getSearchHitsMessage={({ assigned, other }) =>
                 `${t('access_packages.search_hits_active', { count: assigned })}. ${t('access_packages.search_other_hits', { count: other })}`

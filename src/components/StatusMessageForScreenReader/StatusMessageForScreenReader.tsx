@@ -16,6 +16,7 @@ export const StatusMessageForScreenReader = ({
   return (
     <div
       role='status'
+      data-size='sm'
       aria-live={politenessSetting}
       className={visible ? '' : classes.visuallyHidden}
     >

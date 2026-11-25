@@ -161,7 +161,6 @@ export const PendingRequestsList = ({
           resources={singleRightRequests
             .map((x) => x.resource)
             .filter((r): r is ServiceResource => !!r)}
-          showDetails={false}
           onSelect={(resource) => setSelectedResource(resource)}
           renderControls={(resource) => {
             if (isSmallScreen) return undefined;

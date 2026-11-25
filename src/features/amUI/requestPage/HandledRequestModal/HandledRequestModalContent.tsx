@@ -213,7 +213,6 @@ export const HandledRequestModalContent = ({
                   size='xs'
                   border='dotted'
                   enableSearch={false}
-                  showDetails={false}
                   resources={resourceRows}
                   onSelect={(resource) =>
                     handleSelection({ resourceItem: resourceItemById.get(resource.id) })
