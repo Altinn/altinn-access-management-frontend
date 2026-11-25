@@ -151,6 +151,19 @@ const mockConnections: Connection[] = [
         ],
         connections: [],
       },
+      {
+        party: {
+          id: 'u7',
+          name: 'Produktiv Kjede',
+          type: PartyType.Person,
+          isDeleted: false,
+          children: null,
+          dateOfBirth: '1974-07-22',
+        },
+        roles: [],
+        viaRoles: [{ id: '789', code: 'agent' }],
+        connections: [],
+      },
     ],
   },
 ];

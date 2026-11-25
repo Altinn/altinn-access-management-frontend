@@ -93,8 +93,8 @@ export const UserItem = ({
 
   const viaRoleNames = user.roles
     ? mapRoles(user.roles.filter((r) => r.viaParty))
-        .filter((r) => r.provider?.code === ECC_PROVIDER_CODE)
-        .map((r) => r.name)
+        .filter((r) => r.provider?.code === ECC_PROVIDER_CODE || r.code === 'agent')
+        .map((r) => (r.code === 'agent' ? t('user_roles.has_client_access') : r.name))
     : [];
 
   const viaEntity = user.roles?.find((r) => r.viaParty)?.viaParty;
