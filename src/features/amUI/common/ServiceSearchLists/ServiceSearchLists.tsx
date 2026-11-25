@@ -219,7 +219,10 @@ export const ServiceSearchLists = ({
 
   return (
     <div>
-      <div className={classes.searchBar}>
+      <div
+        className={classes.searchBar}
+        data-size='sm'
+      >
         <div className={classes.toolbarRow}>
           <ServicesToolbar
             onSearchChange={handleSearchChange}
