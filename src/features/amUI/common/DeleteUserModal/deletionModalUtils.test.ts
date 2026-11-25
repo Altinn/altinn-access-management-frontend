@@ -642,3 +642,18 @@ describe('bankruptcy estate administrator role', () => {
     expect(getDeletionStatus(rolePermissions, false, false).level).toBe(DeletionLevel.Full);
   });
 });
+
+describe('client delegation through an agent', () => {
+  it('is a reason the user cannot be deleted when there are no roles', () => {
+    expect(getNonDeletableReasons([], true)).toEqual([AGENT_ROLE_REASON]);
+    expect(getDeletionStatus([], false, false, true).level).toBe(DeletionLevel.None);
+  });
+
+  it('leaves other delegations deletable', () => {
+    const rolePermissions = mockRolePermissions([{ code: RIGHTHOLDER_ROLE, via: [null] }]);
+    expect(getNonDeletableReasons(rolePermissions, true)).toEqual([AGENT_ROLE_REASON]);
+    expect(getDeletionStatus(rolePermissions, false, false, true).level).toBe(
+      DeletionLevel.Limited,
+    );
+  });
+});

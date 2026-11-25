@@ -82,20 +82,22 @@ export const hasNonDeletableRights = (rolePermissions: RolePermission[] | undefi
   return getNonDeletableReasons(rolePermissions).length > 0;
 };
 
+// Client delegations are not role permissions, so they are passed in separately.
 export const getNonDeletableReasons = (
   rolePermissions: RolePermission[] | undefined,
+  hasClientDelegation = false,
 ): NonDeletableReason[] => {
   if (!rolePermissions?.length) {
-    return [];
+    return hasClientDelegation ? [AGENT_ROLE_REASON] : [];
   }
 
   const hasERRoles = rolePermissions.some(
     (rolePermission) => rolePermission?.role?.provider?.code === ECC_PROVIDER_CODE,
   );
 
-  const hasAgentRole = rolePermissions.some(
-    (rolePermission) => rolePermission?.role?.code === AGENT_ROLE,
-  );
+  const hasAgentRole =
+    hasClientDelegation ||
+    rolePermissions.some((rolePermission) => rolePermission?.role?.code === AGENT_ROLE);
 
   // Removed under bankruptcy estate administration, never from the user page.
   const hasEstateAdministratorRole = rolePermissions.some((rolePermission) =>
@@ -154,6 +156,7 @@ export const getDeletionStatus = (
   rolePermissions: RolePermission[] | undefined,
   viewingYourself: boolean,
   reporteeView: boolean,
+  hasClientDelegation = false,
 ): DeletionStatus => {
   const target = viewingYourself
     ? DeletionTarget.Yourself
@@ -165,12 +168,12 @@ export const getDeletionStatus = (
     return { target, level: DeletionLevel.None };
   }
 
-  if (rolePermissions.length === 0) {
+  if (rolePermissions.length === 0 && !hasClientDelegation) {
     return { target, level: DeletionLevel.Full };
   }
 
   const hasDeletable = hasDeletableRights(rolePermissions);
-  const hasNonDeletable = hasNonDeletableRights(rolePermissions);
+  const hasNonDeletable = hasClientDelegation || hasNonDeletableRights(rolePermissions);
 
   let level: DeletionLevel = DeletionLevel.None;
   if (hasDeletable && hasNonDeletable) {

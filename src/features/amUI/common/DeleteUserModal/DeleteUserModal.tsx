@@ -1,8 +1,15 @@
 import { useGetRolePermissionsQuery } from '@/rtk/features/roleApi';
+import { useGetUserDelegationsQuery } from '@/rtk/features/accessPackageApi';
+import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { usePartyRepresentation } from '../PartyRepresentationContext/PartyRepresentationContext';
 
-import { getDeletionStatus, getNonDeletableReasons, getViaParties } from './deletionModalUtils';
+import {
+  AGENT_ROLE,
+  getDeletionStatus,
+  getNonDeletableReasons,
+  getViaParties,
+} from './deletionModalUtils';
 import { DeleteUserModalContent } from './DeleteUserModalContent';
 
 export type DeleteUserDirection = 'to' | 'from';
@@ -19,19 +26,50 @@ export const DeleteUserModal = ({ direction = 'to' }: DeleteUserModalProps) => {
   const viewingYourself =
     !!selfParty?.id && targetPartyUuid === selfParty.id && toParty?.id === selfParty.id;
 
+  const skip = !fromParty?.id || !toParty?.id || !actingParty?.id;
+
   const { data: rolePermissions, isLoading: isRolePermissionsLoading } = useGetRolePermissionsQuery(
     {
       from: fromParty?.id ?? '',
       to: toParty?.id ?? '',
       party: actingParty?.id ?? '',
     },
-    {
-      skip: !fromParty?.id || !toParty?.id || !actingParty?.id,
-    },
+    { skip },
   );
 
-  const status = getDeletionStatus(rolePermissions, viewingYourself, direction === 'from');
-  const nonDeletableReasons = getNonDeletableReasons(rolePermissions);
+  const { data: packageDelegations, isLoading: isPackagesLoading } = useGetUserDelegationsQuery(
+    {
+      from: fromParty?.id ?? '',
+      to: toParty?.id ?? '',
+      party: actingParty?.id ?? '',
+    },
+    { skip },
+  );
+
+  const { data: resourceDelegations, isLoading: isResourcesLoading } =
+    useGetSingleRightsForRightholderQuery(
+      {
+        actingParty: actingParty?.id ?? '',
+        from: fromParty?.id ?? '',
+        to: toParty?.id ?? '',
+      },
+      { skip },
+    );
+
+  const hasClientDelegation = [
+    ...Object.values(packageDelegations ?? {}).flat(),
+    ...(resourceDelegations ?? []),
+  ].some(({ permissions }) =>
+    permissions?.some((permission) => permission.viaRole?.code === AGENT_ROLE),
+  );
+
+  const status = getDeletionStatus(
+    rolePermissions,
+    viewingYourself,
+    direction === 'from',
+    hasClientDelegation,
+  );
+  const nonDeletableReasons = getNonDeletableReasons(rolePermissions, hasClientDelegation);
   const viaParties = getViaParties(rolePermissions);
 
   return (
@@ -39,7 +77,7 @@ export const DeleteUserModal = ({ direction = 'to' }: DeleteUserModalProps) => {
       status={status}
       nonDeletableReasons={nonDeletableReasons}
       viaParties={viaParties}
-      isRolePermissionsLoading={isRolePermissionsLoading}
+      isRolePermissionsLoading={isRolePermissionsLoading || isPackagesLoading || isResourcesLoading}
     />
   );
 };
