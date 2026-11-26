@@ -41,10 +41,11 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="party">The party performing the lookup.</param>
         /// <param name="from">Optional right owner to filter on.</param>
         /// <param name="to">Optional right holder to filter on.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         [HttpGet]
         [Authorize]
         [Route("permissions")]
-        public async Task<ActionResult<List<RolePermissionFE>>> GetRolePermissions([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to)
+        public async Task<ActionResult<List<RolePermissionFE>>> GetRolePermissions([FromQuery] Guid party, [FromQuery] Guid? from, [FromQuery] Guid? to, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -59,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                List<RolePermissionFE> permissions = await _roleService.GetRolePermissions(party, from, to, languageCode);
+                List<RolePermissionFE> permissions = await _roleService.GetRolePermissions(party, from, to, languageCode, cancellationToken);
                 return Ok(permissions);
             }
             catch (HttpStatusException ex)
@@ -72,9 +73,10 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Gets metadata for all roles.
         /// </summary>
+        /// <param name="cancellationToken">Cancellation token.</param>
         [HttpGet("meta")]
         [Authorize]
-        public async Task<ActionResult<IEnumerable<RoleMetadata>>> GetAllRoles()
+        public async Task<ActionResult<IEnumerable<RoleMetadata>>> GetAllRoles(CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -84,7 +86,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                IEnumerable<RoleMetadata> roles = await _roleService.GetAllRoles(languageCode);
+                IEnumerable<RoleMetadata> roles = await _roleService.GetAllRoles(languageCode, cancellationToken);
                 return Ok(roles);
             }
             catch (HttpStatusException ex)
@@ -100,6 +102,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="roleCode">The role code.</param>
         /// <param name="variant">Optional variant filter. Must match the entity type of the party offering the role (e.g., "person", "enterprise", "AS", "NUF", "ENK").</param>
         /// <param name="includeResources">Whether package resources should be included.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <remarks>
         /// The variant parameter should correspond to the entity type of the party offering the role.
         /// Common values include: "person" for individuals, or organization types like "AS", "NUF", "ENK", etc.
@@ -109,7 +112,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult<IEnumerable<AccessPackageFE>>> GetRolePackages(
             [FromQuery(Name = "roleCode")] string roleCode,
             [FromQuery] string variant = null,
-            [FromQuery] bool includeResources = false)
+            [FromQuery] bool includeResources = false,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -124,7 +128,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                IEnumerable<AccessPackageFE> packages = await _roleService.GetRolePackages(roleCode, variant, includeResources, languageCode);
+                IEnumerable<AccessPackageFE> packages = await _roleService.GetRolePackages(roleCode, variant, includeResources, languageCode, cancellationToken);
                 return Ok(packages);
             }
             catch (HttpStatusException ex)
@@ -140,13 +144,15 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="from">The right owner (the party that has the role).</param>
         /// <param name="to">The right holder (the party the role is assigned to).</param>
         /// <param name="roleCode">The role code to remove.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         [HttpDelete("roles")]
         [Authorize]
         public async Task<IActionResult> DeleteRole(
             [FromQuery] Guid party,
             [FromQuery] Guid from,
             [FromQuery] Guid to,
-            [FromQuery(Name = "rolecode")] string roleCode)
+            [FromQuery(Name = "rolecode")] string roleCode,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -160,7 +166,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                await _roleService.RemoveRole(party, from, to, roleCode);
+                await _roleService.RemoveRole(party, from, to, roleCode, cancellationToken);
                 return NoContent();
             }
             catch (HttpStatusException ex)
@@ -176,6 +182,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="roleCode">The role code.</param>
         /// <param name="variant">Optional variant filter. Must match the entity type of the party offering the role (e.g., "person", "enterprise", "AS", "NUF", "ENK").</param>
         /// <param name="includePackageResources">Whether to include resources inherited from packages.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <remarks>
         /// The variant parameter should correspond to the entity type of the party offering the role.
         /// Common values include: "person" for individuals, or organization types like "AS", "NUF", "ENK", etc.
@@ -185,7 +192,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         public async Task<ActionResult<IEnumerable<ServiceResourceFE>>> GetRoleResources(
             [FromQuery(Name = "roleCode")] string roleCode,
             [FromQuery] string variant = null,
-            [FromQuery(Name = "includePackageResources")] bool includePackageResources = false)
+            [FromQuery(Name = "includePackageResources")] bool includePackageResources = false,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -200,7 +208,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             try
             {
                 string languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
-                IEnumerable<ServiceResourceFE> resources = await _roleService.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
+                IEnumerable<ServiceResourceFE> resources = await _roleService.GetRoleResources(roleCode, variant, includePackageResources, languageCode, cancellationToken);
                 return Ok(resources);
             }
             catch (HttpStatusException ex)

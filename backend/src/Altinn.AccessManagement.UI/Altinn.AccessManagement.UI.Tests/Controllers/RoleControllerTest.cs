@@ -186,7 +186,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             IEnumerable<RoleMetadata> roles = Util.GetMockData<IEnumerable<RoleMetadata>>($"{ExpectedDataPath}/Role/roles.json");
             Mock<IRoleClient> roleClientMock = new(MockBehavior.Strict);
             roleClientMock
-                .Setup(client => client.GetAllRoles(It.IsAny<string>()))
+                .Setup(client => client.GetAllRoles(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(roles);
 
             using HttpClient client = _factory.WithWebHostBuilder(builder =>
@@ -213,7 +213,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             Assert.NotNull(actual);
             Assert.Equivalent(roles, actual);
-            roleClientMock.Verify(rc => rc.GetAllRoles(It.IsAny<string>()), Times.Once);
+            roleClientMock.Verify(rc => rc.GetAllRoles(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
