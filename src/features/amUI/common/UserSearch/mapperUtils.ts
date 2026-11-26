@@ -20,6 +20,7 @@ export const mapPartyToUserSearchNode = (
   organizationIdentifier: party.organizationIdentifier,
   dateOfBirth: party.dateOfBirth,
   isDeleted: party.isDeleted,
+  isRightsLocked: party.isRightsLocked,
   sortKey: buildSortKey(party.name, sortKey, addedAt),
   addedAt,
   isInherited,
