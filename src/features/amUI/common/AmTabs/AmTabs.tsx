@@ -82,6 +82,7 @@ const AmTabsTab = ({ label, icon, badge, value, ...rest }: AmTabsTabProps) => {
   return (
     <DsTabs.Tab
       value={value}
+      aria-label={`${badge ? badge : ''} ${label}`}
       {...rest}
     >
       <span className={classes.tabLabel}>

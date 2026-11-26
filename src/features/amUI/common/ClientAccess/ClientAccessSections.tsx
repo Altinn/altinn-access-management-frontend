@@ -44,7 +44,7 @@ export const ClientAccessSections = ({ entries, emptyText }: ClientAccessSection
       name: entry.accessPackage.name,
       interactive: true,
       as: 'button',
-      titleAs: 'div',
+      titleAs: 'span',
       description: t('access_packages.package_number_of_resources', {
         count: entry.accessPackage.resources?.length ?? 0,
       }),
@@ -61,7 +61,7 @@ export const ClientAccessSections = ({ entries, emptyText }: ClientAccessSection
       id: entry.itemId,
       resource: entry.resource,
       hasAccess: entryHasAccess,
-      titleAs: 'div',
+      titleAs: 'span',
       onClick: () => openModal(entry),
       controls: renderControl(entry, entryHasAccess),
     };

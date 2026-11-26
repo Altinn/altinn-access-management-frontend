@@ -42,7 +42,7 @@ export const PendingPackageRequests = () => {
       />
       {sentPackageRequests.length > 0 && (
         <ListItem
-          title={t('delegation_modal.request.sent_requests_item')}
+          title={{ as: 'span', children: t('delegation_modal.request.sent_requests_item') }}
           description={t('delegation_modal.request.active_access_request', {
             count: sentPackageRequests.length,
           })}

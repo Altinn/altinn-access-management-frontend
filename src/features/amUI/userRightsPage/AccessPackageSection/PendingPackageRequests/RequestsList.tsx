@@ -101,6 +101,7 @@ export const PendingPackageRequestsList = ({
               pkg={req.package}
               partyType={fromParty?.type ?? PartyType.Organization}
               as='button'
+              titleAs='span'
               onSelect={() => setSelectedRequest(req)}
               controls={
                 isSmallScreen ? undefined : (

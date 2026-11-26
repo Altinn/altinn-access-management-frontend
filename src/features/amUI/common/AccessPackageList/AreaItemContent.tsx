@@ -175,6 +175,7 @@ export const AreaItemContent = ({
                     : 'button'
                 }
                 key={pkg.id}
+                titleAs='span'
                 pkg={pkg}
                 onSelect={onSelect}
                 partyType={partyType}

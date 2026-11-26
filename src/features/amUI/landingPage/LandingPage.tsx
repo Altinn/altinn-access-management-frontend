@@ -333,7 +333,7 @@ const ListItemContainer = ({ heading, items, renderAsCards = false }: ListItemCo
             className={cn(renderAsCards && classes.cardItem)}
             key={`${item.href}-${index}`}
             icon={item.icon}
-            title={item.title}
+            title={{ as: 'span', children: item.title }}
             description={item.description}
             badge={item.badge}
             size={'xs'}

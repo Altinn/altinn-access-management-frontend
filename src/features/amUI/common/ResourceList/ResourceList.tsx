@@ -224,7 +224,7 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
                       ownerLogoUrlAlt={ownerName}
                       as={itemAs}
                       size={itemSize}
-                      titleAs='div'
+                      titleAs='span'
                       interactive={itemInteractive}
                       onClick={handleClick}
                       badge={getBadge?.(resource, index)}

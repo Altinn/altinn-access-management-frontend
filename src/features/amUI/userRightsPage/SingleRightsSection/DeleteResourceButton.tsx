@@ -70,7 +70,9 @@ export const DeleteResourceButton = ({
     fromParty &&
     toParty && (
       <Button
-        aria-label={t('common.delete') + ' ' + resource.title}
+        aria-label={t('common.delete_poa_for', {
+          poa_object: resource.title,
+        })}
         variant='tertiary'
         className={classes.deleteButton}
         disabled={disabled || isLoading}
