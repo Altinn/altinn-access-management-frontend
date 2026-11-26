@@ -121,7 +121,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("delegation/instances/rights")]
-        public async Task<ActionResult<HttpResponseMessage>> DelegateInstanceRights([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] InstanceRightsDelegationDto input)
+        public async Task<ActionResult<string>> DelegateInstanceRights([FromQuery] Guid party, [FromQuery] Guid? to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] InstanceRightsDelegationDto input)
         {
             if (!to.HasValue && input?.To == null)
             {
@@ -207,7 +207,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPut]
         [Authorize]
         [Route("delegation/instances/rights")]
-        public async Task<ActionResult<HttpResponseMessage>> EditInstanceAccess([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] List<string> actionKeys)
+        public async Task<ActionResult<string>> EditInstanceAccess([FromQuery] Guid party, [FromQuery] Guid to, [FromQuery] string resource, [FromQuery] string instance, [FromBody] List<string> actionKeys)
         {
             try
             {

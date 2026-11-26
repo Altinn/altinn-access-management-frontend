@@ -109,7 +109,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("delegate")]
-        public async Task<ActionResult<HttpResponseMessage>> DelegateResource([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
+        public async Task<ActionResult<string>> DelegateResource([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
         {
             try
             {
@@ -242,7 +242,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPut]
         [Authorize]
         [Route("update")]
-        public async Task<ActionResult<HttpResponseMessage>> EditResourceAccess([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
+        public async Task<ActionResult<string>> EditResourceAccess([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
         {
             try
             {

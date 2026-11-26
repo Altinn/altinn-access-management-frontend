@@ -8,6 +8,7 @@ using Altinn.AccessManagement.UI.Filters;
 using Altinn.AccessManagement.UI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -126,6 +127,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyUuid">The uuid of the reportee party</param>
         /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder (only provided when rightholder is an org)</param>
+        /// <param name="personInput">The person that will become a rightHolder. Only used when <paramref name="rightholderPartyUuid"/> is not provided.</param>
         /// <returns>The uuid of the added party</returns>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
@@ -133,21 +135,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("reportee/{partyUuid}/rightholder")]
-        public async Task<ActionResult<Guid>> AddReporteeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid? rightholderPartyUuid)
+        public async Task<ActionResult<Guid>> AddReporteeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid? rightholderPartyUuid, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] PersonInput personInput = null)
         {
-            PersonInput personInput = null;
-
-            // Try to read personInput from body if rightholderPartyUuid is not provided
-            if (!rightholderPartyUuid.HasValue || rightholderPartyUuid == Guid.Empty)
+            // The body is only used when no rightholderPartyUuid is given (they are mutually exclusive)
+            if (rightholderPartyUuid.HasValue && rightholderPartyUuid != Guid.Empty)
             {
-                try
-                {
-                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>();
-                }
-                catch
-                {
-                    // If we can't read the body or it's invalid, personInput remains null
-                }
+                personInput = null;
             }
 
             // Clear model state errors for rightholderPartyUuid if personInput is provided (they are mutually exclusive)
@@ -161,13 +154,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest("Either rightholderPartyUuid or personInput must be provided.");
             }
 
-            // Validate personInput specifically if it's provided
-            if (personInput != null && !TryValidateModel(personInput))
-            {
-                return BadRequest(ModelState);
-            }
-
-            // Check for any remaining model state errors
+            // Check for any remaining model state errors, including those [FromBody] found in personInput
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
