@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, type Mock, vi } from 'vitest';
 
@@ -210,6 +210,48 @@ describe('ActivityLogTab', () => {
     );
     expect(activityLogApi.useGetActivityLogFilterValuesQuery).toHaveBeenLastCalledWith(
       expect.objectContaining({ direction: 'to', from: [], field: 'by' }),
+      { skip: false },
+    );
+  });
+
+  it('queries the period once dates are chosen and the date picker is left', async () => {
+    setActivityLog({ pages: [] });
+    render(
+      <ActivityLogTab
+        area='maskinporten'
+        reporteeName='Fysioterapeutene AS'
+      />,
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: 'activity_log_page.add_filter' }));
+    await userEvent.click(screen.getByText('activity_log_page.filter_date'));
+    const dateFilter = await screen.findByRole('button', { name: 'activity_log_page.filter_date' });
+    if (dateFilter.getAttribute('aria-expanded') !== 'true') {
+      await userEvent.click(dateFilter);
+    }
+    await userEvent.click(screen.getByText('activity_log_page.filter_date_pick'));
+
+    // Choosing the dates alone changes nothing; the picker commits them when it is left.
+    fireEvent.change(document.querySelector('input[name="fromDate"]') as HTMLInputElement, {
+      target: { value: '2025-01-01' },
+    });
+    fireEvent.change(document.querySelector('input[name="toDate"]') as HTMLInputElement, {
+      target: { value: '2025-01-31' },
+    });
+    expect(activityLogApi.useGetActivityLogInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({ after: undefined, before: undefined }),
+    );
+
+    await userEvent.keyboard('{Escape}');
+
+    expect(activityLogApi.useGetActivityLogInfiniteQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        after: new Date('2025-01-01T00:00:00').toISOString(),
+        before: new Date('2025-01-31T23:59:59.999').toISOString(),
+      }),
+    );
+    expect(activityLogApi.useGetActivityLogFilterValuesQuery).toHaveBeenLastCalledWith(
+      expect.objectContaining({ after: new Date('2025-01-01T00:00:00').toISOString() }),
       { skip: false },
     );
   });
