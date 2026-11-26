@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 // we don't actually need the partyUuid, so we can rely on the orgNo instead. However,
                 // this means that consent also need to use orgNo to group consent and id-porten 
                 // authorization together in frontend
-                Party party = await _registerClient.GetPartyForOrganization(auth.Consumer.OrgNo);
+                Party party = await _registerClient.GetPartyForOrganization(auth.Consumer.OrgNo, cancellationToken);
 
                 if (party == null)
                 {

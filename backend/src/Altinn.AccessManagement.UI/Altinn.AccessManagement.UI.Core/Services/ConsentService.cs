@@ -169,7 +169,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 .Where(u => !string.IsNullOrWhiteSpace(u))
                 .Distinct(StringComparer.OrdinalIgnoreCase);
 
-            IEnumerable<Party> parties = await GetConsentParties(partyUuids);
+            IEnumerable<Party> parties = await GetConsentParties(partyUuids, cancellationToken);
             Dictionary<string, Party> partyByUuid = PartyListToDict(parties);
 
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
@@ -209,7 +209,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     .Select(urn => GetUrnValue(urn)))
                 .Distinct();
 
-            IEnumerable<Party> parties = await GetConsentParties(partyUuids);
+            IEnumerable<Party> parties = await GetConsentParties(partyUuids, cancellationToken);
             Dictionary<string, Party> partyByUuid = PartyListToDict(parties);
             IEnumerable<ConsentTemplate> consentTemplates = await GetConsentTemplates(cancellationToken);
 
@@ -366,7 +366,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             return replacedTranslations;
         }
 
-        private async Task<IEnumerable<Party>> GetConsentParties(IEnumerable<string> partyUuids)
+        private async Task<IEnumerable<Party>> GetConsentParties(IEnumerable<string> partyUuids, CancellationToken cancellationToken)
         {
             IEnumerable<Guid> partyGuidsToLookup = partyUuids
                 .Where(urn => urn != null)
@@ -375,7 +375,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 .Select(guid => guid.Value)
                 .Distinct();
 
-            List<Party> parties = await _registerClient.GetPartyList(partyGuidsToLookup.ToList());
+            List<Party> parties = await _registerClient.GetPartyList(partyGuidsToLookup.ToList(), cancellationToken);
 
             return parties;
         }
@@ -425,7 +425,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             string fromPartyUuid = GetUrnValue(request.From);
             string handledByPartyUuid = request.HandledBy != null ? GetUrnValue(request.HandledBy) : null;
 
-            IEnumerable<Party> parties = await GetConsentParties([toPartyUuid, fromPartyUuid, handledByPartyUuid]);
+            IEnumerable<Party> parties = await GetConsentParties([toPartyUuid, fromPartyUuid, handledByPartyUuid], cancellationToken);
             Party toParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == toPartyUuid);
             Party fromParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == fromPartyUuid);
             Party handledByParty = parties.FirstOrDefault(party => party.PartyUuid.ToString() == handledByPartyUuid);

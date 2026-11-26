@@ -24,8 +24,9 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="party">The GUID identifying the party for which to revoke right holders.</param>
         /// <param name="from">The GUID identifying the party from which to revoke right holders.</param>
         /// <param name="to">The GUID identifying the party to which to revoke right holders.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns></returns>
-        Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to);
+        Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to, CancellationToken cancellationToken = default);
 
         /// <summary>
         ///   Gets all connections between one party and one or more others.
@@ -35,20 +36,23 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="to">The GUID identifying the party to which to retrieve connections.</param>
         /// <param name="includeClientDelegations">Whether to include client delegations in the response.</param>
         /// <param name="includeAgentConnections">Whether to include agent connections in the response.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns> A list of <see cref="Connection"/> objects representing the connections between the given parties.</returns>
         Task<List<Connection>> GetConnections(
             Guid party,
             Guid? from,
             Guid? to,
             bool includeClientDelegations = true,
-            bool includeAgentConnections = true);
+            bool includeAgentConnections = true,
+            CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets simplified connections for a party.
         /// This is a limited endpoint for instance admins without full admin access.
         /// </summary>
         /// <param name="party">The party UUID.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A list of simplified connections.</returns>
-        Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party);
+        Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party, CancellationToken cancellationToken = default);
     }
 }

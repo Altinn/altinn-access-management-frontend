@@ -11,37 +11,41 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// Looks up party information for an organization based on the organization number
         /// </summary>
         /// <param name="organizationNumber">The organization number</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>
         /// Party information
         /// </returns>
-        Task<Party> GetPartyForOrganization(string organizationNumber);
+        Task<Party> GetPartyForOrganization(string organizationNumber, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Looks up party information for a person based on the ssn
         /// </summary>
         /// <param name="ssn">The persons ssn</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>
         /// Party information
         /// </returns>
-        Task<Party> GetPartyForPerson(string ssn);
+        Task<Party> GetPartyForPerson(string ssn, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Looks up party information for a list of uuids (old Register API endpoint)
         /// </summary>
         /// <param name="uuidList">The list of uuids to be looked up</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>
         /// A list of party information corresponding to the provided uuids
         /// </returns>
-        Task<List<Party>> GetPartyList(List<Guid> uuidList);
+        Task<List<Party>> GetPartyList(List<Guid> uuidList, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Looks up party information for a party of the provided uuid, (new Register API endpoint and model)
         /// </summary>
         /// <param name="uuid">The uuids to be looked up</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>
         /// Party information corresponding to the provided uuid
         /// </returns>
-        Task<Altinn.Register.Contracts.Party> GetParty(Guid uuid);
+        Task<Altinn.Register.Contracts.Party> GetParty(Guid uuid, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Looks up a person based on ssn and lastname.
@@ -51,10 +55,11 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// </summary>
         /// <param name="ssn">The persons ssn - must match latname</param>
         /// <param name="lastname">The persons lastname - must match ssn</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>
         /// Person information
         /// </returns>
-        Task<Person> GetPerson(string ssn, string lastname);
+        Task<Person> GetPerson(string ssn, string lastname, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Looks up party name for a list of orgNumbers

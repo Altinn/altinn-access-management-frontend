@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<Guid?> ValidatePerson(string personIdentifier, string lastname)
+        public async Task<Guid?> ValidatePerson(string personIdentifier, string lastname, CancellationToken cancellationToken = default)
         {
             string personIdentifierCleaned = personIdentifier.Trim().Replace("\"", string.Empty);
             string lastnameCleaned = lastname.Trim().Replace("\"", string.Empty);
@@ -51,27 +51,27 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return null;
             }
 
-            Person person = await _registerClient.GetPerson(personIdentifierCleaned, lastnameCleaned);
+            Person person = await _registerClient.GetPerson(personIdentifierCleaned, lastnameCleaned, cancellationToken);
 
             if (person == null)
             {
                 return null;
             }
 
-            Party personParty = await _registerClient.GetPartyForPerson(personIdentifierCleaned);
+            Party personParty = await _registerClient.GetPartyForPerson(personIdentifierCleaned, cancellationToken);
 
             return personParty?.PartyUuid;
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to)
+        public async Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to, CancellationToken cancellationToken = default)
         {
-            HttpResponseMessage response = await _connectionClient.RevokeRightHolderConnection(party, from, to);
+            HttpResponseMessage response = await _connectionClient.RevokeRightHolderConnection(party, from, to, cancellationToken);
             return response;
         }
 
         /// <inheritdoc/>
-        public async Task<Guid> AddReporteeRightHolderConnection(Guid partyUuid, Guid? rightholderPartyUuid, PersonInput personInput)
+        public async Task<Guid> AddReporteeRightHolderConnection(Guid partyUuid, Guid? rightholderPartyUuid, PersonInput personInput, CancellationToken cancellationToken = default)
         {
             if (personInput != null)
             {
@@ -99,7 +99,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PersonIdentifier = personIdentifierCleaned
                 };
 
-                return await _connectionClient.PostNewRightHolderConnection(partyUuid, null, cleanedInput);
+                return await _connectionClient.PostNewRightHolderConnection(partyUuid, null, cleanedInput, cancellationToken);
             }
 
             if (!rightholderPartyUuid.HasValue)
@@ -107,7 +107,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 throw new ArgumentException("Either rightholderPartyUuid or personInput must be provided");
             }
 
-            return await _connectionClient.PostNewRightHolderConnection(partyUuid, rightholderPartyUuid);
+            return await _connectionClient.PostNewRightHolderConnection(partyUuid, rightholderPartyUuid, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -116,7 +116,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             Guid? from,
             Guid? to,
             bool includeClientDelegations = true,
-            bool includeAgentConnections = true)
+            bool includeAgentConnections = true,
+            CancellationToken cancellationToken = default)
         {
             try
             {
@@ -125,10 +126,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     from,
                     to,
                     includeClientDelegations,
-                    includeAgentConnections);
+                    includeAgentConnections,
+                    cancellationToken);
                 return connections?.Select(ConnectionFE.FromConnection).ToList();
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException)
             {
                 _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", party);
                 throw;
@@ -136,9 +138,9 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<List<SimplifiedConnectionFE>> GetSimplifiedConnections(Guid party)
+        public async Task<List<SimplifiedConnectionFE>> GetSimplifiedConnections(Guid party, CancellationToken cancellationToken = default)
         {
-            List<SimplifiedConnection> connections = await _connectionClient.GetSimplifiedConnections(party);
+            List<SimplifiedConnection> connections = await _connectionClient.GetSimplifiedConnections(party, cancellationToken);
             return connections?.Select(SimplifiedConnectionFE.FromSimplifiedConnection).ToList();
         }
     }

@@ -23,21 +23,21 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>        
-        public async Task<PartyFE> GetPartyForOrganization(string organizationNumber)
+        public async Task<PartyFE> GetPartyForOrganization(string organizationNumber, CancellationToken cancellationToken = default)
         {
-            Party party = await _registerClient.GetPartyForOrganization(organizationNumber);
+            Party party = await _registerClient.GetPartyForOrganization(organizationNumber, cancellationToken);
             return PartyFE.FromRegisterParty(party);
         }
 
         /// <inheritdoc/>
-        public async Task<PartyFE> GetPartyFromLoggedInUser(Guid userUuid)
+        public async Task<PartyFE> GetPartyFromLoggedInUser(Guid userUuid, CancellationToken cancellationToken = default)
         {
-            return await GetPartyByUUID(userUuid);
+            return await GetPartyByUUID(userUuid, cancellationToken);
         }
 
-        private async Task<PartyFE> GetPartyByUUID(Guid uuid)
+        private async Task<PartyFE> GetPartyByUUID(Guid uuid, CancellationToken cancellationToken)
         {
-            Altinn.Register.Contracts.Party partyFromRegistry = await _registerClient.GetParty(uuid);
+            Altinn.Register.Contracts.Party partyFromRegistry = await _registerClient.GetParty(uuid, cancellationToken);
 
             return PartyFE.FromRegisterParty(partyFromRegistry);
         }
