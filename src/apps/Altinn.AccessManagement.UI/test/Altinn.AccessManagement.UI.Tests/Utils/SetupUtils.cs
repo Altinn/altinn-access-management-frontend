@@ -523,6 +523,30 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
+        ///     Gets a HttpClient for unittests testing for ActivityLogController
+        /// </summary>
+        /// <param name="customFactory">Web app factory to configure test services for ActivityLogController tests</param>
+        /// <returns>HttpClient</returns>
+        internal static HttpClient GetTestClient(CustomWebApplicationFactory<ActivityLogController> customFactory)
+        {
+            WebApplicationFactory<ActivityLogController> factory = customFactory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    services.AddTransient<IActivityLogClient, ActivityLogClientMock>();
+                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
+                });
+            });
+            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
+            {
+                AllowAutoRedirect = false,
+            };
+            factory.Server.AllowSynchronousIO = true;
+            return factory.CreateClient(opts);
+        }
+
+        /// <summary>
         /// Gets a HttpClient for unittests testing for MaskinportenController
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for MaskinportenController tests</param>

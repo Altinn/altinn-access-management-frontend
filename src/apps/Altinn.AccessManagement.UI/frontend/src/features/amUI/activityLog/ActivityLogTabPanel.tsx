@@ -15,7 +15,6 @@ import type {
   ActivityLogDirection,
   ActivityLogDto,
   ActivityLogFilterValueDto,
-  ActivityTypeDto,
 } from './types';
 import { ACTIVITY_LOG_PARTY_FILTER } from './useActivityLogQueryState';
 import { getActivityLogPartyFilterLabel, getActivityLogPartyOptions } from './activityLogUtils';
@@ -38,8 +37,6 @@ export interface ActivityLogTabPanelProps {
   partyOptions: ActivityLogFilterValueDto[];
   /** Entries as returned by the API for the current direction and filter, newest first. */
   entries: ActivityLogDto[];
-  /** The area's catalog (`GET {area}/types`). */
-  activityTypes?: ActivityTypeDto[];
   isLoading?: boolean;
   isError?: boolean;
   hasMore?: boolean;
@@ -56,7 +53,6 @@ export const ActivityLogTabPanel = ({
   onFilterStateChange,
   partyOptions,
   entries,
-  activityTypes,
   isLoading = false,
   isError = false,
   hasMore = false,
@@ -144,7 +140,6 @@ export const ActivityLogTabPanel = ({
           direction={direction}
           reporteeName={reporteeName}
           entries={entries}
-          activityTypes={activityTypes}
           isLoading={isLoading}
           hasMore={hasMore}
           isLoadingMore={isLoadingMore}
