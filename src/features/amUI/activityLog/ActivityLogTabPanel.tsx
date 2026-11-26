@@ -45,12 +45,24 @@ export interface ActivityLogTabPanelProps {
   filterState: FilterState;
   onFilterStateChange: (filterState: FilterState) => void;
   /**
+   * The filter fields the area offers (`GET {area}/filter/fields`, lower-cased). The party filter is
+   * shown when the counterpart's field (`to` or `from`, by direction) is listed, the "performed by"
+   * filter when `by` is; the period can always be chosen.
+   */
+  filterFields: string[];
+  /**
    * Parties to offer in the party filter, from `GET {area}/filter/to` (or `/from`). May hold several
    * names for one id (a renamed party); they are folded into one option.
    */
   partyOptions: ActivityLogFilterValueDto[];
+  /** Called with what the user types in the party picker, so the options can be looked up on the server. */
+  onPartySearch?: (term: string) => void;
+  isPartyOptionsLoading?: boolean;
   /** Users and systems to offer in the "performed by" filter, from `GET {area}/filter/by`. */
   byOptions: ActivityLogFilterValueDto[];
+  /** Called with what the user types in the "performed by" picker. */
+  onBySearch?: (term: string) => void;
+  isByOptionsLoading?: boolean;
   /** Entries as returned by the API for the current direction and filter, newest first. */
   entries: ActivityLogDto[];
   /** The area's catalog (`GET {area}/types`). */
@@ -64,11 +76,22 @@ export interface ActivityLogTabPanelProps {
 
 const FILTER_NAMES = [ACTIVITY_LOG_PARTY_FILTER, ACTIVITY_LOG_BY_FILTER, ACTIVITY_LOG_DATE_FILTER];
 
-/** A searchable multi-select over (id, name) pairs, for the party and "performed by" filters. */
+interface ValueFilterSearch {
+  /** Receives the search text as typed, and '' when the search is cleared or the picker closes. */
+  onSearch?: (term: string) => void;
+  isLoading?: boolean;
+}
+
+/**
+ * A searchable multi-select over (id, name) pairs, for the party and "performed by" filters. The
+ * picker also narrows the options it has client-side, with the same substring match as the server,
+ * so the server's hits stay visible while a lookup is under way.
+ */
 const toValueFilter = (
   name: string,
   title: string,
   values: ActivityLogFilterValueDto[],
+  { onSearch, isLoading }: ValueFilterSearch,
 ): FilterProps => ({
   id: name,
   name,
@@ -76,6 +99,18 @@ const toValueFilter = (
   label: title,
   removable: true,
   searchable: true,
+  loading: isLoading,
+  search: {
+    name: `${name}-search`,
+    onChange: (event) => onSearch?.((event.target as HTMLInputElement).value),
+    onClear: () => onSearch?.(''),
+  },
+  // The picker's own search box starts out empty each time it opens, so the lookup must too.
+  onOpenChange: (open) => {
+    if (!open) {
+      onSearch?.('');
+    }
+  },
   items: values.map((value) => ({
     id: `${name}-${value.id}`,
     value: value.id,
@@ -93,8 +128,13 @@ export const ActivityLogTabPanel = ({
   reporteeName,
   filterState,
   onFilterStateChange,
+  filterFields,
   partyOptions,
+  onPartySearch,
+  isPartyOptionsLoading = false,
   byOptions,
+  onBySearch,
+  isByOptionsLoading = false,
   entries,
   activityTypes,
   isLoading = false,
@@ -124,8 +164,12 @@ export const ActivityLogTabPanel = ({
     ACTIVITY_LOG_PARTY_FILTER,
     partyLabelPrefix,
     partyFilterOptions,
+    { onSearch: onPartySearch, isLoading: isPartyOptionsLoading },
   );
-  const byFilter = toValueFilter(ACTIVITY_LOG_BY_FILTER, byLabelPrefix, byFilterOptions);
+  const byFilter = toValueFilter(ACTIVITY_LOG_BY_FILTER, byLabelPrefix, byFilterOptions, {
+    onSearch: onBySearch,
+    isLoading: isByOptionsLoading,
+  });
   const dateFilter: FilterProps = {
     id: ACTIVITY_LOG_DATE_FILTER,
     name: ACTIVITY_LOG_DATE_FILTER,
@@ -198,7 +242,11 @@ export const ActivityLogTabPanel = ({
           removeLabel: t('activity_log_page.remove_filter'),
           resetLabel: t('activity_log_page.reset_filters'),
           getFilterLabel,
-          filters: [partyFilter, byFilter, dateFilter],
+          filters: [
+            ...(filterFields.includes(direction === 'from' ? 'to' : 'from') ? [partyFilter] : []),
+            ...(filterFields.includes(ACTIVITY_LOG_BY_FILTER) ? [byFilter] : []),
+            dateFilter,
+          ],
         }}
       />
       {isError ? (

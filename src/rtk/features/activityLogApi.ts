@@ -92,6 +92,14 @@ export const activityLogApi = createApi({
         `${args.area}/filter/${encodeURIComponent(field)}?${buildQueryString(args, { term, orderBy })}`,
     }),
     /**
+     * The filter fields the area offers, lower-cased to match the `field` of the value lookup. The
+     * tab only builds the filters whose field is listed here.
+     */
+    getActivityLogFilterFields: builder.query<string[], { area: ActivityLogArea }>({
+      query: ({ area }) => `${area}/filter/fields`,
+      transformResponse: (fields: string[]) => fields.map((field) => field.toLowerCase()),
+    }),
+    /**
      * The activity type catalog entries the area accepts. The BFF translates them to the selected
      * language cookie; `language` is only part of the cache key so a language change refetches.
      */
@@ -106,5 +114,6 @@ export const activityLogApi = createApi({
 export const {
   useGetActivityLogInfiniteQuery,
   useGetActivityLogFilterValuesQuery,
+  useGetActivityLogFilterFieldsQuery,
   useGetActivityTypesQuery,
 } = activityLogApi;

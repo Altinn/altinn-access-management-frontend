@@ -245,6 +245,48 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        /// Test case: GetFilterFields returns the fields the area offers, and is not mistaken for a
+        /// lookup of the values of a field named "fields".
+        /// </summary>
+        [Fact]
+        public async Task GetFilterFields_ReturnsFieldsOfArea()
+        {
+            SetAuthHeader();
+            List<string> expected = Util.GetMockData<List<string>>(Path.Combine(_mockDataFolder, "maskinporten_filter_fields.json"));
+
+            List<string> actual = await GetOk<List<string>>($"{BaseUrl}/maskinporten/filter/fields");
+
+            Assert.NotNull(actual);
+            Assert.Equal(expected, actual);
+            Assert.Contains("To", actual);
+            Assert.Contains("By", actual);
+        }
+
+        /// <summary>
+        /// Test case: GetFilterFields for an unknown area returns not found.
+        /// </summary>
+        [Fact]
+        public async Task GetFilterFields_UnknownArea_ReturnsNotFound()
+        {
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/consent/filter/fields");
+
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+        /// <summary>
+        /// Test case: GetFilterFields without authentication returns unauthorized.
+        /// </summary>
+        [Fact]
+        public async Task GetFilterFields_NoToken_ReturnsUnauthorized()
+        {
+            HttpResponseMessage response = await _client.GetAsync($"{BaseUrl}/maskinporten/filter/fields");
+
+            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        }
+
+        /// <summary>
         /// Test case: GetActivityTypes returns the area's catalog.
         /// </summary>
         [Fact]

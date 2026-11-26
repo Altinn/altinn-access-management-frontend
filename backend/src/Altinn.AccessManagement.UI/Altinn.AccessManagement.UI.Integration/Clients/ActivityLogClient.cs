@@ -65,6 +65,16 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
+        public async Task<IEnumerable<string>> GetFilterFields(string area, CancellationToken cancellationToken = default)
+        {
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            string endpointUrl = $"enduser/{area}/activitylog/filter/fields";
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<string>>(response, _logger, "ActivityLogClient.GetFilterFields");
+        }
+
+        /// <inheritdoc />
         public async Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(string area, string languageCode, CancellationToken cancellationToken = default)
         {
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);

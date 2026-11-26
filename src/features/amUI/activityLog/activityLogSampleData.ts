@@ -74,6 +74,9 @@ export interface SampleActivityLogQuery {
   selectedPartyIds: string[];
   /** Ids of the users or systems that performed the change; empty shows all. */
   selectedByIds?: string[];
+  /** Case-insensitive substrings the party and performer options are narrowed by, as `term` does. */
+  partyTerm?: string;
+  byTerm?: string;
   /** ISO 8601 bounds on when the event happened. */
   after?: string;
   before?: string;
@@ -85,19 +88,24 @@ export interface SampleActivityLogQuery {
 export interface SampleActivityLog {
   /** What `GET maskinporten/activitylog` would return for the direction, filter and pages so far. */
   entries: ActivityLogDto[];
-  /** What `GET maskinporten/activitylog/filter/{to|from}` would return for the direction. */
+  /** What `GET maskinporten/activitylog/filter/fields` would return. */
+  filterFields: string[];
+  /** What `GET maskinporten/activitylog/filter/{to|from}` would return for the direction and term. */
   partyOptions: ActivityLogFilterValueDto[];
-  /** What `GET maskinporten/activitylog/filter/by` would return for the direction. */
+  /** What `GET maskinporten/activitylog/filter/by` would return for the direction and term. */
   byOptions: ActivityLogFilterValueDto[];
   hasMore: boolean;
 }
 
+export const sampleFilterFields = ['from', 'to', 'by', 'resource'];
+
 const counterpartId = (item: ActivityLogDto, direction: ActivityLogDirection) =>
   (direction === 'from' ? item.toId : item.fromId) ?? '';
 
-const distinctParties = (pairs: [string, string | null | undefined][]): Party[] => [
-  ...new Map<string, Party>(pairs.map(([id, name]) => [id, { id, name: name ?? '' }])).values(),
-];
+const distinctParties = (pairs: [string, string | null | undefined][], term = ''): Party[] =>
+  [
+    ...new Map<string, Party>(pairs.map(([id, name]) => [id, { id, name: name ?? '' }])).values(),
+  ].filter((party) => party.name.toLowerCase().includes(term.trim().toLowerCase()));
 
 const inPeriod = (item: ActivityLogDto, after?: string, before?: string) => {
   const when = new Date(item.when).getTime();
@@ -112,6 +120,8 @@ export const getSampleActivityLog = (
     direction,
     selectedPartyIds,
     selectedByIds = [],
+    partyTerm,
+    byTerm,
     after,
     before,
     pageNo,
@@ -127,9 +137,11 @@ export const getSampleActivityLog = (
       counterpartId(item, direction),
       direction === 'from' ? item.toName : item.fromName,
     ]),
+    partyTerm,
   );
   const byOptions = distinctParties(
     inDirection.filter((item) => item.byId).map((item) => [item.byId ?? '', item.byName]),
+    byTerm,
   );
   const filtered = inDirection.filter(
     (item) =>
@@ -140,5 +152,11 @@ export const getSampleActivityLog = (
   );
   const visible = filtered.slice(0, (pageNo + 1) * pageSize);
 
-  return { entries: visible, partyOptions, byOptions, hasMore: visible.length < filtered.length };
+  return {
+    entries: visible,
+    filterFields: sampleFilterFields,
+    partyOptions,
+    byOptions,
+    hasMore: visible.length < filtered.length,
+  };
 };

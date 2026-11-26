@@ -70,6 +70,13 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
+        public Task<IEnumerable<string>> GetFilterFields(string area, CancellationToken cancellationToken = default)
+        {
+            string dataPath = Path.Combine(dataFolder, $"{area}_filter_fields.json");
+            return Task.FromResult<IEnumerable<string>>(Util.GetMockData<List<string>>(dataPath));
+        }
+
+        /// <inheritdoc />
         public Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(string area, string languageCode, CancellationToken cancellationToken = default)
         {
             string dataPath = Path.Combine(dataFolder, $"{area}_types.json");

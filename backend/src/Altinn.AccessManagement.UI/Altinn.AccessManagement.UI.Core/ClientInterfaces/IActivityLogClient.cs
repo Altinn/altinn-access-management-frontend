@@ -28,6 +28,14 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         Task<PaginatedResult<ActivityLogFilterValueDto>> GetFilterValues(string area, string field, ActivityLogFilterValuesQuery query, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Gets the filter fields the area offers, i.e. the fields <see cref="GetFilterValues"/> accepts for it.
+        /// </summary>
+        /// <param name="area">The area: connections, request or maskinporten.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The field names as the API spells them (e.g. From, To, By, Resource).</returns>
+        Task<IEnumerable<string>> GetFilterFields(string area, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Gets the activity type catalog entries the area accepts, translated to the given language.
         /// </summary>
         /// <param name="area">The area: connections, request or maskinporten.</param>

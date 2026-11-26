@@ -26,12 +26,16 @@ const ActivityLogTabPanelStory = ({ isLoading, isError, empty }: StoryArgs) => {
     before,
   } = useActivityLogQueryState();
   const [pageNo, setPageNo] = useState(0);
+  const [partyTerm, setPartyTerm] = useState('');
+  const [byTerm, setByTerm] = useState('');
 
-  const { entries, partyOptions, byOptions, hasMore } = getSampleActivityLog(
+  const { entries, filterFields, partyOptions, byOptions, hasMore } = getSampleActivityLog(
     {
       direction,
       selectedPartyIds,
       selectedByIds,
+      partyTerm,
+      byTerm,
       after,
       before,
       pageNo,
@@ -54,8 +58,11 @@ const ActivityLogTabPanelStory = ({ isLoading, isError, empty }: StoryArgs) => {
         changeFilterState(newFilterState);
         setPageNo(0);
       }}
+      filterFields={filterFields}
       partyOptions={partyOptions}
+      onPartySearch={setPartyTerm}
       byOptions={byOptions}
+      onBySearch={setByTerm}
       entries={entries}
       isLoading={isLoading}
       isError={isError}

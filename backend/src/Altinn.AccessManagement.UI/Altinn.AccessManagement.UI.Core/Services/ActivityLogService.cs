@@ -34,6 +34,12 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
+        public Task<IEnumerable<string>> GetFilterFields(string area, CancellationToken cancellationToken = default)
+        {
+            return _activityLogClient.GetFilterFields(area, cancellationToken);
+        }
+
+        /// <inheritdoc />
         public Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(string area, string languageCode, CancellationToken cancellationToken = default)
         {
             return _activityLogClient.GetActivityTypes(area, languageCode, cancellationToken);

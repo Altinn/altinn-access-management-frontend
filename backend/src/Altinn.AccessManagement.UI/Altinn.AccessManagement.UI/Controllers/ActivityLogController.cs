@@ -74,6 +74,40 @@ namespace Altinn.AccessManagement.UI.Controllers
         }
 
         /// <summary>
+        /// Endpoint for getting the filter fields the area offers, so the tab only builds the filters
+        /// that apply to it. Call this before <see cref="GetFilterValues"/>.
+        /// </summary>
+        /// <param name="area">The area: connections, request or maskinporten.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>The field names as the API spells them (e.g. From, To, By, Resource).</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("{area}/filter/fields")]
+        public async Task<ActionResult<IEnumerable<string>>> GetFilterFields(
+            [FromRoute] string area,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ActivityLogArea.IsValid(area))
+            {
+                return NotFound();
+            }
+
+            try
+            {
+                return Ok(await _activityLogService.GetFilterFields(area, cancellationToken));
+            }
+            catch (HttpStatusException ex)
+            {
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetFilterFields failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
         /// Endpoint for getting the values occurring in the party's slice of the area for one filter
         /// field, so filter pickers only offer values that give hits.
         /// </summary>
