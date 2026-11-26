@@ -11,14 +11,15 @@ using Altinn.AccessManagement.UI.Tests.Utils;
 namespace Altinn.AccessManagement.UI.Tests.Controllers
 {
     /// <summary>
-    /// Test class for <see cref="ActivityLogController"/>.
+    /// Test class for <see cref="ActivityLogController"/>: the routes, validation, authorization and
+    /// error mapping, with one happy path per route for the serialization. What the client sends to
+    /// the API is covered by <see cref="Clients.ActivityLogClientTest"/>.
     /// </summary>
     [Collection("ActivityLogController Tests")]
     public class ActivityLogControllerTest : IClassFixture<CustomWebApplicationFactory<ActivityLogController>>
     {
         private const string Party = "cd35779b-b174-4ecc-bbef-ece13611be7f";
         private const string LiseLarsen = "167536b5-f8ed-4c5a-8f48-0279507e53ae";
-        private const string FysioPartner = "21cc8752-4801-490d-a6ab-ab3266a0f748";
         private const string BaseUrl = "accessmanagement/api/v1/activitylog";
 
         private readonly HttpClient _client;
@@ -69,73 +70,6 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Null(actual.Links.Next);
             Assert.Equal(expected.Select(entry => entry.Id), actual.Items.Select(entry => entry.Id));
             Assert.Equivalent(expected, actual.Items.ToList());
-        }
-
-        /// <summary>
-        /// Test case: GetActivityLog with direction "to" returns the entries where the party received access.
-        /// </summary>
-        [Fact]
-        public async Task GetActivityLog_ToDirection_ReturnsEntriesReceivedByParty()
-        {
-            SetAuthHeader();
-
-            PaginatedResult<ActivityLogDto> actual = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=to");
-
-            Assert.NotNull(actual);
-            Assert.All(actual.Items, entry => Assert.Equal(Guid.Parse(Party), entry.ToId));
-            Assert.Single(actual.Items);
-        }
-
-        /// <summary>
-        /// Test case: GetActivityLog narrows to the given counterparts and pages the result.
-        /// </summary>
-        [Fact]
-        public async Task GetActivityLog_CounterpartFilterAndPaging_ReturnsPage()
-        {
-            SetAuthHeader();
-
-            PaginatedResult<ActivityLogDto> first = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=from&to={FysioPartner}&pageNo=0&pageSize=1");
-            PaginatedResult<ActivityLogDto> second = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=from&to={FysioPartner}&pageNo=1&pageSize=1");
-
-            Assert.Single(first.Items);
-            Assert.NotNull(first.Links.Next);
-            Assert.Contains($"party={Party}", first.Links.Next);
-            Assert.Contains("direction=from", first.Links.Next);
-            Assert.Contains($"to={FysioPartner}", first.Links.Next);
-            Assert.Contains("pageNo=1", first.Links.Next);
-            Assert.Contains("pageSize=1", first.Links.Next);
-            Assert.Single(second.Items);
-            Assert.Null(second.Links.Next);
-            Assert.All(first.Items.Concat(second.Items), entry => Assert.Equal(Guid.Parse(FysioPartner), entry.ToId));
-        }
-
-        /// <summary>
-        /// Test case: GetActivityLog narrows to entries after the given time.
-        /// </summary>
-        [Fact]
-        public async Task GetActivityLog_After_ReturnsOnlyLaterEntries()
-        {
-            SetAuthHeader();
-
-            PaginatedResult<ActivityLogDto> actual = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=from&after=2025-01-01T00:00:00Z");
-
-            Assert.Equal(2, actual.Items.Count());
-            Assert.All(actual.Items, entry => Assert.True(entry.When >= new DateTimeOffset(2025, 1, 1, 0, 0, 0, TimeSpan.Zero)));
-        }
-
-        /// <summary>
-        /// Test case: GetActivityLog narrows to entries of the given activity types.
-        /// </summary>
-        [Fact]
-        public async Task GetActivityLog_TypeId_ReturnsOnlyMatchingTypes()
-        {
-            SetAuthHeader();
-            Guid resourceRemoved = Guid.Parse("2cc78d26-16a1-4a88-95cd-3ca427fb0731");
-
-            PaginatedResult<ActivityLogDto> actual = await GetOk<PaginatedResult<ActivityLogDto>>($"{BaseUrl}/maskinporten?party={Party}&direction=from&typeId={resourceRemoved}");
-
-            Assert.Single(actual.Items);
-            Assert.Equal(resourceRemoved, actual.Items.First().ActivityTypeId);
         }
 
         /// <summary>
@@ -215,33 +149,18 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: GetFilterValues returns the distinct receivers for the party's given access.
+        /// Test case: GetFilterValues binds the search and term and returns the values of the field.
         /// </summary>
         [Fact]
-        public async Task GetFilterValues_To_ReturnsDistinctReceivers()
-        {
-            SetAuthHeader();
-
-            PaginatedResult<ActivityLogFilterValueDto> actual = await GetOk<PaginatedResult<ActivityLogFilterValueDto>>($"{BaseUrl}/maskinporten/filter/to?party={Party}&direction=from");
-
-            Assert.NotNull(actual);
-            Assert.Equal(
-                new[] { (Guid.Parse(FysioPartner), "Fysio Partner AS"), (Guid.Parse(LiseLarsen), "Lise Larsen AS") },
-                actual.Items.Select(value => (value.Id, value.Name)));
-        }
-
-        /// <summary>
-        /// Test case: GetFilterValues matches the term on the name only.
-        /// </summary>
-        [Fact]
-        public async Task GetFilterValues_Term_NarrowsByName()
+        public async Task GetFilterValues_ReturnsValuesOfField()
         {
             SetAuthHeader();
 
             PaginatedResult<ActivityLogFilterValueDto> actual = await GetOk<PaginatedResult<ActivityLogFilterValueDto>>($"{BaseUrl}/maskinporten/filter/to?party={Party}&direction=from&term=lise");
 
-            Assert.Single(actual.Items);
-            Assert.Equal("Lise Larsen AS", actual.Items.First().Name);
+            ActivityLogFilterValueDto value = Assert.Single(actual.Items);
+            Assert.Equal(Guid.Parse(LiseLarsen), value.Id);
+            Assert.Equal("Lise Larsen AS", value.Name);
         }
 
         /// <summary>
