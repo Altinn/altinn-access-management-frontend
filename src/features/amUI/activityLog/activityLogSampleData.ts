@@ -34,10 +34,8 @@ const entry = (
     byName: helle.name,
     fromId: from.id,
     fromName: from.name,
-    fromType: 'Organisasjon',
     toId: to.id,
     toName: to.name,
-    toType: 'Organisasjon',
     roleName: 'Leverandør',
     ...fields,
   };

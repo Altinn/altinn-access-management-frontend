@@ -32,13 +32,12 @@ export const activityLogListParams = [
 export type ActivityLogListParam = (typeof activityLogListParams)[number];
 
 /**
- * Anchor and filters for one area of the activity log. `party` defaults to the current reportee;
- * `after` and `before` are ISO 8601 bounds on when the event happened.
+ * Filters for one area of the activity log, always anchored on the current reportee. `after` and
+ * `before` are ISO 8601 bounds on when the event happened.
  */
 export interface ActivityLogQueryArgs extends Partial<Record<ActivityLogListParam, string[]>> {
   area: ActivityLogArea;
   direction: ActivityLogDirection;
-  party?: string;
   after?: string;
   before?: string;
   /** Default 100, clamped to 1–1000 by the API. */
@@ -65,13 +64,10 @@ export interface ActivityLogFilterOptionsArgs extends ActivityLogLookupArgs {
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/activitylog`;
 
 const buildQueryString = (
-  { area: _area, party, direction, after, before, pageSize, ...lists }: ActivityLogQueryArgs,
+  { area: _area, direction, after, before, pageSize, ...lists }: ActivityLogQueryArgs,
   extra: Record<string, string | number | undefined> = {},
 ): string => {
-  const params = new URLSearchParams({
-    party: party ?? getCookie('AltinnPartyUuid'),
-    direction,
-  });
+  const params = new URLSearchParams({ party: getCookie('AltinnPartyUuid'), direction });
   activityLogListParams.forEach((name) =>
     lists[name]?.forEach((value) => params.append(name, value)),
   );
