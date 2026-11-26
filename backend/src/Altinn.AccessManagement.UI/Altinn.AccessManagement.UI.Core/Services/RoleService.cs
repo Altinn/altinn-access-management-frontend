@@ -44,14 +44,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<List<RolePermissionFE>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode)
+        public async Task<List<RolePermissionFE>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode, CancellationToken cancellationToken = default)
         {
-            var paginated = await _roleClient.GetRolePermissions(party, from, to, languageCode);
+            var paginated = await _roleClient.GetRolePermissions(party, from, to, languageCode, cancellationToken);
             return paginated?.Items?.Select(RolePermissionFE.FromRolePermission).ToList() ?? new List<RolePermissionFE>();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode)
+        public async Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode, CancellationToken cancellationToken = default)
         {
             string cacheKey = $"allroles-{languageCode}";
 
@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return cachedRoles;
             }
 
-            IEnumerable<RoleMetadata> roles = await _roleClient.GetAllRoles(languageCode);
+            IEnumerable<RoleMetadata> roles = await _roleClient.GetAllRoles(languageCode, cancellationToken);
 
             if (roles != null)
             {
@@ -75,16 +75,16 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<AccessPackageFE>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
+        public async Task<IEnumerable<AccessPackageFE>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode, CancellationToken cancellationToken = default)
         {
-            IEnumerable<AccessPackage> packages = await _roleClient.GetRolePackages(roleCode, variant, includeResources, languageCode);
+            IEnumerable<AccessPackage> packages = await _roleClient.GetRolePackages(roleCode, variant, includeResources, languageCode, cancellationToken);
             return await _resourceHelper.MapToAccessPackagesFE(packages);
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<ServiceResourceFE>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode)
+        public async Task<IEnumerable<ServiceResourceFE>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode, CancellationToken cancellationToken = default)
         {
-            IEnumerable<ResourceAM> resources = await _roleClient.GetRoleResources(roleCode, variant, includePackageResources, languageCode);
+            IEnumerable<ResourceAM> resources = await _roleClient.GetRoleResources(roleCode, variant, includePackageResources, languageCode, cancellationToken);
             List<ServiceResourceFE> resourcesFE = await _resourceHelper.MapToServiceResourcesFE(resources);
             return resourcesFE
                 .Where(resource => resource.Identifier != null)
@@ -93,7 +93,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc />
-        public Task RemoveRole(Guid party, Guid from, Guid to, string roleCode)
-            => _roleClient.RemoveRole(party, from, to, roleCode);
+        public Task RemoveRole(Guid party, Guid from, Guid to, string roleCode, CancellationToken cancellationToken = default)
+            => _roleClient.RemoveRole(party, from, to, roleCode, cancellationToken);
     }
 }

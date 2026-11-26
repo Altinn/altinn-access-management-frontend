@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<PaginatedResult<RolePermission>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode)
+        public Task<PaginatedResult<RolePermission>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(from?.ToString());
             try
@@ -68,7 +68,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
 
         /// <inheritdoc />
-        public Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode)
+        public Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode, CancellationToken cancellationToken = default)
         {
             string dataPath = Path.Combine(_dataFolder, "Roles", "roles.json");
             try
@@ -86,21 +86,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode)
+        public Task<IEnumerable<AccessPackage>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode, CancellationToken cancellationToken = default)
         {
             string dataPath = Path.Combine(_dataFolder, "Roles", "Packages", $"{roleCode}.json");
             return Task.FromResult(Util.GetMockData<IEnumerable<AccessPackage>>(dataPath));
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode)
+        public Task<IEnumerable<ResourceAM>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode, CancellationToken cancellationToken = default)
         {
             string dataPath = Path.Combine(_dataFolder, "Roles", "Resources", $"{roleCode}.json");
             return Task.FromResult(Util.GetMockData<IEnumerable<ResourceAM>>(dataPath));
         }
 
         /// <inheritdoc />
-        public Task RemoveRole(Guid party, Guid from, Guid to, string roleCode)
+        public Task RemoveRole(Guid party, Guid from, Guid to, string roleCode, CancellationToken cancellationToken = default)
         {
             Util.ThrowExceptionIfTriggerParty(from.ToString());
             return Task.CompletedTask;
