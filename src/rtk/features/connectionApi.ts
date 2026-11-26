@@ -13,6 +13,7 @@ export interface RoleInfo {
 export interface Connection {
   party: PartyEntity;
   roles: RoleInfo[];
+  viaRoles?: RoleInfo[];
   connections: Connection[];
 }
 

@@ -18,6 +18,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.User.Frontend
         public List<RoleInfo> Roles { get; set; } = new();
 
         /// <summary>
+        /// Gets or sets the roles the party has in the parent connection's party
+        /// </summary>
+        public List<RoleInfo> ViaRoles { get; set; } = new();
+
+        /// <summary>
         /// Gets or sets the connections inherited through this party
         /// </summary>
         public List<ConnectionFE> Connections { get; set; } = new();
@@ -36,6 +41,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.User.Frontend
             {
                 Party = PartyFE.FromEntity(connection.Party),
                 Roles = connection.Roles ?? new(),
+                ViaRoles = connection.ViaRoles ?? new(),
                 Connections = connection.Connections?.Select(FromConnection).ToList() ?? new(),
             };
         }

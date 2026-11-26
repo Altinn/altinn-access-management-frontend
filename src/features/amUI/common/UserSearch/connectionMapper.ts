@@ -5,14 +5,20 @@ import type { MaskinportenConnection } from '@/rtk/features/maskinportenApi';
 import type { UserSearchNode } from './types';
 import { mapPartyToUserSearchNode } from './mapperUtils';
 
-export const mapConnectionsToUserSearchNodes = (connections?: Connection[]): UserSearchNode[] =>
+export const mapConnectionsToUserSearchNodes = (
+  connections?: Connection[],
+  viaParty?: PartyEntity,
+): UserSearchNode[] =>
   connections?.map((connection) => {
     const node = mapPartyToUserSearchNode(connection.party);
     return {
       ...node,
-      roles: connection.roles,
+      roles: [
+        ...connection.roles,
+        ...(viaParty ? (connection.viaRoles ?? []).map((role) => ({ ...role, viaParty })) : []),
+      ],
       children: connection.connections?.length
-        ? mapConnectionsToUserSearchNodes(connection.connections)
+        ? mapConnectionsToUserSearchNodes(connection.connections, connection.party)
         : node.children,
     };
   }) ?? [];
