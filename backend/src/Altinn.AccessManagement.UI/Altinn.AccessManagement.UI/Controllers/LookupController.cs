@@ -58,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return party;
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetOrganisation failed to fetch organisation information");
                 return StatusCode(500);
@@ -98,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
                 return StatusCode(404);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetPartyFromLoggedInUser failed to fetch party information");
                 return StatusCode(500);

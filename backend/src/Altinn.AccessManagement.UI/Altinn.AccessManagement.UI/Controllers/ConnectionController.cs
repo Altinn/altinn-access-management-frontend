@@ -116,7 +116,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "ValidatePerson failed unexpectedly");
                 return StatusCode(500);
@@ -196,7 +196,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AddReporteeRightHolder failed unexpectedly");
                 return StatusCode(500);
@@ -290,7 +290,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetSimplifiedConnections failed unexpectedly");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
