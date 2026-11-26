@@ -1,4 +1,4 @@
-import { type RolePermission } from '@/rtk/features/roleApi';
+import { type Permission, type RolePermission } from '@/rtk/features/roleApi';
 import { type PartyEntity } from '@/dataObjects/dtos/Party';
 
 import {
@@ -82,11 +82,13 @@ export const hasNonDeletableRights = (rolePermissions: RolePermission[] | undefi
   return getNonDeletableReasons(rolePermissions).length > 0;
 };
 
+// Client delegations are not role permissions, so they are passed in separately.
 export const getNonDeletableReasons = (
   rolePermissions: RolePermission[] | undefined,
+  hasClientDelegation = false,
 ): NonDeletableReason[] => {
   if (!rolePermissions?.length) {
-    return [];
+    return hasClientDelegation ? [VIA_ROLE_REASON] : [];
   }
 
   const hasERRoles = rolePermissions.some(
@@ -106,7 +108,7 @@ export const getNonDeletableReasons = (
     (rolePermission) => rolePermission?.role?.provider?.code === CRA_PROVIDER_CODE,
   );
 
-  const hasViaInheritedRole = getViaParties(rolePermissions).length > 0;
+  const hasViaInheritedRole = hasClientDelegation || getViaParties(rolePermissions).length > 0;
 
   const reasons: NonDeletableReason[] = [];
   if (hasERRoles) {
@@ -130,8 +132,12 @@ export const getNonDeletableReasons = (
 
 // ER, Agent and Guardianship roles are reported separately, so any other role
 // (e.g. Rightholder, or other Altinn roles inherited via an org) with a `via`
-// party is reported as a generic "via role" reason.
-export const getViaParties = (rolePermissions: RolePermission[] | undefined): ViaParty[] => {
+// party is reported as a generic "via role" reason. Client delegations are
+// reported the same way, through the firm that gave them.
+export const getViaParties = (
+  rolePermissions: RolePermission[] | undefined,
+  clientDelegationPermissions: Pick<Permission, 'from' | 'via'>[] = [],
+): ViaParty[] => {
   const viaParties = (rolePermissions ?? [])
     .filter(
       (rolePermission) =>
@@ -139,7 +145,10 @@ export const getViaParties = (rolePermissions: RolePermission[] | undefined): Vi
         rolePermission.role?.provider?.code !== CRA_PROVIDER_CODE &&
         rolePermission.role?.code !== AGENT_ROLE,
     )
-    .flatMap((rolePermission) => rolePermission.permissions ?? [])
+    .flatMap(
+      (rolePermission): Pick<Permission, 'from' | 'via'>[] => rolePermission.permissions ?? [],
+    )
+    .concat(clientDelegationPermissions)
     .flatMap((permission) =>
       permission?.via
         ? [{ ...permission.via, isMainUnit: permission.from?.parent?.id === permission.via.id }]
@@ -154,6 +163,7 @@ export const getDeletionStatus = (
   rolePermissions: RolePermission[] | undefined,
   viewingYourself: boolean,
   reporteeView: boolean,
+  hasClientDelegation = false,
 ): DeletionStatus => {
   const target = viewingYourself
     ? DeletionTarget.Yourself
@@ -165,12 +175,12 @@ export const getDeletionStatus = (
     return { target, level: DeletionLevel.None };
   }
 
-  if (rolePermissions.length === 0) {
+  if (rolePermissions.length === 0 && !hasClientDelegation) {
     return { target, level: DeletionLevel.Full };
   }
 
   const hasDeletable = hasDeletableRights(rolePermissions);
-  const hasNonDeletable = hasNonDeletableRights(rolePermissions);
+  const hasNonDeletable = hasClientDelegation || hasNonDeletableRights(rolePermissions);
 
   let level: DeletionLevel = DeletionLevel.None;
   if (hasDeletable && hasNonDeletable) {
