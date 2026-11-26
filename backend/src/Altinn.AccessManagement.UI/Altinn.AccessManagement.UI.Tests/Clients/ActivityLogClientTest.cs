@@ -24,6 +24,10 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
         private static readonly Guid _to = Guid.Parse("22222222-2222-2222-2222-222222222222");
         private static readonly Guid _by = Guid.Parse("33333333-3333-3333-3333-333333333333");
         private static readonly Guid _typeId = Guid.Parse("44444444-4444-4444-4444-444444444444");
+        private static readonly Guid _role = Guid.Parse("55555555-5555-5555-5555-555555555555");
+        private static readonly Guid _package = Guid.Parse("66666666-6666-6666-6666-666666666666");
+        private static readonly Guid _source = Guid.Parse("77777777-7777-7777-7777-777777777777");
+        private static readonly Guid _resource = Guid.Parse("88888888-8888-8888-8888-888888888888");
 
         /// <summary>
         /// Handler that records the outgoing request and returns a fixed response.
@@ -95,6 +99,10 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
                 Direction = "to",
                 From = new List<Guid> { _to },
                 By = new List<Guid> { _by },
+                Role = new List<Guid> { _role },
+                Package = new List<Guid> { _package },
+                Resource = new List<Guid> { _resource },
+                Source = new List<Guid> { _source },
                 TypeId = new List<Guid> { _typeId },
                 After = new DateTimeOffset(2025, 1, 1, 0, 0, 0, TimeSpan.FromHours(1)),
                 Before = new DateTimeOffset(2025, 1, 31, 23, 59, 59, 999, TimeSpan.FromHours(1)),
@@ -105,7 +113,7 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
             await CreateClient(handler).GetActivityLog("connections", query);
 
             Assert.Equal(
-                $"{BaseUrl}v2/enduser/connections/activitylog?party={_party}&direction=to&from={_to}&by={_by}&typeId={_typeId}"
+                $"{BaseUrl}v2/enduser/connections/activitylog?party={_party}&direction=to&from={_to}&by={_by}&role={_role}&package={_package}&resource={_resource}&source={_source}&typeId={_typeId}"
                 + "&after=2025-01-01T00%3A00%3A00.0000000%2B01%3A00&before=2025-01-31T23%3A59%3A59.9990000%2B01%3A00&pageNo=2&pageSize=50",
                 handler.Request.RequestUri.ToString());
         }

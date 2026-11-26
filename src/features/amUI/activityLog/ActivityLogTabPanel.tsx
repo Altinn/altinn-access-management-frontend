@@ -21,11 +21,7 @@ import type {
   ActivityLogFilterValueDto,
   ActivityTypeDto,
 } from './types';
-import {
-  ACTIVITY_LOG_BY_FILTER,
-  ACTIVITY_LOG_DATE_FILTER,
-  ACTIVITY_LOG_PARTY_FILTER,
-} from './useActivityLogQueryState';
+import { ACTIVITY_LOG_DATE_FILTER, ACTIVITY_LOG_PARTY_FILTER } from './useActivityLogQueryState';
 import {
   getActivityLogDateFilterLabel,
   getActivityLogLocale,
@@ -34,6 +30,17 @@ import {
 } from './activityLogUtils';
 import { ActivityLogTimeline } from './ActivityLogTimeline';
 import classes from './ActivityLogTabPanel.module.css';
+
+/** One value filter to offer: a searchable picker over the (id, name) pairs of one field. */
+export interface ActivityLogValueFilterProps {
+  /** The toolbar filter key: `party` for the counterpart, else the field. */
+  name: string;
+  /** The field the options come from (`GET {area}/filter/{field}`), which also names the picker. */
+  field: string;
+  /** May hold several names for one id (a renamed party); they are folded into one option. */
+  options: ActivityLogFilterValueDto[];
+  isLoading?: boolean;
+}
 
 export interface ActivityLogTabPanelProps {
   area: ActivityLogArea;
@@ -45,24 +52,15 @@ export interface ActivityLogTabPanelProps {
   filterState: FilterState;
   onFilterStateChange: (filterState: FilterState) => void;
   /**
-   * The filter fields the area offers (`GET {area}/filter/fields`, lower-cased). The party filter is
-   * shown when the counterpart's field (`to` or `from`, by direction) is listed, the "performed by"
-   * filter when `by` is; the period can always be chosen.
+   * The value filters to offer, in order: the party filter for the counterpart of the direction and
+   * one per other field the area reports. The period can always be chosen.
    */
-  filterFields: string[];
+  valueFilters: ActivityLogValueFilterProps[];
   /**
-   * Parties to offer in the party filter, from `GET {area}/filter/to` (or `/from`). May hold several
-   * names for one id (a renamed party); they are folded into one option.
+   * Called with what the user types in a picker, and '' when the search is cleared or the picker
+   * closes, so its options can be looked up on the server.
    */
-  partyOptions: ActivityLogFilterValueDto[];
-  /** Called with what the user types in the party picker, so the options can be looked up on the server. */
-  onPartySearch?: (term: string) => void;
-  isPartyOptionsLoading?: boolean;
-  /** Users and systems to offer in the "performed by" filter, from `GET {area}/filter/by`. */
-  byOptions: ActivityLogFilterValueDto[];
-  /** Called with what the user types in the "performed by" picker. */
-  onBySearch?: (term: string) => void;
-  isByOptionsLoading?: boolean;
+  onValueFilterSearch?: (name: string, term: string) => void;
   /** Entries as returned by the API for the current direction and filter, newest first. */
   entries: ActivityLogDto[];
   /** The area's catalog (`GET {area}/types`). */
@@ -73,8 +71,6 @@ export interface ActivityLogTabPanelProps {
   isLoadingMore?: boolean;
   onLoadMore?: () => void;
 }
-
-const FILTER_NAMES = [ACTIVITY_LOG_PARTY_FILTER, ACTIVITY_LOG_BY_FILTER, ACTIVITY_LOG_DATE_FILTER];
 
 interface ValueFilterSearch {
   /** Receives the search text as typed, and '' when the search is cleared or the picker closes. */
@@ -128,13 +124,8 @@ export const ActivityLogTabPanel = ({
   reporteeName,
   filterState,
   onFilterStateChange,
-  filterFields,
-  partyOptions,
-  onPartySearch,
-  isPartyOptionsLoading = false,
-  byOptions,
-  onBySearch,
-  isByOptionsLoading = false,
+  valueFilters,
+  onValueFilterSearch,
   entries,
   activityTypes,
   isLoading = false,
@@ -146,30 +137,31 @@ export const ActivityLogTabPanel = ({
   const { t } = useTranslation();
   const locale = getActivityLogLocale(useLanguageCode());
 
-  const partyLabelPrefix =
-    direction === 'from'
-      ? t('activity_log_page.filter_party_to')
-      : t('activity_log_page.filter_party_from');
-  const byLabelPrefix = t('activity_log_page.filter_by');
   const dateLabelPrefix = t('activity_log_page.filter_date');
-  const hasActiveFilter = FILTER_NAMES.some((name) => (filterState[name] ?? []).length > 0);
+  const hasActiveFilter = Object.values(filterState).some((values) => (values ?? []).length > 0);
 
-  const partyFilterOptions = useMemo(
-    () => getActivityLogPartyOptions(partyOptions),
-    [partyOptions],
+  // The party filter is named for the side it applies to; the others for their field.
+  const valueFilterLabel = (filter: ActivityLogValueFilterProps): string => {
+    if (filter.name === ACTIVITY_LOG_PARTY_FILTER) {
+      return direction === 'from'
+        ? t('activity_log_page.filter_party_to')
+        : t('activity_log_page.filter_party_from');
+    }
+    return t(`activity_log_page.filter_field.${filter.field}`);
+  };
+  const valueFilterOptions = useMemo(
+    () =>
+      Object.fromEntries(
+        valueFilters.map((filter) => [filter.name, getActivityLogPartyOptions(filter.options)]),
+      ),
+    [valueFilters],
   );
-  const byFilterOptions = useMemo(() => getActivityLogPartyOptions(byOptions), [byOptions]);
-
-  const partyFilter = toValueFilter(
-    ACTIVITY_LOG_PARTY_FILTER,
-    partyLabelPrefix,
-    partyFilterOptions,
-    { onSearch: onPartySearch, isLoading: isPartyOptionsLoading },
+  const toolbarValueFilters = valueFilters.map((filter) =>
+    toValueFilter(filter.name, valueFilterLabel(filter), valueFilterOptions[filter.name], {
+      onSearch: onValueFilterSearch && ((term) => onValueFilterSearch(filter.name, term)),
+      isLoading: filter.isLoading,
+    }),
   );
-  const byFilter = toValueFilter(ACTIVITY_LOG_BY_FILTER, byLabelPrefix, byFilterOptions, {
-    onSearch: onBySearch,
-    isLoading: isByOptionsLoading,
-  });
   const dateFilter: FilterProps = {
     id: ACTIVITY_LOG_DATE_FILTER,
     name: ACTIVITY_LOG_DATE_FILTER,
@@ -190,22 +182,19 @@ export const ActivityLogTabPanel = ({
   };
 
   const getFilterLabel = (name: string, values?: (string | number)[]) => {
-    switch (name) {
-      case ACTIVITY_LOG_PARTY_FILTER:
-        return getActivityLogPartyFilterLabel(partyLabelPrefix, values, partyFilterOptions);
-      case ACTIVITY_LOG_BY_FILTER:
-        return getActivityLogPartyFilterLabel(byLabelPrefix, values, byFilterOptions);
-      case ACTIVITY_LOG_DATE_FILTER:
-        return getActivityLogDateFilterLabel({
-          prefix: dateLabelPrefix,
-          fromDate: filterState.fromDate?.[0]?.toString(),
-          toDate: filterState.toDate?.[0]?.toString(),
-          locale,
-          t,
-        });
-      default:
-        return undefined;
+    if (name === ACTIVITY_LOG_DATE_FILTER) {
+      return getActivityLogDateFilterLabel({
+        prefix: dateLabelPrefix,
+        fromDate: filterState.fromDate?.[0]?.toString(),
+        toDate: filterState.toDate?.[0]?.toString(),
+        locale,
+        t,
+      });
     }
+    const filter = valueFilters.find((candidate) => candidate.name === name);
+    return filter
+      ? getActivityLogPartyFilterLabel(valueFilterLabel(filter), values, valueFilterOptions[name])
+      : undefined;
   };
 
   return (
@@ -242,11 +231,7 @@ export const ActivityLogTabPanel = ({
           removeLabel: t('activity_log_page.remove_filter'),
           resetLabel: t('activity_log_page.reset_filters'),
           getFilterLabel,
-          filters: [
-            ...(filterFields.includes(direction === 'from' ? 'to' : 'from') ? [partyFilter] : []),
-            ...(filterFields.includes(ACTIVITY_LOG_BY_FILTER) ? [byFilter] : []),
-            dateFilter,
-          ],
+          filters: [...toolbarValueFilters, dateFilter],
         }}
       />
       {isError ? (

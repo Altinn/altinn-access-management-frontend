@@ -1,8 +1,9 @@
 import type { ActivityLogDirection, ActivityLogDto, ActivityLogFilterValueDto } from './types';
+import type { ActivityLogValueFilter } from './useActivityLogQueryState';
 
 /**
- * Sample Maskinporten activity log data for Storybook and local testing until the API is wired up.
- * The reportee is Fysioterapeutene AS; `getSampleActivityLog` plays the part of the area endpoints.
+ * Sample Maskinporten activity log data for Storybook and the tests. The reportee is
+ * Fysioterapeutene AS; `getSampleActivityLog` plays the part of the area endpoints.
  */
 
 type Party = ActivityLogFilterValueDto;
@@ -43,7 +44,12 @@ const entry = (
 };
 
 const scope = (when: string, trigger: ActivityLogDto['trigger'], name: string, to = liseLarsen) =>
-  entry(when, sampleReportee, to, { subtype: 'Resource', trigger, resourceName: name });
+  entry(when, sampleReportee, to, {
+    subtype: 'Resource',
+    trigger,
+    resourceId: name,
+    resourceName: name,
+  });
 
 export const sampleActivityLogEntries: ActivityLogDto[] = [
   scope('2025-01-15T11:15:00', 'Created', 'altinn:supertjenesten:read'),
@@ -70,13 +76,12 @@ export const sampleActivityLogEntries: ActivityLogDto[] = [
 
 export interface SampleActivityLogQuery {
   direction: ActivityLogDirection;
-  /** Ids of the counterparts to show; empty shows all. */
-  selectedPartyIds: string[];
-  /** Ids of the users or systems that performed the change; empty shows all. */
-  selectedByIds?: string[];
-  /** Case-insensitive substrings the party and performer options are narrowed by, as `term` does. */
-  partyTerm?: string;
-  byTerm?: string;
+  /** The value filters on the tab, from `getActivityLogValueFilters(sampleFilterFields, direction)`. */
+  valueFilters: ActivityLogValueFilter[];
+  /** The ids chosen in each value filter, by filter name; empty or missing shows all. */
+  selectedIdsByName: Record<string, string[]>;
+  /** The picker being searched and its term, narrowing that picker's options as `term` does. */
+  search?: { name: string; term: string };
   /** ISO 8601 bounds on when the event happened. */
   after?: string;
   before?: string;
@@ -88,19 +93,34 @@ export interface SampleActivityLogQuery {
 export interface SampleActivityLog {
   /** What `GET maskinporten/activitylog` would return for the direction, filter and pages so far. */
   entries: ActivityLogDto[];
-  /** What `GET maskinporten/activitylog/filter/fields` would return. */
-  filterFields: string[];
-  /** What `GET maskinporten/activitylog/filter/{to|from}` would return for the direction and term. */
-  partyOptions: ActivityLogFilterValueDto[];
-  /** What `GET maskinporten/activitylog/filter/by` would return for the direction and term. */
-  byOptions: ActivityLogFilterValueDto[];
+  /** What `GET maskinporten/activitylog/filter/{field}` would return for each value filter, by name. */
+  optionsByName: Record<string, ActivityLogFilterValueDto[]>;
   hasMore: boolean;
 }
 
-export const sampleFilterFields = ['from', 'to', 'by', 'resource'];
+/** What `GET maskinporten/activitylog/filter/fields` returns for the area, lower-cased. */
+export const sampleFilterFields = ['from', 'to', 'by', 'resource', 'source', 'activitytype'];
 
-const counterpartId = (item: ActivityLogDto, direction: ActivityLogDirection) =>
-  (direction === 'from' ? item.toId : item.fromId) ?? '';
+/** The (id, name) of the entry's value for a lookup field, when it has one. */
+const fieldValue = (
+  item: ActivityLogDto,
+  field: string,
+): [string, string | null | undefined] | undefined => {
+  switch (field) {
+    case 'to':
+      return item.toId ? [item.toId, item.toName] : undefined;
+    case 'from':
+      return item.fromId ? [item.fromId, item.fromName] : undefined;
+    case 'by':
+      return item.byId ? [item.byId, item.byName] : undefined;
+    case 'resource':
+      return item.resourceId ? [item.resourceId, item.resourceName] : undefined;
+    case 'source':
+      return item.sourceId ? [item.sourceId, item.sourceName] : undefined;
+    default:
+      return undefined;
+  }
+};
 
 const distinctParties = (pairs: [string, string | null | undefined][], term = ''): Party[] =>
   [
@@ -114,14 +134,13 @@ const inPeriod = (item: ActivityLogDto, after?: string, before?: string) => {
   );
 };
 
-/** Plays the part of the area endpoints: filters by direction, party, performer and period, and pages the result. */
+/** Plays the part of the area endpoints: filters by direction, the value filters and period, and pages the result. */
 export const getSampleActivityLog = (
   {
     direction,
-    selectedPartyIds,
-    selectedByIds = [],
-    partyTerm,
-    byTerm,
+    valueFilters,
+    selectedIdsByName,
+    search,
     after,
     before,
     pageNo,
@@ -132,31 +151,28 @@ export const getSampleActivityLog = (
   const inDirection = entries
     .filter((item) => (direction === 'from' ? item.fromId : item.toId) === sampleReportee.id)
     .sort((a, b) => b.when.localeCompare(a.when));
-  const partyOptions = distinctParties(
-    inDirection.map((item) => [
-      counterpartId(item, direction),
-      direction === 'from' ? item.toName : item.fromName,
+  const optionsByName = Object.fromEntries(
+    valueFilters.map((filter) => [
+      filter.name,
+      distinctParties(
+        inDirection.flatMap((item) => {
+          const value = fieldValue(item, filter.field);
+          return value ? [value] : [];
+        }),
+        search?.name === filter.name ? search.term : '',
+      ),
     ]),
-    partyTerm,
-  );
-  const byOptions = distinctParties(
-    inDirection.filter((item) => item.byId).map((item) => [item.byId ?? '', item.byName]),
-    byTerm,
   );
   const filtered = inDirection.filter(
     (item) =>
-      (selectedPartyIds.length === 0 ||
-        selectedPartyIds.includes(counterpartId(item, direction))) &&
-      (selectedByIds.length === 0 || selectedByIds.includes(item.byId ?? '')) &&
-      inPeriod(item, after, before),
+      valueFilters.every((filter) => {
+        const selected = selectedIdsByName[filter.name] ?? [];
+        return (
+          selected.length === 0 || selected.includes(fieldValue(item, filter.field)?.[0] ?? '')
+        );
+      }) && inPeriod(item, after, before),
   );
   const visible = filtered.slice(0, (pageNo + 1) * pageSize);
 
-  return {
-    entries: visible,
-    filterFields: sampleFilterFields,
-    partyOptions,
-    byOptions,
-    hasMore: visible.length < filtered.length,
-  };
+  return { entries: visible, optionsByName, hasMore: visible.length < filtered.length };
 };

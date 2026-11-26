@@ -40,21 +40,11 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             // The values are looked up in the full search, except that the field being looked up
             // disregards its own filter.
-            ActivityLogQuery lookupQuery = new ActivityLogQuery
-            {
-                Party = query.Party,
-                Direction = query.Direction,
-                From = string.Equals(field, "from", StringComparison.OrdinalIgnoreCase) ? new List<Guid>() : query.From,
-                To = string.Equals(field, "to", StringComparison.OrdinalIgnoreCase) ? new List<Guid>() : query.To,
-                Via = query.Via,
-                By = string.Equals(field, "by", StringComparison.OrdinalIgnoreCase) ? new List<Guid>() : query.By,
-                TypeId = query.TypeId,
-                After = query.After,
-                Before = query.Before,
-            };
+            ActivityLogQuery lookupQuery = WithoutOwnFilter(query, field);
+            Dictionary<Guid, string> typeNames = GetActivityTypes(area, "nb").Result.ToDictionary(type => type.Id, type => type.Name);
 
             IEnumerable<ActivityLogFilterValueDto> values = GetEntriesInSearch(area, lookupQuery)
-                .Select(entry => GetFieldValue(entry, field))
+                .Select(entry => GetFieldValue(entry, field, typeNames))
                 .Where(value => value != null)
                 .DistinctBy(value => (value.Id, value.Name));
 
@@ -81,6 +71,59 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             string dataPath = Path.Combine(dataFolder, $"{area}_types.json");
             return Task.FromResult<IEnumerable<ActivityTypeDto>>(Util.GetMockData<List<ActivityTypeDto>>(dataPath));
+        }
+
+        private static ActivityLogQuery WithoutOwnFilter(ActivityLogQuery query, string field)
+        {
+            ActivityLogQuery lookupQuery = new ActivityLogQuery
+            {
+                Party = query.Party,
+                Direction = query.Direction,
+                From = query.From,
+                To = query.To,
+                Via = query.Via,
+                By = query.By,
+                Role = query.Role,
+                Package = query.Package,
+                Resource = query.Resource,
+                Source = query.Source,
+                TypeId = query.TypeId,
+                After = query.After,
+                Before = query.Before,
+            };
+
+            switch (field.ToLowerInvariant())
+            {
+                case "from":
+                    lookupQuery.From = new List<Guid>();
+                    break;
+                case "to":
+                    lookupQuery.To = new List<Guid>();
+                    break;
+                case "via":
+                    lookupQuery.Via = new List<Guid>();
+                    break;
+                case "by":
+                    lookupQuery.By = new List<Guid>();
+                    break;
+                case "role":
+                    lookupQuery.Role = new List<Guid>();
+                    break;
+                case "package":
+                    lookupQuery.Package = new List<Guid>();
+                    break;
+                case "resource":
+                    lookupQuery.Resource = new List<Guid>();
+                    break;
+                case "source":
+                    lookupQuery.Source = new List<Guid>();
+                    break;
+                case "activitytype":
+                    lookupQuery.TypeId = new List<Guid>();
+                    break;
+            }
+
+            return lookupQuery;
         }
 
         private IEnumerable<ActivityLogDto> GetEntriesInSearch(string area, ActivityLogQuery query)
@@ -111,6 +154,26 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 entries = entries.Where(entry => entry.ById.HasValue && query.By.Contains(entry.ById.Value));
             }
 
+            if (query.Role?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.RoleId.HasValue && query.Role.Contains(entry.RoleId.Value));
+            }
+
+            if (query.Package?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.PackageId.HasValue && query.Package.Contains(entry.PackageId.Value));
+            }
+
+            if (query.Resource?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.ResourceId.HasValue && query.Resource.Contains(entry.ResourceId.Value));
+            }
+
+            if (query.Source?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.SourceId.HasValue && query.Source.Contains(entry.SourceId.Value));
+            }
+
             if (query.TypeId?.Count > 0)
             {
                 entries = entries.Where(entry => entry.ActivityTypeId.HasValue && query.TypeId.Contains(entry.ActivityTypeId.Value));
@@ -129,7 +192,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return entries.OrderByDescending(entry => entry.When).ThenByDescending(entry => entry.Id);
         }
 
-        private static ActivityLogFilterValueDto GetFieldValue(ActivityLogDto entry, string field)
+        private static ActivityLogFilterValueDto GetFieldValue(ActivityLogDto entry, string field, Dictionary<Guid, string> typeNames)
         {
             switch (field.ToLowerInvariant())
             {
@@ -137,10 +200,20 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return ToFilterValue(entry.FromId, entry.FromName);
                 case "to":
                     return ToFilterValue(entry.ToId, entry.ToName);
+                case "via":
+                    return ToFilterValue(entry.ViaId, entry.ViaName);
                 case "by":
                     return ToFilterValue(entry.ById, entry.ByName);
+                case "role":
+                    return ToFilterValue(entry.RoleId, entry.RoleName);
+                case "package":
+                    return ToFilterValue(entry.PackageId, entry.PackageName);
                 case "resource":
                     return ToFilterValue(entry.ResourceId, entry.ResourceName);
+                case "source":
+                    return ToFilterValue(entry.SourceId, entry.SourceName);
+                case "activitytype":
+                    return ToFilterValue(entry.ActivityTypeId, entry.ActivityTypeId.HasValue && typeNames.TryGetValue(entry.ActivityTypeId.Value, out string typeName) ? typeName : null);
                 default:
                     return null;
             }

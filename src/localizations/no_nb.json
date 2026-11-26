@@ -555,7 +555,15 @@
     "direction_to": "Til virksomheten",
     "filter_party_to": "Til",
     "filter_party_from": "Fra",
-    "filter_by": "Utført av",
+    "filter_field": {
+      "by": "Utført av",
+      "resource": "Scope",
+      "source": "Kilde",
+      "activitytype": "Hendelse",
+      "via": "Via",
+      "role": "Rolle",
+      "package": "Tilgangspakke"
+    },
     "filter_date": "Periode",
     "filter_date_pick": "Velg datoer",
     "filter_date_from": "fra {{date}}",

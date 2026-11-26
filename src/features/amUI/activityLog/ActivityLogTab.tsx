@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import {
+  type ActivityLogListParam,
+  type ActivityLogQueryArgs,
   useGetActivityLogFilterFieldsQuery,
+  useGetActivityLogFilterOptionsQuery,
   useGetActivityLogFilterValuesQuery,
   useGetActivityLogInfiniteQuery,
   useGetActivityTypesQuery,
@@ -12,7 +15,8 @@ import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
 import { ActivityLogTabPanel } from './ActivityLogTabPanel';
 import type { ActivityLogArea } from './types';
 import {
-  ACTIVITY_LOG_BY_FILTER,
+  getActivityLogValueFilters,
+  getSelectedIds,
   useActivityLogFilterOptions,
   useActivityLogQueryState,
 } from './useActivityLogQueryState';
@@ -22,14 +26,13 @@ export const ACTIVITY_LOG_PAGE_SIZE = 50;
 export const ACTIVITY_LOG_FILTER_PAGE_SIZE = 20;
 
 /** The filter fields assumed when the area's own list cannot be fetched. */
-const FALLBACK_FILTER_FIELDS = ['from', 'to', ACTIVITY_LOG_BY_FILTER];
+const FALLBACK_FILTER_FIELDS = ['from', 'to', 'by'];
 
-/** What the user has typed in a filter picker, settled for the lookup: trimmed, debounced and empty when cleared. */
-const useFilterSearchTerm = () => {
-  const [term, setTerm] = useState('');
-  const settled = useDebouncedValue(term, term ? 300 : 0).trim();
-  return { term: settled || undefined, setTerm };
-};
+/** What is typed in the one picker that is open. */
+interface PickerSearch {
+  name: string;
+  term: string;
+}
 
 /** Fetches one area of the activity log for the current reportee and renders it. */
 export const ActivityLogTab = ({
@@ -40,53 +43,77 @@ export const ActivityLogTab = ({
   reporteeName: string;
 }) => {
   const language = useLanguageCode();
-  const {
-    direction,
-    changeDirection,
-    filterState,
-    changeFilterState,
-    selectedPartyIds,
-    selectedByIds,
-    after,
-    before,
-    counterpartField,
-  } = useActivityLogQueryState();
-  const partySearch = useFilterSearchTerm();
-  const bySearch = useFilterSearchTerm();
+  const { direction, changeDirection, filterState, changeFilterState, after, before } =
+    useActivityLogQueryState();
 
   // The area says which filters apply to it; until it has answered only the period can be chosen.
   const { data: fetchedFilterFields, isError: isFilterFieldsError } =
     useGetActivityLogFilterFieldsQuery({ area });
-  const filterFields = fetchedFilterFields ?? (isFilterFieldsError ? FALLBACK_FILTER_FIELDS : []);
-  const hasPartyFilter = filterFields.includes(counterpartField);
-  const hasByFilter = filterFields.includes(ACTIVITY_LOG_BY_FILTER);
+  const valueFilters = useMemo(
+    () =>
+      getActivityLogValueFilters(
+        fetchedFilterFields ?? (isFilterFieldsError ? FALLBACK_FILTER_FIELDS : []),
+        direction,
+      ),
+    [fetchedFilterFields, isFilterFieldsError, direction],
+  );
+  const selectedIdsByName = useMemo(
+    () =>
+      Object.fromEntries(
+        valueFilters.map((filter) => [filter.name, getSelectedIds(filterState, filter.name)]),
+      ),
+    [valueFilters, filterState],
+  );
 
   // The same search for the entries and the filter pickers, so the pickers only offer values that
   // give hits; the API disregards the filter for the field being looked up.
-  const search = {
-    area,
-    direction,
-    [counterpartField]: selectedPartyIds,
-    by: selectedByIds,
-    after,
-    before,
-  };
+  const selectedParams: Partial<Record<ActivityLogListParam, string[]>> = {};
+  valueFilters.forEach((filter) => {
+    selectedParams[filter.param] = selectedIdsByName[filter.name];
+  });
+  const search: ActivityLogQueryArgs = { area, direction, after, before, ...selectedParams };
   // The pickers show the most recent values first and let the user search the rest on the server.
   const lookup = { ...search, orderBy: 'When' as const, pageSize: ACTIVITY_LOG_FILTER_PAGE_SIZE };
 
   const { currentData, isFetching, isError, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useGetActivityLogInfiniteQuery({ ...search, pageSize: ACTIVITY_LOG_PAGE_SIZE });
   const isLoading = isFetching && !isFetchingNextPage;
-  const partyValues = useGetActivityLogFilterValuesQuery(
-    { ...lookup, field: counterpartField, term: partySearch.term },
-    { skip: !hasPartyFilter },
+  const { data: defaultValues, isLoading: isDefaultValuesLoading } =
+    useGetActivityLogFilterOptionsQuery(
+      { ...lookup, fields: valueFilters.map((filter) => filter.field) },
+      { skip: valueFilters.length === 0 },
+    );
+
+  // At most one picker is open, so at most one of them is being searched on the server. Its hits
+  // replace the picker's default values once they arrive; until then the picker narrows what it has.
+  const [pickerSearch, setPickerSearch] = useState<PickerSearch>();
+  const term = useDebouncedValue(pickerSearch?.term ?? '', pickerSearch?.term ? 300 : 0).trim();
+  const searchedFilter = term
+    ? valueFilters.find((filter) => filter.name === pickerSearch?.name)
+    : undefined;
+  const { currentData: searchHits } = useGetActivityLogFilterValuesQuery(
+    { ...lookup, field: searchedFilter?.field ?? '', term },
+    { skip: !searchedFilter },
   );
-  const byValues = useGetActivityLogFilterValuesQuery(
-    { ...lookup, field: ACTIVITY_LOG_BY_FILTER, term: bySearch.term },
-    { skip: !hasByFilter },
+  const onValueFilterSearch = useCallback(
+    (name: string, newTerm: string) =>
+      setPickerSearch(newTerm ? { name, term: newTerm } : undefined),
+    [],
   );
-  const partyOptions = useActivityLogFilterOptions(partyValues.data?.data, selectedPartyIds);
-  const byOptions = useActivityLogFilterOptions(byValues.data?.data, selectedByIds);
+
+  const valuesByName = useMemo(
+    () =>
+      Object.fromEntries(
+        valueFilters.map((filter) => [
+          filter.name,
+          searchedFilter?.name === filter.name && searchHits
+            ? searchHits.data
+            : defaultValues?.[filter.field],
+        ]),
+      ),
+    [valueFilters, searchedFilter, searchHits, defaultValues],
+  );
+  const optionsByName = useActivityLogFilterOptions(valuesByName, selectedIdsByName);
   const { data: activityTypes } = useGetActivityTypesQuery({ area, language });
 
   return (
@@ -97,13 +124,13 @@ export const ActivityLogTab = ({
       reporteeName={reporteeName}
       filterState={filterState}
       onFilterStateChange={changeFilterState}
-      filterFields={filterFields}
-      partyOptions={partyOptions}
-      onPartySearch={partySearch.setTerm}
-      isPartyOptionsLoading={partyValues.isLoading}
-      byOptions={byOptions}
-      onBySearch={bySearch.setTerm}
-      isByOptionsLoading={byValues.isLoading}
+      valueFilters={valueFilters.map((filter) => ({
+        name: filter.name,
+        field: filter.field,
+        options: optionsByName[filter.name] ?? [],
+        isLoading: isDefaultValuesLoading,
+      }))}
+      onValueFilterSearch={onValueFilterSearch}
       entries={currentData?.pages.flatMap((page) => page.data) ?? []}
       activityTypes={activityTypes}
       isLoading={isLoading}

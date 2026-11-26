@@ -3,8 +3,12 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { RootProvider } from '@altinn/altinn-components';
 
 import { ActivityLogTabPanel } from './ActivityLogTabPanel';
-import { getSampleActivityLog, sampleReportee } from './activityLogSampleData';
-import { useActivityLogQueryState } from './useActivityLogQueryState';
+import { getSampleActivityLog, sampleFilterFields, sampleReportee } from './activityLogSampleData';
+import {
+  getActivityLogValueFilters,
+  getSelectedIds,
+  useActivityLogQueryState,
+} from './useActivityLogQueryState';
 
 const STORY_PAGE_SIZE = 4;
 
@@ -15,27 +19,21 @@ interface StoryArgs {
 }
 
 const ActivityLogTabPanelStory = ({ isLoading, isError, empty }: StoryArgs) => {
-  const {
-    direction,
-    changeDirection,
-    filterState,
-    changeFilterState,
-    selectedPartyIds,
-    selectedByIds,
-    after,
-    before,
-  } = useActivityLogQueryState();
+  const { direction, changeDirection, filterState, changeFilterState, after, before } =
+    useActivityLogQueryState();
   const [pageNo, setPageNo] = useState(0);
-  const [partyTerm, setPartyTerm] = useState('');
-  const [byTerm, setByTerm] = useState('');
+  const [search, setSearch] = useState<{ name: string; term: string }>();
 
-  const { entries, filterFields, partyOptions, byOptions, hasMore } = getSampleActivityLog(
+  const valueFilters = getActivityLogValueFilters(sampleFilterFields, direction);
+  const selectedIdsByName = Object.fromEntries(
+    valueFilters.map((filter) => [filter.name, getSelectedIds(filterState, filter.name)]),
+  );
+  const { entries, optionsByName, hasMore } = getSampleActivityLog(
     {
       direction,
-      selectedPartyIds,
-      selectedByIds,
-      partyTerm,
-      byTerm,
+      valueFilters,
+      selectedIdsByName,
+      search,
       after,
       before,
       pageNo,
@@ -58,11 +56,12 @@ const ActivityLogTabPanelStory = ({ isLoading, isError, empty }: StoryArgs) => {
         changeFilterState(newFilterState);
         setPageNo(0);
       }}
-      filterFields={filterFields}
-      partyOptions={partyOptions}
-      onPartySearch={setPartyTerm}
-      byOptions={byOptions}
-      onBySearch={setByTerm}
+      valueFilters={valueFilters.map((filter) => ({
+        name: filter.name,
+        field: filter.field,
+        options: optionsByName[filter.name] ?? [],
+      }))}
+      onValueFilterSearch={(name, term) => setSearch(term ? { name, term } : undefined)}
       entries={entries}
       isLoading={isLoading}
       isError={isError}

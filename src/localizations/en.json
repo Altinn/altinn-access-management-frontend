@@ -562,7 +562,15 @@
     "direction_to": "To the organisation",
     "filter_party_to": "To",
     "filter_party_from": "From",
-    "filter_by": "Performed by",
+    "filter_field": {
+      "by": "Performed by",
+      "resource": "Scope",
+      "source": "Source",
+      "activitytype": "Event type",
+      "via": "Via",
+      "role": "Role",
+      "package": "Access package"
+    },
     "filter_date": "Period",
     "filter_date_pick": "Choose dates",
     "filter_date_from": "from {{date}}",

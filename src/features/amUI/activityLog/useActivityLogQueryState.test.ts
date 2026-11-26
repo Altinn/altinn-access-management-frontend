@@ -2,14 +2,17 @@ import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import {
-  ACTIVITY_LOG_BY_FILTER,
   ACTIVITY_LOG_DATE_FILTER,
   ACTIVITY_LOG_PARTY_FILTER,
   getActivityLogDateBounds,
+  getActivityLogValueFilters,
+  getSelectedIds,
   useActivityLogFilterOptions,
   useActivityLogQueryState,
   withoutStaleDates,
 } from './useActivityLogQueryState';
+
+const ACTIVITY_LOG_BY_FILTER = 'by';
 
 const localInstant = (localDateTime: string) => new Date(localDateTime).toISOString();
 
@@ -70,32 +73,59 @@ describe('withoutStaleDates', () => {
   });
 });
 
+describe('getActivityLogValueFilters', () => {
+  it('folds to and from into the party filter for the counterpart of the direction', () => {
+    expect(getActivityLogValueFilters(['from', 'to', 'by'], 'from')).toEqual([
+      { name: ACTIVITY_LOG_PARTY_FILTER, field: 'to', param: 'to' },
+      { name: 'by', field: 'by', param: 'by' },
+    ]);
+    expect(getActivityLogValueFilters(['from', 'to', 'by'], 'to')).toEqual([
+      { name: ACTIVITY_LOG_PARTY_FILTER, field: 'from', param: 'from' },
+      { name: 'by', field: 'by', param: 'by' },
+    ]);
+  });
+
+  it('maps every other field to its own filter and query parameter, skipping unknown ones', () => {
+    expect(
+      getActivityLogValueFilters(['resource', 'source', 'activitytype', 'somethingnew'], 'from'),
+    ).toEqual([
+      { name: 'resource', field: 'resource', param: 'resource' },
+      { name: 'source', field: 'source', param: 'source' },
+      { name: 'activitytype', field: 'activitytype', param: 'typeId' },
+    ]);
+  });
+});
+
 describe('useActivityLogFilterOptions', () => {
   const lise = { id: 'lise', name: 'Lise Larsen AS' };
   const fysio = { id: 'fysio', name: 'Fysio Partner AS' };
 
-  it('offers what the lookup returned', () => {
-    const { result } = renderHook(() => useActivityLogFilterOptions([lise, fysio], []));
+  it('offers what the lookup returned for each picker', () => {
+    const { result } = renderHook(() =>
+      useActivityLogFilterOptions({ party: [lise, fysio], by: undefined }, { party: [] }),
+    );
 
-    expect(result.current).toEqual([lise, fysio]);
+    expect(result.current).toEqual({ party: [lise, fysio], by: [] });
   });
 
   it('keeps a selected value offered after a narrowed lookup stops returning it', () => {
     const { result, rerender } = renderHook(
       ({ fetched, selected }: { fetched: (typeof lise)[]; selected: string[] }) =>
-        useActivityLogFilterOptions(fetched, selected),
+        useActivityLogFilterOptions({ party: fetched }, { party: selected }),
       { initialProps: { fetched: [lise, fysio], selected: ['lise'] } },
     );
 
     rerender({ fetched: [fysio], selected: ['lise'] });
 
-    expect(result.current).toEqual([fysio, lise]);
+    expect(result.current).toEqual({ party: [fysio, lise] });
   });
 
-  it('cannot offer a selected value it has never seen', () => {
-    const { result } = renderHook(() => useActivityLogFilterOptions([fysio], ['unknown']));
+  it('cannot offer a selected value it has never seen, nor one another picker saw', () => {
+    const { result } = renderHook(() =>
+      useActivityLogFilterOptions({ party: [fysio], by: [lise] }, { party: ['unknown', 'lise'] }),
+    );
 
-    expect(result.current).toEqual([fysio]);
+    expect(result.current).toEqual({ party: [fysio], by: [lise] });
   });
 });
 
@@ -106,8 +136,6 @@ describe('useActivityLogQueryState', () => {
     expect(result.current.direction).toBe('from');
     expect(result.current.counterpartField).toBe('to');
     expect(result.current.filterState).toEqual({});
-    expect(result.current.selectedPartyIds).toEqual([]);
-    expect(result.current.selectedByIds).toEqual([]);
     expect(result.current.after).toBeUndefined();
     expect(result.current.before).toBeUndefined();
   });
@@ -124,7 +152,7 @@ describe('useActivityLogQueryState', () => {
       }),
     );
 
-    expect(result.current.selectedByIds).toEqual(['helle']);
+    expect(getSelectedIds(result.current.filterState, ACTIVITY_LOG_BY_FILTER)).toEqual(['helle']);
     expect(result.current.after).toBe(localInstant('2025-01-01T00:00:00'));
     expect(result.current.before).toBe(localInstant('2025-01-31T23:59:59.999'));
   });
@@ -133,7 +161,10 @@ describe('useActivityLogQueryState', () => {
     const { result } = renderHook(() => useActivityLogQueryState());
 
     act(() => result.current.changeFilterState({ [ACTIVITY_LOG_PARTY_FILTER]: ['lise', 'fysio'] }));
-    expect(result.current.selectedPartyIds).toEqual(['lise', 'fysio']);
+    expect(getSelectedIds(result.current.filterState, ACTIVITY_LOG_PARTY_FILTER)).toEqual([
+      'lise',
+      'fysio',
+    ]);
     expect(result.current.counterpartField).toBe('to');
 
     act(() => result.current.changeDirection('to'));
@@ -178,8 +209,8 @@ describe('useActivityLogQueryState', () => {
       [ACTIVITY_LOG_DATE_FILTER]: ['fromAndToDate'],
       fromDate: ['2025-01-01'],
     });
-    expect(result.current.selectedPartyIds).toEqual([]);
-    expect(result.current.selectedByIds).toEqual(['helle']);
+    expect(getSelectedIds(result.current.filterState, ACTIVITY_LOG_PARTY_FILTER)).toEqual([]);
+    expect(getSelectedIds(result.current.filterState, ACTIVITY_LOG_BY_FILTER)).toEqual(['helle']);
     expect(result.current.after).toBe(localInstant('2025-01-01T00:00:00'));
   });
 });

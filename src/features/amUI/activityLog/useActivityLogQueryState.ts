@@ -1,13 +1,13 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { FilterState } from '@altinn/altinn-components';
 
+import type { ActivityLogListParam } from '@/rtk/features/activityLogApi';
+
 import { parseActivityLogPickerDate } from './activityLogUtils';
 import type { ActivityLogDirection, ActivityLogFilterValueDto } from './types';
 
 /** Filter key for the counterpart: the receivers when the reportee gave access, else the givers. */
 export const ACTIVITY_LOG_PARTY_FILTER = 'party';
-/** Filter key for the user or system that performed the change. */
-export const ACTIVITY_LOG_BY_FILTER = 'by';
 /**
  * Filter key for the period. `SelectDateFilter` marks it with `fromAndToDate` and keeps the chosen
  * dates (YYYY-MM-DD) under `fromDate` and `toDate` in the same filter state.
@@ -15,6 +15,55 @@ export const ACTIVITY_LOG_BY_FILTER = 'by';
 export const ACTIVITY_LOG_DATE_FILTER = 'date';
 
 const DATE_FILTER_RANGE = 'fromAndToDate';
+
+/**
+ * The query parameter each lookup field (`GET {area}/filter/fields`, lower-cased) narrows. A field
+ * the API reports that is not listed here gets no filter on the tab.
+ */
+export const ACTIVITY_LOG_FIELD_PARAMS: Record<string, ActivityLogListParam> = {
+  from: 'from',
+  to: 'to',
+  via: 'via',
+  by: 'by',
+  role: 'role',
+  package: 'package',
+  resource: 'resource',
+  source: 'source',
+  activitytype: 'typeId',
+};
+
+/** One picker on the tab: its filter key, the field whose values it offers and the parameter it narrows. */
+export interface ActivityLogValueFilter {
+  name: string;
+  field: string;
+  param: ActivityLogListParam;
+}
+
+/** The side of the entries the party filter applies to: the receivers when the reportee gave access. */
+export const getActivityLogCounterpartField = (direction: ActivityLogDirection): 'to' | 'from' =>
+  direction === 'from' ? 'to' : 'from';
+
+/**
+ * The value filters to offer for the fields the area reports, in the area's order. `to` and `from`
+ * fold into the party filter, which offers the counterparts of the direction; the other side is
+ * always the reportee and gets no filter.
+ */
+export const getActivityLogValueFilters = (
+  filterFields: string[],
+  direction: ActivityLogDirection,
+): ActivityLogValueFilter[] => {
+  const counterpartField = getActivityLogCounterpartField(direction);
+  return filterFields.flatMap((field) => {
+    const param = ACTIVITY_LOG_FIELD_PARAMS[field];
+    if (!param) {
+      return [];
+    }
+    if (field === 'to' || field === 'from') {
+      return field === counterpartField ? [{ name: ACTIVITY_LOG_PARTY_FILTER, field, param }] : [];
+    }
+    return [{ name: field, field, param }];
+  });
+};
 
 export interface ActivityLogDateBounds {
   /** ISO 8601 instant at the start of the chosen first day. */
@@ -59,49 +108,50 @@ export const withoutStaleDates = (filterState: FilterState): FilterState => {
   return next;
 };
 
-/**
- * The options to offer in a filter picker: the values the lookup returned, plus any selected value
- * the lookup no longer returns.
- */
-export const useActivityLogFilterOptions = (
-  fetched: ActivityLogFilterValueDto[] | undefined,
-  selectedIds: string[],
-): ActivityLogFilterValueDto[] => {
-  // A cache of the names seen so far, not render state: nothing re-renders when it grows, and it
-  // only ever gains entries from `fetched`, which the memo already depends on.
-  const [seen] = useState(() => new Map<string, ActivityLogFilterValueDto>());
-
-  return useMemo(() => {
-    const values = fetched ?? [];
-    values.forEach((value) => seen.set(value.id, value));
-    const missing = selectedIds
-      .filter((id) => !values.some((value) => value.id === id))
-      .map((id) => seen.get(id))
-      .filter((value): value is ActivityLogFilterValueDto => value !== undefined);
-    return missing.length > 0 ? [...values, ...missing] : values;
-  }, [fetched, selectedIds, seen]);
-};
-
-const selectedIds = (filterState: FilterState, name: string): string[] =>
+/** The ids chosen in one value filter. */
+export const getSelectedIds = (filterState: FilterState, name: string): string[] =>
   (filterState[name] ?? []).map(String);
 
 /**
- * Holds what the user has chosen for one area of the activity log: the direction and the filters
- * (counterpart, who performed the change, period). Changing the direction clears the counterpart
- * filter, since the parties to choose from differ; the other filters apply to both directions.
+ * The options to offer in each filter picker, keyed like the input: the values the lookup
+ * returned, plus any selected value the lookup no longer returns.
+ */
+export const useActivityLogFilterOptions = (
+  valuesByName: Record<string, ActivityLogFilterValueDto[] | undefined>,
+  selectedIdsByName: Record<string, string[]>,
+): Record<string, ActivityLogFilterValueDto[]> => {
+  // A cache of the names seen so far per picker, not render state: nothing re-renders when it
+  // grows, and it only ever gains entries from `valuesByName`, which the memo already depends on.
+  const [seen] = useState(() => new Map<string, Map<string, ActivityLogFilterValueDto>>());
+
+  return useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(valuesByName).map(([name, fetched]) => {
+          const values = fetched ?? [];
+          const seenForName = seen.get(name) ?? new Map<string, ActivityLogFilterValueDto>();
+          seen.set(name, seenForName);
+          values.forEach((value) => seenForName.set(value.id, value));
+          const missing = (selectedIdsByName[name] ?? [])
+            .filter((id) => !values.some((value) => value.id === id))
+            .map((id) => seenForName.get(id))
+            .filter((value): value is ActivityLogFilterValueDto => value !== undefined);
+          return [name, missing.length > 0 ? [...values, ...missing] : values];
+        }),
+      ),
+    [valuesByName, selectedIdsByName, seen],
+  );
+};
+
+/**
+ * Holds what the user has chosen for one area of the activity log: the direction and the filter
+ * state (the value filters and the period). Changing the direction clears the party filter, since
+ * the parties to choose from differ; the other filters apply to both directions.
  */
 export const useActivityLogQueryState = () => {
   const [direction, setDirection] = useState<ActivityLogDirection>('from');
   const [filterState, setFilterState] = useState<FilterState>({});
 
-  const selectedPartyIds = useMemo(
-    () => selectedIds(filterState, ACTIVITY_LOG_PARTY_FILTER),
-    [filterState],
-  );
-  const selectedByIds = useMemo(
-    () => selectedIds(filterState, ACTIVITY_LOG_BY_FILTER),
-    [filterState],
-  );
   const { after, before } = useMemo(() => getActivityLogDateBounds(filterState), [filterState]);
 
   const changeFilterState = useCallback(
@@ -123,11 +173,8 @@ export const useActivityLogQueryState = () => {
     changeDirection,
     filterState,
     changeFilterState,
-    selectedPartyIds,
-    selectedByIds,
     after,
     before,
-    /** The side of the entries the party filter applies to: the receivers when the reportee gave access. */
-    counterpartField: direction === 'from' ? 'to' : 'from',
+    counterpartField: getActivityLogCounterpartField(direction),
   } as const;
 };
