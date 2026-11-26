@@ -66,8 +66,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<AgentDelegationFE>> GetAgents(Guid party, string languageCode, CancellationToken cancellationToken = default)
         {
             IEnumerable<AgentDelegation> agents = await _clientDelegationClient.GetAgents(party, cancellationToken);
-            await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
-            return agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
+            List<AgentDelegationFE> retVal = agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
+            IEnumerable<CompactResource> enrichData = [
+                .. ResourcesOf(retVal.SelectMany(agent => agent.Access)), 
+                .. ResourcesOf(retVal.SelectMany(agent => agent.SystemUserSets))
+            ];
+            await EnrichResources(enrichData, languageCode);
+            return retVal;
         }
 
         /// <inheritdoc />
@@ -110,8 +115,13 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<IEnumerable<AgentDelegationFE>> GetClientResources(Guid party, Guid from, string languageCode, CancellationToken cancellationToken = default)
         {
             IEnumerable<AgentDelegation> agents = await _clientDelegationClient.GetClientResources(party, from, cancellationToken);
-            await EnrichResources(agents.SelectMany(agent => agent.Access), languageCode);
-            return agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
+            List<AgentDelegationFE> retVal = agents.Select(AgentDelegationFE.FromAgentDelegation).ToList();
+            IEnumerable<CompactResource> enrichData = [
+                .. ResourcesOf(retVal.SelectMany(agent => agent.Access)), 
+                .. ResourcesOf(retVal.SelectMany(agent => agent.SystemUserSets))
+            ];
+            await EnrichResources(enrichData, languageCode);
+            return retVal;
         }
 
         /// <inheritdoc />
@@ -182,12 +192,15 @@ namespace Altinn.AccessManagement.UI.Core.Services
         /// and lookups are cached across requests. A registry failure leaves the details unset
         /// rather than failing the whole listing.
         /// </summary>
-        private async Task EnrichResources(IEnumerable<ClientDelegation.RoleAccessPackages> access, string languageCode)
+        private Task EnrichResources(IEnumerable<ClientDelegation.RoleAccessPackages> access, string languageCode)
         {
-            List<IGrouping<string, CompactResource>> resourcesByRefId = access
-                .Where(roleAccess => roleAccess?.Resources != null)
-                .SelectMany(roleAccess => roleAccess.Resources)
-                .Where(resource => !string.IsNullOrEmpty(resource.RefId))
+            return EnrichResources(ResourcesOf(access), languageCode);
+        }
+
+        private async Task EnrichResources(IEnumerable<CompactResource> resources, string languageCode)
+        {
+            List<IGrouping<string, CompactResource>> resourcesByRefId = resources
+                .Where(resource => !string.IsNullOrEmpty(resource?.RefId))
                 .GroupBy(resource => resource.RefId)
                 .ToList();
 
@@ -216,6 +229,20 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     resource.Details = details;
                 }
             }
+        }
+
+        private static IEnumerable<CompactResource> ResourcesOf(IEnumerable<ClientDelegation.RoleAccessPackages> access)
+        {
+            return access
+                .Where(roleAccess => roleAccess?.Resources != null)
+                .SelectMany(roleAccess => roleAccess.Resources);
+        }
+
+        private static IEnumerable<CompactResource> ResourcesOf(IEnumerable<SystemUserSet> sets)
+        {
+            return sets
+                .Where(set => set?.Resources != null)
+                .SelectMany(set => set.Resources);
         }
     }
 }

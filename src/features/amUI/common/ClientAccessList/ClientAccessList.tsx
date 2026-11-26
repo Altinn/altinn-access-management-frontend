@@ -9,7 +9,8 @@ import {
   getAvatarType,
 } from '@/resources/utils/reporteeUtils';
 import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
-import type { Client } from '@/rtk/features/clientApi';
+import type { Client, ClientAccess, ClientResource } from '@/rtk/features/clientApi';
+import { type CompactPackage } from '@/dataObjects/dtos/accessPackage';
 
 import { buildClientParentNameById, buildClientSortKey } from '../clientSortUtils';
 import { useRoleMetadata } from '../UserRoles/useRoleMetadata';
@@ -32,7 +33,11 @@ type ClientAccessListProps = {
   canDelegate?: boolean;
   addDisabled?: boolean;
   removeDisabled?: boolean;
-  renderClientActions?: (client: Client, restoreFocusFallbackId?: string) => React.ReactNode;
+  renderClientActions?: (
+    client: Client,
+    overrideItems?: ClientAccess[],
+    restoreFocusFallbackId?: string,
+  ) => React.ReactNode;
   requireDelegableForActions?: boolean;
   emptyAccessText?: string;
   emptyText?: string;
@@ -41,6 +46,11 @@ type ClientAccessListProps = {
   onToggleExpanded?: (id: string) => void;
   // Focus target when the acted-on row is no longer reachable here, typically the section heading.
   restoreFocusFallbackId?: string;
+  systemUserSets?: {
+    name: string;
+    accessPackages: CompactPackage[];
+    resources: ClientResource[];
+  }[];
 };
 
 const sortClientsByKey = (clients: Client[], parentNameById: Map<string, string>): Client[] =>
@@ -77,6 +87,7 @@ export const ClientAccessList = ({
   expandedIds,
   onToggleExpanded,
   restoreFocusFallbackId,
+  systemUserSets,
 }: ClientAccessListProps) => {
   const { t } = useTranslation();
   const { getAccessPackageByUrn } = useAccessPackageLookup();
@@ -149,7 +160,27 @@ export const ClientAccessList = ({
       as: 'button',
       titleAs: 'div',
       entries: buildEntries(client),
-      actions: renderClientActions?.(client, restoreFocusFallbackId),
+      systemUserSets: systemUserSets,
+      renderActions: (items?: { packageId: string; resourceId: string; roleCode: string }[]) => {
+        const items2 = !items
+          ? undefined
+          : client.access.map((access) => {
+              const itemPackages = items
+                .filter((i) => i.roleCode === access.role.code)
+                .map((x) => x.packageId);
+
+              const itemResources = items
+                .filter((i) => i.roleCode === access.role.code)
+                .map((x) => x.resourceId);
+
+              return {
+                ...access,
+                packages: access.packages.filter((p) => itemPackages?.indexOf(p.urn) > -1),
+                resources: access.resources?.filter((r) => itemResources?.indexOf(r.refId) > -1),
+              };
+            });
+        return renderClientActions?.(client, items2, restoreFocusFallbackId);
+      },
       description:
         userType === 'company'
           ? t('client_administration_page.organization_identifier', {

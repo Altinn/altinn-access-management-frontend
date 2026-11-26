@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState, type ReactNode } from 'react';
+import { DsHeading } from '@altinn/altinn-components';
 
-import type { ClientAccess } from '@/rtk/features/clientApi';
+import type { ClientAccess, ClientResource } from '@/rtk/features/clientApi';
+import { useAccessPackageLookup } from '@/resources/hooks/useAccessPackageLookup';
+import { type CompactPackage } from '@/dataObjects/dtos/accessPackage';
 
 import type { HeldAccessByRow } from '../ClientBulkDelegation/getClientBulkItems';
 import { ClientAccessInfoModal } from '../DelegationModal/ClientAccessInfoModal';
@@ -14,8 +17,15 @@ import { clientActionControlId } from './DelegationControl';
 
 export type ClientAccessRow = Omit<UserListItemData, 'children'> & {
   entries: ClientAccessEntry[];
+  systemUserSets?: {
+    name: string;
+    accessPackages: CompactPackage[];
+    resources: ClientResource[];
+  }[];
   /** Rendered above the row's access lists, e.g. bulk actions. */
-  actions?: ReactNode;
+  renderActions: (
+    items?: { packageId: string; resourceId: string; roleCode: string }[],
+  ) => ReactNode;
 };
 
 interface ClientAccessRowsProps {
@@ -66,6 +76,7 @@ export const ClientAccessRows = ({
   const restoreFocus = useRestoreFocusContext();
   const requestPackageFocus = useRestoreFocusOnDataChange(heldPackages);
   const requestResourceFocus = useRestoreFocusOnDataChange(heldResources);
+  const { getAccessPackageByUrn } = useAccessPackageLookup();
 
   const hasAccess = (entry: ClientAccessEntry) => {
     const held = entry.kind === 'package' ? heldPackages : heldResources;
@@ -104,18 +115,125 @@ export const ClientAccessRows = ({
   });
   useEffect(() => () => restoreFocusOnUnmountRef.current?.(), []);
 
-  const items: UserListItemData[] = rows.map(({ entries, actions, ...item }) => ({
-    ...item,
-    children: (
-      <>
-        {actions}
-        <ClientAccessSections
-          entries={entries}
-          emptyText={emptyAccessText}
-        />
-      </>
-    ),
-  }));
+  // hvert rettighetssett er en ClientAccessSections.
+  const items: UserListItemData[] = rows.map(({ entries, renderActions, ...item }) => {
+    const sets = item.systemUserSets;
+
+    if (sets && sets.length > 0) {
+      // enrich systemuser set
+      const setData = sets.map((set) => {
+        const setEntriesPackages: ClientAccessEntry[] = set.accessPackages.map((accessPackage) => {
+          const urn = accessPackage.urn;
+          const existingEntry = entries.find(
+            (e) => e.kind === 'package' && e.accessPackage.urn === urn,
+          );
+          if (existingEntry) {
+            return {
+              ...existingEntry,
+              canAct: false,
+            };
+          } else {
+            const accessPackage = getAccessPackageByUrn(urn);
+            // create fake entry for missing access package. Eller skal disse berikes av backend? Det er et begrenset sett
+            return {
+              clientId: item.id,
+              recipient: {
+                id: '',
+                name: '',
+              },
+              roleCode: '',
+              accessId: '',
+              itemId: `generated-${urn}`,
+              kind: 'package',
+              accessPackage: accessPackage!, // TODO: handle missing access package gracefully
+              canAct: false,
+              isMissingRight: true,
+            };
+          }
+        });
+
+        const setEntriesResources: ClientAccessEntry[] = set.resources.map((resource) => {
+          const identifier = resource.refId;
+          const existingEntry = entries.find(
+            (e) => e.kind === 'resource' && e.resource.identifier === identifier,
+          );
+          if (existingEntry) {
+            return {
+              ...existingEntry,
+              canAct: false,
+            };
+          } else {
+            // create fake entry for missing resource
+            return {
+              clientId: item.id,
+              recipient: {
+                id: '',
+                name: '',
+              },
+              roleCode: '',
+              accessId: '',
+              itemId: `generated-${identifier}`,
+              kind: 'resource',
+              resource: resource.details || { identifier: identifier },
+              canAct: false,
+              isMissingRight: true,
+            };
+          }
+        });
+        const setEntries = [...setEntriesPackages, ...setEntriesResources];
+
+        const isMissingRightFromSet = setEntries.some((p) => !p.recipient.id);
+        const item2: { packageId: string; resourceId: string; roleCode: string }[] = setEntries.map(
+          (entry) => ({
+            packageId: entry.kind === 'package' ? entry.accessPackage?.urn || '' : '',
+            resourceId: entry.kind === 'resource' ? entry.resource.identifier : '',
+            roleCode: entry.roleCode,
+          }),
+        );
+
+        return (
+          <div
+            key={set.name}
+            style={{
+              marginBottom: '2rem',
+              padding: '1rem',
+              borderLeft: '4px solid #aaa',
+              boxShadow: '0 0 5px 3px #eee',
+            }}
+          >
+            <DsHeading
+              level={2}
+              data-size='xs'
+            >
+              {set.name}
+            </DsHeading>
+            {isMissingRightFromSet ? null : renderActions?.(item2)}
+            <ClientAccessSections
+              entries={setEntries}
+              emptyText={emptyAccessText}
+            />
+          </div>
+        );
+      });
+
+      return {
+        ...item,
+        children: setData,
+      };
+    }
+    return {
+      ...item,
+      children: (
+        <>
+          {renderActions?.()}
+          <ClientAccessSections
+            entries={entries}
+            emptyText={emptyAccessText}
+          />
+        </>
+      ),
+    };
+  });
 
   return (
     <ClientAccessContext.Provider value={context}>

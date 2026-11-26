@@ -6,6 +6,7 @@ import { useParams } from 'react-router';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import {
   type Agent,
+  type ClientAccess,
   useAddAgentAccessPackagesMutation,
   useAddAgentResourcesMutation,
   useGetAgentsQuery,
@@ -141,9 +142,17 @@ export const ClientDetails = () => {
     removeAgentResources,
   });
   const renderAgentActions = useCallback(
-    (agent: Agent, rowKey: string, restoreFocusFallbackId?: string) => {
+    (
+      agent: Agent,
+      rowKey: string,
+      overrideItems?: ClientAccess[],
+      restoreFocusFallbackId?: string,
+    ) => {
       const agentId = agent.agent.id;
-      const items = bulk.getItems(selectedClient?.access ?? [], agentId);
+      const items = bulk.getItems(
+        overrideItems ? overrideItems : (selectedClient?.access ?? []),
+        agentId,
+      );
       if (items.missing.length === 0 && items.held.length === 0) return null;
       return (
         <ClientBulkActions
