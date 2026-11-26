@@ -63,7 +63,10 @@ export const UserItem = ({
   useRestoreFocusTarget(user.id);
   const childrenToDisplay =
     user.children?.filter(
-      (child) => child.type === PartyType.Person || child.type === PartyType.Organization,
+      (child) =>
+        child.type === PartyType.Person ||
+        child.type === PartyType.Organization ||
+        child.type === PartyType.SystemUser,
     ) || [];
   const hasInheritingUsers = childrenToDisplay.length > 0;
   const [isExpanded, setExpanded] = useState(false);
