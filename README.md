@@ -7,11 +7,11 @@
 
 # Frontend for access management
 
-The code lives in `src/apps/Altinn.AccessManagement.UI`:
+The code lives in `src/apps/Altinn.AMUI`:
 
 - `frontend/`: the React application (a yarn project). Run all `yarn` commands from this folder.
 - `src/`: the BFF (Backend For Frontend), a .NET application. Its tests are in `test/`.
-- `Altinn.AccessManagement.UI.slnx`: the solution file for the BFF.
+- `Altinn.AMUI.slnx`: the solution file for the BFF.
 
 # Setting up your dev-environment 🚀
 
@@ -59,7 +59,7 @@ OBS: Note that overwriting this path in the host file will make you unable to re
 
 ### Step 2: Run the BFF
 
-Open `src/apps/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.slnx` in Visual Studio (or another IDE).
+Open `src/apps/Altinn.AMUI/Altinn.AMUI.slnx` in Visual Studio (or another IDE).
 
 - In Visual Studio, log in with your ai-dev email (the user that has the necessary accesses)
 - Locate the Launch button
@@ -150,7 +150,7 @@ Try running your app again. It should now work correctly on port 443, with nginx
 
 ### Step 3: Run the React application
 
-Pull the newest version of this repo and navigate to `src/apps/Altinn.AccessManagement.UI/frontend`
+Pull the newest version of this repo and navigate to `src/apps/Altinn.AMUI/frontend`
 
 - Run `yarn` to install all necessary dependencies
 - Run `yarn start` to run the application
@@ -198,7 +198,7 @@ It can also help to fully close the browser or open a fresh private/incognito wi
 
 ### 2. Update `appsettings.Development.json`
 
-Temporarily change the following values in `./src/apps/Altinn.AccessManagement.UI/src/Altinn.AccessManagement.UI/appsettings.Development.json`:
+Temporarily change the following values in `./src/apps/Altinn.AMUI/src/Altinn.AMUI/appsettings.Development.json`:
 
 - All `PlatformSettings` URLs from `at22` to `at23`
 - `GeneralSettings.FrontendBaseUrl` from `https://am.ui.at22.altinn.cloud` to `https://am.ui.at23.altinn.cloud`
@@ -274,7 +274,7 @@ Feature flags let us turn functionality on and off per environment without chang
 ### Adding a new feature flag
 
 1. Our flags are defined in the backend repo: add the flag to the `access_management_feature_flags_ui` map in [`infra/deploy/hub/feature_flags.tf`](https://github.com/Altinn/altinn-auth/blob/main/infra/deploy/hub/feature_flags.tf) in [altinn-auth](https://github.com/Altinn/altinn-auth). Terraform creates the flag (disabled) in the App Configuration store for every environment, with the label `{environment}-access-management-ui`. This happens when the "Terraform: Shared" workflow in that repo is run by hand with the `hub` environment. Terraform only owns the flag's existence and description. The on/off state is controlled in the Azure portal.
-2. Add a constant in `Altinn.AccessManagement.UI.Core/Configuration/FeatureFlags.cs`. Flag names use the `AccessManagementUI.` prefix followed by a PascalCase name, e.g. `AccessManagementUI.UseNewSingleRightsClientDelegation`.
+2. Add a constant in `Altinn.AMUI.Core/Configuration/FeatureFlags.cs`. Flag names use the `AccessManagementUI.` prefix followed by a PascalCase name, e.g. `AccessManagementUI.UseNewSingleRightsClientDelegation`.
 3. Add the flag with its default value (usually `false`) to the `FeatureManagement` section in `appsettings.json` and `appsettings.Development.json`.
 4. The flag is automatically exposed to the frontend as `window.featureFlags.<name>`, where `<name>` is the camelCased flag name without the prefix (e.g. `useNewSingleRightsClientDelegation`). Add it to the `featureFlags` type in `frontend/src/global.d.ts` so it can be used with type support.
 5. To read the flag in the BFF, inject `IFeatureManager` and call `IsEnabledAsync(FeatureFlags.YourFlag)`.
@@ -304,7 +304,7 @@ The deploy in charge for the week, deploys the application to a specific environ
 
 ## yarn commands 🧨
 
-Run these from `src/apps/Altinn.AccessManagement.UI/frontend`.
+Run these from `src/apps/Altinn.AMUI/frontend`.
 
 Run `yarn` to setup code.
 
@@ -393,7 +393,7 @@ You can define stories for components by adding a file with the *.stories.tsx ex
 yarn storybook
 ```
 
-This project uses [MSW (Mock Service Worker)](https://mswjs.io/) to mock API requests in Storybook. The mock handlers are defined in [`.mock/handlers.ts`](src/apps/Altinn.AccessManagement.UI/frontend/.mock/handlers.ts) and the worker is set up in [`.mock/browser.ts`](src/apps/Altinn.AccessManagement.UI/frontend/.mock/browser.ts).
+This project uses [MSW (Mock Service Worker)](https://mswjs.io/) to mock API requests in Storybook. The mock handlers are defined in [`.mock/handlers.ts`](src/apps/Altinn.AMUI/frontend/.mock/handlers.ts) and the worker is set up in [`.mock/browser.ts`](src/apps/Altinn.AMUI/frontend/.mock/browser.ts).
 
 ### Documentation: 
 *  For more information on writing stories, see the [Storybook Docs](https://storybook.js.org/docs/react/get-started/introduction).

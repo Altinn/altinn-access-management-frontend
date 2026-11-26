@@ -1,0 +1,112 @@
+using System.Net;
+using Altinn.AMUI.Core.ClientInterfaces;
+using Altinn.AMUI.Core.Models.SystemUser;
+using Altinn.AMUI.Mocks.Utils;
+using Altinn.Authorization.ProblemDetails;
+
+namespace Altinn.AMUI.Mocks.Mocks
+{
+    /// <summary>
+    /// Mock class for <see cref="ISystemUserAgentDelegationClient"></see> interface
+    /// </summary>
+    public class SystemUserAgentDelegationClientMock : ISystemUserAgentDelegationClient
+    {
+        private readonly string dataFolder;
+
+        private readonly Guid regnskapsforerSystemUserId = Guid.Parse("61844188-3789-4b84-9314-2be1fdbc6633");
+        private readonly Guid revisorSystemUserId = Guid.Parse("244c56a5-3737-44ac-8f3b-8697c5e281da");
+        private readonly Guid forretningsforerSystemUserId = Guid.Parse("095b06de-1a93-4320-b572-42d72949cf2c");
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SystemUserAgentDelegationClientMock"/> class
+        /// </summary>
+        public SystemUserAgentDelegationClientMock()
+        {
+            dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserClientMock).Assembly.Location).LocalPath), "Data");
+        }
+
+        public Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid facilitatorId, Guid systemUserGuid, CancellationToken cancellationToken)
+        {
+            string jsonFile = null;
+            if (systemUserGuid == regnskapsforerSystemUserId)
+            {
+                jsonFile = "regnskapsforerAgentDelegations.json";
+            }
+            else if (systemUserGuid == revisorSystemUserId)
+            {
+                jsonFile = "revisorAgentDelegations.json";
+            }
+            else if (systemUserGuid == forretningsforerSystemUserId)
+            {
+                jsonFile = "forretningsforerAgentDelegations.json";
+            }
+
+            if (jsonFile != null)
+            {
+                List<AgentDelegation> delegations = Util.GetMockData<List<AgentDelegation>>($"{dataFolder}/SystemUser/{jsonFile}");
+                return Task.FromResult(delegations);
+            }
+
+            return Task.FromResult(new List<AgentDelegation>());
+        }
+
+        public Task<Result<List<AgentDelegation>>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        {
+            if (delegationRequest.CustomerId.Equals(Guid.Parse("82cc64c5-60ff-4184-8c07-964c3a1e6fc7")))
+            {
+                return Task.FromResult(new Result<List<AgentDelegation>>(TestErrors.CustomerNotFound));
+            }
+            return Task.FromResult(new Result<List<AgentDelegation>>([new AgentDelegation()
+            {
+                DelegationId = Guid.NewGuid(),
+                AgentSystemUserId = systemUserGuid,
+                CustomerId = delegationRequest.CustomerId
+            }]));
+        }
+
+        public Task<Result<bool>> RemoveClient(int partyId, Guid systemUserGuid, Guid facilitatorId, Guid clientId, CancellationToken cancellationToken)
+        {
+            if (clientId.Equals(Guid.Parse("60f1ade9-ed48-4083-a369-178d45d6ffd1")))
+            {
+                return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
+            }
+            return Task.FromResult(new Result<bool>(true));
+        }
+
+        public Task<Result<bool>> AddSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            if (new List<Guid> { regnskapsforerSystemUserId, revisorSystemUserId, forretningsforerSystemUserId }.Contains(systemUserGuid))
+            {
+                return Task.FromResult(new Result<bool>(true));
+            }
+            return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
+        }
+
+        public Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            if (new List<Guid> { regnskapsforerSystemUserId, revisorSystemUserId, forretningsforerSystemUserId }.Contains(systemUserGuid))
+            {
+                return Task.FromResult(new Result<bool>(true));
+            }
+            return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
+        }
+
+        public Task<Result<bool>> IsSelfAdded(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            if (new List<Guid> { regnskapsforerSystemUserId, revisorSystemUserId, forretningsforerSystemUserId }.Contains(systemUserGuid))
+            {
+                return Task.FromResult(new Result<bool>(true));
+            }
+            return Task.FromResult(new Result<bool>(TestErrors.CustomerNotFound));
+        }
+
+        internal static class TestErrors
+        {
+            private static readonly ProblemDescriptorFactory _factory
+                = ProblemDescriptorFactory.New("AUTH");
+
+            public static ProblemDescriptor CustomerNotFound { get; }
+                = _factory.Create(10, HttpStatusCode.NotFound, "Customer not found");
+        }
+    }
+}

@@ -1,0 +1,40 @@
+namespace Altinn.AMUI.Core.Configuration
+{
+    /// <summary>
+    /// General configuration settings
+    /// </summary>
+    public class GeneralSettings
+    {
+        /// <summary>
+        /// Gets or sets the access management ui base url.
+        /// </summary>
+        public string FrontendBaseUrl { get; set; }
+
+        /// <summary>
+        /// Gets or sets the host name.
+        /// </summary>
+        public string Hostname { get; set; }
+
+        /// <summary>
+        /// Option to disable csrf check
+        /// </summary>
+        public bool DisableCsrfCheck { get; set; }
+
+        /// <summary>
+        /// Language cookie name
+        /// </summary>
+        public string LanguageCookie { get; set; }
+
+        /// <summary>
+        /// Apex domains permitted as redirect targets after a reportee change. A target host is allowed
+        /// if it equals one of these values or ends with ".{value}".
+        /// </summary>
+        public List<string> AllowedRedirectDomains { get; set; } = new List<string>();
+
+        /// <summary>
+        /// Exact host names where the user keeps their session when redirected after a consent request.
+        /// Redirects to any other host log the user out first.
+        /// </summary>
+        public List<string> KeepSessionRedirectHosts { get; set; } = new List<string>();
+    }
+}

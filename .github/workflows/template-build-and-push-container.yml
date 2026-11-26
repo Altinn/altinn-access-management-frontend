@@ -33,7 +33,7 @@ jobs:
         name: Build and Push Docker image
         with:
           context: .
-          file: src/apps/Altinn.AccessManagement.UI/Dockerfile
+          file: src/apps/Altinn.AMUI/Dockerfile
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.tag }}
   

@@ -1,0 +1,241 @@
+using Altinn.AMUI.Core.Configuration;
+using Altinn.AMUI.Core.Helpers;
+using Altinn.AMUI.Core.Models.Consent;
+using Altinn.AMUI.Core.Models.Consent.Frontend;
+using Altinn.AMUI.Core.Services.Interfaces;
+using Altinn.AMUI.Filters;
+using Altinn.AMUI.Integration.Configuration;
+using Altinn.Authorization.ProblemDetails;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+
+namespace Altinn.AMUI.Controllers
+{
+    /// <summary>
+    /// API for Consent Integrations, both request and history
+    /// </summary>
+    [Route("accessmanagement/api/v1/consent")]
+    [ApiController]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
+    public class ConsentController : ControllerBase
+    {
+        private readonly IConsentService _consentService;
+        private readonly IOptions<PlatformSettings> _platformSettings;
+        private readonly IOptions<GeneralSettings> _generalSettings;
+        private readonly IEncryptionService _encryptionService;
+
+        /// <summary>
+        /// Constructor for <see cref="ConsentController"/>
+        /// </summary>
+        public ConsentController(
+            IConsentService consentService,
+            IOptions<PlatformSettings> platformSettings,
+            IOptions<GeneralSettings> generalSettings,
+            IEncryptionService encryptionService)
+        {
+            _consentService = consentService;
+            _platformSettings = platformSettings;
+            _generalSettings = generalSettings;
+            _encryptionService = encryptionService;
+        }
+
+        /// <summary>
+        /// Get a consent request by id
+        /// </summary>
+        /// <param name="consentRequestId">Consent request to get</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("request/{consentRequestId}")]
+        public async Task<ActionResult> GetConsentRequest([FromRoute] Guid consentRequestId, CancellationToken cancellationToken)
+        {
+            Result<ConsentRequestFE> consentRequest = await _consentService.GetConsentRequest(consentRequestId, cancellationToken);
+
+            if (consentRequest.IsProblem)
+            {
+                return consentRequest.Problem.ToActionResult();
+            }
+
+            return Ok(consentRequest.Value);
+        }
+
+        /// <summary>
+        /// Approve consent request
+        /// </summary>
+        /// <param name="consentRequestId">Consent request to approve</param>
+        /// <param name="context">Context when approving</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("request/{consentRequestId}/approve")]
+        public async Task<ActionResult> ApproveConsent([FromRoute] Guid consentRequestId, ApproveConsentContext context, CancellationToken cancellationToken)
+        {
+            Result<bool> approveResponse = await _consentService.ApproveConsentRequest(consentRequestId, context, cancellationToken);
+
+            if (approveResponse.IsProblem)
+            {
+                return approveResponse.Problem.ToActionResult();
+            }
+
+            return Ok(approveResponse.Value);
+        }
+
+        /// <summary>
+        /// Reject consent request
+        /// </summary>
+        /// <param name="consentRequestId">Consent request to reject</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("request/{consentRequestId}/reject")]
+        public async Task<ActionResult> RejectConsent([FromRoute] Guid consentRequestId, CancellationToken cancellationToken)
+        {
+            Result<bool> rejectResponse = await _consentService.RejectConsentRequest(consentRequestId, cancellationToken);
+
+            if (rejectResponse.IsProblem)
+            {
+                return rejectResponse.Problem.ToActionResult();
+            }
+
+            return Ok(rejectResponse.Value);
+        }
+
+        /// <summary>
+        /// Get count of consents for a party filtered by status
+        /// </summary>
+        /// <param name="party">Id of party to count consents for</param>
+        /// <param name="status">Status to filter by</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("count/{party}")]
+        public async Task<ActionResult> GetConsentRequestCount([FromRoute] Guid party, [FromQuery] ConsentRequestStatusType status, CancellationToken cancellationToken)
+        {
+            Result<int> count = await _consentService.GetConsentRequestCount(party, status, cancellationToken);
+
+            if (count.IsProblem)
+            {
+                return count.Problem.ToActionResult();
+            }
+
+            return Ok(count.Value);
+        }
+
+        /// <summary>
+        /// Get active consents
+        /// </summary>
+        /// <param name="party">Id of party to get active consents for</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("active/{party}")]
+        public async Task<ActionResult> GetActiveConsents([FromRoute] Guid party, CancellationToken cancellationToken)
+        {
+            Result<List<ActiveConsentItemFE>> activeConsents = await _consentService.GetActiveConsents(party, cancellationToken);
+
+            if (activeConsents.IsProblem)
+            {
+                return activeConsents.Problem.ToActionResult();
+            }
+
+            return Ok(activeConsents.Value);
+        }
+
+        /// <summary>
+        /// Gets consent history
+        /// </summary>
+        /// <param name="party">Id of party to get consent history for</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("log/{party}")]
+        public async Task<ActionResult> GetConsentLog([FromRoute] Guid party, CancellationToken cancellationToken)
+        {
+            Result<List<ConsentLogItemFE>> consentLog = await _consentService.GetConsentLog(party, cancellationToken);
+
+            if (consentLog.IsProblem)
+            {
+                return consentLog.Problem.ToActionResult();
+            }
+
+            return Ok(consentLog.Value);
+        }
+
+        /// <summary>
+        /// Get a consent request by id
+        /// </summary>
+        /// <param name="consentId">Id of consent to get </param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("{consentId}")]
+        public async Task<ActionResult> GetConsent([FromRoute] Guid consentId, CancellationToken cancellationToken)
+        {
+            Result<ConsentFE> consent = await _consentService.GetConsent(consentId, cancellationToken);
+
+            if (consent.IsProblem)
+            {
+                return consent.Problem.ToActionResult();
+            }
+
+            return Ok(consent.Value);
+        }
+
+        /// <summary>
+        /// Revoke consent
+        /// </summary>
+        /// <param name="consentId">Consent to revoke</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpPost("{consentId}/revoke")]
+        public async Task<ActionResult> RevokeConsent([FromRoute] Guid consentId, CancellationToken cancellationToken)
+        {
+            Result<bool> revokeResponse = await _consentService.RevokeConsent(consentId, cancellationToken);
+
+            if (revokeResponse.IsProblem)
+            {
+                return revokeResponse.Problem.ToActionResult();
+            }
+
+            return Ok(revokeResponse.Value);
+        }
+
+        /// <summary>
+        /// Logout after user acccepts or rejects consent
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("request/{consentRequestId}/logout")]
+        public async Task<IActionResult> Logout(Guid consentRequestId, CancellationToken cancellationToken)
+        {
+            CookieOptions cookieOptions = new()
+            {
+                Domain = _generalSettings.Value.Hostname,
+                HttpOnly = true,
+                Secure = true,
+                IsEssential = true,
+                SameSite = SameSiteMode.Lax
+            };
+
+            Result<string> redirectUrlResponse = await _consentService.GetConsentRequestRedirectUrl(consentRequestId, cancellationToken);
+
+            if (redirectUrlResponse.IsSuccess)
+            {
+                // do not log out user if redirect url is an allowed Altinn host (e.g. Arbeidsflate)
+                if (RedirectUrlUtils.IsAllowedHost(redirectUrlResponse.Value, _generalSettings.Value.KeepSessionRedirectHosts))
+                {
+                    return Redirect(redirectUrlResponse.Value);
+                }
+
+                // store encrypted redirect url in cookie
+                string encryptedUrl = await _encryptionService.EncryptText(redirectUrlResponse.Value);
+                HttpContext.Response.Cookies.Append(_platformSettings.Value.AltinnLogoutInfoCookieName, $"amSafeRedirectUrl={encryptedUrl}", cookieOptions);
+            }
+
+            string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
+            return Redirect(logoutUrl);
+        }
+    }
+}

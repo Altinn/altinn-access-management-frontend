@@ -6,17 +6,17 @@ on:
     branches: [ main ]
     paths:
       - .repo.jsonc
-      - Altinn.AccessManagement.UI.slnx
-      - src/apps/Altinn.AccessManagement.UI/**
-      - '!src/apps/Altinn.AccessManagement.UI/frontend/**'
+      - Altinn.AMUI.slnx
+      - src/apps/Altinn.AMUI/**
+      - '!src/apps/Altinn.AMUI/frontend/**'
 
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
       - .repo.jsonc
-      - Altinn.AccessManagement.UI.slnx
-      - src/apps/Altinn.AccessManagement.UI/**
-      - '!src/apps/Altinn.AccessManagement.UI/frontend/**'
+      - Altinn.AMUI.slnx
+      - src/apps/Altinn.AMUI/**
+      - '!src/apps/Altinn.AMUI/frontend/**'
 
 jobs:
   ci:

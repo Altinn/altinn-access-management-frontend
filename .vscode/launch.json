@@ -2,10 +2,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "C#: Altinn.AccessManagement.UI[LocalDev_5000] Debug",
+      "name": "C#: Altinn.AMUI[LocalDev_5000] Debug",
       "type": "dotnet",
       "request": "launch",
-      "projectPath": "${workspaceFolder}/src/apps/Altinn.AccessManagement.UI/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.csproj",
+      "projectPath": "${workspaceFolder}/src/apps/Altinn.AMUI/src/Altinn.AMUI/Altinn.AMUI.csproj",
       "preLaunchTask": "build"
     },
     {
@@ -13,7 +13,7 @@
       "request": "launch",
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:8080",
-      "webRoot": "${workspaceFolder}/src/apps/Altinn.AccessManagement.UI/frontend"
+      "webRoot": "${workspaceFolder}/src/apps/Altinn.AMUI/frontend"
     }
   ]
 }

@@ -1,0 +1,65 @@
+﻿using Altinn.AMUI.Core.Models;
+using Altinn.AMUI.Core.Models.AccessManagement;
+using Altinn.AMUI.Core.Models.Common.Frontend;
+using Altinn.AMUI.Core.Models.Profile;
+using Altinn.AMUI.Core.Models.User;
+
+namespace Altinn.AMUI.Core.Services.Interfaces
+{
+    /// <summary>
+    /// Service for delegations
+    /// </summary>
+    public interface IUserService
+    {
+        /// <summary>
+        /// Gets the user's preferences from altinn profile
+        /// </summary>
+        /// <param name="userId">Id of user</param>
+        /// <returns>users preferred settings</returns>
+        Task<UserProfileFE> GetUserProfile(int userId);
+
+        /// <summary>
+        /// Updates the current user's profile settings in altinn profile
+        /// </summary>
+        /// <param name="shouldShowDeletedEntities">The new value of the field in the profile settings</param>
+        /// <returns>users new profile preferences</returns>
+        Task<ProfileSettingPreference> SetShowDeletedProfileSetting(bool shouldShowDeletedEntities);
+
+        /// <summary>
+        /// Updates the current user's language preference in altinn profile
+        /// </summary>
+        /// <param name="languageCode">Frontend standard language code (e.g. "no_nb", "no_nn", "en")</param>
+        Task SetLanguageProfileSetting(string languageCode);
+
+        /// <summary>
+        /// Gets a Party based on partyUuid if the party is in the users reporteelist
+        /// </summary>
+        /// <param name="partyUuid">The party UUID of the party to retrieve</param>
+        /// <returns>Party that corresponds to partyUuid parameter if it's in the users reporteelist</returns>
+        Task<AuthorizedPartyFE> GetPartyFromReporteeListIfExists(Guid partyUuid);
+
+        /// <summary>
+        /// Endpoint for reportees the authenticated user can act on behalf of
+        /// </summary>
+        /// <returns>List of reportees</returns>
+        Task<List<AuthorizedParty>> GetReporteeListForUser();
+
+        /// <summary>
+        /// Function for getting the favorite actors of the authenticated user
+        /// </summary>
+        /// <returns>List of partyUuids</returns>
+        Task<List<string>> GetFavoriteActorUuids();
+
+        /// <summary>
+        /// Adds a partyUuid to the user's favorite profile group in altinn profile
+        /// </summary>
+        /// <returns></returns>
+        Task AddPartyUuidToFavorites(Guid partyUuid);
+
+        /// <summary>
+        /// Deletes a partyUuid from the user's favorite profile group in altinn profile
+        /// </summary>
+        /// <returns></returns>
+        Task DeletePartyUuidFromFavorites(Guid partyUuid);
+    }
+}

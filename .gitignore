@@ -358,7 +358,7 @@ MigrationBackup/
 
 # Tracked test data and certificates that the Visual Studio rules above would ignore
 !**/Data/**/[Pp]ackages/*
-!src/apps/Altinn.AccessManagement.UI/test/Altinn.AccessManagement.UI.Tests/*.pfx
+!src/apps/Altinn.AMUI/test/Altinn.AMUI.Tests/*.pfx
 
 # Claude Code
 .claude/

@@ -1,0 +1,278 @@
+using Altinn.AMUI.Core.ClientInterfaces;
+using Altinn.AMUI.Core.Enums;
+using Altinn.AMUI.Core.Exceptions;
+using Altinn.AMUI.Core.Helpers;
+using Altinn.AMUI.Core.Models.AccessPackage;
+using Altinn.AMUI.Core.Models.AccessPackage.Frontend;
+using Altinn.AMUI.Core.Models.Common;
+using Altinn.AMUI.Core.Models.Common.Frontend;
+using Altinn.AMUI.Core.Models.Request;
+using Altinn.AMUI.Core.Models.Request.Frontend;
+using Altinn.AMUI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AMUI.Core.Services.Interfaces;
+
+namespace Altinn.AMUI.Core.Services
+{
+    /// <inheritdoc />
+    public class RequestService : IRequestService
+    {
+        private readonly IRequestClient _requestClient;
+        private readonly IAccessPackageClient _accessPackageClient;
+        private readonly ResourceHelper _resourceHelper;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestService"/> class.
+        /// </summary>
+        /// <param name="requestClient">The request client.</param>
+        /// <param name="accessPackageClient">The access package client.</param>
+        /// <param name="resourceHelper">The resource helper.</param>
+        public RequestService(IRequestClient requestClient, IAccessPackageClient accessPackageClient, ResourceHelper resourceHelper)
+        {
+            _requestClient = requestClient;
+            _accessPackageClient = accessPackageClient;
+            _resourceHelper = resourceHelper;
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<RequestFE>> GetSentRequests(Guid party, Guid? to, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        {
+            PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, type, cancellationToken);
+
+            // filter approved and handled requests which are older than one year
+            return RemoveHandledItemsOlderThanOneYear(response).Select(MapToRequestFE);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedSentResourceRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
+        {
+            PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "resource", cancellationToken);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), languageCode);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<RequestFE>> GetReceivedRequests(Guid party, Guid? from, List<RequestStatus> status, string type, CancellationToken cancellationToken)
+        {
+            PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, type, cancellationToken);
+
+            // filter approved and handled requests which are older than one year
+            return RemoveHandledItemsOlderThanOneYear(response).Select(MapToRequestFE);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<EnrichedResourceRequest>> GetEnrichedReceivedResourceRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
+        {
+            PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "resource", cancellationToken);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedResourceRequestList(RemoveHandledItemsOlderThanOneYear(response), languageCode);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedSentPackageRequests(Guid party, Guid? to, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
+        {
+            PaginatedResult<Request> response = await _requestClient.GetSentRequests(party, to, status, "package", cancellationToken);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), languageCode);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<EnrichedPackageRequest>> GetEnrichedReceivedPackageRequests(Guid party, Guid? from, List<RequestStatus> status, string languageCode, CancellationToken cancellationToken)
+        {
+            PaginatedResult<Request> response = await _requestClient.GetReceivedRequests(party, from, status, "package", cancellationToken);
+
+            // filter handled requests which are older than one year, so the modal matches the list
+            return await MapToEnrichedPackageRequestList(RemoveHandledItemsOlderThanOneYear(response), languageCode);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> GetRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            Request response = await _requestClient.GetRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> GetDraftRequest(Guid id, string languageCode, CancellationToken cancellationToken)
+        {
+            Request response = await _requestClient.GetDraftRequest(id, cancellationToken);
+            if (response.Type == "package")
+            {
+                return (await MapToEnrichedPackageRequestList(new[] { response }, languageCode)).First();
+            }
+
+            return (await MapToEnrichedResourceRequestList(new[] { response }, languageCode)).First();
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> CreateResourceRequest(Guid party, Guid to, string resource, CancellationToken cancellationToken)
+        {
+            Request response = await _requestClient.CreateResourceRequest(party, to, resource, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> CreatePackageRequest(Guid party, Guid to, string package, CancellationToken cancellationToken)
+        {
+            Request response = await _requestClient.CreatePackageRequest(party, to, package, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> WithdrawRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            Request response = await _requestClient.WithdrawRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> ConfirmRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            Request response = await _requestClient.ConfirmRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> RejectRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            Request response = await _requestClient.RejectRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<RequestFE> ApproveRequest(Guid party, Guid id, CancellationToken cancellationToken)
+        {
+            Request response = await _requestClient.ApproveRequest(party, id, cancellationToken);
+            return MapToRequestFE(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<int> GetSentRequestsCount(Guid party, Guid? to, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            return await _requestClient.GetSentRequestsCount(party, to, status, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<int> GetReceivedRequestsCount(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            return await _requestClient.GetReceivedRequestsCount(party, from, status, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<ReceivedRequestCountSubunitFE>> GetReceivedRequestsCountForSubunits(Guid party, Guid? from, List<RequestStatus> status, CancellationToken cancellationToken)
+        {
+            List<ReceivedRequestCountSubunit> response = await _requestClient.GetReceivedRequestsCountForSubunits(party, from, status, cancellationToken);
+            return response.Select(x => new ReceivedRequestCountSubunitFE()
+            {
+                Party = PartyFE.FromEntity(x.Party),
+                Count = x.Count
+            });
+        }
+
+        private static RequestFE MapToRequestFE(Request x)
+        {
+            return new RequestFE()
+            {
+                Id = x.Id,
+                From = PartyFE.FromEntity(x.From),
+                To = PartyFE.FromEntity(x.To),
+                Type = x.Type,
+                Status = x.Status,
+                ResourceId = x.Resource?.ReferenceId,
+                PackageId = x.Package?.ReferenceId,
+                LastUpdated = x.LastUpdated,
+                LastUpdatedByName = x.LastUpdatedBy?.Name
+            };
+        }
+
+        private async Task<IEnumerable<EnrichedResourceRequest>> MapToEnrichedResourceRequestList(IEnumerable<Request> list, string languageCode)
+        {
+            Dictionary<string, ServiceResourceFE> resourceDictionary = [];
+            var uniqueResourceIds = list
+                .Select(x => x.Resource.ReferenceId)
+                .Distinct();
+            var resources = await _resourceHelper.EnrichResources(uniqueResourceIds, languageCode);
+            resourceDictionary = resources.ToDictionary(r => r.Identifier);
+
+            return list.Select(x =>
+            {
+                RequestFE request = MapToRequestFE(x);
+
+                if (!resourceDictionary.TryGetValue(request.ResourceId, out var resource))
+                {
+                    throw new ResourceNotFoundException($"Resource not found for ID: {request.ResourceId}");
+                }
+
+                return new EnrichedResourceRequest()
+                {
+                    Id = request.Id,
+                    From = request.From,
+                    To = request.To,
+                    Type = request.Type,
+                    Status = request.Status,
+                    ResourceId = request.ResourceId,
+                    LastUpdated = request.LastUpdated,
+                    LastUpdatedByName = request.LastUpdatedByName ?? string.Empty,
+                    Resource = resource
+                };
+            }).ToList();
+        }
+
+        private async Task<IEnumerable<EnrichedPackageRequest>> MapToEnrichedPackageRequestList(IEnumerable<Request> list, string languageCode)
+        {
+            List<AccessPackage> packages = [];
+            var uniquePackageIds = list
+                .Select(x => x.Package.Id)
+                .Distinct();
+
+            foreach (var packageId in uniquePackageIds)
+            {
+                var package = await _accessPackageClient.GetAccessPackageById(languageCode, packageId);
+                if (package == null)
+                {
+                    throw new ResourceNotFoundException($"Access package not found for ID: {packageId}");
+                }
+
+                packages.Add(package);
+            }
+
+            Dictionary<Guid, AccessPackageFE> packageDictionary = (await _resourceHelper.MapToAccessPackagesFE(packages))
+                .ToDictionary(package => Guid.Parse(package.Id));
+
+            return list.Select(x =>
+            {
+                RequestFE request = MapToRequestFE(x);
+                var packageId = x.Package.Id;
+
+                if (!packageDictionary.TryGetValue(packageId, out var package))
+                {
+                    throw new ResourceNotFoundException($"Access package not found for ID: {packageId}");
+                }
+
+                return new EnrichedPackageRequest()
+                {
+                    Id = request.Id,
+                    From = request.From,
+                    To = request.To,
+                    Type = request.Type,
+                    Status = request.Status,
+                    PackageId = request.PackageId,
+                    LastUpdated = request.LastUpdated,
+                    LastUpdatedByName = request.LastUpdatedByName ?? string.Empty,
+                    Package = package
+                };
+            }).ToList();
+        }
+
+        private static IEnumerable<Request> RemoveHandledItemsOlderThanOneYear(PaginatedResult<Request> requests)
+        {
+            return requests.Items.Where(item =>
+            {
+                bool isHandled = item.Status is RequestStatus.Approved or RequestStatus.Rejected;
+                return !isHandled || item.LastUpdated > DateTimeOffset.UtcNow.AddYears(-1);
+            });
+        }
+    }
+}

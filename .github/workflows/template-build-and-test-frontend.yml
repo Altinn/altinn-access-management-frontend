@@ -9,7 +9,7 @@ jobs:
     name: Test & Build
     defaults:
       run:
-        working-directory: src/apps/Altinn.AccessManagement.UI/frontend
+        working-directory: src/apps/Altinn.AMUI/frontend
     steps:
       - name: checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7

@@ -1,0 +1,52 @@
+using Altinn.AMUI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AMUI.Core.Models.SingleRight.Frontend;
+
+namespace Altinn.AMUI.Core.Models.InstanceDelegation.Frontend
+{
+    /// <summary>
+    /// An instance with the rights delegated on it, as sent to the frontend
+    /// </summary>
+    public class InstanceRightsFE
+    {
+        /// <summary>
+        /// Gets or sets the resource
+        /// </summary>
+        public ServiceResourceFE Resource { get; set; }
+
+        /// <summary>
+        /// Gets or sets the delegated instance
+        /// </summary>
+        public DelegationInstance Instance { get; set; }
+
+        /// <summary>
+        /// Gets or sets the direct rights for the instance
+        /// </summary>
+        public List<RightAccessFE> DirectRights { get; set; } = new();
+
+        /// <summary>
+        /// Gets or sets the indirect rights for the instance
+        /// </summary>
+        public List<RightAccessFE> IndirectRights { get; set; } = new();
+
+        /// <summary>
+        /// Maps instance rights from the access management instance endpoints
+        /// </summary>
+        /// <param name="instanceRights">The instance rights from Access Management</param>
+        /// <param name="resource">The resource, already mapped to the frontend model</param>
+        public static InstanceRightsFE FromInstanceRights(InstanceRights instanceRights, ServiceResourceFE resource)
+        {
+            if (instanceRights == null)
+            {
+                return null;
+            }
+
+            return new InstanceRightsFE
+            {
+                Resource = resource,
+                Instance = instanceRights.Instance,
+                DirectRights = RightAccessFE.FromRightAccesses(instanceRights.DirectRights),
+                IndirectRights = RightAccessFE.FromRightAccesses(instanceRights.IndirectRights),
+            };
+        }
+    }
+}

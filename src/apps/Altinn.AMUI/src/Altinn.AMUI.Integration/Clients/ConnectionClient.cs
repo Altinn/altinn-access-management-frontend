@@ -1,0 +1,143 @@
+﻿using System.Net;
+using System.Text;
+using System.Text.Json;
+using Altinn.AMUI.Core.ClientInterfaces;
+using Altinn.AMUI.Core.Extensions;
+using Altinn.AMUI.Core.Helpers;
+using Altinn.AMUI.Core.Models.Common;
+using Altinn.AMUI.Core.Models.Connections;
+using Altinn.AMUI.Core.Models.User;
+using Altinn.AMUI.Core.Services.Interfaces;
+using Altinn.AMUI.Integration.Configuration;
+using Altinn.AMUI.Integration.Util;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+namespace Altinn.AMUI.Integration.Clients
+{
+    /// <summary>
+    /// Client for interacting with Access packages
+    /// </summary>
+    public class ConnectionClient : IConnectionClient
+    {
+        private readonly ILogger _logger;
+        private readonly HttpClient _client;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly PlatformSettings _platformSettings;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccessPackageClient"/> class
+        /// </summary>
+        /// <param name="httpClient">the handler for httpclient service</param>
+        /// <param name="logger">the handler for logger service</param>
+        /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
+        /// <param name="platformSettings"> platform settings configuration</param>
+        public ConnectionClient(
+            HttpClient httpClient,
+            ILogger<ConnectionClient> logger,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<PlatformSettings> platformSettings)
+        {
+            _logger = logger;
+            _platformSettings = platformSettings.Value;
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint + "v1/");
+            httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
+            _client = httpClient;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        /// <inheritdoc />
+        public async Task<Guid> PostNewRightHolderConnection(Guid party, Guid? to, PersonInput personInput = null, CancellationToken cancellationToken = default)
+        {
+            string endpointUrl = $"enduser/connections?party={party}&from={party}" + (to != null ? $"&to={to}" : string.Empty);
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            StringContent requestBody = personInput != null ? new StringContent(JsonSerializer.Serialize(personInput, _serializerOptions), Encoding.UTF8, "application/json") : null;
+
+            var httpResponse = await _client.PostAsync(token, endpointUrl, requestBody);
+
+            var content = await httpResponse.Content.ReadAsStringAsync();
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Unexpected http response. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+            }
+
+            AddConnectionResponse response = JsonSerializer.Deserialize<AddConnectionResponse>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            return response.ToId;
+        }
+
+        /// <inheritdoc/>
+        public async Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to)
+        {
+            string endpointUrl = $"enduser/connections?party={party}&from={from}&to={to}&cascade=true";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            var httpResponse = await _client.DeleteAsync(token, endpointUrl);
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                _logger.LogError($"Unexpected http response. Status code: {httpResponse.StatusCode}, Reason: {httpResponse.ReasonPhrase}");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+            }
+
+            return httpResponse;
+        }
+
+        /// <inheritdoc />
+        public async Task<List<Connection>> GetConnections(
+            Guid party,
+            Guid? from,
+            Guid? to,
+            bool includeClientDelegations = true,
+            bool includeAgentConnections = true)
+        {
+            var endpointBuilder = new System.Text.StringBuilder($"enduser/connections?party={party}&from={from?.ToString() ?? string.Empty}&to={to?.ToString() ?? string.Empty}");
+            endpointBuilder.Append($"&includeClientDelegations={includeClientDelegations.ToString().ToLowerInvariant()}");
+            endpointBuilder.Append($"&includeAgentConnections={includeAgentConnections.ToString().ToLowerInvariant()}");
+
+            string endpointUrl = endpointBuilder.ToString();
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            try
+            {
+                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                if (!httpResponse.IsSuccessStatusCode)
+                {
+                    throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
+                }
+
+                string content = await httpResponse.Content.ReadAsStringAsync();
+                PaginatedResult<Connection> rightHolders = JsonSerializer.Deserialize<PaginatedResult<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                return rightHolders.Items.ToList();
+            }
+            catch (HttpStatusException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while getting right holders");
+                throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", HttpStatusCode.InternalServerError, null, ex.Message);
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party)
+        {
+            string endpointUrl = $"enduser/connections/users?party={party}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            var httpResponse = await _client.GetAsync(token, endpointUrl);
+            PaginatedResult<SimplifiedConnection> result =
+                await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<SimplifiedConnection>>(
+                    httpResponse,
+                    _logger,
+                    "ConnectionClient // GetSimplifiedConnections");
+            return result?.Items?.ToList() ?? [];
+        }
+    }
+}
