@@ -18,13 +18,15 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">Optional right owner filter.</param>
         /// <param name="to">Optional right holder filter.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<List<RolePermissionFE>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode);
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task<List<RolePermissionFE>> GetRolePermissions(Guid party, Guid? from, Guid? to, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets metadata for all roles.
         /// </summary>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode);
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task<IEnumerable<RoleMetadata>> GetAllRoles(string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets package metadata for a role.
@@ -33,7 +35,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="variant">Optional variant filter.</param>
         /// <param name="includeResources">Whether to include resources for each package.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<IEnumerable<AccessPackageFE>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode);
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task<IEnumerable<AccessPackageFE>> GetRolePackages(string roleCode, string variant, bool includeResources, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Gets resource metadata for a role.
@@ -42,7 +45,8 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="variant">Optional variant filter.</param>
         /// <param name="includePackageResources">Whether to include resources assigned via packages.</param>
         /// <param name="languageCode">Language code for localization.</param>
-        Task<IEnumerable<ServiceResourceFE>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode);
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task<IEnumerable<ServiceResourceFE>> GetRoleResources(string roleCode, string variant, bool includePackageResources, string languageCode, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes an Altinn 2 role assignment between two parties.
@@ -51,6 +55,7 @@ namespace Altinn.AccessManagement.UI.Core.Services.Interfaces
         /// <param name="from">The right owner (the party that has the role).</param>
         /// <param name="to">The right holder (the party the role is assigned to).</param>
         /// <param name="roleCode">The role code to remove.</param>
-        Task RemoveRole(Guid party, Guid from, Guid to, string roleCode);
+        /// <param name="cancellationToken">Cancellation token.</param>
+        Task RemoveRole(Guid party, Guid from, Guid to, string roleCode, CancellationToken cancellationToken = default);
     }
 }
