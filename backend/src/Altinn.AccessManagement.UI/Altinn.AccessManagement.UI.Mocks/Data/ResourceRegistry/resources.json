@@ -1217,5 +1217,95 @@
         "nn": "Testdepartementet"
       }
     }
+  },
+  {
+    "title": {
+      "en": "Claims and payments",
+      "nb": "Krav og betalinger",
+      "nn": "Krav og betalinger"
+    },
+    "sector": null,
+    "status": null,
+    "homepage": null,
+    "keywords": null,
+    "identifier": "ske-krav-og-betalinger",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": {
+      "en": "Claims and payments",
+      "nb": "Krav og betalinger",
+      "nn": "Krav og betalinger"
+    },
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": {
+      "en": "Grants access to claims and payments.",
+      "nb": "Gir tilgang til krav og betalinger.",
+      "nn": "Gir tilgang til krav og betalingar."
+    },
+    "resourceReferences": [],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "974760746",
+      "name": {
+        "en": "Testdepartementet",
+        "nb": "Testdepartementet",
+        "nn": "Testdepartementet"
+      }
+    }
+  },
+  {
+    "title": {
+      "en": "Neighbour notice",
+      "nb": "Nabovarsel",
+      "nn": "Nabovarsel"
+    },
+    "sector": null,
+    "status": null,
+    "homepage": null,
+    "keywords": null,
+    "identifier": "app_dibk_nabovarsel-v5",
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "visible": true,
+    "delegable": true,
+    "description": {
+      "en": "Neighbour notice",
+      "nb": "Nabovarsel",
+      "nn": "Nabovarsel"
+    },
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": {
+      "en": "Grants access to neighbour notices.",
+      "nb": "Gir tilgang til nabovarsel.",
+      "nn": "Gir tilgang til nabovarsel."
+    },
+    "resourceReferences": [],
+    "hasCompetentAuthority": {
+      "orgcode": "TTD",
+      "organization": "974760746",
+      "name": {
+        "en": "Testdepartementet",
+        "nb": "Testdepartementet",
+        "nn": "Testdepartementet"
+      }
+    }
   }
 ]

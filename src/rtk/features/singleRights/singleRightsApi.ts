@@ -4,6 +4,7 @@ import { createBaseQuery } from '@/rtk/app/baseQuery';
 import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type { DelegationResult } from '@/dataObjects/dtos/resourceDelegation';
 import type { Permissions, Reason } from '@/dataObjects/dtos/accessPackage';
+import type { PartyType } from '@/dataObjects/dtos/Party';
 
 interface PaginatedListDTO {
   page: number;
@@ -56,6 +57,7 @@ interface searchParams {
   page: number;
   resultsPerPage: number;
   includeExpired?: boolean;
+  fromPartyType?: PartyType;
 }
 
 export interface DelegationCheckedRight {
@@ -75,6 +77,7 @@ const buildResourceSearchUrl = ({
   page,
   resultsPerPage,
   includeExpired,
+  fromPartyType,
 }: searchParams): string => {
   let filterParams = '';
   for (const filter of ROfilters) {
@@ -83,6 +86,9 @@ const buildResourceSearchUrl = ({
   if (includeExpired) {
     // Default is to not include expired apps, so only add param if true
     filterParams = filterParams + `&includeExpired=true`;
+  }
+  if (fromPartyType) {
+    filterParams = filterParams + `&fromPartyType=${fromPartyType}`;
   }
   return `resources/search?Page=${page}&ResultsPerPage=${resultsPerPage}&SearchString=${encodeURIComponent(searchString)}${filterParams}`;
 };

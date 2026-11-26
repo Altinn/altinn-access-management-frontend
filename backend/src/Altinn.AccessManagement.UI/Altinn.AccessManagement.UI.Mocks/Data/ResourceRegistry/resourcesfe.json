@@ -785,5 +785,61 @@
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
     "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
+  },
+  {
+    "title": "Krav og betalinger",
+    "sector": null,
+    "status": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "homepage": null,
+    "keywords": null,
+    "identifier": "ske-krav-og-betalinger",
+    "visible": true,
+    "delegable": true,
+    "description": "Krav og betalinger",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til krav og betalinger.",
+    "resourceReferences": [],
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
+  },
+  {
+    "title": "Nabovarsel",
+    "sector": null,
+    "status": null,
+    "contactPoints": [
+      {
+        "category": "Some category",
+        "email": "email@someemaildigdir.no",
+        "telephone": "12345678",
+        "contactPage": "Some page (webpage maybe?)"
+      }
+    ],
+    "homepage": null,
+    "keywords": null,
+    "identifier": "app_dibk_nabovarsel-v5",
+    "visible": true,
+    "delegable": true,
+    "description": "Nabovarsel",
+    "resourceType": "Default",
+    "thematicArea": null,
+    "isPublicService": true,
+    "rightDescription": "Gir tilgang til nabovarsel.",
+    "resourceReferences": [],
+    "resourceOwnerName": "Testdepartementet",
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   }
 ]
