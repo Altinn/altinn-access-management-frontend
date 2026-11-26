@@ -1,13 +1,11 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 
 import { createBaseQuery } from '@/rtk/app/baseQuery';
-import { getCookie } from '@/resources/Cookie/CookieMethods';
 import type {
   ActivityLogArea,
   ActivityLogDirection,
   ActivityLogDto,
   ActivityLogFilterValueDto,
-  ActivityTypeDto,
   PaginatedResult,
 } from '@/features/amUI/activityLog/types';
 
@@ -32,11 +30,13 @@ export const activityLogListParams = [
 export type ActivityLogListParam = (typeof activityLogListParams)[number];
 
 /**
- * Filters for one area of the activity log, always anchored on the current reportee. `after` and
- * `before` are ISO 8601 bounds on when the event happened.
+ * Anchor and filters for one area of the activity log. `party` is the reportee, passed explicitly
+ * so that it is part of the cache key; `after` and `before` are ISO 8601 bounds on when the event
+ * happened.
  */
 export interface ActivityLogQueryArgs extends Partial<Record<ActivityLogListParam, string[]>> {
   area: ActivityLogArea;
+  party: string;
   direction: ActivityLogDirection;
   after?: string;
   before?: string;
@@ -64,10 +64,10 @@ export interface ActivityLogFilterOptionsArgs extends ActivityLogLookupArgs {
 const baseUrl = `${import.meta.env.BASE_URL}accessmanagement/api/v1/activitylog`;
 
 const buildQueryString = (
-  { area: _area, direction, after, before, pageSize, ...lists }: ActivityLogQueryArgs,
+  { area: _area, party, direction, after, before, pageSize, ...lists }: ActivityLogQueryArgs,
   extra: Record<string, string | number | undefined> = {},
 ): string => {
-  const params = new URLSearchParams({ party: getCookie('AltinnPartyUuid'), direction });
+  const params = new URLSearchParams({ party, direction });
   activityLogListParams.forEach((name) =>
     lists[name]?.forEach((value) => params.append(name, value)),
   );
@@ -145,15 +145,6 @@ export const activityLogApi = createApi({
       query: ({ area }) => `${area}/filter/fields`,
       transformResponse: (fields: string[]) => fields.map((field) => field.toLowerCase()),
     }),
-    /**
-     * The activity type catalog entries the area accepts. The BFF translates them to the selected
-     * language cookie; `language` is only part of the cache key so a language change refetches.
-     */
-    getActivityTypes: builder.query<ActivityTypeDto[], { area: ActivityLogArea; language: string }>(
-      {
-        query: ({ area }) => `${area}/types`,
-      },
-    ),
   }),
 });
 
@@ -162,5 +153,4 @@ export const {
   useGetActivityLogFilterValuesQuery,
   useGetActivityLogFilterOptionsQuery,
   useGetActivityLogFilterFieldsQuery,
-  useGetActivityTypesQuery,
 } = activityLogApi;

@@ -7,10 +7,9 @@ import {
   useGetActivityLogFilterOptionsQuery,
   useGetActivityLogFilterValuesQuery,
   useGetActivityLogInfiniteQuery,
-  useGetActivityTypesQuery,
 } from '@/rtk/features/activityLogApi';
 import { useDebouncedValue } from '@/resources/hooks';
-import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
+import { getCookie } from '@/resources/Cookie/CookieMethods';
 
 import { ActivityLogTabPanel } from './ActivityLogTabPanel';
 import type { ActivityLogArea } from './types';
@@ -42,7 +41,8 @@ export const ActivityLogTab = ({
   area: ActivityLogArea;
   reporteeName: string;
 }) => {
-  const language = useLanguageCode();
+  // Read once per mounted view and passed explicitly, so the reportee is part of the cache key.
+  const [party] = useState(() => getCookie('AltinnPartyUuid'));
   const { direction, changeDirection, filterState, changeFilterState, after, before } =
     useActivityLogQueryState();
 
@@ -71,7 +71,14 @@ export const ActivityLogTab = ({
   valueFilters.forEach((filter) => {
     selectedParams[filter.param] = selectedIdsByName[filter.name];
   });
-  const search: ActivityLogQueryArgs = { area, direction, after, before, ...selectedParams };
+  const search: ActivityLogQueryArgs = {
+    area,
+    party,
+    direction,
+    after,
+    before,
+    ...selectedParams,
+  };
   // The pickers show the most recent values first and let the user search the rest on the server.
   const lookup = { ...search, orderBy: 'When' as const, pageSize: ACTIVITY_LOG_FILTER_PAGE_SIZE };
 
@@ -114,7 +121,6 @@ export const ActivityLogTab = ({
     [valueFilters, searchedFilter, searchHits, defaultValues],
   );
   const optionsByName = useActivityLogFilterOptions(valuesByName, selectedIdsByName);
-  const { data: activityTypes } = useGetActivityTypesQuery({ area, language });
 
   return (
     <ActivityLogTabPanel
@@ -132,7 +138,6 @@ export const ActivityLogTab = ({
       }))}
       onValueFilterSearch={onValueFilterSearch}
       entries={currentData?.pages.flatMap((page) => page.data) ?? []}
-      activityTypes={activityTypes}
       isLoading={isLoading}
       isError={isError}
       hasMore={hasNextPage}

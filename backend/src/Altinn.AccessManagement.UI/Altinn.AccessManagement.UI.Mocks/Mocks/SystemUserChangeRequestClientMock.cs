@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserChangeRequestClientMock).Assembly.Location).LocalPath), "Data");
         }
-        
+
         /// <inheritdoc />
         public Task<Result<SystemUserChangeRequest>> GetSystemUserChangeRequest(Guid changeRequestId, CancellationToken cancellationToken)
         {
@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return Task.FromResult(new Result<bool>(true));
         }
 
-                /// <inheritdoc />
+        /// <inheritdoc />
         public Task<Result<bool>> RejectSystemUserChangeRequest(int partyId, Guid changeRequestId, CancellationToken cancellationToken)
         {
             SystemUserChangeRequest systemUserChangeRequest = Util.GetMockData<SystemUserChangeRequest>($"{dataFolder}/SystemUser/systemUserChangeRequest.json");
@@ -53,7 +53,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return Task.FromResult(new Result<bool>(TestErrors.RequestNotFound));
             }
             return Task.FromResult(new Result<bool>(true));
-        }        
+        }
 
         internal static class TestErrors
         {

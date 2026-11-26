@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         private readonly Guid PERSON_REJECTED_CONSENT_WITH_FRAGMENT_ID = Guid.Parse("52574a16-4114-4bdf-b471-85ac10a722b9");
         private readonly Guid PERSON_REJECTED_CONSENT_WITH_QUERY_ID = Guid.Parse("ecc578c9-f0d6-45c7-a989-fd448f1be4e0");
         private readonly Guid PERSON_REJECTED_CONSENT_WITH_LOCAL_REDIRECT_ID = Guid.Parse("b8d3f1a2-6c4e-4f7a-9e2d-3a5b7c9d1e0f");
-        private readonly Guid ORG_CONSENT_ID =Guid.Parse("7e540335-d82f-41e9-8b8f-619336d792b4");
+        private readonly Guid ORG_CONSENT_ID = Guid.Parse("7e540335-d82f-41e9-8b8f-619336d792b4");
         private readonly Guid ORG_CONSENT_WITHOUT_MESSAGE_ID = Guid.Parse("1a04a7fa-24c1-4e06-9217-8aee89239a9f");
         private readonly Guid PERSON_PARTY_ID = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
         private readonly Guid ORG_PARTY_ID = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");

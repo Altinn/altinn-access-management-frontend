@@ -1,10 +1,12 @@
 ﻿using Altinn.AccessManagement.UI.Core.ClientInterfaces;
+using Altinn.AccessManagement.UI.Core.Constants;
 using Altinn.AccessManagement.UI.Core.Helpers;
 using Altinn.AccessManagement.UI.Core.Models.BankruptcyEstate;
 using Altinn.AccessManagement.UI.Core.Models.BankruptcyEstate.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
+using Altinn.Authorization.ProblemDetails;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -38,30 +40,36 @@ namespace Altinn.AccessManagement.UI.Core.Services
         }
 
         /// <inheritdoc/>
-        public async Task<AssignmentDto> AddAdministrator(Guid partyId, PersonInput personInput, CancellationToken cancellationToken = default)
+        public async Task<Result<AssignmentDto>> AddAdministrator(Guid partyId, PersonInput personInput, CancellationToken cancellationToken = default)
         {
-            if (personInput == null || string.IsNullOrWhiteSpace(personInput.PersonIdentifier) || string.IsNullOrWhiteSpace(personInput.LastName))
+            string personIdentifier = personInput?.PersonIdentifier?.Trim().Replace("\"", string.Empty);
+            string lastName = personInput?.LastName?.Trim().Replace("\"", string.Empty);
+
+            ValidationErrorBuilder errors = default;
+
+            if (string.IsNullOrWhiteSpace(personIdentifier))
             {
-                throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                errors.Add(AmProblem.Required, "/personIdentifier");
+            }
+            else if (!PersonIdentifierUtils.IsValidPersonIdentifier(personIdentifier))
+            {
+                errors.Add(AmProblem.InvalidExternalIdentifiers, "/personIdentifier");
             }
 
-            string personIdentifierCleaned = personInput.PersonIdentifier.Trim().Replace("\"", string.Empty);
-            string lastNameCleaned = personInput.LastName.Trim().Replace("\"", string.Empty);
-
-            if (string.IsNullOrWhiteSpace(personIdentifierCleaned) || string.IsNullOrWhiteSpace(lastNameCleaned))
+            if (string.IsNullOrWhiteSpace(lastName))
             {
-                throw new ArgumentException("PersonInput requires both personIdentifier and lastName.");
+                errors.Add(AmProblem.Required, "/lastName");
             }
 
-            if (!PersonIdentifierUtils.IsValidPersonIdentifier(personIdentifierCleaned))
+            if (errors.TryBuild(out ValidationProblemInstance problem))
             {
-                throw new ArgumentException("Invalid person identifier format");
+                return problem;
             }
 
             PersonInput cleanedInput = new PersonInput
             {
-                PersonIdentifier = personIdentifierCleaned,
-                LastName = lastNameCleaned,
+                PersonIdentifier = personIdentifier,
+                LastName = lastName,
             };
 
             return await _bankruptcyEstateClient.AddAdministrator(partyId, cleanedInput, cancellationToken);

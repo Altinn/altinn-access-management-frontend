@@ -14,3 +14,11 @@
 .heading {
   margin-bottom: var(--ds-spacing-6);
 }
+
+.headingWithDescription {
+  margin-bottom: var(--ds-spacing-2);
+}
+
+.description {
+  margin-bottom: var(--ds-spacing-6);
+}

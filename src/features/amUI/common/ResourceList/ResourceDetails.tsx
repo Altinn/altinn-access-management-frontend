@@ -1,19 +1,18 @@
 import React from 'react';
 import { DsDialog, DsParagraph } from '@altinn/altinn-components';
 
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
+
 import { ResourceHeading } from '../DelegationModal/SingleRights/ResourceHeading';
 
-import type { ResourceListItemResource } from './types';
-import { extractDescription } from './utils';
 import classes from './ResourceDetails.module.css';
 
 interface ResourceDetailsProps {
-  resource: ResourceListItemResource | null;
+  resource: ServiceResource | null;
   onClose: () => void;
-  providerLogoUrl?: string | null;
 }
 
-export const ResourceDetails = ({ resource, onClose, providerLogoUrl }: ResourceDetailsProps) => {
+export const ResourceDetails = ({ resource, onClose }: ResourceDetailsProps) => {
   const dialogRef = React.useRef<HTMLDialogElement>(null);
 
   React.useEffect(() => {
@@ -24,11 +23,8 @@ export const ResourceDetails = ({ resource, onClose, providerLogoUrl }: Resource
     }
   }, [resource]);
 
-  const description = resource ? extractDescription(resource) : '';
-  const rightDescription =
-    resource && 'rightDescription' in resource && typeof resource.rightDescription === 'string'
-      ? resource.rightDescription
-      : undefined;
+  const description = resource?.description;
+  const rightDescription = resource?.rightDescription;
 
   return (
     <DsDialog
@@ -42,7 +38,6 @@ export const ResourceDetails = ({ resource, onClose, providerLogoUrl }: Resource
             <ResourceHeading
               resource={resource}
               level={2}
-              providerLogoUrl={providerLogoUrl}
             />
             {description && <DsParagraph data-size='sm'>{description}</DsParagraph>}
             {rightDescription && <DsParagraph data-size='sm'>{rightDescription}</DsParagraph>}

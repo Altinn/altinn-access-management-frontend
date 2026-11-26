@@ -192,17 +192,6 @@ namespace Altinn.AccessManagement.UI.Tests.Clients
         }
 
         [Fact]
-        public async Task GetActivityTypes_RequestsTheTypesRoute_InTheLanguage()
-        {
-            RecordingHandler handler = new RecordingHandler("[]");
-
-            await CreateClient(handler).GetActivityTypes("request", "nn");
-
-            Assert.Equal($"{BaseUrl}v2/enduser/request/activitylog/types", handler.Request.RequestUri.ToString());
-            Assert.Equal("nn", handler.Request.Headers.GetValues("Accept-Language").Single());
-        }
-
-        [Fact]
         public async Task GetActivityLog_PassesAnErrorStatusOn()
         {
             RecordingHandler handler = new RecordingHandler(string.Empty, HttpStatusCode.NotFound);

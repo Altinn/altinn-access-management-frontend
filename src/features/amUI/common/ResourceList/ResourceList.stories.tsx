@@ -3,47 +3,36 @@ import { Provider } from 'react-redux';
 import { RootProvider } from '@altinn/altinn-components';
 
 import store from '@/rtk/app/store';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { ResourceList } from './ResourceList';
 
-const sampleResources = [
+const sampleResources: ServiceResource[] = [
   {
-    id: 'resource-1',
-    name: 'Altinn Resource',
+    identifier: 'resource-1',
     title: 'Altinn Resource',
     description: 'Access to core Altinn services.',
-    provider: {
-      id: 'digdir',
-      name: 'Digitaliseringsdirektoratet',
-      refId: 'digdir',
-      logoUrl: '',
-      code: 'digdir',
-      typeId: 'agencies',
-    },
+    rightDescription: '',
     resourceOwnerName: 'Digitaliseringsdirektoratet',
-    resourceOwnerLogoUrl: '',
+    resourceOwnerLogoUrl: 'https://altinncdn.no/orgs/digdir/digdir.svg',
     resourceOwnerOrgcode: 'digdir',
     resourceOwnerOrgNumber: '991825827',
-    resourceOwnerType: 'state',
+    resourceReferences: [],
+    resourceType: 'GenericAccessResource',
+    delegable: true,
   },
   {
-    id: 'resource-2',
-    name: 'Tax Reporting',
+    identifier: 'resource-2',
     title: 'Tax Reporting',
     description: 'Allows submitting tax data on behalf of an organization.',
-    provider: {
-      id: 'skd',
-      name: 'Skatteetaten',
-      refId: 'skd',
-      logoUrl: '',
-      code: 'skd',
-      typeId: 'agencies',
-    },
+    rightDescription: '',
     resourceOwnerName: 'Skatteetaten',
     resourceOwnerLogoUrl: '',
     resourceOwnerOrgcode: 'skd',
     resourceOwnerOrgNumber: '974761076',
-    resourceOwnerType: 'state',
+    resourceReferences: [],
+    resourceType: 'GenericAccessResource',
+    delegable: true,
   },
 ];
 
@@ -60,7 +49,6 @@ const meta: Meta<typeof ResourceList> = {
   args: {
     resources: sampleResources,
     enableSearch: true,
-    resolveLogos: false,
   },
 };
 
@@ -74,7 +62,6 @@ export const WithControls: Story = {
   args: {
     resources: sampleResources,
     enableSearch: false,
-    resolveLogos: false,
     renderControls: (resource) => <span>{`Action for ${resource.title}`}</span>,
     getBadge: (_, index) =>
       index === 0 ? { label: 'New', theme: 'base', color: 'success' } : undefined,
@@ -85,7 +72,6 @@ export const NonInteractive: Story = {
   args: {
     resources: sampleResources,
     enableSearch: false,
-    resolveLogos: false,
     interactive: false,
     showDetails: false,
   },

@@ -1,7 +1,5 @@
 import { http, HttpResponse } from 'msw';
 
-import orgData from './data/orgData.json';
-
 const diskretNaerTiger = {
   id: 'cd35779b-b174-4ecc-bbef-ece13611be7f',
   partyId: 51329012,
@@ -37,8 +35,5 @@ export const lookupHandlers = (ACCESSMANAGEMENT_BASE_URL: string) => [
   }),
   http.get(`${ACCESSMANAGEMENT_BASE_URL}/lookup/party`, () => {
     return HttpResponse.json(diskretNaerTiger);
-  }),
-  http.get(`${ACCESSMANAGEMENT_BASE_URL}/cdn/orgdata`, () => {
-    return HttpResponse.json(orgData);
   }),
 ];

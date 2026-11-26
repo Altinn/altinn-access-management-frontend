@@ -108,19 +108,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
         private async Task<List<ResourceDelegation>> EnrichResourcePermissions(IEnumerable<ResourcePermission> resourcePermissions, string languageCode)
         {
-            var lookups = resourcePermissions
+            List<ResourcePermission> permissions = resourcePermissions?
                 .Where(rp => !string.IsNullOrWhiteSpace(rp.Resource?.RefId))
-                .Select(async rp => new
-                {
-                    Permission = rp,
-                    Resource = await _resourceService.GetResource(rp.Resource.RefId, languageCode),
-                });
+                .ToList() ?? [];
 
-            var results = await Task.WhenAll(lookups);
+            // Each resource is looked up once. Resources that cannot be found are left out.
+            Dictionary<string, ServiceResourceFE> resources = await _resourceService.GetResourcesFE(
+                permissions.Select(rp => rp.Resource.RefId),
+                languageCode);
 
-            return results
-                .Where(r => r.Resource != null)
-                .Select(r => new ResourceDelegation(r.Resource, PermissionFE.FromPermissions(r.Permission.Permissions)))
+            return permissions
+                .Where(rp => resources.ContainsKey(rp.Resource.RefId))
+                .Select(rp => new ResourceDelegation(resources[rp.Resource.RefId], PermissionFE.FromPermissions(rp.Permissions)))
                 .ToList();
         }
     }

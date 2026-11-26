@@ -27,5 +27,17 @@ namespace Altinn.AccessManagement.UI.Core.Constants
         /// </summary>
         public static ValidationErrorDescriptor InvalidUnitType { get; }
             = _factory.Create(28, "Cannot delegate to the selected unit type.");
+
+        /// <summary>
+        /// Gets a validation error descriptor for when the entity type is not allowed for the operation.
+        /// </summary>
+        public static ValidationErrorDescriptor DisallowedEntityType { get; }
+            = _factory.Create(8, "This entity type is not allowed here.");
+
+        /// <summary>
+        /// Gets a validation error descriptor for when the given identifiers, such as person identifier and last name, match no one.
+        /// </summary>
+        public static ValidationErrorDescriptor InvalidExternalIdentifiers { get; }
+            = _factory.Create(34, "Given external identifiers yielded empty result.");
     }
 }

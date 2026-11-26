@@ -1,0 +1,19 @@
+.text {
+  margin-bottom: var(--ds-spacing-6);
+}
+
+.trigger {
+  vertical-align: middle;
+}
+
+.popover {
+  --dsc-popover-max-width: min(30rem, 90vw);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--ds-spacing-2);
+  margin-bottom: var(--ds-spacing-1);
+}

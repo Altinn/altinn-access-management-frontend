@@ -1,22 +1,11 @@
 import * as React from 'react';
-import { forwardRef, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsDialog } from '@altinn/altinn-components';
 
 import type { ActionError } from '@/resources/hooks/useActionError';
-import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
-import type { AccessPackage } from '@/rtk/features/accessPackageApi';
-import type { Role } from '@/rtk/features/roleApi';
-import type { DialogLookup } from '@/rtk/features/instanceApi';
-import type { PartyEntity } from '@/dataObjects/dtos/Party';
 
-import { ScopeInfo } from '../../maskinporten/ScopeInfo';
-
-import { ResourceInfo } from './SingleRights/ResourceInfo';
-import { InstanceInfo } from './Instance/InstanceInfo';
 import classes from './DelegationModal.module.css';
-import { AccessPackageInfo } from './AccessPackages/AccessPackageInfo';
-import { RoleInfo } from './Role/RoleInfo';
 import { useDelegationModalContext } from './DelegationModalContext';
 
 export enum DelegationAction {
@@ -26,157 +15,54 @@ export enum DelegationAction {
   APPROVE = 'APPROVE',
 }
 
-export interface InstanceData {
-  instanceUrn: string;
-  dialogLookup?: DialogLookup;
-}
-
 export interface EditModalProps {
-  resource?: ServiceResource;
-  maskinportenScope?: ServiceResource;
-  accessPackage?: AccessPackage;
-  role?: Role;
-  instance?: InstanceData;
-  toParty?: Pick<PartyEntity, 'id' | 'name' | 'type'>;
-  availableActions?: DelegationAction[];
+  ref?: React.Ref<HTMLDialogElement>;
+  /** Accessible name of the dialog, e.g. t('delegation_modal.aria_label.access_package'). */
+  ariaLabel: string;
   openWithError?: ActionError | null;
-  onSuccess?: () => void;
   onClose?: () => void;
+  children?: React.ReactNode;
 }
 
-export const EditModal = forwardRef<HTMLDialogElement, EditModalProps>(
-  (
-    {
-      resource,
-      maskinportenScope,
-      accessPackage,
-      role,
-      instance,
-      toParty,
-      availableActions,
-      openWithError,
-      onSuccess,
-      onClose,
-    },
-    ref,
-  ) => {
-    const { t } = useTranslation();
-    const { setActionError, reset } = useDelegationModalContext();
-    const ownDialogRef = useRef<HTMLDialogElement | null>(null);
+/**
+ * Dialog shell shared by all "edit access" modals. The caller decides what to show inside it,
+ * e.g. <ResourceInfo />, <AccessPackageInfo />, <InstanceInfo />, <ScopeInfo /> or <RoleInfo />.
+ */
+export const EditModal = ({ ref, ariaLabel, openWithError, onClose, children }: EditModalProps) => {
+  const { t } = useTranslation();
+  const { setActionError, reset } = useDelegationModalContext();
+  const ownDialogRef = useRef<HTMLDialogElement | null>(null);
 
-    const setDialogRef = (node: HTMLDialogElement | null) => {
-      ownDialogRef.current = node;
-      if (typeof ref === 'function') ref(node);
-      else if (ref) ref.current = node;
-    };
+  const setDialogRef = (node: HTMLDialogElement | null) => {
+    ownDialogRef.current = node;
+    if (typeof ref === 'function') ref(node);
+    else if (ref) ref.current = node;
+  };
 
-    const getDialogLabel = () => {
-      if (maskinportenScope) return t('delegation_modal.aria_label.maskinporten');
-      if (instance) return t('delegation_modal.aria_label.instance');
-      if (accessPackage) return t('delegation_modal.aria_label.access_package');
-      if (role) return t('delegation_modal.aria_label.role');
-      return t('delegation_modal.aria_label.single_rights');
-    };
+  useEffect(() => {
+    if (openWithError) {
+      setActionError(openWithError);
+    } else {
+      setActionError(null);
+    }
+  }, [openWithError, setActionError]);
 
-    useEffect(() => {
-      if (openWithError) {
-        setActionError(openWithError);
-      } else {
-        setActionError(null);
-      }
-    }, [openWithError, setActionError]);
-
-    return (
-      <DsDialog
-        ref={setDialogRef}
-        className={classes.modalDialog}
-        closedby='any'
-        onClose={(event) => {
-          // To prevent the close event from bubbling up to the parent dialog when the user clicks the backdrop.
-          // @digdir/designsystemet-react >= 1.15 has this buildt in, so remove this guard once @altinn/altinn-components bundles that version.
-          if (event.target !== ownDialogRef.current) return;
-          onClose?.();
-          reset();
-        }}
-        aria-label={getDialogLabel()}
-        aria-description={t('delegation_modal.aria_description')}
-      >
-        <div className={classes.content}>
-          {renderModalContent({
-            resource,
-            maskinportenScope,
-            accessPackage,
-            role,
-            instance,
-            toParty,
-            availableActions,
-            onSuccess,
-          })}
-        </div>
-      </DsDialog>
-    );
-  },
-);
-
-const renderModalContent = ({
-  resource,
-  maskinportenScope,
-  accessPackage,
-  role,
-  instance,
-  toParty,
-  availableActions,
-  onSuccess,
-}: {
-  resource?: ServiceResource;
-  maskinportenScope?: ServiceResource;
-  accessPackage?: AccessPackage;
-  role?: Role;
-  instance?: InstanceData;
-  toParty?: Pick<PartyEntity, 'id' | 'name' | 'type'>;
-  availableActions?: DelegationAction[];
-  onSuccess?: () => void;
-}) => {
-  if (maskinportenScope) {
-    return (
-      <ScopeInfo
-        resource={maskinportenScope}
-        availableActions={availableActions}
-      />
-    );
-  }
-  if (resource && instance) {
-    return (
-      <InstanceInfo
-        resource={resource}
-        instanceUrn={instance.instanceUrn}
-        dialogLookup={instance.dialogLookup}
-        toParty={toParty}
-        availableActions={availableActions}
-        onSuccess={onSuccess}
-      />
-    );
-  }
-  if (resource) {
-    return (
-      <ResourceInfo
-        resource={resource}
-        availableActions={availableActions}
-      />
-    );
-  }
-  if (accessPackage) {
-    return (
-      <AccessPackageInfo
-        accessPackage={accessPackage}
-        availableActions={availableActions}
-      />
-    );
-  }
-  if (role) {
-    return <RoleInfo role={role} />;
-  }
-  return null;
+  return (
+    <DsDialog
+      ref={setDialogRef}
+      className={classes.modalDialog}
+      closedby='any'
+      onClose={(event) => {
+        // To prevent the close event from bubbling up to the parent dialog when the user clicks the backdrop.
+        // @digdir/designsystemet-react >= 1.15 has this buildt in, so remove this guard once @altinn/altinn-components bundles that version.
+        if (event.target !== ownDialogRef.current) return;
+        onClose?.();
+        reset();
+      }}
+      aria-label={ariaLabel}
+      aria-description={t('delegation_modal.aria_description')}
+    >
+      <div className={classes.content}>{children}</div>
+    </DsDialog>
+  );
 };
-
-EditModal.displayName = 'EditModal';

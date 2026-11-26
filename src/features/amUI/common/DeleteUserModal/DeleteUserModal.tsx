@@ -15,7 +15,9 @@ export const DeleteUserModal = ({ direction = 'to' }: DeleteUserModalProps) => {
   const { fromParty, toParty, actingParty, selfParty } = usePartyRepresentation();
 
   const targetPartyUuid = direction === 'to' ? toParty?.id : fromParty?.id;
-  const viewingYourself = !!targetPartyUuid && !!selfParty?.id && targetPartyUuid === selfParty.id;
+  // The "yourself" texts only fit when the logged-in user is the one losing access
+  const viewingYourself =
+    !!selfParty?.id && targetPartyUuid === selfParty.id && toParty?.id === selfParty.id;
 
   const { data: rolePermissions, isLoading: isRolePermissionsLoading } = useGetRolePermissionsQuery(
     {

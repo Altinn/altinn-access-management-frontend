@@ -38,8 +38,6 @@
   },
   "keywords": [],
   "accessListMode": "Disabled",
-  "selfIdentifiedUserEnabled": false,
-  "enterpriseUserEnabled": true,
   "resourceType": "Consent",
   "consentTemplate": "poa",
   "consentText": {
@@ -50,11 +48,5 @@
   "consentMetadata": null,
   "isOneTimeConsent": true,
   "availableForType": ["LegalEntityEnterprise"],
-  "authorizationReference": [
-    {
-      "id": "urn:altinn:resource",
-      "value": "consent-test-resource-poa"
-    }
-  ],
   "versionId": 204
 }

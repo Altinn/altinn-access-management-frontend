@@ -10,7 +10,7 @@ import cn from 'classnames';
 
 import { useRestoreFocusTarget } from '@/features/amUI/common/RestoreFocus';
 import { useDebouncedValue } from '@/resources/hooks';
-import { useProviderLogoUrl } from '@/resources/hooks/useProviderLogoUrl';
+import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 
 import { ResourceFilterToolbar } from '../ResourceFilterToolbar/ResourceFilterToolbar';
 import { SearchHitsStatus } from '../SearchHitsStatus/SearchHitsStatus';
@@ -19,17 +19,7 @@ import { ResourceDetails } from './ResourceDetails';
 import classes from './ResourceList.module.css';
 import { SkeletonResourceList } from './SkeletonResourceList';
 import { useFilteredResources } from './useFilteredResources';
-import type { ResourceListItemResource } from './types';
-import {
-  extractResourceName,
-  extractOwnerName,
-  extractOrgCode,
-  extractDescription,
-  extractResourceId,
-  extractLogoUrl,
-  extractLogoAlt,
-  isExpiredResource,
-} from './utils';
+import { isExpiredResource } from './utils';
 
 interface ResourceListItemRowProps extends React.ComponentProps<typeof ResourceListItem> {
   resourceId: string;
@@ -46,9 +36,7 @@ const ResourceListItemRow = ({
   return <ResourceListItem {...props} />;
 };
 
-export interface ResourceListProps<
-  TResource extends ResourceListItemResource = ResourceListItemResource,
-> {
+export interface ResourceListProps<TResource extends ServiceResource = ServiceResource> {
   resources: TResource[];
   isLoading?: boolean;
   noResourcesText?: string;
@@ -64,7 +52,6 @@ export interface ResourceListProps<
   size?: ResourceListItemProps['size'];
   interactive?: boolean | ((resource: TResource) => boolean);
   as?: ResourceListItemProps['as'];
-  resolveLogos?: boolean;
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
   getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
@@ -79,9 +66,7 @@ export interface ResourceListProps<
   className?: string;
 }
 
-export const ResourceList = <
-  TResource extends ResourceListItemResource = ResourceListItemResource,
->({
+export const ResourceList = <TResource extends ServiceResource = ServiceResource>({
   resources,
   isLoading,
   noResourcesText,
@@ -93,12 +78,11 @@ export const ResourceList = <
   size,
   interactive,
   as,
-  resolveLogos = true,
   enableMaxHeight = false,
   renderControls,
   getBadge,
   getDescriptionText,
-  getSearchableText = extractDescription,
+  getSearchableText,
   getHasAccess,
   getActionControlId,
   delegationModal,
@@ -112,11 +96,6 @@ export const ResourceList = <
   const [filterState, setFilterState] = React.useState<string[]>([]);
   const [includeExpired, setIncludeExpired] = React.useState<boolean>(false);
   const [selected, setSelected] = React.useState<TResource | null>(null);
-  const { getProviderLogoUrl, isLoading: orgLoading } = useProviderLogoUrl();
-  const logoResolver = React.useMemo(
-    () => (resolveLogos ? getProviderLogoUrl : () => undefined),
-    [getProviderLogoUrl, resolveLogos],
-  );
   const hasExpiredResources = React.useMemo(
     () => resources && resources.some(isExpiredResource),
     [resources],
@@ -151,26 +130,19 @@ export const ResourceList = <
     serviceOwnerFilter: filterState,
     searchString: enableSearch ? debouncedSearch : '',
     includeExpiredResources: enableSearch ? includeExpired : true,
-    getResourceName: extractResourceName,
-    getOwnerName: extractOwnerName,
-    getOwnerOrgCode: extractOrgCode,
     getDescription: getSearchableText,
-    isExpiredResource: isExpiredResource,
   });
-
-  const isSkeletonVisible = isLoading || (resolveLogos && orgLoading);
 
   const serviceOwnerOptions = React.useMemo(() => {
     const uniqueOwners = new Map<string, { value: string; label: string; count: number }>();
     resources.forEach((res) => {
-      const code = extractOrgCode(res);
-      const name = extractOwnerName(res);
+      const code = res.resourceOwnerOrgcode;
       if (code) {
         const existing = uniqueOwners.get(code);
         if (existing) {
           existing.count = (existing.count ?? 1) + 1;
         } else {
-          uniqueOwners.set(code, { value: code, label: name, count: 1 });
+          uniqueOwners.set(code, { value: code, label: res.resourceOwnerName ?? '', count: 1 });
         }
       }
     });
@@ -204,7 +176,7 @@ export const ResourceList = <
           className={classes.searchHits}
         />
       )}
-      {isSkeletonVisible ? (
+      {isLoading ? (
         <SkeletonResourceList size={size} />
       ) : (
         <>
@@ -224,16 +196,9 @@ export const ResourceList = <
             {filteredResources.length > 0 && (
               <List aria-labelledby={ariaLabelledBy}>
                 {filteredResources.map((resource, index) => {
-                  const derivedId = extractResourceId(resource);
-                  const resourceId = derivedId ? String(derivedId) : `resource-${index}`;
-                  const resourceName = extractResourceName(resource);
-                  const defaultOwnerName = extractOwnerName(resource);
+                  const resourceId = resource.identifier || `resource-${index}`;
+                  const ownerName = resource.resourceOwnerName ?? '';
                   const description = getDescriptionText?.(resource, index);
-                  const orgCode = extractOrgCode(resource);
-                  const providerLogo = resolveLogos && orgCode ? logoResolver(orgCode) : undefined;
-                  const fallbackLogoUrl = extractLogoUrl(resource);
-                  const ownerLogoUrl = providerLogo ?? fallbackLogoUrl;
-                  const ownerLogoAlt = extractLogoAlt(resource) ?? defaultOwnerName;
                   const customAs = getItemAs?.(resource);
                   const itemInteractive = customAs ? true : derivedInteractive(resource);
                   const itemAs = customAs ?? as ?? (itemInteractive ? 'button' : 'div');
@@ -252,11 +217,11 @@ export const ResourceList = <
                       resourceId={resourceId}
                       actionControlId={actionControlId}
                       id={resourceId}
-                      resourceName={resourceName}
-                      ownerName={defaultOwnerName}
+                      resourceName={resource.title ?? ''}
+                      ownerName={ownerName}
                       description={description}
-                      ownerLogoUrl={ownerLogoUrl}
-                      ownerLogoUrlAlt={ownerLogoAlt}
+                      ownerLogoUrl={resource.resourceOwnerLogoUrl || undefined}
+                      ownerLogoUrlAlt={ownerName}
                       as={itemAs}
                       size={itemSize}
                       titleAs='div'
@@ -282,13 +247,6 @@ export const ResourceList = <
         <ResourceDetails
           resource={selected}
           onClose={closeDetails}
-          providerLogoUrl={
-            selected
-              ? resolveLogos
-                ? (logoResolver(extractOrgCode(selected) ?? '') ?? selected.resourceOwnerLogoUrl)
-                : (extractLogoUrl(selected) ?? null)
-              : undefined
-          }
         />
       )}
     </div>

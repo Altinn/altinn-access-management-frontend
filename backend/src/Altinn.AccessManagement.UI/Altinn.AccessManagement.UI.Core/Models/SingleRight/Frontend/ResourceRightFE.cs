@@ -1,4 +1,4 @@
-using Altinn.AccessManagement.UI.Core.Models.AccessPackage;
+using Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend;
 
 namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend
 {
@@ -10,7 +10,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend
         /// <summary>
         /// Gets or sets the resource
         /// </summary>
-        public ResourceAM Resource { get; set; }
+        public ServiceResourceFE Resource { get; set; }
 
         /// <summary>
         /// Gets or sets the direct rights for the resource
@@ -25,7 +25,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend
         /// <summary>
         /// Maps a resource right from the access management rights endpoints
         /// </summary>
-        public static ResourceRightFE FromResourceRight(ResourceRight resourceRight)
+        /// <param name="resourceRight">The resource right from Access Management</param>
+        /// <param name="resource">The resource, already mapped to the frontend model</param>
+        public static ResourceRightFE FromResourceRight(ResourceRight resourceRight, ServiceResourceFE resource)
         {
             if (resourceRight == null)
             {
@@ -34,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Core.Models.SingleRight.Frontend
 
             return new ResourceRightFE
             {
-                Resource = resourceRight.Resource,
+                Resource = resource,
                 DirectRights = RightAccessFE.FromRightAccesses(resourceRight.DirectRights),
                 IndirectRights = RightAccessFE.FromRightAccesses(resourceRight.IndirectRights),
             };

@@ -20,6 +20,8 @@ interface DeleteClientProviderModalProps {
   onConfirm: () => Promise<void>;
   disabled?: boolean;
   errorMessage?: string;
+  /*** Shown before the trigger label. A trash can unless something else is given */
+  triggerIcon?: React.ReactNode;
 }
 
 export const DeleteClientProviderModal = ({
@@ -30,6 +32,7 @@ export const DeleteClientProviderModal = ({
   onConfirm,
   disabled = false,
   errorMessage,
+  triggerIcon = <TrashIcon aria-hidden='true' />,
 }: DeleteClientProviderModalProps) => {
   const { t } = useTranslation();
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -64,7 +67,7 @@ export const DeleteClientProviderModal = ({
           dialogRef.current?.showModal();
         }}
       >
-        <TrashIcon aria-hidden='true' />
+        {triggerIcon}
         {triggerLabel}
       </DsDialog.Trigger>
       <DsDialog

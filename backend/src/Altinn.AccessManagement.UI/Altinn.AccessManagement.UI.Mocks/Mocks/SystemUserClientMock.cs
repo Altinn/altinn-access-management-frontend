@@ -20,7 +20,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserClientMock).Assembly.Location).LocalPath), "Data");
         }
-        
+
         /// <inheritdoc />
         public Task<Result<SystemUser>> CreateNewSystemUser(int partyId, NewSystemUserRequest newSystemUser, CancellationToken cancellationToken)
         {
@@ -60,7 +60,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
             return Task.FromResult(systemUser);
         }
-        
+
         /// <inheritdoc />
         public Task<List<SystemUser>> GetSystemUsersForParty(int partyId, CancellationToken cancellationToken)
         {
@@ -75,7 +75,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             SystemUser systemUser = systemUsers.Find(s => s.Id == id.ToString() && s.PartyId == partyId.ToString());
             return Task.FromResult(systemUser);
         }
-        
+
         /// <inheritdoc />
         public Task<List<SystemUser>> GetAgentSystemUsersForParty(int partyId, CancellationToken cancellationToken)
         {
@@ -99,14 +99,14 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         public Task<Result<List<Customer>>> GetClients(int partyId, Guid facilitatorId, List<string> accessPackages, CancellationToken cancellationToken)
         {
             string dataFolder = Path.Combine(Path.GetDirectoryName(new Uri(typeof(SystemUserClientMock).Assembly.Location).LocalPath), "Data");
-            string jsonFile = ""; 
-            
+            string jsonFile = "";
+
             if (accessPackages.Any(x => x == "ansvarlig-revisor" || x == "revisormedarbeider"))
             {
                 jsonFile = "revisorCustomers.json";
             }
-            else if (accessPackages.Any(x => x == "regnskapsforer-med-signeringsrettighet" 
-                                         || x == "regnskapsforer-uten-signeringsrettighet" 
+            else if (accessPackages.Any(x => x == "regnskapsforer-med-signeringsrettighet"
+                                         || x == "regnskapsforer-uten-signeringsrettighet"
                                          || x == "regnskapsforer-lonn"))
             {
                 jsonFile = "regnskapsforerCustomers.json";
@@ -128,7 +128,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             }
 
             List<Customer> customers = Util.GetMockData<List<Customer>>($"{dataFolder}/SystemUser/{jsonFile}");
-            
+
             return Task.FromResult(new Result<List<Customer>>(customers));
         }
 
@@ -167,8 +167,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             public static ProblemDescriptor SystemNotFound { get; }
                 = _factory.Create(11, HttpStatusCode.NotFound, "System not found");
 
-        public static ProblemDescriptor SystemUserNotFound { get; }
-            = _factory.Create(15, HttpStatusCode.NotFound, "The SystemUser was not found.");
+            public static ProblemDescriptor SystemUserNotFound { get; }
+                = _factory.Create(15, HttpStatusCode.NotFound, "The SystemUser was not found.");
 
             public static ProblemDescriptor AgentSystemUser_FailedToGetClients { get; }
             = _factory.Create(45, HttpStatusCode.BadRequest, "Failed to get clients");

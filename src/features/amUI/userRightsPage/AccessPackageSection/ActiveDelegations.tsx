@@ -5,6 +5,7 @@ import type { AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import { AccessPackageList } from '../../common/AccessPackageList/AccessPackageList';
 import { type DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
+import { AccessPackageInfo } from '../../common/DelegationModal/AccessPackages/AccessPackageInfo';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
 import {
@@ -15,16 +16,22 @@ import {
 
 interface ActiveDelegationsProps {
   searchString?: string;
+  serviceOwners?: string[];
   availableActions: DelegationAction[];
 }
 
-export const ActiveDelegations = ({ searchString, availableActions }: ActiveDelegationsProps) => {
+export const ActiveDelegations = ({
+  searchString,
+  serviceOwners,
+  availableActions,
+}: ActiveDelegationsProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [modalItem, setModalItem] = useState<AccessPackage | undefined>(undefined);
   const { setActionError } = useDelegationModalContext();
   const { isLoading } = usePartyRepresentation();
   const { t } = useTranslation();
   const restoreFocus = useRestoreFocus();
+  const isSearching = !!searchString || !!serviceOwners?.length;
 
   return (
     <RestoreFocusProvider restoreFocus={restoreFocus}>
@@ -33,10 +40,11 @@ export const ActiveDelegations = ({ searchString, availableActions }: ActiveDele
           isLoading={isLoading}
           showPackagesCount
           showAllPackages
-          showAllAreas={!!searchString}
-          showUnassignedAvailableAreas={!!searchString}
-          minimizeAvailablePackages={!searchString}
+          showAllAreas={isSearching}
+          showUnassignedAvailableAreas={isSearching}
+          minimizeAvailablePackages={!isSearching}
           searchString={searchString}
+          serviceOwners={serviceOwners}
           onSelect={(accessPackage) => {
             setModalItem(accessPackage);
             modalRef.current?.showModal();
@@ -58,15 +66,21 @@ export const ActiveDelegations = ({ searchString, availableActions }: ActiveDele
       </RestoreFocusFallback>
       <EditModal
         ref={modalRef}
-        accessPackage={modalItem}
+        ariaLabel={t('delegation_modal.aria_label.access_package')}
         onClose={() => {
           if (modalItem) {
             restoreFocus.requestFocus(modalItem.id);
           }
           setModalItem(undefined);
         }}
-        availableActions={availableActions}
-      />
+      >
+        {modalItem && (
+          <AccessPackageInfo
+            accessPackage={modalItem}
+            availableActions={availableActions}
+          />
+        )}
+      </EditModal>
     </RestoreFocusProvider>
   );
 };

@@ -38,8 +38,6 @@
   },
   "keywords": [],
   "accessListMode": "Disabled",
-  "selfIdentifiedUserEnabled": false,
-  "enterpriseUserEnabled": true,
   "resourceType": "Consent",
   "consentTemplate": "sblanesoknad",
   "consentText": {
@@ -52,11 +50,5 @@
   },
   "isOneTimeConsent": false,
   "availableForType": ["LegalEntityEnterprise"],
-  "authorizationReference": [
-    {
-      "id": "urn:altinn:resource",
-      "value": "consent-test-resource"
-    }
-  ],
   "versionId": 203
 }

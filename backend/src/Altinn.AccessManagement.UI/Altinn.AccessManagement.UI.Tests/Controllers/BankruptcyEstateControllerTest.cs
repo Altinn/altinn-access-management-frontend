@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Altinn.AccessManagement.UI.Controllers;
 using Altinn.AccessManagement.UI.Core.Models.BankruptcyEstate.Frontend;
 using Altinn.AccessManagement.UI.Core.Models.ClientDelegation;
@@ -41,6 +42,14 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             string token = PrincipalUtil.GetToken(1234, 1234, 2);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+        private static async Task<List<(string Code, string Path)>> ReadValidationErrors(HttpResponseMessage response)
+        {
+            using JsonDocument body = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            return body.RootElement.GetProperty("validationErrors").EnumerateArray()
+                .Select(error => (error.GetProperty("code").GetString(), error.GetProperty("paths").EnumerateArray().Select(path => path.GetString()).FirstOrDefault()))
+                .ToList();
         }
 
         /// <summary>
@@ -194,22 +203,51 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
-        /// Test case: AddAdministrator returns bad request when the person identifier has an invalid format.
+        /// Test case: AddAdministrator returns a validation problem when the person identifier has an invalid format.
         /// </summary>
         [Fact]
-        public async Task AddAdministrator_InvalidPersonIdentifier_ReturnsBadRequest()
+        public async Task AddAdministrator_InvalidPersonIdentifier_ReturnsValidationProblem()
         {
             Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
-            PersonInput personInput = new PersonInput
-            {
-                PersonIdentifier = "20838198",
-                LastName = "Medaljong",
-            };
+            PersonInput personInput = new PersonInput { PersonIdentifier = "20838198", LastName = "Medaljong" };
             SetAuthHeader();
 
             HttpResponseMessage response = await _client.PostAsync($"{AdministratorsUrl}?party={party}", JsonContent.Create(personInput));
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal([("AM.VLD-00034", "/personIdentifier")], await ReadValidationErrors(response));
+        }
+
+        /// <summary>
+        /// Test case: AddAdministrator returns a validation problem when Access Management finds no person for the input.
+        /// </summary>
+        [Fact]
+        public async Task AddAdministrator_UnknownPerson_ReturnsValidationProblem()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            PersonInput personInput = new PersonInput { PersonIdentifier = "20838198385", LastName = "Ukjent" };
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync($"{AdministratorsUrl}?party={party}", JsonContent.Create(personInput));
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal([("AM.VLD-00034", null)], await ReadValidationErrors(response));
+        }
+
+        /// <summary>
+        /// Test case: AddAdministrator returns a required error per field when the input is empty after quotes are stripped.
+        /// </summary>
+        [Fact]
+        public async Task AddAdministrator_OnlyQuotesInPersonInput_ReturnsRequiredErrors()
+        {
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            PersonInput personInput = new PersonInput { PersonIdentifier = "\"\"", LastName = "\"" };
+            SetAuthHeader();
+
+            HttpResponseMessage response = await _client.PostAsync($"{AdministratorsUrl}?party={party}", JsonContent.Create(personInput));
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal([("STD.VLD-00000", "/personIdentifier"), ("STD.VLD-00000", "/lastName")], await ReadValidationErrors(response));
         }
 
         /// <summary>

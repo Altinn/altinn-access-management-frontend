@@ -1,5 +1,3 @@
-import type { RequestStatus } from '@/rtk/features/requestApi';
-
 /** The API areas, in the order they are shown as tabs. */
 export const activityLogAreas = ['connections', 'request', 'maskinporten'] as const;
 
@@ -41,17 +39,6 @@ export interface ActivityLogDto {
   itemId: string;
   /** The activity type catalog entry for the event */
   activityTypeId?: string | null;
-}
-
-/** A catalog entry from `GET {area}/types` (`ActivityTypeDto`), translated by the API. */
-export interface ActivityTypeDto {
-  id: string;
-  type: ActivityLogType;
-  subtype?: ActivityLogSubtype | null;
-  trigger: ActivityLogTrigger;
-  status?: RequestStatus | null;
-  name: string;
-  description: string;
 }
 
 /** A value from `GET {area}/filter/{field}` (`ActivityLogFilterValueDto`). */

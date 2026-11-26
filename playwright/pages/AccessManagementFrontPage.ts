@@ -29,6 +29,11 @@ export class AccessManagementFrontPage {
     });
   }
 
+  /** Hovedoverskriften viser navnet til den innloggede (for selvidentifiserte: e-posten). */
+  pageHeading(name: string): Locator {
+    return this.page.getByRole('heading', { level: 1, name });
+  }
+
   get systemUserMenuLink(): Locator {
     return this.sidebar.systemAccess;
   }

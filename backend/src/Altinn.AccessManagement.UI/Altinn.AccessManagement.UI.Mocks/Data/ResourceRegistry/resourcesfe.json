@@ -12,7 +12,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-136",
     "description": null,
@@ -47,12 +46,6 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-136"
-      }
-    ],
     "resourceOwnerName": "Skatteetaten",
     "resourceOwnerOrgcode": "skd",
     "resourceOwnerOrgNumber": "974761076"
@@ -70,7 +63,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-400",
     "description": "Tulleregisteret",
@@ -100,12 +92,6 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-400"
-      }
-    ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgcode": "PAA",
     "resourceOwnerOrgNumber": "985399077"
@@ -123,7 +109,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-401",
     "description": "Blomsterhagen",
@@ -158,12 +143,6 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-401"
-      }
-    ],
     "resourceOwnerName": "BLOMSTERFINN",
     "resourceOwnerOrgcode": "finn",
     "resourceOwnerOrgNumber": "994598759"
@@ -181,7 +160,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-402",
     "description": "Det magiske klesskapet",
@@ -216,12 +194,6 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-402"
-      }
-    ],
     "resourceOwnerName": "NARNIA",
     "resourceOwnerOrgNumber": "777777777",
     "resourceOwnerOrgcode": "NRNA"
@@ -239,7 +211,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-403",
     "description": "Snarveien",
@@ -269,12 +240,6 @@
         "referenceSource": "Altinn2"
       }
     ],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-403"
-      }
-    ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgcode": "PAA",
     "resourceOwnerOrgNumber": "130000000"
@@ -292,7 +257,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": [
       "klesskapet_kw"
     ],
@@ -305,15 +269,10 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til Narnia.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-502"
-      }
-    ],
     "resourceOwnerName": "NARNIA",
     "resourceOwnerOrgcode": "NRNA",
-    "resourceOwnerOrgNumber": "777777777"
+    "resourceOwnerOrgNumber": "777777777",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/nrna/nrna.png"
   },
   {
     "title": "Snarveien - lenketjeneste",
@@ -328,7 +287,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-503",
     "visible": true,
@@ -339,15 +297,10 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til snarveier.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-503"
-      }
-    ],
     "resourceOwnerName": "PÅFUNNSETATEN",
     "resourceOwnerOrgcode": "PAA",
-    "resourceOwnerOrgNumber": "130000000"
+    "resourceOwnerOrgNumber": "130000000",
+    "resourceOwnerLogoUrl": null
   },
   {
     "title": "A3 app",
@@ -362,7 +315,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "app_ttd_a3-app",
     "visible": true,
@@ -379,19 +331,10 @@
         "referenceType": "ApplicationId"
       }
     ],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:app",
-        "value": "a3-app"
-      },
-      {
-        "id": "urn:altinn:org",
-        "value": "ttd"
-      }
-    ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "A2 skjema",
@@ -406,7 +349,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "se_3225_1596",
     "visible": true,
@@ -428,19 +370,10 @@
         "referenceType": "ServiceEditionCode"
       }
     ],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:servicecode",
-        "value": "3225"
-      },
-      {
-        "id": "urn:altinn:serviceeditioncode",
-        "value": "1596"
-      }
-    ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "A3 app 2",
@@ -455,7 +388,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "app_ttd_a3-app2",
     "visible": true,
@@ -472,19 +404,10 @@
         "referenceType": "ApplicationId"
       }
     ],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:app",
-        "value": "a3-app2"
-      },
-      {
-        "id": "urn:altinn:org",
-        "value": "ttd"
-      }
-    ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "A2 skjema 2",
@@ -499,7 +422,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "se_322a_159b",
     "visible": true,
@@ -521,19 +443,10 @@
         "referenceType": "ServiceEditionCode"
       }
     ],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:servicecode",
-        "value": "322a"
-      },
-      {
-        "id": "urn:altinn:serviceeditioncode",
-        "value": "159b"
-      }
-    ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "Brannbilen i Brønnøysund",
@@ -548,7 +461,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-508",
     "visible": true,
@@ -559,15 +471,10 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til brannbilen.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-508"
-      }
-    ],
     "resourceOwnerName": "Brannvesenet",
     "resourceOwnerOrgcode": "FD",
-    "resourceOwnerOrgNumber": "110110110"
+    "resourceOwnerOrgNumber": "110110110",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/fd/fd.svg"
   },
   {
     "title": "Kaffemaskinen i 4. etasje",
@@ -582,7 +489,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-509",
     "visible": true,
@@ -593,15 +499,10 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til kaffemaskinen.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-509"
-      }
-    ],
     "resourceOwnerName": "ØkernPortal",
-    "resourceOwnerOrgcode": "okp",
-    "resourceOwnerOrgNumber": "904111111"
+    "resourceOwnerOrgcode": "OP",
+    "resourceOwnerOrgNumber": "904111111",
+    "resourceOwnerLogoUrl": null
   },
   {
     "title": "DigDir WiFi",
@@ -616,7 +517,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-510",
     "visible": true,
@@ -627,15 +527,10 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-510"
-      }
-    ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "DigDir Sommerfest",
@@ -650,7 +545,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-511",
     "visible": true,
@@ -661,15 +555,10 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-511"
-      }
-    ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "Lønningsoversikt",
@@ -684,7 +573,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-512",
     "visible": true,
@@ -695,15 +583,10 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-512"
-      }
-    ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "Inngangsdøra på kontoret",
@@ -718,7 +601,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "appid-513",
     "visible": true,
@@ -729,15 +611,10 @@
     "isPublicService": true,
     "rightDescription": "Her er en beskrivelse.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-513"
-      }
-    ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "identifier": "jks-test-resource",
@@ -746,23 +623,16 @@
     "rightDescription": "Du gir tilgang til denne fine test ressursen",
     "homepage": null,
     "status": "Active",
-    "spatial": null,
     "contactPoints": [],
     "delegable": true,
     "visible": true,
     "resourceOwnerName": "JK's Test departement",
     "resourceOwnerOrgNumber": "991825827",
-    "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg",
     "resourceOwnerOrgcode": "ttd",
     "resourceReferences": [],
     "priorityCounter": null,
     "resourceType": "GenericAccessResource",
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "jks-test-resource"
-      }
-    ],
     "keywords": []
   },
   {
@@ -772,7 +642,6 @@
     "rightDescription": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
     "homepage": null,
     "status": "Completed",
-    "spatial": null,
     "contactPoints": [
       {
         "category": "Innrapportering",
@@ -785,17 +654,11 @@
     "visible": true,
     "resourceOwnerName": "Skatteetaten",
     "resourceOwnerOrgNumber": "974761076",
-    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.svg",
     "resourceOwnerOrgcode": "skd",
     "resourceReferences": [],
     "priorityCounter": null,
     "resourceType": "GenericAccessResource",
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "ske-innrapportering-boligsameie"
-      }
-    ],
     "keywords": [
       "Boligsameie",
       "innrapportering"
@@ -808,7 +671,6 @@
     "rightDescription": "Delegering gir tilgang selv om eiernavn mangler.",
     "homepage": null,
     "status": "Active",
-    "spatial": null,
     "contactPoints": [],
     "delegable": true,
     "visible": true,
@@ -819,12 +681,6 @@
     "resourceReferences": [],
     "priorityCounter": null,
     "resourceType": "MaskinportenSchema",
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "appid-520"
-      }
-    ],
     "keywords": []
   },
   {
@@ -836,16 +692,11 @@
     "rightDescription": "Gir tilgang til arkiverte data",
     "resourceType": "MigratedApp",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "migratedapp-test-resource"
-      }
-    ],
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
-    "keywords": []
+    "keywords": [],
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "Arkivert tjeneste - MigratedCorrespondence",
@@ -857,16 +708,11 @@
     "rightDescription": "Gir tilgang til arkiverte korrespondansedata",
     "resourceType": "GenericAccessResource",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "migratedcorrespondence-test-resource"
-      }
-    ],
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
-    "keywords": []
+    "keywords": [],
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "Aktiv tjeneste - MigratedCorrespondence",
@@ -878,16 +724,11 @@
     "rightDescription": "Gir tilgang til korrespondansedata",
     "resourceType": "GenericAccessResource",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "migratedcorrespondence-active-resource"
-      }
-    ],
     "resourceOwnerName": "Testdepartementet",
     "resourceOwnerOrgcode": "TTD",
     "resourceOwnerOrgNumber": "974760746",
-    "keywords": []
+    "keywords": [],
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   },
   {
     "title": "GSI - Administrasjon",
@@ -902,7 +743,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "gsi-administrasjon",
     "visible": true,
@@ -913,15 +753,10 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til GSI.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "gsi-administrasjon"
-      }
-    ],
     "resourceOwnerName": "Digitaliseringsdirektoratet",
-    "resourceOwnerOrgcode": "digdir",
-    "resourceOwnerOrgNumber": "991825827"
+    "resourceOwnerOrgcode": "DIGDIR",
+    "resourceOwnerOrgNumber": "991825827",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/digdir/digdir.svg"
   },
   {
     "title": "Regnskapstjenester for kommuner",
@@ -936,7 +771,6 @@
       }
     ],
     "homepage": null,
-    "isPartOf": null,
     "keywords": null,
     "identifier": "regnskap-bergsiden",
     "visible": true,
@@ -947,14 +781,9 @@
     "isPublicService": true,
     "rightDescription": "Gir tilgang til regnskapsdata.",
     "resourceReferences": [],
-    "authorizationReference": [
-      {
-        "id": "urn:altinn:resource",
-        "value": "regnskap-bergsiden"
-      }
-    ],
     "resourceOwnerName": "Testdepartementet",
-    "resourceOwnerOrgcode": "ttd",
-    "resourceOwnerOrgNumber": "974760746"
+    "resourceOwnerOrgcode": "TTD",
+    "resourceOwnerOrgNumber": "974760746",
+    "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg"
   }
 ]

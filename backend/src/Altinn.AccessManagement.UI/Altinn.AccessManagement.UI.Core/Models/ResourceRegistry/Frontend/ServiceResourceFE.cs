@@ -39,12 +39,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public string Status { get; set; }
 
         /// <summary>
-        /// spatial coverage
-        /// This property represents that area(s) a Public Service is likely to be available only within, typically the area(s) covered by a particular public authority.
-        /// </summary>
-        public List<string> Spatial { get; set; }
-
-        /// <summary>
         /// List of possible contact points
         /// </summary>
         public List<ContactPoint> ContactPoints { get; set; }
@@ -96,11 +90,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         public ResourceType ResourceType { get; set; }
 
         /// <summary>
-        /// List of autorizationReference attributes to reference this resource in authorization API
-        /// </summary>
-        public List<IdValuePair> AuthorizationReference { get; set; }
-
-        /// <summary>
         /// Keywords to be used in search
         /// </summary>
         public List<string> Keywords { get; set; }
@@ -116,22 +105,20 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// Basic constructor
         /// </summary>
         public ServiceResourceFE(
-            string identifier, 
-            string title, 
-            string description, 
-            string rightDescription, 
-            string status, 
-            string resourceOwnerName, 
+            string identifier,
+            string title,
+            string description,
+            string rightDescription,
+            string status,
+            string resourceOwnerName,
             string resourceOwnerOrgNumber,
-            List<ResourceReference> resourceReferences, 
-            ResourceType resourceType, 
-            List<ContactPoint> contactPoints, 
-            List<string> spatial, 
-            List<IdValuePair> authorizationReference, 
+            List<ResourceReference> resourceReferences,
+            ResourceType resourceType,
+            List<ContactPoint> contactPoints,
             string homepage = null,
-            int? priorityCounter = null, 
-            bool visible = true, 
-            bool delegable = true, 
+            int? priorityCounter = null,
+            bool visible = true,
+            bool delegable = true,
             List<string> keywords = null,
             string resourceOwnerLogoUrl = null,
             string resourceOwnerOrgcode = null)
@@ -151,37 +138,8 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
             Visible = visible;
             Delegable = delegable;
             ContactPoints = contactPoints;
-            Spatial = spatial;
-            AuthorizationReference = authorizationReference;
             Keywords = keywords ?? new List<string>();
             ResourceOwnerOrgcode = resourceOwnerOrgcode;
-        }
-
-        /// <summary>
-        /// Constructor used when copying
-        /// </summary>
-        /// <param name="serviceResourceFE">The resource to be copied</param>
-        public ServiceResourceFE(ServiceResourceFE serviceResourceFE)
-        {
-            Identifier = serviceResourceFE.Identifier;
-            Title = serviceResourceFE.Title;
-            Description = serviceResourceFE.Description;
-            RightDescription = serviceResourceFE.RightDescription;
-            Homepage = serviceResourceFE.Homepage;
-            Status = serviceResourceFE.Status;
-            ResourceOwnerName = serviceResourceFE.ResourceOwnerName;
-            ResourceOwnerLogoUrl = serviceResourceFE.ResourceOwnerLogoUrl;
-            ResourceOwnerOrgNumber = serviceResourceFE.ResourceOwnerOrgNumber;
-            PriorityCounter = serviceResourceFE.PriorityCounter;
-            ResourceReferences = serviceResourceFE.ResourceReferences;
-            ResourceType = serviceResourceFE.ResourceType;
-            Visible = serviceResourceFE.Visible;
-            Delegable = serviceResourceFE.Delegable;
-            ContactPoints = serviceResourceFE.ContactPoints;
-            Spatial = serviceResourceFE.Spatial;
-            AuthorizationReference = serviceResourceFE.AuthorizationReference;
-            Keywords = serviceResourceFE.Keywords ?? new List<string>();
-            ResourceOwnerOrgcode = serviceResourceFE.ResourceOwnerOrgcode;
         }
     }
 }

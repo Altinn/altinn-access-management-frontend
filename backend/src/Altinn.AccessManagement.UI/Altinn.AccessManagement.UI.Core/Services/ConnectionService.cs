@@ -92,7 +92,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 {
                     throw new ArgumentException("Invalid person identifier format");
                 }
-   
+
                 PersonInput cleanedInput = new PersonInput
                 {
                     LastName = lastnameCleaned,

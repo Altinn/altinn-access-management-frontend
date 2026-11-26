@@ -35,7 +35,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         {
             // Arrange
             string expectedUrl = "https://localhost";
-           
+
             // Act
             HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/logoutredirect");
 
@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             Assert.Equal(expectedUrl, httpResponse.Headers.Location.OriginalString);
         }
 
-         /// <summary>
+        /// <summary>
         ///     Test case: LogoutRedirect redirects to URL from encrypted cookie
         ///     Expected: Returns redirect response to URL decrypted from cookie
         /// </summary>
@@ -56,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             byte[] plainTextBytes = Encoding.UTF8.GetBytes(expectedUrl);
             string encodedUrl = Convert.ToBase64String(plainTextBytes);
             string cookieValue = $"AltinnLogoutInfo=amSafeRedirectUrl={encodedUrl}";
-            
+
             HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, "accessmanagement/api/v1/logoutredirect");
             requestMessage.Headers.Add("Cookie", cookieValue);
 

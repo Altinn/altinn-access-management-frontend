@@ -29,8 +29,8 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Constructor for <see cref="ConsentController"/>
         /// </summary>
         public ConsentController(
-            IConsentService consentService,        
-            IOptions<PlatformSettings> platformSettings, 
+            IConsentService consentService,
+            IOptions<PlatformSettings> platformSettings,
             IOptions<GeneralSettings> generalSettings,
             IEncryptionService encryptionService)
         {
@@ -39,7 +39,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             _generalSettings = generalSettings;
             _encryptionService = encryptionService;
         }
-        
+
         /// <summary>
         /// Get a consent request by id
         /// </summary>
@@ -233,7 +233,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string encryptedUrl = await _encryptionService.EncryptText(redirectUrlResponse.Value);
                 HttpContext.Response.Cookies.Append(_platformSettings.Value.AltinnLogoutInfoCookieName, $"amSafeRedirectUrl={encryptedUrl}", cookieOptions);
             }
-            
+
             string logoutUrl = $"{_platformSettings.Value.ApiAuthenticationEndpoint}logout";
             return Redirect(logoutUrl);
         }

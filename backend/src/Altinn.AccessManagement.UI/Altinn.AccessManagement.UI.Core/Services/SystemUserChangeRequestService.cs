@@ -38,7 +38,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<Result<SystemUserChangeRequestFE>> GetSystemUserChangeRequest(Guid changeRequestId, string languageCode, CancellationToken cancellationToken)
         {
             Result<SystemUserChangeRequest> changeRequest = await _systemUserChangeRequestClient.GetSystemUserChangeRequest(changeRequestId, cancellationToken);
-            
+
             if (changeRequest.IsProblem)
             {
                 return new Result<SystemUserChangeRequestFE>(changeRequest.Problem);
@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             var orgNames = await _registerClient.GetPartyNames([system.SystemVendorOrgNumber], cancellationToken);
             RegisteredSystemFE systemFE = SystemRegisterUtils.MapToRegisteredSystemFE(languageCode, system, orgNames);
 
-            return new SystemUserChangeRequestFE() 
+            return new SystemUserChangeRequestFE()
             {
                 Id = changeRequest.Value.Id,
                 PartyId = changeRequest.Value.PartyId,

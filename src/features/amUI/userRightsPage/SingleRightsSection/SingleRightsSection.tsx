@@ -21,6 +21,7 @@ import { useCanRequestAccess } from '@/resources/hooks/useCanRequestAccess';
 import { SingleRightsDelegationModal } from '../../common/DelegationModal/SingleRights/SingleRightsDelegationModal';
 import { usePartyRepresentation } from '../../common/PartyRepresentationContext/PartyRepresentationContext';
 import { DelegationAction, EditModal } from '../../common/DelegationModal/EditModal';
+import { ResourceInfo } from '../../common/DelegationModal/SingleRights/ResourceInfo';
 import { getAvailableActions } from '../../common/DelegationModal/delegationActionUtils';
 import { getInheritedStatus } from '../../common/useInheritedStatus';
 import { HelpText } from '../../common/HelpText/HelpText';
@@ -158,7 +159,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
         {revokeConfirmationDialog}
         <EditModal
           ref={modalRef}
-          resource={selectedResource ?? undefined}
+          ariaLabel={t('delegation_modal.aria_label.single_rights')}
           onClose={() => {
             // Request focus synchronously before clearing state.
             // If the resource was revoked inside the modal its row is gone, so fall back to
@@ -168,8 +169,14 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
             }
             setSelectedResource(null);
           }}
-          availableActions={availableActions}
-        />
+        >
+          {selectedResource && (
+            <ResourceInfo
+              resource={selectedResource}
+              availableActions={availableActions}
+            />
+          )}
+        </EditModal>
       </div>
     )
   );

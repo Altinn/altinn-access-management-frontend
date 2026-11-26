@@ -36,7 +36,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             if (id == "00000000-0000-0000-0000-000000000000")
             {
                 throw new Exception("Simulated internal error");
-            } 
+            }
             else if (id == "11111111-1111-1111-1111-111111111111")
             {
                 throw new HttpRequestException("Simulated not found error", null, System.Net.HttpStatusCode.NotFound);

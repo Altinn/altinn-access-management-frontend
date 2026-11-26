@@ -1,0 +1,4 @@
+/* The controls of a list row do not wrap text, and the dialog would inherit that. */
+.remove dialog {
+  white-space: normal;
+}

@@ -23,9 +23,12 @@ import {
   TechnicalErrorParagraphs,
 } from '../common/TechnicalErrorParagraphs/TechnicalErrorParagraphs';
 
+import { NotificationsNotSupportedDialog } from './NotificationsNotSupportedDialog';
+import { isNotificationAddressSupported } from './notificationAddressSupport';
 import classes from './SettingsPageContent.module.css';
 import { SettingsModal } from './SettingsModal';
 import { SettingsServiceAnnouncement } from './SettingsServiceAnnouncement';
+import { OrganizationNotInErAlert } from './OrganizationNotInErAlert';
 
 export const SettingsPageContent = () => {
   const { t } = useTranslation();
@@ -36,12 +39,14 @@ export const SettingsPageContent = () => {
 
   const { data: reportee, isLoading: isLoadingReportee } = useGetReporteeQuery();
   const { actingParty, isLoading: actorLoading } = usePartyRepresentation();
+  const orgNumber = actingParty?.organizationIdentifier;
+  const isAddressSupported = isNotificationAddressSupported(orgNumber);
   const {
     data: notificationAddresses,
     isLoading: notifLoading,
     error: notifError,
-  } = useGetOrgNotificationAddressesQuery(actingParty?.organizationIdentifier ?? '', {
-    skip: !actingParty?.organizationIdentifier,
+  } = useGetOrgNotificationAddressesQuery(orgNumber ?? '', {
+    skip: !orgNumber || !isAddressSupported,
   });
   const notifErrorDetails = createErrorDetails(notifError);
 
@@ -94,6 +99,7 @@ export const SettingsPageContent = () => {
         isLoading={isLoading}
       />
       <SettingsServiceAnnouncement />
+      <OrganizationNotInErAlert />
       <div className={classes.settingsHeaderAndInfo}>
         <DsHeading
           level={2}
@@ -159,7 +165,7 @@ export const SettingsPageContent = () => {
               }
               as={'button'}
               onClick={() => onSettingsClick('email')}
-              controls={emailAddresses.length === 0 && t('common.add')}
+              controls={isAddressSupported && emailAddresses.length === 0 && t('common.add')}
               loading={isLoading}
               linkIcon
             />
@@ -183,20 +189,28 @@ export const SettingsPageContent = () => {
               as={'button'}
               onClick={() => onSettingsClick('sms')}
               loading={isLoading}
-              controls={phoneNumbers.length === 0 && t('common.add')}
+              controls={isAddressSupported && phoneNumbers.length === 0 && t('common.add')}
               linkIcon
             />
           </List>
         </div>
       )}
-      <SettingsModal
-        mode={modalMode}
-        open={openModal}
-        onClose={onCloseModal}
-        canDeleteLastAddress={
-          modalMode === 'email' ? phoneNumbers.length > 0 : emailAddresses.length > 0 // Must have at least one address of either type
-        }
-      />
+      {isAddressSupported ? (
+        <SettingsModal
+          mode={modalMode}
+          open={openModal}
+          onClose={onCloseModal}
+          canDeleteLastAddress={
+            modalMode === 'email' ? phoneNumbers.length > 0 : emailAddresses.length > 0 // Must have at least one address of either type
+          }
+        />
+      ) : (
+        <NotificationsNotSupportedDialog
+          open={openModal}
+          organizationName={formattedActingPartyName}
+          onClose={onCloseModal}
+        />
+      )}
     </div>
   );
 };

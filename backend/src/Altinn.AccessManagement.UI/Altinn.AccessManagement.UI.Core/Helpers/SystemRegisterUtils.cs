@@ -19,7 +19,7 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
         public static RegisteredSystemFE MapToRegisteredSystemFE(string languageCode, RegisteredSystem system, List<PartyName> orgNames)
         {
             string lang = string.IsNullOrWhiteSpace(languageCode) ? "nb" : languageCode;
-            return new RegisteredSystemFE() 
+            return new RegisteredSystemFE()
             {
                 SystemId = system.SystemId,
                 Name = system.Name.TryGetValue(lang, out string name) ? name : "N/A",

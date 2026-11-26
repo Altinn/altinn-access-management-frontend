@@ -8,7 +8,6 @@
       "rightDescription": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
       "homepage": null,
       "status": "Completed",
-      "spatial": null,
       "contactPoints": [
         {
           "category": "Innrapportering",
@@ -21,18 +20,15 @@
       "visible": true,
       "resourceOwnerName": "Skatteetaten",
       "resourceOwnerOrgNumber": "974761076",
-      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+      "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.svg",
       "resourceOwnerOrgcode": "skd",
       "resourceReferences": null,
       "priorityCounter": null,
       "resourceType": "GenericAccessResource",
-      "authorizationReference": [
-        {
-          "id": "urn:altinn:resource",
-          "value": "ske-innrapportering-boligsameie"
-        }
-      ],
-      "keywords": ["Boligsameie", "innrapportering"]
+      "keywords": [
+        "Boligsameie",
+        "innrapportering"
+      ]
     }
   ]
 }

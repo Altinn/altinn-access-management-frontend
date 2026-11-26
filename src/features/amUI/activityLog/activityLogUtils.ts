@@ -3,12 +3,7 @@ import type { Color, LanguageCode } from '@altinn/altinn-components';
 
 import { formatDateToNorwegianWithMonthName } from '@/resources/utils/dateUtils';
 
-import type {
-  ActivityLogDirection,
-  ActivityLogDto,
-  ActivityLogFilterValueDto,
-  ActivityTypeDto,
-} from './types';
+import type { ActivityLogDirection, ActivityLogDto, ActivityLogFilterValueDto } from './types';
 
 type TranslateFunction = TFunction<'translation', undefined>;
 
@@ -182,8 +177,6 @@ interface GetActivityLogSentenceParams {
   t: TranslateFunction;
   /** Whether a translation key exists, normally `i18n.exists`. */
   exists: (key: string) => boolean;
-  /** The area's catalog, used to name events without a sentence template. */
-  activityTypes?: ActivityTypeDto[];
 }
 
 /** Resolves the sentence that describes an entry from the reportee's point of view. */
@@ -193,11 +186,9 @@ export const getActivityLogSentence = ({
   reporteeName,
   t,
   exists,
-  activityTypes,
 }: GetActivityLogSentenceParams): ActivityLogSentence => {
   const candidateKey = getActivityLogEventKey(entry);
   const eventKey = exists(`${candidateKey}.${direction}`) ? candidateKey : `${EVENTS_KEY}.fallback`;
-  const catalogName = activityTypes?.find((type) => type.id === entry.activityTypeId)?.name;
   const byKey = `${eventKey}.by`;
 
   return {
@@ -208,7 +199,7 @@ export const getActivityLogSentence = ({
       counterpart: getActivityLogCounterpart(entry, direction)?.name ?? '',
       object: getActivityLogObjectLabel(entry, t),
       by: entry.byName ?? '',
-      typeName: catalogName ?? t(`${TRIGGER_KEY}.${entry.trigger.toLowerCase()}`),
+      typeName: t(`${TRIGGER_KEY}.${entry.trigger.toLowerCase()}`),
     },
   };
 };

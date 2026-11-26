@@ -37,7 +37,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
 
             IEnumerable<string> orgNumbers = lista.Select(x => x.SystemVendorOrgNumber);
             List<PartyName> orgNames = await _registerClient.GetPartyNames(orgNumbers, cancellationToken);
-            
+
             return lista
                 .Select(system => SystemRegisterUtils.MapToRegisteredSystemFE(languageCode, system, orgNames))
                 .OrderBy(s => s.Name, StringComparer.OrdinalIgnoreCase)

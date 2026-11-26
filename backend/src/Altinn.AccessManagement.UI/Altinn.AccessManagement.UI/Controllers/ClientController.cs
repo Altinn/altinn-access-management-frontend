@@ -201,7 +201,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            
+
             try
             {
                 IEnumerable<AgentDelegationFE> agents = await _clientService.GetAgents(party, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);

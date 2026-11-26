@@ -10,6 +10,7 @@ using Altinn.AccessManagement.UI.Core.Models.Common;
 using Altinn.AccessManagement.UI.Core.Models.Connections;
 using Altinn.AccessManagement.UI.Integration.Configuration;
 using Altinn.AccessManagement.UI.Integration.Util;
+using Altinn.Authorization.ProblemDetails;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -91,7 +92,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<AssignmentDto> AddAdministrator(Guid partyId, PersonInput personInput, CancellationToken cancellationToken = default)
+        public async Task<Result<AssignmentDto>> AddAdministrator(Guid partyId, PersonInput personInput, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/bankruptcyestate/administrators?party={partyId}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -103,6 +104,11 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             if (!response.IsSuccessStatusCode)
             {
+                if (response.StatusCode == HttpStatusCode.BadRequest && ProblemMapper.MapToAmUiValidationProblem(responseContent) is { } validationProblem)
+                {
+                    return validationProblem;
+                }
+
                 _logger.LogError("AccessManagement.UI // BankruptcyEstateClient.AddAdministrator // Unexpected HttpStatusCode: {StatusCode}\n {ResponseBody}", response.StatusCode, responseContent);
                 throw new HttpStatusException(StatusErrorTitle, StatusErrorMessage, response.StatusCode, _httpContextAccessor.HttpContext?.TraceIdentifier, responseContent);
             }

@@ -122,5 +122,64 @@ namespace Altinn.AccessManagement.UI.Core.Helpers
                 _ => null
             };
         }
+
+        /// <summary>
+        /// Maps the validation errors in a problem details response from AM to an AMUI validation problem
+        /// </summary>
+        /// <param name="responseContent">The response body from AM</param>
+        /// <returns>The validation problem, or null when the body holds no validation error the UI has a message for</returns>
+        public static ValidationProblemInstance MapToAmUiValidationProblem(string responseContent)
+        {
+            ValidationErrorBuilder errors = default;
+
+            foreach (string errorCode in GetValidationErrorCodes(responseContent))
+            {
+                ValidationErrorDescriptor descriptor = errorCode switch
+                {
+                    "AM.VLD-00008" => AmProblem.DisallowedEntityType,
+                    "AM.VLD-00034" => AmProblem.InvalidExternalIdentifiers,
+                    _ => null,
+                };
+
+                if (descriptor != null)
+                {
+                    errors.Add(descriptor);
+                }
+            }
+
+            return errors.TryBuild(out ValidationProblemInstance problem) ? problem : null;
+        }
+
+        private static List<string> GetValidationErrorCodes(string responseContent)
+        {
+            List<string> codes = [];
+            if (string.IsNullOrWhiteSpace(responseContent))
+            {
+                return codes;
+            }
+
+            try
+            {
+                AltinnProblemDetails problemDetails = JsonSerializer.Deserialize<AltinnProblemDetails>(responseContent);
+                if (problemDetails?.Extensions is { } extensions &&
+                    extensions.TryGetValue("validationErrors", out object validationErrorsObj) &&
+                    validationErrorsObj is JsonElement { ValueKind: JsonValueKind.Array } validationErrors)
+                {
+                    foreach (JsonElement error in validationErrors.EnumerateArray())
+                    {
+                        if (error.TryGetProperty("code", out JsonElement codeElement) && codeElement.GetString() is { } code)
+                        {
+                            codes.Add(code);
+                        }
+                    }
+                }
+            }
+            catch (JsonException)
+            {
+                // The body is not problem details, so there are no codes to read
+            }
+
+            return codes;
+        }
     }
 }

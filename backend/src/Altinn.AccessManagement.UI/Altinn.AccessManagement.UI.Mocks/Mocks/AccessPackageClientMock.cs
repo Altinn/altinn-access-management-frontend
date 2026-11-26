@@ -36,10 +36,15 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName)
+        public Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName, IEnumerable<string> resourceProviderCodes = null)
         {
 
             IEnumerable<SearchObject<AccessPackage>> searchResults = Util.GetMockData<IEnumerable<SearchObject<AccessPackage>>>($"{dataFolder}/AccessPackage/packages.json");
+
+            if (resourceProviderCodes?.Any() == true)
+            {
+                searchResults = searchResults.Where(sr => sr.Object.Resources?.Any(r => resourceProviderCodes.Contains(r.Provider?.Code)) == true);
+            }
 
             return searchString != null ? Task.FromResult(searchResults.Where(sr => sr.Object.Name.ToLower().Contains(searchString.ToLower()))) : Task.FromResult(searchResults);
         }
@@ -176,7 +181,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 return await Task.FromResult(fallback);
             }
         }
-        
+
         /// <inheritdoc />
         public Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
         {

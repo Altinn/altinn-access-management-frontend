@@ -34,14 +34,5 @@ namespace Altinn.AccessManagement.UI.Core.ClientInterfaces
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The field names as the API spells them (e.g. From, To, By, Resource).</returns>
         Task<IEnumerable<string>> GetFilterFields(string area, CancellationToken cancellationToken = default);
-
-        /// <summary>
-        /// Gets the activity type catalog entries the area accepts, translated to the given language.
-        /// </summary>
-        /// <param name="area">The area: connections, request or maskinporten.</param>
-        /// <param name="languageCode">The language code in backend standard (nb, nn or en).</param>
-        /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>The catalog entries.</returns>
-        Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(string area, string languageCode, CancellationToken cancellationToken = default);
     }
 }

@@ -20,13 +20,13 @@ namespace Altinn.AccessManagement.UI.Core.Constants
             = _factory.Create(1, HttpStatusCode.NotFound, "Consent not found");
 
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
-        public static ProblemDescriptor ConsentCantBeAccepted { get; }  
+        public static ProblemDescriptor ConsentCantBeAccepted { get; }
             = _factory.Create(2, HttpStatusCode.BadRequest, "Consent have wrong status to be consented");
 
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
         public static ProblemDescriptor ConsentCantBeRevoked { get; }
             = _factory.Create(10, HttpStatusCode.BadRequest, "Consent have wrong status to be revoked");
-        
+
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
         public static ProblemDescriptor ConsentRevoked { get; }
             = _factory.Create(11, HttpStatusCode.BadRequest, "Consent is revoked");
@@ -44,7 +44,7 @@ namespace Altinn.AccessManagement.UI.Core.Constants
             = _factory.Create(15, HttpStatusCode.BadRequest, "Consent cant be rejected. Wrong status");
 
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
-        public static ProblemDescriptor ConsentPartyNotFound { get; }  
+        public static ProblemDescriptor ConsentPartyNotFound { get; }
             = _factory.Create(95, HttpStatusCode.NotFound, "Consent party not found");
 
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
@@ -52,15 +52,15 @@ namespace Altinn.AccessManagement.UI.Core.Constants
             = _factory.Create(96, HttpStatusCode.NotFound, "Consent resource not found");
 
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
-        public static ProblemDescriptor ConsentTemplateNotFound { get; }  
+        public static ProblemDescriptor ConsentTemplateNotFound { get; }
             = _factory.Create(97, HttpStatusCode.NotFound, "Consent template not found");
 
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
-        public static ProblemDescriptor UnauthorizedUser { get; }  
+        public static ProblemDescriptor UnauthorizedUser { get; }
             = _factory.Create(98, HttpStatusCode.Unauthorized, "Unauthorized user");
 
         /// <summary>Gets a <see cref="ProblemDescriptor"/>.</summary>
-        public static ProblemDescriptor UnknownError { get; }  
+        public static ProblemDescriptor UnknownError { get; }
             = _factory.Create(99, HttpStatusCode.InternalServerError, "Unhandled error from backend");
 
         /// <summary>

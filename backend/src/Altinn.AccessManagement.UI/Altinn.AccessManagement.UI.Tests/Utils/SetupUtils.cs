@@ -468,31 +468,6 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
         }
 
         /// <summary>
-        /// Gets a HttpClient for unittests testing for AltinnCdnController
-        /// </summary>
-        /// <param name="customFactory">Web app factory to configure test services for AltinnCdnController tests</param>
-        /// <param name="value">An object to be used in the setup, can be null</param>
-        /// <returns>HttpClient</returns>
-        internal static HttpClient GetTestClient(CustomWebApplicationFactory<AltinnCdnController> customFactory)
-        {
-            WebApplicationFactory<AltinnCdnController> factory = customFactory.WithWebHostBuilder(builder =>
-            {
-                builder.ConfigureTestServices(services =>
-                {
-                    services.AddSingleton<IAltinnCdnClient, AltinnCdnClientMock>();
-                    services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-                    services.AddSingleton<IPostConfigureOptions<JwtCookieOptions>, JwtCookiePostConfigureOptionsStub>();
-                });
-            });
-            WebApplicationFactoryClientOptions opts = new WebApplicationFactoryClientOptions
-            {
-                AllowAutoRedirect = false,
-            };
-            factory.Server.AllowSynchronousIO = true;
-            return factory.CreateClient(opts);
-        }
-
-        /// <summary>
         /// Gets a HttpClient for unittests testing for ClientController
         /// </summary>
         /// <param name="customFactory">Web app factory to configure test services for ClientController tests</param>
@@ -568,9 +543,7 @@ namespace Altinn.AccessManagement.UI.Tests.Utils
                 AllowAutoRedirect = false,
             };
             factory.Server.AllowSynchronousIO = true;
-            HttpClient client = factory.CreateClient(opts);
-            client.DefaultRequestHeaders.Add("Cookie", "selectedLanguage=no_nb");
-            return client;
+            return factory.CreateClient(opts);
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ import {
   A2_PROVIDER_CODE,
   CRA_PROVIDER_CODE,
   ECC_PROVIDER_CODE,
+  isBankruptcyEstateAdministratorRole,
 } from '../UserRoles/useRoleMetadata';
 
 export const RIGHTHOLDER_ROLE = 'rettighetshaver';
@@ -12,12 +13,14 @@ export const AGENT_ROLE = 'agent';
 
 export const ER_ROLE_REASON = 'er_roles';
 export const AGENT_ROLE_REASON = 'agent_role';
+export const BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON = 'bankruptcy_estate_administrator_role';
 export const GUARDIANSHIP_ROLE_REASON = 'guardianship_role';
 export const VIA_ROLE_REASON = 'via_role';
 
 export type NonDeletableReason =
   | typeof ER_ROLE_REASON
   | typeof AGENT_ROLE_REASON
+  | typeof BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON
   | typeof GUARDIANSHIP_ROLE_REASON
   | typeof VIA_ROLE_REASON;
 
@@ -94,6 +97,11 @@ export const getNonDeletableReasons = (
     (rolePermission) => rolePermission?.role?.code === AGENT_ROLE,
   );
 
+  // Removed under bankruptcy estate administration, never from the user page.
+  const hasEstateAdministratorRole = rolePermissions.some((rolePermission) =>
+    isBankruptcyEstateAdministratorRole(rolePermission?.role?.code),
+  );
+
   const hasGuardianshipRole = rolePermissions.some(
     (rolePermission) => rolePermission?.role?.provider?.code === CRA_PROVIDER_CODE,
   );
@@ -106,6 +114,9 @@ export const getNonDeletableReasons = (
   }
   if (hasAgentRole) {
     reasons.push(AGENT_ROLE_REASON);
+  }
+  if (hasEstateAdministratorRole) {
+    reasons.push(BANKRUPTCY_ESTATE_ADMINISTRATOR_ROLE_REASON);
   }
   if (hasGuardianshipRole) {
     reasons.push(GUARDIANSHIP_ROLE_REASON);

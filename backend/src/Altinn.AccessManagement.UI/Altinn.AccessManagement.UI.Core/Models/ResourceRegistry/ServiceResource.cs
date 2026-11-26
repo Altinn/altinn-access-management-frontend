@@ -39,30 +39,9 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         public string Status { get; set; }
 
         /// <summary>
-        /// spatial coverage
-        /// This property represents that area(s) a Public Service is likely to be available only within, typically the area(s) covered by a particular public authority.
-        /// </summary>
-        public List<string> Spatial { get; set; }
-
-        /// <summary>
         /// List of possible contact points
         /// </summary>
         public List<ContactPoint> ContactPoints { get; set; }
-
-        /// <summary>
-        /// Linkes to the outcome of a public service
-        /// </summary>
-        public List<string> Produces { get; set; }
-
-        /// <summary>
-        /// IsPartOf
-        /// </summary>
-        public string IsPartOf { get; set; }
-
-        /// <summary>
-        /// ThematicAreas
-        /// </summary>
-        public List<string> ThematicAreas { get; set; }
 
         /// <summary>
         /// ResourceReference
@@ -90,21 +69,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         public List<Keyword> Keywords { get; set; }
 
         /// <summary>
-        /// Defines if the resource is limited by Resource Rights Registry
-        /// </summary>
-        public bool LimitedByRRR { get; set; }
-
-        /// <summary>
-        /// The user acting on behalf of party can be a selfidentifed users
-        /// </summary>
-        public bool SelfIdentifiedUserEnabled { get; set; }
-
-        /// <summary>
-        /// The user acting on behalf of party can be an enterprise users
-        /// </summary>
-        public bool EnterpriseUserEnabled { get; set; }
-
-        /// <summary>
         /// ResourceType
         /// </summary>
         [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -114,11 +78,6 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry
         /// Available for type defines which type of entity / person that resource targets
         /// </summary>
         public List<ResourcePartyType> AvailableForType { get; set; }
-
-        /// <summary>
-        /// List of autorizationReference attributes to reference this resource in authorization API
-        /// </summary>
-        public List<IdValuePair> AuthorizationReference { get; set; }
 
         /// <summary>
         /// Consent template defines which template to use if resource is a consent resource

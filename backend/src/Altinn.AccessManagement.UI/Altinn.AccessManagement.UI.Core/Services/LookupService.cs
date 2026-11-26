@@ -34,7 +34,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return await GetPartyByUUID(userUuid);
         }
-        
+
         private async Task<PartyFE> GetPartyByUUID(Guid uuid)
         {
             Altinn.Register.Contracts.Party partyFromRegistry = await _registerClient.GetParty(uuid);

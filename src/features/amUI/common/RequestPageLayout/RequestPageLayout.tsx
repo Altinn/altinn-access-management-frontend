@@ -5,7 +5,6 @@ import cn from 'classnames';
 import { DsButton, DsSpinner, Layout, RootProvider } from '@altinn/altinn-components';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
-import { getButtonIconSize } from '@/resources/utils/iconUtils';
 import { useRedirectToRequestParty } from '@/resources/hooks/useRedirectToRequestParty';
 import { useLanguageCode } from '@/resources/hooks/useLanguageCode';
 
@@ -98,10 +97,7 @@ export const RequestPageLayout = ({
                 asChild
               >
                 <Link to={backToPage}>
-                  <ArrowLeftIcon
-                    fontSize={getButtonIconSize(true)}
-                    aria-hidden='true'
-                  />
+                  <ArrowLeftIcon aria-hidden='true' />
                   {t('common.back')}
                 </Link>
               </DsButton>

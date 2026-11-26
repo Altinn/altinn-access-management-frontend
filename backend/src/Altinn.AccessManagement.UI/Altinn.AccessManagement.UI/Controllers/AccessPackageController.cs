@@ -38,16 +38,17 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="searchString">SearchString (mapped to term).</param>
         /// <param name="typeName">Package type name (e.g. organisasjon, person).</param>
+        /// <param name="resourceProviderCode">Service owner org codes. Only packages with resources from these service owners are returned.</param>
         /// <returns>All search results, sorted into areas</returns>
         [HttpGet]
         [Authorize]
         [Route("search")]
-        public async Task<ActionResult<List<AccessAreaFE>>> Search([FromQuery] string searchString, [FromQuery] string typeName = null)
+        public async Task<ActionResult<List<AccessAreaFE>>> Search([FromQuery] string searchString, [FromQuery] string typeName = null, [FromQuery] List<string> resourceProviderCode = null)
         {
             var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
             try
             {
-                return await _accessPackageService.GetSearch(languageCode, searchString, typeName);
+                return await _accessPackageService.GetSearch(languageCode, searchString, typeName, resourceProviderCode);
             }
             catch (HttpStatusException ex)
             {

@@ -47,16 +47,8 @@
     }
   ],
   "accessListMode": "Disabled",
-  "selfIdentifiedUserEnabled": false,
-  "enterpriseUserEnabled": true,
   "resourceType": "GenericAccessResource",
   "availableForType": [
     "LegalEntityEnterprise"
-  ],
-  "authorizationReference": [
-    {
-      "id": "urn:altinn:resource",
-      "value": "ske-innrapportering-boligsameie"
-    }
   ]
 }

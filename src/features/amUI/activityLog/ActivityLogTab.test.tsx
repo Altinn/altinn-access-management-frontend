@@ -17,7 +17,6 @@ vi.mock('@/rtk/features/activityLogApi', () => ({
   useGetActivityLogFilterValuesQuery: vi.fn(),
   useGetActivityLogFilterOptionsQuery: vi.fn(),
   useGetActivityLogFilterFieldsQuery: vi.fn(),
-  useGetActivityTypesQuery: vi.fn(),
 }));
 
 // No i18n instance is initialised in tests; `t` returns the key, and every sentence template exists.
@@ -30,6 +29,11 @@ vi.mock('react-i18next', () => ({
 }));
 
 const fetchNextPage = vi.fn();
+const reporteeUuid = 'cd35779b-b174-4ecc-bbef-ece13611be7f';
+
+vi.mock('@/resources/Cookie/CookieMethods', () => ({
+  getCookie: (name: string) => (name === 'AltinnPartyUuid' ? reporteeUuid : ''),
+}));
 
 /** The query hooks are mocked with only the fields the tab reads. */
 const mockHookResult = (hook: unknown, result: object) => (hook as Mock).mockReturnValue(result);
@@ -95,7 +99,6 @@ describe('ActivityLogTab', () => {
     mockHookResult(activityLogApi.useGetActivityLogFilterValuesQuery, {
       currentData: { data: [{ id: 'lise-larsen-as', name: 'Lise Larsen AS' }], links: {} },
     });
-    mockHookResult(activityLogApi.useGetActivityTypesQuery, { data: [] });
     mockHookResult(activityLogApi.useGetActivityLogFilterFieldsQuery, { data: sampleFilterFields });
   });
 
@@ -105,6 +108,7 @@ describe('ActivityLogTab', () => {
 
     const search = {
       area: 'maskinporten',
+      party: reporteeUuid,
       direction: 'from',
       to: [],
       by: [],

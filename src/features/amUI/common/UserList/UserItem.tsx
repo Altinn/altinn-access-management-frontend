@@ -17,6 +17,7 @@ import {
 import {
   ECC_PROVIDER_CODE,
   ROLE_CODES_TO_IGNORE,
+  isBankruptcyEstateAdministratorRole,
   useRoleMetadata,
 } from '../UserRoles/useRoleMetadata';
 import { isNewUser } from '../isNewUser';
@@ -78,10 +79,17 @@ export const UserItem = ({
     ? mapRoles(user.roles.filter((r) => !r.viaParty))
         .filter(
           (r) =>
-            r.provider?.code === ECC_PROVIDER_CODE && !ROLE_CODES_TO_IGNORE.includes(r.code || ''),
+            isBankruptcyEstateAdministratorRole(r.code) ||
+            (r.provider?.code === ECC_PROVIDER_CODE &&
+              !ROLE_CODES_TO_IGNORE.includes(r.code || '')),
         )
         .map((r) => r.name)
     : [];
+
+  // The role badges take the row's colour. The sketch shows this role in blue.
+  const isEstateAdministrator = user.roles?.some(
+    (r) => !r.viaParty && isBankruptcyEstateAdministratorRole(r.code),
+  );
 
   const viaRoleNames = user.roles
     ? mapRoles(user.roles.filter((r) => r.viaParty))
@@ -140,6 +148,7 @@ export const UserItem = ({
         },
       })}
       roleNames={showRoles && !isExpanded ? roleNames : []}
+      color={isEstateAdministrator ? 'company' : undefined}
       type={getAvatarType(user)}
       expanded={isExpanded}
       collapsible={!!hasInheritingUsers}

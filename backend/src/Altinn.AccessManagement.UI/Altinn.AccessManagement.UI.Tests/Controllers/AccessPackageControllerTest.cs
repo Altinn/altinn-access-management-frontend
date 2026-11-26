@@ -77,6 +77,24 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: Search filtered on a service owner
+        ///     Expected: Search returns only the access packages with resources from that service owner
+        /// </summary>
+        [Fact]
+        public async Task GetSearch_WithResourceProviderCode()
+        {
+            // Act
+            HttpResponseMessage response = await _client.GetAsync("accessmanagement/api/v1/accesspackage/search?resourceProviderCode=skd");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            List<AccessAreaFE> actualResources = JsonSerializer.Deserialize<List<AccessAreaFE>>(await response.Content.ReadAsStringAsync(), options);
+            AccessPackageFE accessPackage = Assert.Single(Assert.Single(actualResources).AccessPackages);
+            Assert.Equal("Regnskapsfører med signeringsrettighet", accessPackage.Name);
+        }
+
+        /// <summary>
         ///     Test case: Get all access packages for a valid right holder on behalf of a valid party 
         ///     Expected: Returns the right holders active access package delegations, sorted into the areas they belong to
         /// </summary>
@@ -206,7 +224,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
             string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
             string party = from;
             string packageId = "1dba50d6-f604-48e9-bd41-82321b13e85c";
-            
+
             var expectedResult = Util.GetMockData<AccessPackageFE>(_expectedDataPath + $"/AccessPackage/GetSinglePackagePermissions/{from}.json");
 
             // Act
@@ -214,7 +232,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            
+
             var result = JsonSerializer.Deserialize<AccessPackageFE>(await response.Content.ReadAsStringAsync(), options);
             AssertionUtil.AssertEqual(expectedResult, result);
         }

@@ -8,51 +8,22 @@ import {
   DsSkeleton,
 } from '@altinn/altinn-components';
 
-import type { PackageResource } from '@/rtk/features/accessPackageApi';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import type { ExtendedAccessPackage } from '@/features/amUI/common/AccessPackageList/useAreaPackageList';
 import { PackageHeader } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageHeader';
 import { PackageMeta } from '@/features/amUI/common/DelegationModal/AccessPackages/PackageMeta';
-
-import type { SystemUserAccessPackage } from '../../types';
+import { type AccessPackage } from '@/rtk/features/accessPackageApi';
 
 import classes from './RightsList.module.css';
 
 interface RightsListProps {
   resources: ServiceResource[];
-  accessPackages: SystemUserAccessPackage[];
+  accessPackages: AccessPackage[];
   hideHeadings?: boolean;
   isLoading?: boolean;
   headingLevel?: 2 | 3 | 4;
 }
-
-const mapSystemUserAccessPackageToExtended = (
-  accessPackage: SystemUserAccessPackage,
-): ExtendedAccessPackage => ({
-  ...accessPackage,
-  resources: accessPackage.resources.map((resource): PackageResource => ({
-    id: resource.identifier,
-    identifier: resource.identifier,
-    name: resource.title,
-    title: resource.title,
-    description: resource.description ?? '',
-    refId: resource.identifier,
-    provider: {
-      id: '',
-      name: resource.resourceOwnerName,
-      refId: '',
-      logoUrl: resource.resourceOwnerLogoUrl,
-      code: '',
-      typeId: '',
-    },
-    resourceOwnerName: resource.resourceOwnerName,
-    resourceOwnerLogoUrl: resource.resourceOwnerLogoUrl,
-    resourceOwnerOrgcode: resource.resourceOwnerOrgcode,
-    resourceOwnerOrgNumber: resource.resourceOwnerOrgNumber,
-    resourceOwnerType: '',
-  })),
-});
 
 export const RightsList = ({
   resources,
@@ -67,8 +38,8 @@ export const RightsList = ({
   const [selectedAccessPackage, setSelectedAccessPackage] =
     React.useState<ExtendedAccessPackage | null>(null);
 
-  const onSelectAccessPackage = (accessPackage: SystemUserAccessPackage): void => {
-    setSelectedAccessPackage(mapSystemUserAccessPackageToExtended(accessPackage));
+  const onSelectAccessPackage = (accessPackage: AccessPackage): void => {
+    setSelectedAccessPackage(accessPackage);
     modalRef.current?.showModal();
   };
 

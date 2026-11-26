@@ -41,10 +41,9 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             // The values are looked up in the full search, except that the field being looked up
             // disregards its own filter.
             ActivityLogQuery lookupQuery = WithoutOwnFilter(query, field);
-            Dictionary<Guid, string> typeNames = GetActivityTypes(area, "nb").Result.ToDictionary(type => type.Id, type => type.Name);
 
             IEnumerable<ActivityLogFilterValueDto> values = GetEntriesInSearch(area, lookupQuery)
-                .Select(entry => GetFieldValue(entry, field, typeNames))
+                .Select(entry => GetFieldValue(entry, field))
                 .Where(value => value != null)
                 .DistinctBy(value => (value.Id, value.Name));
 
@@ -64,13 +63,6 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         {
             string dataPath = Path.Combine(dataFolder, $"{area}_filter_fields.json");
             return Task.FromResult<IEnumerable<string>>(Util.GetMockData<List<string>>(dataPath));
-        }
-
-        /// <inheritdoc />
-        public Task<IEnumerable<ActivityTypeDto>> GetActivityTypes(string area, string languageCode, CancellationToken cancellationToken = default)
-        {
-            string dataPath = Path.Combine(dataFolder, $"{area}_types.json");
-            return Task.FromResult<IEnumerable<ActivityTypeDto>>(Util.GetMockData<List<ActivityTypeDto>>(dataPath));
         }
 
         private static ActivityLogQuery WithoutOwnFilter(ActivityLogQuery query, string field)
@@ -192,7 +184,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             return entries.OrderByDescending(entry => entry.When).ThenByDescending(entry => entry.Id);
         }
 
-        private static ActivityLogFilterValueDto GetFieldValue(ActivityLogDto entry, string field, Dictionary<Guid, string> typeNames)
+        private static ActivityLogFilterValueDto GetFieldValue(ActivityLogDto entry, string field)
         {
             switch (field.ToLowerInvariant())
             {
@@ -213,7 +205,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 case "source":
                     return ToFilterValue(entry.SourceId, entry.SourceName);
                 case "activitytype":
-                    return ToFilterValue(entry.ActivityTypeId, entry.ActivityTypeId.HasValue && typeNames.TryGetValue(entry.ActivityTypeId.Value, out string typeName) ? typeName : null);
+                    // The API names the type from its catalog; the mock names it from the entry's own fields.
+                    return ToFilterValue(entry.ActivityTypeId, string.Join(" ", new[] { entry.Type, entry.Subtype, entry.Trigger }.Where(part => !string.IsNullOrEmpty(part))));
                 default:
                     return null;
             }

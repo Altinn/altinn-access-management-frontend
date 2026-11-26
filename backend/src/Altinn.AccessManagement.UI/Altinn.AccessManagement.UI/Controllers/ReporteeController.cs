@@ -150,7 +150,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             if (partyId.HasValue && partyId.Value > 0)
             {
-               foreach (AuthorizedParty party in reporteeList)
+                foreach (AuthorizedParty party in reporteeList)
                 {
                     if (party.PartyId == partyId.Value)
                     {

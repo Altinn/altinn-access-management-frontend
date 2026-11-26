@@ -18,7 +18,6 @@ const digdirResource = {
   resourceOwnerOrgNumber: '991825827',
   rightDescription: '',
   resourceReferences: [],
-  authorizationReference: [],
   resourceType: 'GenericAccessResource',
   delegable: true,
 };

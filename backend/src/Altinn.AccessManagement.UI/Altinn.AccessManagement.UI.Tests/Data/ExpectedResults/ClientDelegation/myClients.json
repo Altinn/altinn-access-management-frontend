@@ -53,18 +53,16 @@
                   "rightDescription": null,
                   "homepage": null,
                   "status": null,
-                  "spatial": null,
                   "contactPoints": null,
                   "delegable": true,
                   "visible": true,
                   "resourceOwnerName": "Testdepartementet",
                   "resourceOwnerOrgNumber": "",
-                  "resourceOwnerLogoUrl": "https://altinncdn.no/img/illustration-help-circle.svg",
+                  "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/ttd/ttd.svg",
                   "resourceOwnerOrgcode": "TTD",
                   "resourceReferences": null,
                   "priorityCounter": null,
                   "resourceType": "AltinnApp",
-                  "authorizationReference": null,
                   "keywords": []
                 }
               },
@@ -78,7 +76,6 @@
                   "rightDescription": "Delegering av denne tjenesten gir andre mulighet til å rapportere opplysninger om boligsameie på vegne av deg.",
                   "homepage": null,
                   "status": "Completed",
-                  "spatial": null,
                   "contactPoints": [
                     {
                       "category": "Innrapportering",
@@ -91,17 +88,11 @@
                   "visible": true,
                   "resourceOwnerName": "Skatteetaten",
                   "resourceOwnerOrgNumber": "974761076",
-                  "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.png",
+                  "resourceOwnerLogoUrl": "https://altinncdn.no/orgs/skd/skd.svg",
                   "resourceOwnerOrgcode": "skd",
                   "resourceReferences": null,
                   "priorityCounter": null,
                   "resourceType": "GenericAccessResource",
-                  "authorizationReference": [
-                    {
-                      "id": "urn:altinn:resource",
-                      "value": "ske-innrapportering-boligsameie"
-                    }
-                  ],
                   "keywords": []
                 }
               }

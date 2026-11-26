@@ -10,7 +10,6 @@ import { userInfoApi } from '../features/userInfoApi';
 import { roleApi } from '../features/roleApi';
 import { systemUserApi } from '../features/systemUserApi';
 import { consentApi } from '../features/consentApi';
-import { altinnCdnApi } from '../features/altinnCdnApi';
 import { connectionApi } from '../features/connectionApi';
 import { clientApi } from '../features/clientApi';
 import { instanceApi } from '../features/instanceApi';
@@ -34,7 +33,6 @@ const store = configureStore({
     [systemUserApi.reducerPath]: systemUserApi.reducer,
     [clientApi.reducerPath]: clientApi.reducer,
     [consentApi.reducerPath]: consentApi.reducer,
-    [altinnCdnApi.reducerPath]: altinnCdnApi.reducer,
     [instanceApi.reducerPath]: instanceApi.reducer,
     [requestApi.reducerPath]: requestApi.reducer,
     [selfIdentifiedUserApi.reducerPath]: selfIdentifiedUserApi.reducer,
@@ -55,7 +53,6 @@ const store = configureStore({
       systemUserApi.middleware,
       clientApi.middleware,
       consentApi.middleware,
-      altinnCdnApi.middleware,
       instanceApi.middleware,
       settingsApi.middleware,
       requestApi.middleware,
