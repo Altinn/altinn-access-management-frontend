@@ -9,6 +9,7 @@ using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.AccessManagement.UI.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Altinn.AccessManagement.UI.Controllers
 {
@@ -593,6 +594,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="party">The uuid for the party.</param>
         /// <param name="to">The uuid for the agent party.</param>
+        /// <param name="personInput">The person to add as agent. Only used when <paramref name="to"/> is not provided.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Assignment details for the agent.</returns>
         /// <response code="400">Bad Request</response>
@@ -601,21 +603,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("agents")]
-        public async Task<ActionResult<AssignmentDto>> AddAgent([FromQuery] Guid party, [FromQuery] Guid? to, CancellationToken cancellationToken = default)
+        public async Task<ActionResult<AssignmentDto>> AddAgent([FromQuery] Guid party, [FromQuery] Guid? to, [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] PersonInput personInput = null, CancellationToken cancellationToken = default)
         {
-            PersonInput personInput = null;
-
-            if (!to.HasValue || to == Guid.Empty)
+            // The body is only used when no agent party is given (they are mutually exclusive)
+            if (to.HasValue && to != Guid.Empty)
             {
-                try
-                {
-                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>(cancellationToken);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogWarning(ex, "Failed to read PersonInput in AddAgent for party {Party}", party);
-                    return BadRequest("Failed to read PersonInput.");
-                }
+                personInput = null;
             }
 
             // Clear model state errors for to if personInput is provided (they are mutually exclusive)
@@ -629,11 +622,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 return BadRequest("Either to or personInput must be provided.");
             }
 
-            if (personInput != null && !TryValidateModel(personInput))
-            {
-                return BadRequest(ModelState);
-            }
-
+            // [FromBody] has already validated personInput
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
