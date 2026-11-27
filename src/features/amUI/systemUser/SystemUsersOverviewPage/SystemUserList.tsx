@@ -93,7 +93,7 @@ export const SystemUserList = ({
             <ListItem
               key={systemUser.id}
               size='lg'
-              title={{ children: `${systemUser.integrationTitle} ${refText}`, as: 'div' }}
+              title={{ children: `${systemUser.integrationTitle} ${refText}`, as: 'span' }}
               ariaLabel={`${systemUser.integrationTitle} ${newlyCreatedId === systemUser.id ? t('systemuser_overviewpage.new_system_user') : ''} ${refText} ${systemUser.system.systemVendorOrgName} ${badgeContent}`}
               description={systemUser.system.systemVendorOrgName}
               as={(props) => (
