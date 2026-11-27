@@ -6,7 +6,6 @@ using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Models.User.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Register.Contracts.V1;
-using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -15,22 +14,18 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// </summary>
     public class ConnectionService : IConnectionService
     {
-        private readonly ILogger _logger;
         private readonly IConnectionClient _connectionClient;
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectionService"/> class.
         /// </summary>
-        /// <param name="logger">handler for logger</param>
         /// <param name="registerClient">handler for register client</param>
         /// <param name="connectionClient">handler for right holder client</param>
         public ConnectionService(
-            ILogger<ConnectionService> logger,
             IRegisterClient registerClient,
             IConnectionClient connectionClient)
         {
-            _logger = logger;
             _registerClient = registerClient;
             _connectionClient = connectionClient;
         }
@@ -119,22 +114,14 @@ namespace Altinn.AccessManagement.UI.Core.Services
             bool includeAgentConnections = true,
             CancellationToken cancellationToken = default)
         {
-            try
-            {
-                List<Connection> connections = await _connectionClient.GetConnections(
-                    party,
-                    from,
-                    to,
-                    includeClientDelegations,
-                    includeAgentConnections,
-                    cancellationToken);
-                return connections?.Select(ConnectionFE.FromConnection).ToList();
-            }
-            catch (Exception ex) when (ex is not OperationCanceledException)
-            {
-                _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", party);
-                throw;
-            }
+            List<Connection> connections = await _connectionClient.GetConnections(
+                party,
+                from,
+                to,
+                includeClientDelegations,
+                includeAgentConnections,
+                cancellationToken);
+            return connections?.Select(ConnectionFE.FromConnection).ToList();
         }
 
         /// <inheritdoc/>

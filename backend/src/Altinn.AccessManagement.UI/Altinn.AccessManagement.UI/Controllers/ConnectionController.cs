@@ -145,7 +145,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 try
                 {
-                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>();
+                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>(cancellationToken);
                 }
                 catch
                 {
@@ -254,6 +254,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             }
             catch (HttpStatusException ex)
             {
+                _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", party);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
