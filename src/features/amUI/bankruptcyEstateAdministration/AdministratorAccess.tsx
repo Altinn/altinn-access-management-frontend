@@ -52,7 +52,7 @@ export const AdministratorAccess = ({ administrator }: AdministratorAccessProps)
       loading: isLoading,
       color: 'company',
       as: 'button',
-      titleAs: 'div',
+      titleAs: 'span',
       interactive: !!accessPackage,
       onClick: () => {
         setOpenPackage(accessPackage);
