@@ -1,0 +1,269 @@
+using Altinn.AMUI.Core.Helpers;
+using Altinn.AMUI.Core.Models.SingleRight;
+using Altinn.AMUI.Core.Models.SingleRight.Frontend;
+using Altinn.AMUI.Core.Services.Interfaces;
+using Altinn.AMUI.Filters;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Altinn.AMUI.Controllers
+{
+    /// <summary>
+    ///     Controller responsible for all operations regarding single rights
+    /// </summary>
+    [ApiController]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
+    [Route("accessmanagement/api/v1/singleright")]
+    public class SingleRightController : Controller
+    {
+        private readonly ILogger<SingleRightController> _logger;
+        private readonly ISingleRightService _singleRightService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="SingleRightController" /> class
+        /// </summary>
+        public SingleRightController(
+            ISingleRightService singleRightService,
+            IHttpContextAccessor httpContextAccessor,
+            ILogger<SingleRightController> logger)
+        {
+            _singleRightService = singleRightService;
+            _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
+        }
+
+        /// <summary>
+        ///     Endpoint for checking what rights a user can delegate on a particular resource
+        /// </summary>
+        /// <param name="from">The party from which the resource would be delegated</param>
+        /// <param name="resource">The id of the resource on which to check right delegability</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("delegationcheck")]
+        public async Task<ActionResult<List<RightCheck>>> GetDelegationCheck([FromQuery] Guid from, [FromQuery] string resource)
+        {
+            try
+            {
+                List<RightCheck> result = await _singleRightService.DelegationCheck(from, resource);
+                return Ok(result);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving single rights for right holder: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for retrieving metadata about the rights on a resource
+        /// </summary>
+        /// <param name="resource">The id of the resource for which to retrieve rights metadata</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        /// <returns> A list of rights on the resource</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("rightsmeta")]
+        public async Task<ActionResult<List<Core.Models.SingleRight.Right>>> GetResourceRightsMeta([FromQuery] string resource)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+
+            try
+            {
+                List<Core.Models.SingleRight.Right> result = await _singleRightService.GetResourceRightsMeta(resource, languageCode);
+                return Ok(result);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response from backend", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving single rights for right holder: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for delegating a given set of rights on a resource
+        /// </summary>
+        /// <param name="from">The party from which the resource will be delegated (The owner of the delegated content)</param>
+        /// <param name="to">To whom the resource will be delegted</param>
+        /// <param name="party">The party that is performing the delegation</param>
+        /// <param name="resourceId">The id of the resource which will be delegated</param>
+        /// <param name="actionKeys">The identifiers of the rights/actions that are to be delegated</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("delegate")]
+        public async Task<ActionResult<HttpResponseMessage>> DelegateResource([FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] Guid party, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
+        {
+            try
+            {
+                var response = await _singleRightService.Delegate(party, from, to, resourceId, actionKeys);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(await response.Content.ReadAsStringAsync());
+                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while adding single rights for right holder: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for getting the resources (without actions) that have been granted from one party to another
+        /// </summary>
+        /// <param name="party">The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated (the owner of the data)</param>
+        /// <param name="to">The party that has received the delegations. If omitted, resources delegated to all recipients are returned</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("delegation/resources")]
+        public async Task<ActionResult<List<ResourceDelegation>>> GetDelegatedResources([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid? to)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                List<ResourceDelegation> delegations = await _singleRightService.GetDelegatedResources(languageCode, party, from, to);
+                return Ok(delegations);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving resource delegations for right holder: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for getting the resources (without actions) that have been granted from one party to another
+        /// </summary>
+        /// <param name="party">The acting party that is asking to see the resource delegations</param>
+        /// <param name="from">The party from which the resources have been delegated (the owner of the data)</param>
+        /// <param name="to">The party that has received the delegations</param>
+        /// <param name="resourceId">The id of the resource to fetch delegated rights for</param>
+        /// <response code="200">OK</response>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpGet]
+        [Authorize]
+        [Route("delegation/resources/rights")]
+        public async Task<ActionResult<ResourceRightFE>> GetDelegatedResourceRights([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                ResourceRightFE delegations = await _singleRightService.GetDelegatedResourceRights(languageCode, party, from, to, resourceId);
+                return Ok(delegations);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred while retrieving resource right delegations for right holder: {Message}", ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for revoking all rights on a resource that has been granted from one party to another.
+        /// </summary>
+        /// <param name="party">The party that is performing the revoking</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
+        /// <param name="to">The right holder that has been granted access to the resource.</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpDelete]
+        [Authorize]
+        [Route("revoke")]
+        public async Task<ActionResult> RevokeResourceAccess([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId)
+        {
+            try
+            {
+                var response = await _singleRightService.RevokeResourceAccess(party, from, to, resourceId);
+                return Ok(response);
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during revoking of resource access:" + ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+
+        /// <summary>
+        ///     Endpoint for editing what rights are granted from one party to another on a specific resource.
+        /// </summary>
+        /// <param name="party">The party that is performing the edit</param>
+        /// <param name="from">The right owner on which behalf access to the resource has been granted.</param>
+        /// <param name="to">The right holder that has been granted access to the resource.</param>
+        /// <param name="resourceId">The identifier of the resource that has been granted access to</param>
+        /// <param name="actionKeys">The updated list of actions that the toParty should hold on the resource</param>
+        /// <response code="400">Bad Request</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPut]
+        [Authorize]
+        [Route("update")]
+        public async Task<ActionResult<HttpResponseMessage>> EditResourceAccess([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, [FromQuery] string resourceId, [FromBody] List<string> actionKeys)
+        {
+            try
+            {
+                var response = await _singleRightService.UpdateResourceAccess(party, to, from, resourceId, actionKeys);
+                if (response.IsSuccessStatusCode)
+                {
+                    return Ok(await response.Content.ReadAsStringAsync());
+                }
+
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)response.StatusCode, "Error returned from backend"));
+            }
+            catch (HttpStatusException statusEx)
+            {
+                string responseContent = statusEx.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)statusEx.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected exception occurred during update of resource access:" + ex.Message);
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));
+            }
+        }
+    }
+}

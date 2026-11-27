@@ -1,0 +1,701 @@
+using System.Collections.Generic;
+using System.Net;
+using Altinn.AMUI.Core.Helpers;
+using Altinn.AMUI.Core.Models.ClientDelegation;
+using Altinn.AMUI.Core.Models.ClientDelegation.Frontend;
+using Altinn.AMUI.Core.Models.Common;
+using Altinn.AMUI.Core.Models.Connections;
+using Altinn.AMUI.Core.Services.Interfaces;
+using Altinn.AMUI.Filters;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Altinn.AMUI.Controllers
+{
+    /// <summary>
+    /// The <see cref="ClientController"/> provides API endpoints related to client delegations.
+    /// </summary>
+    [Route("accessmanagement/api/v1/clientdelegations")]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
+    public class ClientController : ControllerBase
+    {
+        private const string PayloadRequiredMessage = "Delegation payload is required.";
+
+        private readonly IClientService _clientService;
+        private readonly ILogger _logger;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClientController"/> class.
+        /// </summary>
+        public ClientController(
+            IClientService clientService,
+            ILogger<ClientController> logger)
+        {
+            _clientService = clientService;
+            _logger = logger;
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving clients delegated to the authenticated user.
+        /// </summary>
+        /// <param name="provider">Optional provider party uuids.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of providers and delegated clients.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("my/clients")]
+        public async Task<ActionResult<IEnumerable<MyClientDelegationFE>>> GetMyClients(
+            [FromQuery] List<Guid> provider = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                IEnumerable<MyClientDelegationFE> clients = await _clientService.GetMyClients(LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), provider, cancellationToken);
+                return Ok(clients);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetMyClients failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing a client-provider relationship for the authenticated user.
+        /// </summary>
+        /// <param name="provider">The provider party uuid.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>No content on success.</returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("my/clientproviders")]
+        public async Task<IActionResult> RemoveMyClientProvider(
+            [FromQuery] Guid provider,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _clientService.RemoveMyClientProvider(provider, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveMyClientProvider failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing delegated access packages for the authenticated user from a client via provider.
+        /// </summary>
+        /// <param name="provider">The provider party uuid.</param>
+        /// <param name="from">The client party uuid.</param>
+        /// <param name="payload">Delegation payload.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>No content on success.</returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("my/clients")]
+        public async Task<IActionResult> RemoveMyClientAccessPackages(
+            [FromQuery] Guid provider,
+            [FromQuery] Guid from,
+            [FromBody] DelegationBatchInputDto payload,
+            CancellationToken cancellationToken = default)
+        {
+            if (payload == null)
+            {
+                return BadRequest(PayloadRequiredMessage);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _clientService.RemoveMyClientAccessPackages(provider, from, payload, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveMyClientAccessPackages failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving clients for a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="roles">Optional list of role identifiers to filter by.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of clients.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("clients")]
+        public async Task<ActionResult<IEnumerable<ClientDelegationFE>>> GetClients(
+            [FromQuery] Guid party,
+            [FromQuery] List<string> roles = null,
+            CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                IEnumerable<ClientDelegationFE> clients = await _clientService.GetClients(party, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), roles, cancellationToken);
+                return Ok(clients);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetClients failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving agents for a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of agents.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("agents")]
+        public async Task<ActionResult<IEnumerable<AgentDelegationFE>>> GetAgents([FromQuery] Guid party, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                IEnumerable<AgentDelegationFE> agents = await _clientService.GetAgents(party, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                return Ok(agents);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAgents failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving access packages delegated to an agent via a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="to">The uuid for the agent party.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of clients with delegated access packages.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("agents/accesspackages")]
+        public async Task<ActionResult<IEnumerable<ClientDelegationFE>>> GetAgentAccessPackages([FromQuery] Guid party, [FromQuery] Guid to, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                IEnumerable<ClientDelegationFE> clients = await _clientService.GetAgentAccessPackages(party, to, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                return Ok(clients);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAgentAccessPackages failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving access packages delegated from a client via a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="from">The uuid for the client party.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of agents with delegated access packages.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("clients/accesspackages")]
+        public async Task<ActionResult<IEnumerable<AgentDelegationFE>>> GetClientAccessPackages([FromQuery] Guid party, [FromQuery] Guid from, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                IEnumerable<AgentDelegationFE> agents = await _clientService.GetClientAccessPackages(party, from, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                return Ok(agents);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetClientAccessPackages failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for adding access packages for an agent via a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="from">The uuid for the client party.</param>
+        /// <param name="to">The uuid for the agent party.</param>
+        /// <param name="payload">Delegation payload.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of delegated access packages.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("agents/accesspackages")]
+        public async Task<ActionResult<IEnumerable<DelegationDto>>> AddAgentAccessPackages(
+            [FromQuery] Guid party,
+            [FromQuery] Guid from,
+            [FromQuery] Guid to,
+            [FromBody] DelegationBatchInputDto payload,
+            CancellationToken cancellationToken = default)
+        {
+            if (payload == null)
+            {
+                return BadRequest(PayloadRequiredMessage);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                List<DelegationDto> delegations = await _clientService.AddAgentAccessPackages(party, from, to, payload, cancellationToken);
+                return Ok(delegations);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AddAgentAccessPackages failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing access packages for an agent via a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="from">The uuid for the client party.</param>
+        /// <param name="to">The uuid for the agent party.</param>
+        /// <param name="payload">Delegation payload.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>No content on success.</returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("agents/accesspackages")]
+        public async Task<IActionResult> RemoveAgentAccessPackages(
+            [FromQuery] Guid party,
+            [FromQuery] Guid from,
+            [FromQuery] Guid to,
+            [FromBody] DelegationBatchInputDto payload,
+            CancellationToken cancellationToken = default)
+        {
+            if (payload == null)
+            {
+                return BadRequest(PayloadRequiredMessage);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _clientService.RemoveAgentAccessPackages(party, from, to, payload, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveAgentAccessPackages failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving the resources delegated to an agent via a party.
+        /// Only served by the v2 client delegation API.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="to">The uuid for the agent party.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of clients with delegated resources.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("agents/resources")]
+        public async Task<ActionResult<IEnumerable<ClientDelegationFE>>> GetAgentResources([FromQuery] Guid party, [FromQuery] Guid to, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                IEnumerable<ClientDelegationFE> clients = await _clientService.GetAgentResources(party, to, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                return Ok(clients);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetAgentResources failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for retrieving the resources delegated from a client via a party.
+        /// Only served by the v2 client delegation API.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="from">The uuid for the client party.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of agents with delegated resources.</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("clients/resources")]
+        public async Task<ActionResult<IEnumerable<AgentDelegationFE>>> GetClientResources([FromQuery] Guid party, [FromQuery] Guid from, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                IEnumerable<AgentDelegationFE> agents = await _clientService.GetClientResources(party, from, LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(HttpContext), cancellationToken);
+                return Ok(agents);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "GetClientResources failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for adding resources for an agent via a party.
+        /// Only served by the v2 client delegation API.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="from">The uuid for the client party.</param>
+        /// <param name="to">The uuid for the agent party.</param>
+        /// <param name="payload">Resource delegation payload, holding resource registry ids.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>List of delegated resources.</returns>
+        [HttpPost]
+        [Authorize]
+        [Route("agents/resources")]
+        public async Task<ActionResult<IEnumerable<ResourceDelegationDto>>> AddAgentResources(
+            [FromQuery] Guid party,
+            [FromQuery] Guid from,
+            [FromQuery] Guid to,
+            [FromBody] ResourceDelegationBatchInputDto payload,
+            CancellationToken cancellationToken = default)
+        {
+            if (payload == null)
+            {
+                return BadRequest(PayloadRequiredMessage);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                List<ResourceDelegationDto> delegations = await _clientService.AddAgentResources(party, from, to, payload, cancellationToken);
+                return Ok(delegations);
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AddAgentResources failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing resources for an agent via a party.
+        /// Only served by the v2 client delegation API.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="from">The uuid for the client party.</param>
+        /// <param name="to">The uuid for the agent party.</param>
+        /// <param name="payload">Resource delegation payload, holding resource registry ids.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>No content on success.</returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("agents/resources")]
+        public async Task<IActionResult> RemoveAgentResources(
+            [FromQuery] Guid party,
+            [FromQuery] Guid from,
+            [FromQuery] Guid to,
+            [FromBody] ResourceDelegationBatchInputDto payload,
+            CancellationToken cancellationToken = default)
+        {
+            if (payload == null)
+            {
+                return BadRequest(PayloadRequiredMessage);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _clientService.RemoveAgentResources(party, from, to, payload, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveAgentResources failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing delegated resources for the authenticated user from a client via a provider.
+        /// Only served by the v2 client delegation API.
+        /// </summary>
+        /// <param name="provider">The uuid for the provider party.</param>
+        /// <param name="from">The uuid for the client party.</param>
+        /// <param name="payload">Resource delegation payload, holding resource registry ids.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>No content on success.</returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("my/clients/resources")]
+        public async Task<IActionResult> RemoveMyClientResources(
+            [FromQuery] Guid provider,
+            [FromQuery] Guid from,
+            [FromBody] ResourceDelegationBatchInputDto payload,
+            CancellationToken cancellationToken = default)
+        {
+            if (payload == null)
+            {
+                return BadRequest(PayloadRequiredMessage);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _clientService.RemoveMyClientResources(provider, from, payload, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveMyClientResources failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for adding a new agent for a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="to">The uuid for the agent party.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        /// <returns>Assignment details for the agent.</returns>
+        /// <response code="400">Bad Request</response>
+        /// <response code="429">TooManyRequests</response>
+        /// <response code="500">Internal Server Error</response>
+        [HttpPost]
+        [Authorize]
+        [Route("agents")]
+        public async Task<ActionResult<AssignmentDto>> AddAgent([FromQuery] Guid party, [FromQuery] Guid? to, CancellationToken cancellationToken = default)
+        {
+            PersonInput personInput = null;
+
+            if (!to.HasValue || to == Guid.Empty)
+            {
+                try
+                {
+                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>(cancellationToken);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to read PersonInput in AddAgent for party {Party}", party);
+                    return BadRequest("Failed to read PersonInput.");
+                }
+            }
+
+            // Clear model state errors for to if personInput is provided (they are mutually exclusive)
+            if (personInput != null && ModelState.ContainsKey("to"))
+            {
+                ModelState.Remove("to");
+            }
+
+            if ((to == null || to == Guid.Empty) && personInput == null)
+            {
+                return BadRequest("Either to or personInput must be provided.");
+            }
+
+            if (personInput != null && !TryValidateModel(personInput))
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                AssignmentDto assignment = await _clientService.AddAgent(party, to, personInput, cancellationToken);
+                return Ok(assignment);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.TooManyRequests)
+                {
+                    return StatusCode(429);
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AddAgent failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Endpoint for removing an agent for a party.
+        /// </summary>
+        /// <param name="party">The uuid for the party.</param>
+        /// <param name="to">The uuid for the agent party.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
+        [HttpDelete]
+        [Authorize]
+        [Route("agents")]
+        public async Task<IActionResult> RemoveAgent([FromQuery] Guid party, [FromQuery] Guid to, CancellationToken cancellationToken = default)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _clientService.RemoveAgent(party, to, cancellationToken);
+                return NoContent();
+            }
+            catch (HttpStatusException ex)
+            {
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "RemoveAgent failed unexpectedly");
+                return StatusCode((int)HttpStatusCode.InternalServerError);
+            }
+        }
+    }
+}

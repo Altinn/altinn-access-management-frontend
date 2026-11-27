@@ -1,0 +1,108 @@
+﻿using System.Net;
+using Altinn.AMUI.Core.Enums;
+using Altinn.AMUI.Core.Helpers;
+using Altinn.AMUI.Core.Models.ResourceRegistry;
+using Altinn.AMUI.Core.Models.ResourceRegistry.Frontend;
+using Altinn.AMUI.Core.Services.Interfaces;
+using Altinn.AMUI.Filters;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Altinn.AMUI.Controllers
+{
+    /// <summary>
+    ///     Controller for CRUD-operations related to the ResourceRegister.
+    /// </summary>
+    [ApiController]
+    [AutoValidateAntiforgeryTokenIfAuthCookie]
+    [Route("accessmanagement/api/v1/resources")]
+    public class ResourceController : ControllerBase
+    {
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IResourceService _resourceService;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="ResourceController" /> class.
+        /// </summary>
+        /// <param name="resourceService">The resource administration point</param>
+        /// <param name="httpContextAccessor">handler for httpcontext</param>
+        public ResourceController(
+            IResourceService resourceService,
+            IHttpContextAccessor httpContextAccessor)
+        {
+            _resourceService = resourceService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        /// <summary>
+        ///     Gets list of resource owners that has the resourceTypesProvided by <param name="relevantResourceTypes"></param>
+        /// </summary>
+        /// <returns>List of resource owners in string format</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("resourceowners")]
+        public async Task<ActionResult<List<ResourceOwnerFE>>> GetResourceOwners([FromQuery] List<ResourceType> relevantResourceTypes)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            if (relevantResourceTypes?.Count > 0)
+            {
+                return await _resourceService.GetResourceOwners(relevantResourceTypes, languageCode);
+            }
+            else
+            {
+                return await _resourceService.GetAllResourceOwners(languageCode);
+            }
+        }
+
+        /// <summary>
+        ///     Gets a single resource by id.
+        /// </summary>
+        /// <param name="resourceId">The resource id.</param>
+        /// <returns>The resource if found.</returns>
+        [HttpGet]
+        [Authorize]
+        public async Task<ActionResult<ServiceResourceFE>> GetResource([FromQuery] string resourceId)
+        {
+            if (string.IsNullOrWhiteSpace(resourceId))
+            {
+                return BadRequest();
+            }
+
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            ServiceResourceFE resource = await _resourceService.GetResource(resourceId, languageCode);
+
+            if (resource == null)
+            {
+                return NotFound();
+            }
+
+            return resource;
+        }
+
+        /// <summary>
+        ///     Search through all delegable service resources and returns matches
+        /// </summary>
+        /// <returns>Paginated search results</returns>
+        [HttpGet]
+        [Authorize]
+        [Route("search")]
+        public async Task<ActionResult<PaginatedList<ServiceResourceFE>>> PaginatedSearch([FromQuery] PaginatedSearchParams parameters)
+        {
+            var languageCode = LanguageHelper.GetSelectedLanguageCookieValueBackendStandard(_httpContextAccessor.HttpContext);
+            try
+            {
+                return await _resourceService.GetPaginatedSearchResults(languageCode, parameters);
+            }
+            catch (HttpStatusException ex)
+            {
+                if (ex.StatusCode == HttpStatusCode.NoContent)
+                {
+                    return NoContent();
+                }
+
+                string responseContent = ex.Message;
+                return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
+            }
+        }
+    }
+}

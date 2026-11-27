@@ -1,0 +1,635 @@
+using System.Net;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
+using Altinn.AMUI.Controllers;
+using Altinn.AMUI.Core.Models;
+using Altinn.AMUI.Core.Models.SingleRight;
+using Altinn.AMUI.Core.Models.SingleRight.Frontend;
+using Altinn.AMUI.Mocks.Mocks;
+using SingleRight = Altinn.AMUI.Core.Models.SingleRight.Right;
+using Altinn.AMUI.Mocks.Utils;
+using Altinn.AMUI.Tests.Utils;
+
+namespace Altinn.AMUI.Tests.Controllers
+{
+    /// <summary>
+    ///     Test class for <see cref="SingleRightControllerTest"></see>
+    /// </summary>
+    [Collection("SingleRightControllerTest")]
+    public class SingleRightControllerTest : IClassFixture<CustomWebApplicationFactory<SingleRightController>>
+    {
+        JsonSerializerOptions options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+
+        private readonly HttpClient _client;
+        private readonly CustomWebApplicationFactory<SingleRightController> _factory;
+        private readonly string mockFolder;
+        /// <summary>
+        ///     Constructor setting up factory, test client and dependencies
+        /// </summary>
+        /// <param name="factory">CustomWebApplicationFactory</param>
+        public SingleRightControllerTest(CustomWebApplicationFactory<SingleRightController> factory)
+        {
+            _factory = factory;
+            _client = SetupUtils.GetSingleRightTestClient(factory);
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            string token = PrincipalUtil.GetAccessToken("sbl.authorization");
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            mockFolder = Path.GetDirectoryName(new Uri(typeof(AccessManagementClientV0Mock).Assembly.Location).LocalPath);
+        }
+
+        /// <summary>
+        ///     Test case: Successfully perform delegationcheck on a resource
+        ///     Expected: Returns OK and the checked accesses of the given resource
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_ReturnsValid()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string resource = "appid-503";
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "DelegationCheck", "appid-503.json");
+            List<RightCheck> expectedResponse = Util.GetMockData<List<RightCheck>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
+            List<RightCheck> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<RightCheck>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, AssertionUtil.AssertEqual);
+        }
+
+        /// <summary>
+        ///     Test case: Try to perform delegation check on a resource that does not exist
+        ///     Expected: Returns a non-successfull status
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_InvalidResource()
+        {
+            // Arrange
+            string from = "cd35779b-b174-4ecc-bbef-ece13611be7f";
+            string resource = "non-existing-resource";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors by returning a 500 status
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task DelegationCheck_InternalServerError()
+        {
+            // Arrange
+            string from = "00000000-0000-0000-0000-000000000000"; // This triggers ThrowExceptionIfTriggerParty in mock
+            string resource = "appid-503";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegationcheck?from={from}&resource={resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Successfully retrieve rights metadata for a resource
+        ///     Expected: Returns OK and the list of rights for the given resource
+        /// </summary>
+        [Fact]
+        public async Task GetResourceRightsMeta_ReturnsValid()
+        {
+            // Arrange
+            string resource = "appid-503";
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "RightsMeta", "appid-503.json");
+            List<SingleRight> expectedResponse = Util.GetMockData<List<SingleRight>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/rightsmeta?resource={resource}");
+            List<SingleRight> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<SingleRight>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Action<SingleRight, SingleRight> assertRight = AssertionUtil.AssertEqual;
+            AssertionUtil.AssertCollections(expectedResponse, actualResponse, assertRight);
+        }
+
+        /// <summary>
+        ///     Test case: Try to retrieve rights metadata for a resource that does not exist
+        ///     Expected: Returns a non-successful status (BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task GetResourceRightsMeta_InvalidResource()
+        {
+            // Arrange
+            string resource = "non-existing-resource";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/rightsmeta?resource={resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors by returning a 500 status
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task GetResourceRightsMeta_InternalServerError()
+        {
+            // Arrange
+            string resource = "internal-error-trigger"; // This triggers a generic Exception in the mock
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/rightsmeta?resource={resource}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Successfully perform delegation of the rights on a specified resource
+        ///     Expected: Returns OK, with the output of the delegation
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_Success()
+        {
+            // Arrange
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resourceId = "appid-503";
+            List<string> actionKeys = new List<string> { "appid-503/read", "appid-503/write" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate?from={from}&to={to}&party={party}&resourceId={resourceId}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Try to perform delegation of the rights on a non-existent resource
+        ///     Expected: Returns BadRequest
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_InvalidResource()
+        {
+            // Arrange
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resourceId = "non-existing-resource";
+            List<string> actionKeys = new List<string> { "non-existing-resource/read", "non-existing-resource/write" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate?from={from}&to={to}&party={party}&resourceId={resourceId}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors by returning a 500 status
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_InternalServerError()
+        {
+            // Arrange - Using Guid that triggers exception in mock
+            Guid from = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            string resourceId = "appid-503";
+            List<string> actionKeys = new List<string> { "appid-503/read", "appid-503/write" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate?from={from}&to={to}&party={party}&resourceId={resourceId}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles HttpStatusException specifically 
+        ///     Expected: Returns the appropriate status code from HttpStatusException
+        /// </summary>
+        [Fact]
+        public async Task DelegateResource_HttpStatusException()
+        {
+            // Arrange - Using specific resourceId that triggers HttpStatusException in mock
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resourceId = "non-existing-resource"; // This should trigger HttpStatusException based on mock behavior
+            List<string> actionKeys = new List<string> { "appid-503/read" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PostAsync($"accessmanagement/api/v1/singleright/delegate?from={from}&to={to}&party={party}&resourceId={resourceId}", content);
+
+            // Assert - Should return BadRequest based on how mock handles HttpStatusException
+            Assert.True(httpResponse.StatusCode == HttpStatusCode.BadRequest || httpResponse.StatusCode == HttpStatusCode.InternalServerError);
+        }
+
+        /// <summary>
+        ///     Test case: Successfully retrieve delegated resources for a right holder
+        ///     Expected: Returns OK and the list of delegated resources
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_ReturnsValid()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "delegations.json");
+            List<ResourceDelegation> expectedResponse = Util.GetMockData<List<ResourceDelegation>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}&to={to}");
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equal(expectedResponse.Count, actualResponse.Count);
+        }
+
+        /// <summary>
+        ///     Test case: Retrieve delegated resources without specifying a recipient
+        ///     Expected: Returns OK and the resources delegated to all recipients
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_WithoutTo_ReturnsValid()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetDelegations", "delegations.json");
+            List<ResourceDelegation> expectedResponse = Util.GetMockData<List<ResourceDelegation>>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}");
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.Equal(expectedResponse.Count, actualResponse.Count);
+        }
+
+        /// <summary>
+        ///     Test case: Retrieve delegated resources in a selected language
+        ///     Expected: Returns the keywords of each resource in that language, as the resource search does
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_ReturnsKeywordsInSelectedLanguage()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, $"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}");
+            request.Headers.Add("Cookie", "selectedLanguage=no_nb");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.SendAsync(request);
+            List<ResourceDelegation> actualResponse = await httpResponse.Content.ReadFromJsonAsync<List<ResourceDelegation>>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            ResourceDelegation delegation = actualResponse.Single(d => d.Resource.Identifier == "appid-502");
+            Assert.Equal(["klesskapet_kw"], delegation.Resource.Keywords);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors when retrieving delegated resources
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_InternalServerError()
+        {
+            // Arrange - Using Guid that triggers exception in mock
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}&to={to}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles HttpStatusException when retrieving delegated resources
+        ///     Expected: Returns the appropriate status code from HttpStatusException
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResources_HttpStatusException()
+        {
+            // Arrange - Using Guid that triggers HttpStatusException in mock
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources?party={party}&from={from}&to={to}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Successfully retrieve delegated resource rights for a specific resource
+        ///     Expected: Returns OK and the resource rights
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResourceRights_ReturnsValid()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resourceId = "appid-502";
+            string path = Path.Combine(mockFolder, "Data", "ExpectedResults", "SingleRight", "GetResourceRights", $"{resourceId}.json");
+            ResourceRightFE expectedResponse = Util.GetMockData<ResourceRightFE>(path);
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
+            ResourceRightFE actualResponse = await httpResponse.Content.ReadFromJsonAsync<ResourceRightFE>();
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+            Assert.NotNull(actualResponse);
+            Assert.NotNull(actualResponse.Resource);
+            AssertionUtil.AssertEqual(expectedResponse.Resource, actualResponse.Resource);
+        }
+
+        /// <summary>
+        ///     Test case: Handles unexpected errors when retrieving delegated resource rights
+        ///     Expected: Returns an internal server error
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResourceRights_InternalServerError()
+        {
+            // Arrange - Using Guid that triggers exception in mock
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resourceId = "appid-502";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles HttpStatusException when retrieving delegated resource rights
+        ///     Expected: Returns the appropriate status code from HttpStatusException
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResourceRights_HttpStatusException()
+        {
+            // Arrange - Using Guid that triggers HttpStatusException in mock
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("11111111-1111-1111-1111-111111111111");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resourceId = "appid-502";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///     Test case: Handles HttpStatusException when resource is not found for delegated resource rights
+        ///     Expected: Returns NotFound status code
+        /// </summary>
+        [Fact]
+        public async Task GetDelegatedResourceRights_ResourceNotFound()
+        {
+            // Arrange - Using invalid resource ID that doesn't exist in mock data
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("167536b5-f8ed-4c5a-8f48-0279507e53ae");
+            string resourceId = "non-existing-resource";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.GetAsync($"accessmanagement/api/v1/singleright/delegation/resources/rights?party={party}&from={from}&to={to}&resourceId={resourceId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///  Test case: Call RevokeResourceAccess with input that causes the client layer to throw an exception
+        ///  Expected: RevokeResourceAccess returns internal server error when revoke request fails
+        /// </summary>
+        [Fact]
+        public async Task RevokeResourceAccess_handles_internal_error()
+        {
+            // Arrange
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            string resourceId = "appid-502";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/revoke?party={party}&from={from}&to={to}&resourceId={resourceId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///  Test case: Call RevokeResourceAccess with invalid resource
+        ///  Expected: RevokeResourceAccess returns a failing status as provided by backend (in this case: BadRequest)
+        /// </summary>
+        [Fact]
+        public async Task RevokeResourceAccess_handles_response_error()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            string resourceId = "invalid-resource";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/revoke?party={party}&from={from}&to={to}&resourceId={resourceId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: RevokeResourceAccess revokes the resource of a user
+        ///    Expected: RevokeResourceAccess returns ok on valid input
+        /// </summary>
+        [Fact]
+        public async Task RevokeResourceAccess_returns_ok_on_valid_input()
+        {
+            // Arrange
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            string resourceId = "appid-502";
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.DeleteAsync($"accessmanagement/api/v1/singleright/revoke?party={party}&from={from}&to={to}&resourceId={resourceId}");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: EditResourceAccess successfully makes the requested edits
+        ///    Expected: EditResourceAccess returns ok with no failed edits
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_ok_on_valid_input()
+        {
+            // Arrange
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resourceId = "appid-503";
+
+            List<string> actionKeys = new List<string> { "appid-503/read", "appid-503/write" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/singleright/update?party={party}&from={from}&to={to}&resourceId={resourceId}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: Backend returns unsuccessfull edits
+        ///    Expected: EditResourceAccess returns ok but with failed edits
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_unsuccessfull_edits()
+        {
+            // Arrange
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resourceId = "appid-502";
+
+            List<string> actionKeys = new List<string> { "appid-502/read" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/singleright/update?party={party}&from={from}&to={to}&resourceId={resourceId}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: An internal error happens
+        ///    Expected: EditResourceAccess returns 500 Internal Server Error
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_returns_handles_internal_errors()
+        {
+            // Arrange
+            Guid from = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            Guid party = Guid.Parse("00000000-0000-0000-0000-000000000000");
+            string resourceId = "invalid-resource";
+
+            List<string> actionKeys = new List<string> { "appid-502/write" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/singleright/update?party={party}&from={from}&to={to}&resourceId={resourceId}", content);
+
+            // Assert
+            Assert.Equal(HttpStatusCode.InternalServerError, httpResponse.StatusCode);
+        }
+
+        /// <summary>
+        ///    Test case: HttpStatusException is thrown from service layer
+        ///    Expected: EditResourceAccess returns appropriate status code from the exception
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_HttpStatusException()
+        {
+            // Arrange - Using specific scenario that triggers HttpStatusException in mock
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resourceId = "non-existing-resource";
+
+            List<string> actionKeys = new List<string> { "non-existing-resource/write" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/singleright/update?party={party}&from={from}&to={to}&resourceId={resourceId}", content);
+
+            // Assert - Should return BadRequest based on how mock handles non-existing resources
+            Assert.True(httpResponse.StatusCode == HttpStatusCode.BadRequest || httpResponse.StatusCode == HttpStatusCode.InternalServerError);
+        }
+
+        /// <summary>
+        ///    Test case: Invalid resource ID provided
+        ///    Expected: EditResourceAccess returns BadRequest
+        /// </summary>
+        [Fact]
+        public async Task EditResourceAccess_InvalidResource()
+        {
+            // Arrange
+            Guid from = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            Guid to = Guid.Parse("5c0656db-cf51-43a4-bd64-6a91c8caacfb");
+            Guid party = Guid.Parse("cd35779b-b174-4ecc-bbef-ece13611be7f");
+            string resourceId = "definitely-does-not-exist";
+
+            List<string> actionKeys = new List<string> { "invalid/action" };
+
+            string jsonActionKeys = JsonSerializer.Serialize(actionKeys);
+            HttpContent content = new StringContent(jsonActionKeys, Encoding.UTF8, "application/json");
+
+            // Act
+            HttpResponseMessage httpResponse = await _client.PutAsync($"accessmanagement/api/v1/singleright/update?party={party}&from={from}&to={to}&resourceId={resourceId}", content);
+
+            // Assert
+            Assert.True(httpResponse.StatusCode == HttpStatusCode.BadRequest || httpResponse.StatusCode == HttpStatusCode.InternalServerError);
+        }
+
+    }
+}

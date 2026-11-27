@@ -1,0 +1,96 @@
+﻿using Altinn.AMUI.Core.ClientInterfaces;
+using Altinn.AMUI.Core.Helpers;
+using Altinn.AMUI.Core.Models;
+using Altinn.AMUI.Core.Models.AccessManagement;
+using Altinn.AMUI.Core.Models.Common.Frontend;
+using Altinn.AMUI.Core.Models.Profile;
+using Altinn.AMUI.Core.Models.User;
+using Altinn.AMUI.Core.Services.Interfaces;
+
+namespace Altinn.AMUI.Core.Services
+{
+    /// <summary>
+    /// Service that integrates with the delegation client. Processes and maps the required data to the frontend model
+    /// </summary>
+    public class UserService : IUserService
+    {
+        private readonly IProfileClient _profileClient;
+        private readonly IAccessManagementClientV0 _accessManagementClientV0;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserService"/> class.
+        /// </summary>
+        /// <param name="profileClient">handler for profile client</param>
+        /// <param name="accessManagementClientV0">handler for old AM client</param>
+        public UserService(
+            IProfileClient profileClient,
+            IAccessManagementClientV0 accessManagementClientV0)
+        {
+            _profileClient = profileClient;
+            _accessManagementClientV0 = accessManagementClientV0;
+        }
+
+        /// <inheritdoc/>
+        public async Task<UserProfileFE> GetUserProfile(int userId)
+        {
+            UserProfile userProfile = await _profileClient.GetUserProfile(userId);
+            return userProfile == null ? null : new UserProfileFE(userProfile);
+        }
+
+        /// <inheritdoc/>
+        public async Task<ProfileSettingPreference> SetShowDeletedProfileSetting(bool shouldShowDeletedEntities)
+        {
+            ProfileSettingPreference change = new ProfileSettingPreference
+            {
+                ShouldShowDeletedEntities = shouldShowDeletedEntities
+            };
+            return await _profileClient.PatchCurrentUserProfileSetting(change);
+        }
+
+        /// <inheritdoc/>
+        public async Task SetLanguageProfileSetting(string languageCode)
+        {
+            string backendLanguage = LanguageHelper.GetBackendStandardLanguage(languageCode);
+            if (string.IsNullOrEmpty(backendLanguage))
+            {
+                throw new ArgumentException($"Unsupported language code: {languageCode}", nameof(languageCode));
+            }
+
+            ProfileSettingPreference change = new ProfileSettingPreference { Language = backendLanguage };
+            await _profileClient.PatchCurrentUserProfileSetting(change);
+        }
+
+        /// <inheritdoc/>        
+        public async Task<AuthorizedPartyFE> GetPartyFromReporteeListIfExists(Guid partyUuid)
+        {
+            AuthorizedParty partyInfo = await _accessManagementClientV0.GetPartyFromReporteeListIfExists(partyUuid);
+            return AuthorizedPartyFE.FromAuthorizedParty(partyInfo);
+        }
+
+        /// <inheritdoc/>        
+        public async Task<List<AuthorizedParty>> GetReporteeListForUser()
+        {
+            List<AuthorizedParty> parties = await _accessManagementClientV0.GetReporteeListForUser();
+            return parties;
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<string>> GetFavoriteActorUuids()
+        {
+            ProfileGroup favoriteProfileGroup = await _profileClient.GetFavoriteProfileGroup();
+            return favoriteProfileGroup?.Parties;
+        }
+
+        /// <inheritdoc/>
+        public async Task AddPartyUuidToFavorites(Guid partyUuid)
+        {
+            await _profileClient.AddPartyUuidToFavorites(partyUuid);
+        }
+
+        /// <inheritdoc/>
+        public async Task DeletePartyUuidFromFavorites(Guid partyUuid)
+        {
+            await _profileClient.DeletePartyUuidFromFavorites(partyUuid);
+        }
+    }
+}

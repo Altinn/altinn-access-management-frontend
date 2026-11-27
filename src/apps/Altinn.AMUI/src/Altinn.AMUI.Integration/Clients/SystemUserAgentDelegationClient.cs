@@ -1,0 +1,205 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Json;
+using System.Text.Json;
+using Altinn.AMUI.Core.ClientInterfaces;
+using Altinn.AMUI.Core.Extensions;
+using Altinn.AMUI.Core.Helpers;
+using Altinn.AMUI.Core.Models.SystemUser;
+using Altinn.AMUI.Integration.Configuration;
+using Altinn.Authorization.ProblemDetails;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+namespace Altinn.AMUI.Integration.Clients
+{
+    /// <summary>
+    /// client that integrates with the agent deletation api
+    /// </summary>
+    [ExcludeFromCodeCoverage]
+    public class SystemUserAgentDelegationClient : ISystemUserAgentDelegationClient
+    {
+        private readonly ILogger _logger;
+        private readonly HttpClient _client;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly PlatformSettings _platformSettings;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SystemUserAgentDelegationClient"/> class
+        /// </summary>
+        /// <param name="httpClient">http client</param>
+        /// <param name="logger">the handler for logger service</param>
+        /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
+        /// <param name="platformSettings"> platform settings configuration</param>
+        public SystemUserAgentDelegationClient(
+            HttpClient httpClient,
+            ILogger<SystemUserAgentDelegationClient> logger,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<PlatformSettings> platformSettings)
+        {
+            _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
+            _platformSettings = platformSettings.Value;
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAuthenticationEndpoint);
+            httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
+            _client = httpClient;
+        }
+
+        /// <inheritdoc/>
+        public async Task<List<AgentDelegation>> GetSystemUserAgentDelegations(int partyId, Guid facilitatorId, Guid systemUserGuid, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{facilitatorId}/{systemUserGuid}/delegations";
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<List<AgentDelegation>>(responseContent, _serializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // GetSystemUserAgentDelegations // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return [];
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // GetSystemUserAgentDelegations // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<List<AgentDelegation>>> AddClient(int partyId, Guid systemUserGuid, AgentDelegationRequest delegationRequest, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}?provider={delegationRequest.FacilitatorId}&client={delegationRequest.CustomerId}";
+
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<List<AgentDelegation>>(responseContent, _serializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // AddClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // AddClient // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<bool>> RemoveClient(int partyId, Guid systemUserGuid, Guid facilitatorId, Guid clientId, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/client?provider={facilitatorId}&client={clientId}";
+
+                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveClient // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<bool>> AddSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/self?partyUuid={partyUuid}";
+
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, null);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // AddSelf // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // AddSelf // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<bool>> RemoveSelf(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/self?partyUuid={partyUuid}";
+
+                HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // RemoveSelf // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // RemoveSelf // Exception");
+                throw;
+            }
+        }
+
+        /// <inheritdoc/>
+        public async Task<Result<bool>> IsSelfAdded(int partyId, Guid systemUserGuid, Guid partyUuid, CancellationToken cancellationToken)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"systemuser/agent/{partyId}/{systemUserGuid}/self?partyUuid={partyUuid}";
+
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return JsonSerializer.Deserialize<bool>(responseContent, _serializerOptions);
+                }
+
+                _logger.LogError("AccessManagement.UI // SystemUserAgentDelegationClient // IsSelfAdded // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
+                return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // SystemUserAgentDelegationClient // IsSelfAdded // Exception");
+                throw;
+            }
+        }
+    }
+}

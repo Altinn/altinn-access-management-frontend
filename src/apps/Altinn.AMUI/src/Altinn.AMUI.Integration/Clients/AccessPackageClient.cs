@@ -1,0 +1,172 @@
+﻿using System.Diagnostics;
+using System.Net;
+using System.Text.Json;
+using Altinn.AMUI.Core.ClientInterfaces;
+using Altinn.AMUI.Core.Extensions;
+using Altinn.AMUI.Core.Helpers;
+using Altinn.AMUI.Core.Models.AccessPackage;
+using Altinn.AMUI.Core.Models.Common;
+using Altinn.AMUI.Integration.Configuration;
+using Altinn.AMUI.Integration.Util;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+
+namespace Altinn.AMUI.Integration.Clients
+{
+    /// <summary>
+    /// Client for interacting with Access packages
+    /// </summary>
+    public class AccessPackageClient : IAccessPackageClient
+    {
+        private readonly ILogger _logger;
+        private readonly HttpClient _client;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly PlatformSettings _platformSettings;
+        private readonly JsonSerializerOptions _serializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccessPackageClient"/> class
+        /// </summary>
+        /// <param name="httpClient">the handler for httpclient service</param>
+        /// <param name="logger">the handler for logger service</param>
+        /// <param name="httpContextAccessor">the handler for httpcontextaccessor service</param>
+        /// <param name="platformSettings"> platform settings configuration</param>
+        public AccessPackageClient(
+            HttpClient httpClient,
+            ILogger<AccessPackageClient> logger,
+            IHttpContextAccessor httpContextAccessor,
+            IOptions<PlatformSettings> platformSettings)
+        {
+            _logger = logger;
+            _platformSettings = platformSettings.Value;
+            httpClient.BaseAddress = new Uri(_platformSettings.ApiAccessManagementEndpoint + "v1/");
+            httpClient.DefaultRequestHeaders.Add(_platformSettings.SubscriptionKeyHeaderName, _platformSettings.SubscriptionKey);
+            _client = httpClient;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        /// <inheritdoc />
+        public async Task<AccessPackage> GetAccessPackageById(string languageCode, Guid packageId)
+        {
+            string endpointUrl = $"meta/info/accesspackages/package/{packageId}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
+
+            if (response.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+            else if (response.StatusCode == HttpStatusCode.OK)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<AccessPackage>(responseContent, _serializerOptions);
+            }
+            else
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+
+                throw new HttpStatusException(
+                    "StatusError",
+                    responseContent,
+                    response.StatusCode,
+                    Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<SearchObject<AccessPackage>>> GetAccessPackageSearchMatches(string languageCode, string searchString, string typeName, IEnumerable<string> resourceProviderCodes = null)
+        {
+            string safeSearchTerm = Uri.EscapeDataString(searchString ?? string.Empty);
+            string endpointUrl = $"meta/info/accesspackages/search/?term={safeSearchTerm}&searchInResources=true";
+            if (!string.IsNullOrWhiteSpace(typeName))
+            {
+                string safeTypeName = Uri.EscapeDataString(typeName);
+                endpointUrl = $"{endpointUrl}&typeName={safeTypeName}";
+            }
+
+            foreach (string code in resourceProviderCodes?.Where(c => !string.IsNullOrWhiteSpace(c)) ?? Enumerable.Empty<string>())
+            {
+                endpointUrl = $"{endpointUrl}&resourceProviderCode={Uri.EscapeDataString(code)}";
+            }
+
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
+
+            if (response.StatusCode == HttpStatusCode.NoContent)
+            {
+                return new List<SearchObject<AccessPackage>>();
+            }
+            else if (response.StatusCode == HttpStatusCode.OK)
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                return JsonSerializer.Deserialize<IEnumerable<SearchObject<AccessPackage>>>(responseContent, _serializerOptions);
+            }
+            else
+            {
+                string responseContent = await response.Content.ReadAsStringAsync();
+                throw new HttpStatusException(
+                    "StatusError",
+                    responseContent,
+                    response.StatusCode,
+                    Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
+            }
+        }
+
+        /// <inheritdoc />
+        public async Task<PaginatedResult<PackagePermission>> GetAccessPackageAccesses(Guid party, Guid? to, Guid? from, string languageCode)
+        {
+            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, languageCode: languageCode);
+
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<PackagePermission>>(response);
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> CreateAccessPackageDelegation(Guid party, Guid to, Guid from, string packageId)
+        {
+            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}&packageId={packageId}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+
+            var httpResponse = await _client.PostAsync(token, endpointUrl, null);
+            return httpResponse;
+        }
+
+        /// <inheritdoc />
+        public async Task<HttpResponseMessage> RevokeAccessPackage(Guid from, Guid to, Guid party, string packageId)
+        {
+            string endpointUrl = $"enduser/connections/accesspackages?party={party}&to={to}&from={from}&packageId={packageId}";
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return response;
+            }
+
+            _logger.LogError("Revoke resource delegation from accessmanagement failed with {StatusCode}", response.StatusCode);
+            throw new HttpStatusException("StatusError", "Unexpected response status from Access Management", response.StatusCode, Activity.Current?.Id ?? _httpContextAccessor.HttpContext?.TraceIdentifier);
+        }
+
+        /// <inheritdoc />
+        public async Task<PaginatedResult<DelegationCheck>> AccessPackageDelegationCheck(Guid party)
+        {
+            try
+            {
+                string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+                string endpointUrl = $"enduser/connections/accesspackages/delegationcheck?party={party}";
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl);
+                var resString = await response.Content.ReadAsStringAsync();
+                return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<DelegationCheck>>(response);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "AccessManagement.UI // AccessPackageClient // AccessPackageDelegationCheck // Exception");
+                throw;
+            }
+        }
+    }
+}

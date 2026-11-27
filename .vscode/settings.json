@@ -2,5 +2,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "dotnet.defaultSolution": "backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln"
+  "eslint.workingDirectories": ["src/apps/Altinn.AMUI/frontend"],
+  "dotnet.defaultSolution": "src/apps/Altinn.AMUI/Altinn.AMUI.slnx"
 }

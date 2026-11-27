@@ -5,8 +5,24 @@ on:
 
 env:
   dotnet_version: 10.0.x
+  # renovate: datasource=nuget depName=Altinn.Authorization.RepoCtl.Cli
+  repoctlVersion: '2.2.1'
 
 jobs:
+  check-repo:
+    name: Check repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5
+        with:
+          dotnet-version: ${{ env.dotnet_version }}
+      - name: Install RepoCtl
+        run: dotnet tool install --global Altinn.Authorization.RepoCtl.Cli --version "${{ env.repoctlVersion }}"
+      # Solution files and `dotnet format --verify-no-changes`
+      - name: Check repository
+        run: repoctl check
+
   build:
     name: Build
     if: ((github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false) || github.event_name == 'push') && github.repository_owner == 'Altinn' && github.actor != 'dependabot[bot]'
@@ -19,7 +35,7 @@ jobs:
         with:
           dotnet-version: ${{ env.dotnet_version }}
       - name: Build
-        run: dotnet build backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln -v m -warnaserror
+        run: dotnet build src/apps/Altinn.AMUI/Altinn.AMUI.slnx -v m -warnaserror
 
   test:
     name: Test
@@ -32,7 +48,7 @@ jobs:
         with:
           dotnet-version: ${{ env.dotnet_version }}
       - name: Test
-        run: dotnet test backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln -v m
+        run: dotnet test src/apps/Altinn.AMUI/Altinn.AMUI.slnx -v m
 
   analyze:
     name: Analyze
@@ -76,10 +92,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Altinn_altinn-access-management-frontend" /o:"altinn" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="src/**/*,**/*mock*/**,**/*Mock*/**, **/Altinn.AccessManagement.UI.Integration/**,playwright/**"
+          .\.sonar\scanner\dotnet-sonarscanner begin /k:"Altinn_altinn-access-management-frontend" /o:"altinn" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths="**/*.trx" /d:sonar.cs.opencover.reportsPaths="**/coverage.opencover.xml" /d:sonar.coverage.exclusions="src/apps/Altinn.AMUI/frontend/**/*,**/*mock*/**,**/*Mock*/**, **/Altinn.AMUI.Integration/**"
 
-          dotnet build backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln
-          dotnet test backend/src/Altinn.AccessManagement.UI/Altinn.AccessManagement.UI.sln `
+          dotnet build src/apps/Altinn.AMUI/Altinn.AMUI.slnx
+          dotnet test src/apps/Altinn.AMUI/Altinn.AMUI.slnx `
           --no-build `
           --results-directory TestResults/ `
           --collect:"XPlat Code Coverage" `

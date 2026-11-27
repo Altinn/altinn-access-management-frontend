@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Altinn.AMUI/" />
+  <Folder Name="/Altinn.AMUI/src/">
+    <Project Path="src/apps/Altinn.AMUI/src/Altinn.AMUI/Altinn.AMUI.csproj" />
+    <Project Path="src/apps/Altinn.AMUI/src/Altinn.AMUI.Core/Altinn.AMUI.Core.csproj" />
+    <Project Path="src/apps/Altinn.AMUI/src/Altinn.AMUI.Integration/Altinn.AMUI.Integration.csproj" />
+    <Project Path="src/apps/Altinn.AMUI/src/Altinn.AMUI.Mocks/Altinn.AMUI.Mocks.csproj" />
+  </Folder>
+  <Folder Name="/Altinn.AMUI/test/">
+    <Project Path="src/apps/Altinn.AMUI/test/Altinn.AMUI.Tests/Altinn.AMUI.Tests.csproj" />
+  </Folder>
+</Solution>

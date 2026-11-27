@@ -1,0 +1,5 @@
+# exclude everything
+*
+!.gitignore
+# keep folders visible so the placeholder accessmanagement/.gitignore stays tracked
+!*/

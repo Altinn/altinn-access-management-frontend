@@ -5,12 +5,18 @@ on:
   push:
     branches: [ main ]
     paths:
-      - backend/**
+      - .repo.jsonc
+      - Altinn.AMUI.slnx
+      - src/apps/Altinn.AMUI/**
+      - '!src/apps/Altinn.AMUI/frontend/**'
 
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
-      - backend/**
+      - .repo.jsonc
+      - Altinn.AMUI.slnx
+      - src/apps/Altinn.AMUI/**
+      - '!src/apps/Altinn.AMUI/frontend/**'
 
 jobs:
   ci:

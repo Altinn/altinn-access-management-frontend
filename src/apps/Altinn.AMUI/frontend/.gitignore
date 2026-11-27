@@ -1,0 +1,23 @@
+# Yarn stuff; we're not using PnP/Zero installs
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+/node_modules/
+
+# Playwright report files
+playwright/playwright-report
+playwright/test-results
+playwright/jsonReports
+*storybook.log
+playwright/config/.env
+accessibility-violation*
+
+# Storybook build files
+storybook-static/
+test-results
+coverage
