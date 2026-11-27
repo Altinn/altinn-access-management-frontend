@@ -111,7 +111,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportensuppliers/resources?party={party}&supplier={Uri.EscapeDataString(supplier)}&resource={Uri.EscapeDataString(resource)}";
 
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
@@ -158,7 +158,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportensuppliers?party={party}&supplier={supplier}&cascade={cascade}";
 
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
@@ -175,7 +175,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportenconsumers?party={party}&consumer={consumer}&cascade={cascade}";
 
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;
@@ -207,7 +207,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             var token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             var endpointUrl = $"enduser/maskinportenconsumers/resources?party={party}&consumer={Uri.EscapeDataString(consumer)}&resource={Uri.EscapeDataString(resource)}";
 
-            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl);
+            HttpResponseMessage response = await _client.DeleteAsync(token, endpointUrl, cancellationToken);
             if (response.IsSuccessStatusCode)
             {
                 return;

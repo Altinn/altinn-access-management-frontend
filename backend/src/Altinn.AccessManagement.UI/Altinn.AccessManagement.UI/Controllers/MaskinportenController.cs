@@ -63,7 +63,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "SearchScopes failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -100,7 +100,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "ResourceDelegationCheck failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -139,7 +139,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetSupplierResources failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -177,7 +177,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AddSupplierResource failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -216,7 +216,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "RemoveSupplierResource failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -250,7 +250,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetSuppliers failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -284,7 +284,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AddSupplier failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -318,7 +318,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetConsumers failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -352,7 +352,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "RemoveSupplier failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -386,7 +386,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "RemoveConsumer failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -423,7 +423,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetConsumerResources failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);
@@ -461,7 +461,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                 string responseContent = ex.Message;
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: responseContent));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "RemoveConsumerResource failed unexpectedly");
                 return StatusCode((int)HttpStatusCode.InternalServerError);

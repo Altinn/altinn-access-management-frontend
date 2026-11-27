@@ -52,7 +52,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<IdPortenAuthorization>>(httpResponse);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AccessManagement.UI // IdPortenAuthorizationClient // GetIdPortenAuthorizations // Exception");
                 throw;
@@ -67,10 +67,10 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string endpointUrl = $"bff/idportenauthorization?id={id}";
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-                var httpResponse = await _client.DeleteAsync(token, endpointUrl);
+                var httpResponse = await _client.DeleteAsync(token, endpointUrl, cancellationToken);
                 return await ClientUtils.DeserializeIfSuccessfullStatusCode<bool>(httpResponse);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AccessManagement.UI // IdPortenAuthorizationClient // WithdrawIdPortenAuthorization // Exception");
                 throw;
