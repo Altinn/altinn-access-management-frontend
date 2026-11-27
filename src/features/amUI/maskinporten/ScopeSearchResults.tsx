@@ -91,7 +91,6 @@ export const ScopeSearchResults = ({
               <ResourceList
                 resources={resources}
                 enableSearch={false}
-                showDetails={false}
                 onSelect={onSelect}
                 size='sm'
                 getHasAccess={(resource) => isDelegated(resource.identifier)}

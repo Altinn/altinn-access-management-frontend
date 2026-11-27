@@ -166,7 +166,6 @@ export const MultipleDraftRequestsView = ({
             size='xs'
             border='dotted'
             enableSearch={false}
-            showDetails={false}
             resources={resourceRequests.map((r) => r.resource)}
             onSelect={handleSelectResource}
             ariaLabelledBy='multiple-services-title'

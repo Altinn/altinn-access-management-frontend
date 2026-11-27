@@ -14,6 +14,7 @@ import {
 } from '@/rtk/features/maskinportenApi';
 
 import { DelegationAction, EditModal } from '../common/DelegationModal/EditModal';
+import { useDelegationModalContext } from '../common/DelegationModal/DelegationModalContext';
 import { PageContainer } from '../common/PageContainer/PageContainer';
 import { UserPageHeader } from '../common/UserPageHeader/UserPageHeader';
 import { usePartyRepresentation } from '../common/PartyRepresentationContext/PartyRepresentationContext';
@@ -51,6 +52,17 @@ const SupplierPageContentInner = () => {
   const deleteDialogRef = React.useRef<HTMLDialogElement>(null);
   const scopeModalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
+  const { setActionError } = useDelegationModalContext();
+
+  // `error` is set when giving a scope from its row failed: actionError is then already set and
+  // ScopeInfo shows it.
+  const openScope = (resource: ServiceResource, error = false) => {
+    if (!error) {
+      setActionError(null);
+    }
+    setSelectedResource(resource);
+    scopeModalRef.current?.showModal();
+  };
 
   const backUrl = `/${amUIPath.Maskinporten}#suppliers`;
 
@@ -144,6 +156,12 @@ const SupplierPageContentInner = () => {
           onResourceClick={(r) => {
             setSelectedResource(r);
             scopeModalRef.current?.showModal();
+          }}
+          otherScopes={{
+            onSelect: openScope,
+            // A given scope moves to the delegated list; focus its row there.
+            onGiven: (r) =>
+              requestFocusOnDataChange(r.identifier, MASKINPORTEN_RESOURCES_HEADING_ID),
           }}
           editModal={
             <EditModal

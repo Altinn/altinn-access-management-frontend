@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DsAlert, DsHeading, DsParagraph } from '@altinn/altinn-components';
 
-import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import {
   type ResourceDelegation,
   type ServiceResource,
@@ -10,22 +9,14 @@ import {
 import { AmPagination } from '@/components/Paginering/AmPaginering';
 import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import { SkeletonResourceList } from '@/features/amUI/common/ResourceList/SkeletonResourceList';
-import { getInheritedStatus } from '@/features/amUI/common/useInheritedStatus';
 import { SearchHitsStatus } from '@/features/amUI/common/SearchHitsStatus/SearchHitsStatus';
 
-import { DelegationAction } from '../EditModal';
-import { useDelegationModalContext } from '../DelegationModalContext';
-import { usePartyRepresentation } from '../../PartyRepresentationContext/PartyRepresentationContext';
+import { type DelegationAction } from '../EditModal';
 import { useRestoreFocusOnDataChange } from '../../RestoreFocus';
-import { useCanRedelegateResource, useRevokeConfirmation } from '../../RevokeConfirmation';
 
 import classes from './ResourceSearch.module.css';
-import { useResourceListDelegation } from './hooks/useResourceListDelegation';
-import {
-  useRenderSearchResultControl,
-  resourceActionControlId,
-} from './createSearchResultControlsRenderer';
-import { useSingleRightRequests } from './hooks/useSingleRightRequests';
+import { resourceActionControlId } from './createSearchResultControlsRenderer';
+import { useSingleRightsListControls } from './hooks/useSingleRightsListControls';
 
 interface SearchResultsProps {
   isFetching: boolean;
@@ -55,8 +46,6 @@ export const SearchResults = ({
   availableActions,
 }: SearchResultsProps) => {
   const { t } = useTranslation();
-  const { setActionError } = useDelegationModalContext();
-  const { actingParty, fromParty, toParty } = usePartyRepresentation();
   const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
 
   // The total is only a hit count once there is a search term. The search resets to page 1 when it
@@ -65,88 +54,11 @@ export const SearchResults = ({
   const settledTotal =
     !searchString?.trim() || (isFetching && currentPage === 1) ? undefined : totalNumberOfResults;
 
-  const { createRequest, deleteRequest, hasPendingRequest, isLoadingRequest } =
-    useSingleRightRequests({
-      canRequestRights: availableActions?.includes(DelegationAction.REQUEST) ?? false,
-      actingPartyUuid: actingParty?.id,
-      fromPartyUuid: fromParty?.id,
-      onCreateRequestError: (resource) => {
-        onSelect(resource);
-      },
-      onDeleteRequestError: (resource) => {
-        onSelect(resource);
-      },
-    });
-
-  const { canRedelegateResource } = useCanRedelegateResource();
-  const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
-
-  const { delegateFromList, revokeFromList, isResourceLoading } = useResourceListDelegation({
-    onActionError: (resource, errorInfo) => {
-      onSelect(resource, true);
-      setActionError(errorInfo);
-    },
-    onSuccess: (resource) => {
-      setActionError(null);
-      requestFocusOnDataChange(resourceActionControlId(resource.identifier));
-    },
-    onMissingAccessToAllActions: (resource) => {
-      setActionError(null);
-      onSelect(resource);
-    },
-  });
-
-  const confirmAndRevokeFromList = (resource: ServiceResource) =>
-    confirmRevoke(
-      resource.identifier,
-      () => canRedelegateResource(resource.identifier),
-      () => revokeFromList(resource),
-      {
-        name: resource.title,
-        toName: formatEntityDisplayName(toParty),
-      },
-    );
-
-  const requestFromList = (resource: ServiceResource) => {
-    createRequest(resource);
-  };
-
-  const deleteRequestFromList = (resource: ServiceResource) => {
-    deleteRequest(resource);
-  };
-
-  const isDelegated = (resourceId: string) =>
-    delegatedResources?.some((delegation) => delegation.resource?.identifier === resourceId) ??
-    false;
-
-  const isInherited = (resourceId: string) => {
-    const delegation = delegatedResources?.find((item) => item.resource?.identifier === resourceId);
-    if (!delegation) {
-      return false;
-    }
-    return (
-      getInheritedStatus({
-        permissions: delegation.permissions,
-        toParty,
-      }).length > 0
-    );
-  };
-
-  const isLoading = (resourceId: string) => {
-    return isResourceLoading(resourceId) || isLoadingRequest(resourceId);
-  };
-
-  const renderControls = useRenderSearchResultControl({
-    isDelegated,
-    isInherited,
-    isRequested: hasPendingRequest,
+  const { renderControls, isDelegated, revokeConfirmationDialog } = useSingleRightsListControls({
+    delegatedResources,
     availableActions,
-    isResourceLoading: isLoading,
-    setActionError,
-    revokeFromList: confirmAndRevokeFromList,
-    delegateFromList,
-    requestFromList,
-    deleteRequestFromList,
+    onSelect,
+    onSuccess: (resource) => requestFocusOnDataChange(resourceActionControlId(resource.identifier)),
   });
 
   if (error) {
@@ -186,7 +98,6 @@ export const SearchResults = ({
               <ResourceList
                 resources={resources}
                 enableSearch={false}
-                showDetails={false}
                 onSelect={onSelect}
                 size='sm'
                 getHasAccess={(resource) => isDelegated(resource.identifier)}

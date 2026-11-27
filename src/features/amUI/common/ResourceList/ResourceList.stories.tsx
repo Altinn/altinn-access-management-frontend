@@ -63,8 +63,6 @@ export const WithControls: Story = {
     resources: sampleResources,
     enableSearch: false,
     renderControls: (resource) => <span>{`Action for ${resource.title}`}</span>,
-    getBadge: (_, index) =>
-      index === 0 ? { label: 'New', theme: 'base', color: 'success' } : undefined,
   },
 };
 
@@ -73,6 +71,5 @@ export const NonInteractive: Story = {
     resources: sampleResources,
     enableSearch: false,
     interactive: false,
-    showDetails: false,
   },
 };

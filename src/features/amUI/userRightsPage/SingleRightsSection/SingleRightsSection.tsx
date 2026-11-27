@@ -6,7 +6,6 @@ import { DsHeading } from '@altinn/altinn-components';
 import { formatEntityDisplayName } from '@/resources/utils/reporteeUtils';
 import type { ServiceResource } from '@/rtk/features/singleRights/singleRightsApi';
 import { useGetSingleRightsForRightholderQuery } from '@/rtk/features/singleRights/singleRightsApi';
-import { ResourceList } from '@/features/amUI/common/ResourceList/ResourceList';
 import {
   RestoreFocusFallback,
   RestoreFocusProvider,
@@ -26,6 +25,9 @@ import { getAvailableActions } from '../../common/DelegationModal/delegationActi
 import { getInheritedStatus } from '../../common/useInheritedStatus';
 import { HelpText } from '../../common/HelpText/HelpText';
 import { useCanRedelegateResource, useRevokeConfirmation } from '../../common/RevokeConfirmation';
+import { ServiceSearchLists } from '../../common/ServiceSearchLists/ServiceSearchLists';
+import { useDelegationModalContext } from '../../common/DelegationModal/DelegationModalContext';
+import { useSingleRightsListControls } from '../../common/DelegationModal/SingleRights/hooks/useSingleRightsListControls';
 
 import classes from './SingleRightsSection.module.css';
 import { DeleteResourceButton } from './DeleteResourceButton';
@@ -56,11 +58,36 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
     },
   );
 
+  const availableActions = getAvailableActions({ canGiveAccess, canRequestAccess });
+
   const modalRef = React.useRef<HTMLDialogElement>(null);
   const [selectedResource, setSelectedResource] = React.useState<ServiceResource | null>(null);
+  const { actionError, setActionError } = useDelegationModalContext();
+
+  // Rows in both lists open the same modal; ResourceInfo offers give/request/revoke as allowed.
+  // `error` is set when a give or revoke from a row failed: actionError is then already set and is
+  // shown in the modal. A failed request from a row is reported with a snackbar instead.
+  const openResource = (resource: ServiceResource, error = false) => {
+    if (!error) {
+      setActionError(null);
+    }
+    setSelectedResource(resource);
+    modalRef.current?.showModal();
+  };
 
   const requestFocusOnDataChange = useRestoreFocusOnDataChange(delegatedResources);
   const restoreFocusContext = useRestoreFocusContext();
+
+  // Give (Users page) or request (PoA for others) buttons on the rows of the "other services"
+  // list: the same controls as in the "Gi fullmakt" search.
+  const { renderControls: renderOtherServiceControls, revokeConfirmationDialog: listRevokeDialog } =
+    useSingleRightsListControls({
+      delegatedResources,
+      availableActions,
+      onSelect: openResource,
+      // A given service moves to the assigned list; focus its row there.
+      onSuccess: (resource) => requestFocusOnDataChange(resource.identifier, 'single_rights_title'),
+    });
 
   const { canRedelegateResource } = useCanRedelegateResource();
   const { confirmRevoke, revokeConfirmationDialog } = useRevokeConfirmation();
@@ -75,11 +102,6 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
         toName: formatEntityDisplayName(toParty),
       },
     );
-
-  const resources = React.useMemo(
-    () => delegatedResources?.map((delegation) => delegation.resource).filter(Boolean),
-    [delegatedResources],
-  ) as ServiceResource[];
 
   const isResourceInherited = (resourceId: string) => {
     const resource = delegatedResources?.find(
@@ -98,8 +120,6 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
   if (isLoading || isPartyLoading) {
     return <SingleRightsSectionSkeleton />;
   }
-
-  const availableActions = getAvailableActions({ canGiveAccess, canRequestAccess });
 
   return (
     toParty && (
@@ -122,41 +142,51 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
         {availableActions.includes(DelegationAction.REQUEST) && <PendingRequests />}
         <RestoreFocusFallback>
           <div className={classes.singleRightsList}>
-            <ResourceList
-              resources={resources ?? []}
-              enableSearch={true}
-              showDetails={false}
-              onSelect={(resource) => {
-                setSelectedResource(resource);
-                modalRef.current?.showModal();
-              }}
+            <ServiceSearchLists
+              delegations={delegatedResources}
               size={isSmallScreen ? 'sm' : 'md'}
-              noResourcesText={t('resource_list.no_user_resources')}
-              delegationModal={
+              hideListHeadingsUntilSearch
+              headingLevel={3}
+              // Same wording as the access package search on this page.
+              getSearchHitsMessage={({ assigned, other }) =>
+                `${t('access_packages.search_hits_active', { count: assigned })}. ${t('access_packages.search_other_hits', { count: other })}`
+              }
+              toolbarAction={
                 (availableActions.includes(DelegationAction.DELEGATE) ||
                   availableActions.includes(DelegationAction.REQUEST)) && (
                   <SingleRightsDelegationModal availableActions={availableActions} />
                 )
               }
-              renderControls={(resource) => {
-                if (isSmallScreen || !availableActions.includes(DelegationAction.REVOKE))
-                  return null;
-                const isInherited = isResourceInherited(resource.identifier);
-                return (
-                  <DeleteResourceButton
-                    resource={resource}
-                    disabled={isInherited}
-                    confirmDelete={confirmDelete}
-                    onSuccess={() =>
-                      requestFocusOnDataChange(resource.identifier, 'single_rights_title')
-                    }
-                  />
-                );
+              assignedList={{
+                heading: t('access_packages.search_active_matches'),
+                onSelect: (resource) => openResource(resource),
+                noResourcesText: t('resource_list.no_user_resources'),
+                renderControls: (resource) => {
+                  if (isSmallScreen || !availableActions.includes(DelegationAction.REVOKE))
+                    return null;
+                  const isInherited = isResourceInherited(resource.identifier);
+                  return (
+                    <DeleteResourceButton
+                      resource={resource}
+                      disabled={isInherited}
+                      confirmDelete={confirmDelete}
+                      onSuccess={() =>
+                        requestFocusOnDataChange(resource.identifier, 'single_rights_title')
+                      }
+                    />
+                  );
+                },
+              }}
+              otherList={{
+                heading: t('access_packages.search_other_matches'),
+                onSelect: (resource) => openResource(resource),
+                renderControls: renderOtherServiceControls,
               }}
             />
           </div>
         </RestoreFocusFallback>
         {revokeConfirmationDialog}
+        {listRevokeDialog}
         <EditModal
           ref={modalRef}
           ariaLabel={t('delegation_modal.aria_label.single_rights')}
@@ -174,6 +204,7 @@ const SingleRightsSectionContent = ({ isReportee }: { isReportee: boolean }) => 
             <ResourceInfo
               resource={selectedResource}
               availableActions={availableActions}
+              actionError={actionError}
             />
           )}
         </EditModal>

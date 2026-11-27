@@ -247,7 +247,6 @@ export const RequestReviewModalContent = ({
                     size='xs'
                     border='dotted'
                     enableSearch={false}
-                    showDetails={false}
                     resources={snapshotResources}
                     onSelect={(resource) => handleSelection({ resource })}
                     renderControls={(resource) => itemControls({ resourceId: resource.identifier })}

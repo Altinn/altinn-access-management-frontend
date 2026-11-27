@@ -63,7 +63,7 @@ describe('ResourceList', () => {
     expect(handleSelect).toHaveBeenCalledTimes(1);
   });
 
-  it('renders custom controls provided via renderControls and getBadge', () => {
+  it('renders custom controls provided via renderControls', () => {
     const resources = [createResource({ title: 'With Controls' })];
 
     render(
@@ -71,12 +71,10 @@ describe('ResourceList', () => {
         resources={resources}
         enableSearch={false}
         renderControls={() => <span data-testid='custom-control'>Custom</span>}
-        getBadge={() => ({ label: 'Badge', theme: 'base', color: 'success' })}
       />,
     );
 
     expect(screen.getByTestId('custom-control')).toBeInTheDocument();
-    expect(screen.getByText('Badge')).toBeInTheDocument();
   });
 
   it('uses custom description text while preserving ownerName', () => {

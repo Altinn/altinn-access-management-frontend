@@ -42,25 +42,23 @@ export interface ResourceListProps<TResource extends ServiceResource = ServiceRe
   noResourcesText?: string;
   enableSearch?: boolean;
   searchPlaceholder?: string;
+  /** Called when a row is clicked. Without it, clicking a row opens the resource's details dialog. */
   onSelect?: (resource: TResource) => void;
   /**
    * Renders each row as a custom element, e.g. a router Link pointing at the resource's own page.
    * A row with a custom element is always interactive and never opens the details dialog.
    */
   getItemAs?: (resource: TResource) => React.ElementType | undefined;
-  showDetails?: boolean;
   size?: ResourceListItemProps['size'];
-  interactive?: boolean | ((resource: TResource) => boolean);
-  as?: ResourceListItemProps['as'];
+  /** Rows are interactive unless set to false: they either call onSelect or open the details dialog. */
+  interactive?: boolean;
   enableMaxHeight?: boolean;
   renderControls?: (resource: TResource) => React.ReactNode;
-  getBadge?: (resource: TResource, index: number) => ResourceListItemProps['badge'];
   getDescriptionText?: (resource: TResource, index: number) => string | undefined;
   /** Text matched by the search field besides name and owner. Defaults to the description. */
   getSearchableText?: (resource: TResource) => string;
   getHasAccess?: (resource: TResource) => boolean;
   getActionControlId?: (resource: TResource) => string;
-  delegationModal?: React.ReactNode;
   border?: ResourceListItemProps['border'];
   ariaLabelledBy?: string;
   className?: string;
@@ -74,18 +72,14 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
   searchPlaceholder,
   onSelect,
   getItemAs,
-  showDetails,
   size,
-  interactive,
-  as,
+  interactive = true,
   enableMaxHeight = false,
   renderControls,
-  getBadge,
   getDescriptionText,
   getSearchableText,
   getHasAccess,
   getActionControlId,
-  delegationModal,
   border = 'none',
   ariaLabelledBy,
   className,
@@ -101,26 +95,9 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
     [resources],
   );
 
-  const shouldShowDetails = showDetails ?? !onSelect;
-  const derivedInteractive = (resource: TResource) => {
-    if (typeof interactive === 'function') {
-      return interactive(resource);
-    }
-    return interactive ?? Boolean(onSelect || shouldShowDetails);
-  };
-
   const handleSelect = React.useCallback(
-    (resource: TResource) => {
-      if (onSelect) {
-        onSelect(resource);
-        return;
-      }
-
-      if (shouldShowDetails) {
-        setSelected(resource);
-      }
-    },
-    [onSelect, shouldShowDetails],
+    (resource: TResource) => (onSelect ? onSelect(resource) : setSelected(resource)),
+    [onSelect],
   );
 
   const closeDetails = React.useCallback(() => setSelected(null), []);
@@ -166,7 +143,6 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
                 : undefined
             }
           />
-          <div className={classes.delegationModalButton}>{delegationModal}</div>
         </div>
       )}
       {enableSearch && (
@@ -200,8 +176,8 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
                   const ownerName = resource.resourceOwnerName ?? '';
                   const description = getDescriptionText?.(resource, index);
                   const customAs = getItemAs?.(resource);
-                  const itemInteractive = customAs ? true : derivedInteractive(resource);
-                  const itemAs = customAs ?? as ?? (itemInteractive ? 'button' : 'div');
+                  const itemInteractive = !!customAs || interactive;
+                  const itemAs = customAs ?? (itemInteractive ? 'button' : 'div');
                   const itemSize = size ?? 'xs';
                   const handleClick =
                     !customAs && itemInteractive ? () => handleSelect(resource) : undefined;
@@ -227,7 +203,6 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
                       titleAs='div'
                       interactive={itemInteractive}
                       onClick={handleClick}
-                      badge={getBadge?.(resource, index)}
                       titleBadge={titleBadge}
                       variant={getHasAccess?.(resource) ? 'tinted' : 'default'}
                       controls={renderControls?.(resource)}
@@ -243,7 +218,7 @@ export const ResourceList = <TResource extends ServiceResource = ServiceResource
         </>
       )}
 
-      {shouldShowDetails && (
+      {!onSelect && (
         <ResourceDetails
           resource={selected}
           onClose={closeDetails}

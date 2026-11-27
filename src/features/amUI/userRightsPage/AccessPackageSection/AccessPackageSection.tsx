@@ -71,14 +71,12 @@ export const AccessPackageSection = ({ isReportee = false }: { isReportee?: bool
           </div>
           {canRequestAccess && <PendingPackageRequests />}
           <div className={classes.inputs}>
-            <div className={classes.searchField}>
-              <PackageSearchToolbar
-                searchString={searchString}
-                setSearchString={setSearchString}
-                serviceOwners={serviceOwners}
-                setServiceOwners={setServiceOwners}
-              />
-            </div>
+            <PackageSearchToolbar
+              searchString={searchString}
+              setSearchString={setSearchString}
+              serviceOwners={serviceOwners}
+              setServiceOwners={setServiceOwners}
+            />
             <div className={classes.delegateButton}>
               {(availableActions.includes(DelegationAction.DELEGATE) ||
                 availableActions.includes(DelegationAction.REQUEST)) && (

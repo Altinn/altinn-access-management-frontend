@@ -271,11 +271,6 @@
       "count": 1
     }
   },
-  "src/features/amUI/common/DelegationModal/SingleRights/SearchResults.tsx": {
-    "@typescript-eslint/no-misused-promises": {
-      "count": 2
-    }
-  },
   "src/features/amUI/common/DelegationModal/SingleRights/createSearchResultControlsRenderer.tsx": {
     "react/display-name": {
       "count": 1

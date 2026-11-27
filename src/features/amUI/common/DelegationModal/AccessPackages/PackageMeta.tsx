@@ -39,10 +39,8 @@ export const PackageMeta = ({ accessPackage }: PackageMetaProps) => {
             resources={accessPackage.resources}
             noResourcesText={t('delegation_modal.no_resources_in_package')}
             enableMaxHeight={true}
-            showDetails={false}
             interactive={false}
             size='xs'
-            as='div'
           />
         </div>
       </div>
