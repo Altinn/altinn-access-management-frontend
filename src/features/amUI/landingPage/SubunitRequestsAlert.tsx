@@ -118,7 +118,7 @@ export const SubunitRequestsAlert = ({
                 name={reporteeName}
                 description={`${t('common.org_nr')} ${formatOrgNr(reportee?.organizationIdentifier)}`}
                 type='company'
-                titleAs='h3'
+                titleAs='span'
                 size='sm'
                 interactive={false}
                 shadow='none'
@@ -160,7 +160,7 @@ export const SubunitRequestsAlert = ({
                   })}
                   type='company'
                   subUnit
-                  titleAs='h3'
+                  titleAs='span'
                   size='sm'
                   interactive={false}
                   shadow='none'

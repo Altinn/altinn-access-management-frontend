@@ -107,6 +107,7 @@ export const UserListItems = ({
             <UserListItem
               key={item.id}
               {...item}
+              titleAs='span'
               collapsible={collapsible}
               expanded={expanded}
               onClick={collapsible ? handleClick : item.onClick}

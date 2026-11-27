@@ -172,7 +172,7 @@ export const UserItem = ({
             : 'div'
       }
       controls={hasInheritingUsers ? showHint && <EditPoasHint /> : controls?.(user)}
-      titleAs='div'
+      titleAs='span'
       subUnit={subUnit || hasSubUnitRole || isSubUnitByType(user.unitType)}
       deleted={user.isDeleted}
     >

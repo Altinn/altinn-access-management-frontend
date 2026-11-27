@@ -40,7 +40,7 @@ export const AdministratorListItem = ({
       type='person'
       size='sm'
       as='button'
-      titleAs='div'
+      titleAs='span'
       collapsible
       expanded={isExpanded}
       onClick={() => setIsExpanded(!isExpanded)}
