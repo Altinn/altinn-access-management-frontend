@@ -63,5 +63,15 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<ActivityLogFilterValueDto>>(response, _logger, "ActivityLogClient.GetFilterValues");
         }
+
+        /// <inheritdoc />
+        public async Task<IEnumerable<string>> GetFilterFields(string area, CancellationToken cancellationToken = default)
+        {
+            string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
+            string endpointUrl = $"enduser/{area}/activitylog/filter/fields";
+
+            HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken);
+            return await ClientUtils.DeserializeIfSuccessfullStatusCode<IEnumerable<string>>(response, _logger, "ActivityLogClient.GetFilterFields");
+        }
     }
 }

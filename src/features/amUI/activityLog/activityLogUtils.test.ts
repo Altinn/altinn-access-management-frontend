@@ -4,6 +4,7 @@ import { describe, expect, it } from 'vitest';
 import {
   getActivityLogColor,
   getActivityLogCounterpart,
+  getActivityLogDateFilterLabel,
   getActivityLogEventKey,
   getActivityLogLocale,
   getActivityLogObjectLabel,
@@ -177,6 +178,44 @@ describe('getActivityLogPartyFilterLabel', () => {
   it('skips ids that are no longer among the options', () => {
     expect(getActivityLogPartyFilterLabel('Til', ['gone', 'lise'], options)).toBe(
       'Til: Lise Larsen AS',
+    );
+  });
+});
+
+describe('getActivityLogDateFilterLabel', () => {
+  const locale = 'nb-NO';
+
+  it('is the prefix alone when no dates are chosen', () => {
+    expect(getActivityLogDateFilterLabel({ prefix: 'Periode', locale, t })).toBe('Periode');
+  });
+
+  it('shows the period when both dates are chosen', () => {
+    const label = getActivityLogDateFilterLabel({
+      prefix: 'Periode',
+      fromDate: '2025-01-01',
+      toDate: '2025-02-03',
+      locale,
+      t,
+    });
+
+    expect(label).toMatch(/^Periode: /);
+    expect(label).toContain('2025');
+    expect(label).toContain('jan');
+    expect(label).toContain('feb');
+  });
+
+  it('names the open end when only one date is chosen', () => {
+    expect(
+      getActivityLogDateFilterLabel({ prefix: 'Periode', fromDate: '2025-01-01', locale, t }),
+    ).toMatch(/^Periode: activity_log_page\.filter_date_from\(.*2025.*\)$/);
+    expect(
+      getActivityLogDateFilterLabel({ prefix: 'Periode', toDate: '2025-01-31', locale, t }),
+    ).toMatch(/^Periode: activity_log_page\.filter_date_to\(.*2025.*\)$/);
+  });
+
+  it('ignores a date that cannot be parsed', () => {
+    expect(getActivityLogDateFilterLabel({ prefix: 'Periode', fromDate: 'nope', locale, t })).toBe(
+      'Periode',
     );
   });
 });

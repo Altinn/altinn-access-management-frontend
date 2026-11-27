@@ -32,5 +32,11 @@ namespace Altinn.AccessManagement.UI.Core.Services
         {
             return _activityLogClient.GetFilterValues(area, field, query, cancellationToken);
         }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<string>> GetFilterFields(string area, CancellationToken cancellationToken = default)
+        {
+            return _activityLogClient.GetFilterFields(area, cancellationToken);
+        }
     }
 }

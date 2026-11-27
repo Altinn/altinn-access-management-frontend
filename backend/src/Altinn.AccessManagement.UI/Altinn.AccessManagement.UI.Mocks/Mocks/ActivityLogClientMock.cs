@@ -40,18 +40,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
             // The values are looked up in the full search, except that the field being looked up
             // disregards its own filter.
-            ActivityLogQuery lookupQuery = new ActivityLogQuery
-            {
-                Party = query.Party,
-                Direction = query.Direction,
-                From = string.Equals(field, "from", StringComparison.OrdinalIgnoreCase) ? new List<Guid>() : query.From,
-                To = string.Equals(field, "to", StringComparison.OrdinalIgnoreCase) ? new List<Guid>() : query.To,
-                Via = query.Via,
-                By = string.Equals(field, "by", StringComparison.OrdinalIgnoreCase) ? new List<Guid>() : query.By,
-                TypeId = query.TypeId,
-                After = query.After,
-                Before = query.Before,
-            };
+            ActivityLogQuery lookupQuery = WithoutOwnFilter(query, field);
 
             IEnumerable<ActivityLogFilterValueDto> values = GetEntriesInSearch(area, lookupQuery)
                 .Select(entry => GetFieldValue(entry, field))
@@ -67,6 +56,66 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 ? values.ToList()
                 : values.OrderBy(value => value.Name).ToList();
             return Task.FromResult(Page(ordered, query));
+        }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<string>> GetFilterFields(string area, CancellationToken cancellationToken = default)
+        {
+            string dataPath = Path.Combine(dataFolder, $"{area}_filter_fields.json");
+            return Task.FromResult<IEnumerable<string>>(Util.GetMockData<List<string>>(dataPath));
+        }
+
+        private static ActivityLogQuery WithoutOwnFilter(ActivityLogQuery query, string field)
+        {
+            ActivityLogQuery lookupQuery = new ActivityLogQuery
+            {
+                Party = query.Party,
+                Direction = query.Direction,
+                From = query.From,
+                To = query.To,
+                Via = query.Via,
+                By = query.By,
+                Role = query.Role,
+                Package = query.Package,
+                Resource = query.Resource,
+                Source = query.Source,
+                TypeId = query.TypeId,
+                After = query.After,
+                Before = query.Before,
+            };
+
+            switch (field.ToLowerInvariant())
+            {
+                case "from":
+                    lookupQuery.From = new List<Guid>();
+                    break;
+                case "to":
+                    lookupQuery.To = new List<Guid>();
+                    break;
+                case "via":
+                    lookupQuery.Via = new List<Guid>();
+                    break;
+                case "by":
+                    lookupQuery.By = new List<Guid>();
+                    break;
+                case "role":
+                    lookupQuery.Role = new List<Guid>();
+                    break;
+                case "package":
+                    lookupQuery.Package = new List<Guid>();
+                    break;
+                case "resource":
+                    lookupQuery.Resource = new List<Guid>();
+                    break;
+                case "source":
+                    lookupQuery.Source = new List<Guid>();
+                    break;
+                case "activitytype":
+                    lookupQuery.TypeId = new List<Guid>();
+                    break;
+            }
+
+            return lookupQuery;
         }
 
         private IEnumerable<ActivityLogDto> GetEntriesInSearch(string area, ActivityLogQuery query)
@@ -97,6 +146,26 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                 entries = entries.Where(entry => entry.ById.HasValue && query.By.Contains(entry.ById.Value));
             }
 
+            if (query.Role?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.RoleId.HasValue && query.Role.Contains(entry.RoleId.Value));
+            }
+
+            if (query.Package?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.PackageId.HasValue && query.Package.Contains(entry.PackageId.Value));
+            }
+
+            if (query.Resource?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.ResourceId.HasValue && query.Resource.Contains(entry.ResourceId.Value));
+            }
+
+            if (query.Source?.Count > 0)
+            {
+                entries = entries.Where(entry => entry.SourceId.HasValue && query.Source.Contains(entry.SourceId.Value));
+            }
+
             if (query.TypeId?.Count > 0)
             {
                 entries = entries.Where(entry => entry.ActivityTypeId.HasValue && query.TypeId.Contains(entry.ActivityTypeId.Value));
@@ -123,10 +192,21 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
                     return ToFilterValue(entry.FromId, entry.FromName);
                 case "to":
                     return ToFilterValue(entry.ToId, entry.ToName);
+                case "via":
+                    return ToFilterValue(entry.ViaId, entry.ViaName);
                 case "by":
                     return ToFilterValue(entry.ById, entry.ByName);
+                case "role":
+                    return ToFilterValue(entry.RoleId, entry.RoleName);
+                case "package":
+                    return ToFilterValue(entry.PackageId, entry.PackageName);
                 case "resource":
                     return ToFilterValue(entry.ResourceId, entry.ResourceName);
+                case "source":
+                    return ToFilterValue(entry.SourceId, entry.SourceName);
+                case "activitytype":
+                    // The API names the type from its catalog; the mock names it from the entry's own fields.
+                    return ToFilterValue(entry.ActivityTypeId, string.Join(" ", new[] { entry.Type, entry.Subtype, entry.Trigger }.Where(part => !string.IsNullOrEmpty(part))));
                 default:
                     return null;
             }

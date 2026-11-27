@@ -43,6 +43,26 @@ namespace Altinn.AccessManagement.UI.Core.Models.ActivityLog
         public List<Guid> By { get; set; } = new List<Guid>();
 
         /// <summary>
+        /// Gets or sets the roles to include.
+        /// </summary>
+        public List<Guid> Role { get; set; } = new List<Guid>();
+
+        /// <summary>
+        /// Gets or sets the access packages to include.
+        /// </summary>
+        public List<Guid> Package { get; set; } = new List<Guid>();
+
+        /// <summary>
+        /// Gets or sets the resources (for Maskinporten: the scopes) to include.
+        /// </summary>
+        public List<Guid> Resource { get; set; } = new List<Guid>();
+
+        /// <summary>
+        /// Gets or sets the systems the change came through to include.
+        /// </summary>
+        public List<Guid> Source { get; set; } = new List<Guid>();
+
+        /// <summary>
         /// Gets or sets the activity type catalog entries to include.
         /// </summary>
         public List<Guid> TypeId { get; set; } = new List<Guid>();
@@ -85,6 +105,10 @@ namespace Altinn.AccessManagement.UI.Core.Models.ActivityLog
             parameters.AddRange(To.Select(id => $"to={id}"));
             parameters.AddRange(Via.Select(id => $"via={id}"));
             parameters.AddRange(By.Select(id => $"by={id}"));
+            parameters.AddRange(Role.Select(id => $"role={id}"));
+            parameters.AddRange(Package.Select(id => $"package={id}"));
+            parameters.AddRange(Resource.Select(id => $"resource={id}"));
+            parameters.AddRange(Source.Select(id => $"source={id}"));
             parameters.AddRange(TypeId.Select(id => $"typeId={id}"));
 
             if (After.HasValue)
