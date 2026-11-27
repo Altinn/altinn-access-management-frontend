@@ -73,8 +73,9 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
         /// <param name="requestUri">The request Uri.</param>
         /// <param name="content">The http content.</param>
         /// <param name="platformAccessToken">The platformAccess tokens.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>A HttpResponseMessage.</returns>
-        public static Task<HttpResponseMessage> PatchAsync(this HttpClient httpClient, string authorizationToken, string requestUri, HttpContent content, string platformAccessToken = null)
+        public static Task<HttpResponseMessage> PatchAsync(this HttpClient httpClient, string authorizationToken, string requestUri, HttpContent content, string platformAccessToken = null, CancellationToken cancellationToken = default)
         {
             HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Patch, requestUri);
             request.Headers.Add("Authorization", "Bearer " + authorizationToken);
@@ -84,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
                 request.Headers.Add("PlatformAccessToken", platformAccessToken);
             }
 
-            return httpClient.SendAsync(request, CancellationToken.None);
+            return httpClient.SendAsync(request, cancellationToken);
         }
 
         /// <summary>
@@ -139,7 +140,7 @@ namespace Altinn.AccessManagement.UI.Core.Extensions
         /// <returns>A HttpResponseMessage.</returns>
         public static Task<HttpResponseMessage> DeleteAsync(this HttpClient httpClient, string authorizationToken, string requestUri, string platformAccessToken = null, CancellationToken cancellationToken = default)
         {
-            return httpClient.DeleteAsync(authorizationToken, requestUri, CancellationToken.None, platformAccessToken);
+            return httpClient.DeleteAsync(authorizationToken, requestUri, cancellationToken, platformAccessToken);
         }
 
         /// <summary>
