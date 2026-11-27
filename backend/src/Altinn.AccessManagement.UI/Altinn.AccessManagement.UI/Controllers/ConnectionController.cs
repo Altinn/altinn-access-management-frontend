@@ -41,12 +41,13 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="party">The uuid identifying the party the authenticated user is acting on behalf of.</param>
         /// <param name="from">The uuid identifying the party the authenticated user is acting for.</param>
         /// <param name="to">The uuid identifying the target party to which the assignment should be deleted.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete]
         [Authorize]
         [Route("reportee")]
-        public async Task<ActionResult> RevokeRightHolder([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to)
+        public async Task<ActionResult> RevokeRightHolder([FromQuery] Guid party, [FromQuery] Guid from, [FromQuery] Guid to, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                await _connectionService.RevokeRightHolderConnection(party, from, to);
+                await _connectionService.RevokeRightHolderConnection(party, from, to, cancellationToken);
                 return NoContent();
             }
             catch (HttpStatusException ex)
@@ -77,13 +78,14 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// If the combination is valid, the endpoint will return the partyUuid of the person.
         /// </summary>
         /// <param name="validationInput">The person identifier and last name of the person to be looked up</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The partyUuid of the person</returns>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
         [Authorize]
         [Route("reportee/{partyUuid}/rightholder/validateperson")]
-        public async Task<ActionResult<Guid>> ValidatePerson([FromBody] ValidatePersonInput validationInput)
+        public async Task<ActionResult<Guid>> ValidatePerson([FromBody] ValidatePersonInput validationInput, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -92,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                Guid? partyUuid = await _connectionService.ValidatePerson(validationInput.PersonIdentifier, validationInput.LastName);
+                Guid? partyUuid = await _connectionService.ValidatePerson(validationInput.PersonIdentifier, validationInput.LastName, cancellationToken);
 
                 if (partyUuid != null)
                 {
@@ -114,7 +116,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "ValidatePerson failed unexpectedly");
                 return StatusCode(500);
@@ -126,6 +128,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// </summary>
         /// <param name="partyUuid">The uuid of the reportee party</param>
         /// <param name="rightholderPartyUuid">The uuid of the party that will become a rightHolder (only provided when rightholder is an org)</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>The uuid of the added party</returns>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
@@ -133,7 +136,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         [HttpPost]
         [Authorize]
         [Route("reportee/{partyUuid}/rightholder")]
-        public async Task<ActionResult<Guid>> AddReporteeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid? rightholderPartyUuid)
+        public async Task<ActionResult<Guid>> AddReporteeRightHolder([FromRoute] Guid partyUuid, [FromQuery] Guid? rightholderPartyUuid, CancellationToken cancellationToken = default)
         {
             PersonInput personInput = null;
 
@@ -142,7 +145,7 @@ namespace Altinn.AccessManagement.UI.Controllers
             {
                 try
                 {
-                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>();
+                    personInput = await HttpContext.Request.ReadFromJsonAsync<PersonInput>(cancellationToken);
                 }
                 catch
                 {
@@ -175,7 +178,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                var rightHolderUuid = await _connectionService.AddReporteeRightHolderConnection(partyUuid, rightholderPartyUuid, personInput);
+                var rightHolderUuid = await _connectionService.AddReporteeRightHolderConnection(partyUuid, rightholderPartyUuid, personInput, cancellationToken);
                 return Ok(rightHolderUuid);
             }
             catch (ArgumentException ex)
@@ -193,7 +196,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AddReporteeRightHolder failed unexpectedly");
                 return StatusCode(500);
@@ -208,6 +211,7 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <param name="to">The string representation of the GUID identifying the target party to which the assignment should be created (optional).</param>
         /// <param name="includeClientDelegations">Whether to include client delegations in the response.</param>
         /// <param name="includeAgentConnections">Whether to include agent connections in the response.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <remarks>
         /// Party must match From or To
         /// Either from or to must be provided
@@ -221,7 +225,8 @@ namespace Altinn.AccessManagement.UI.Controllers
             [FromQuery] Guid? from,
             [FromQuery] Guid? to,
             [FromQuery] bool includeClientDelegations = true,
-            [FromQuery] bool includeAgentConnections = true)
+            [FromQuery] bool includeAgentConnections = true,
+            CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -242,12 +247,14 @@ namespace Altinn.AccessManagement.UI.Controllers
                     from,
                     to,
                     includeClientDelegations,
-                    includeAgentConnections);
+                    includeAgentConnections,
+                    cancellationToken);
 
                 return Ok(rightHolders);
             }
             catch (HttpStatusException ex)
             {
+                _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", party);
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response"));
             }
         }
@@ -258,11 +265,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// Proxies to backend: GET enduser/connections/users
         /// </summary>
         /// <param name="party">The party UUID.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>List of simplified connections.</returns>
         [HttpGet]
         [Authorize]
         [Route("simplified")]
-        public async Task<ActionResult<List<SimplifiedConnectionFE>>> GetSimplifiedConnections([FromQuery] Guid party)
+        public async Task<ActionResult<List<SimplifiedConnectionFE>>> GetSimplifiedConnections([FromQuery] Guid party, CancellationToken cancellationToken = default)
         {
             if (!ModelState.IsValid)
             {
@@ -276,14 +284,14 @@ namespace Altinn.AccessManagement.UI.Controllers
 
             try
             {
-                var connections = await _connectionService.GetSimplifiedConnections(party);
+                var connections = await _connectionService.GetSimplifiedConnections(party, cancellationToken);
                 return Ok(connections);
             }
             catch (HttpStatusException ex)
             {
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext, (int?)ex.StatusCode, "Unexpected HttpStatus response", detail: ex.Message));
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetSimplifiedConnections failed unexpectedly");
                 return new ObjectResult(ProblemDetailsFactory.CreateProblemDetails(HttpContext));

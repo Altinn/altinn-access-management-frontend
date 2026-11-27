@@ -36,16 +36,18 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Endpoint for retrieving delegated rules between parties
         /// </summary>
+        /// <param name="orgNummer">The organization number.</param>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <response code="400">Bad Request</response>
         /// <response code="500">Internal Server Error</response>
         [HttpGet]
         [Authorize]
         [Route("org/{orgNummer}")]
-        public async Task<ActionResult<PartyFE>> GetOrganisation(string orgNummer)
+        public async Task<ActionResult<PartyFE>> GetOrganisation(string orgNummer, CancellationToken cancellationToken = default)
         {
             try
             {
-                PartyFE party = await _lookupService.GetPartyForOrganization(orgNummer);
+                PartyFE party = await _lookupService.GetPartyForOrganization(orgNummer, cancellationToken);
 
                 if (party == null)
                 {
@@ -56,7 +58,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return party;
                 }
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetOrganisation failed to fetch organisation information");
                 return StatusCode(500);
@@ -66,11 +68,12 @@ namespace Altinn.AccessManagement.UI.Controllers
         /// <summary>
         /// Endpoint for retrieving the party from logged in user.
         /// </summary>
+        /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Party information for the GUI</returns>
         [HttpGet]
         [Authorize]
         [Route("party/user")]
-        public async Task<ActionResult<PartyFE>> GetPartyFromLoggedInUser()
+        public async Task<ActionResult<PartyFE>> GetPartyFromLoggedInUser(CancellationToken cancellationToken = default)
         {
             if (ModelState.IsValid == false)
             {
@@ -86,7 +89,7 @@ namespace Altinn.AccessManagement.UI.Controllers
                     return new ObjectResult(ProblemDetailsFactory.CreateValidationProblemDetails(HttpContext, ModelState, 400, detail: "Missing or invalid user uuid in token"));
                 }
 
-                PartyFE party = await _lookupService.GetPartyFromLoggedInUser(userUuid.Value);
+                PartyFE party = await _lookupService.GetPartyFromLoggedInUser(userUuid.Value, cancellationToken);
 
                 if (party != null)
                 {
@@ -95,7 +98,7 @@ namespace Altinn.AccessManagement.UI.Controllers
 
                 return StatusCode(404);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "GetPartyFromLoggedInUser failed to fetch party information");
                 return StatusCode(500);

@@ -56,9 +56,9 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             StringContent requestBody = personInput != null ? new StringContent(JsonSerializer.Serialize(personInput, _serializerOptions), Encoding.UTF8, "application/json") : null;
 
-            var httpResponse = await _client.PostAsync(token, endpointUrl, requestBody);
+            var httpResponse = await _client.PostAsync(token, endpointUrl, requestBody, cancellationToken);
 
-            var content = await httpResponse.Content.ReadAsStringAsync();
+            var content = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
 
             if (!httpResponse.IsSuccessStatusCode)
             {
@@ -71,12 +71,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to)
+        public async Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/connections?party={party}&from={from}&to={to}&cascade=true";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            var httpResponse = await _client.DeleteAsync(token, endpointUrl);
+            var httpResponse = await _client.DeleteAsync(token, endpointUrl, cancellationToken);
 
             if (!httpResponse.IsSuccessStatusCode)
             {
@@ -93,7 +93,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             Guid? from,
             Guid? to,
             bool includeClientDelegations = true,
-            bool includeAgentConnections = true)
+            bool includeAgentConnections = true,
+            CancellationToken cancellationToken = default)
         {
             var endpointBuilder = new System.Text.StringBuilder($"enduser/connections?party={party}&from={from?.ToString() ?? string.Empty}&to={to?.ToString() ?? string.Empty}");
             endpointBuilder.Append($"&includeClientDelegations={includeClientDelegations.ToString().ToLowerInvariant()}");
@@ -103,18 +104,22 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
             try
             {
-                var httpResponse = await _client.GetAsync(token, endpointUrl);
+                var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
                 if (!httpResponse.IsSuccessStatusCode)
                 {
                     throw new HttpStatusException("Unexpected http response.", "Unexpected http response.", httpResponse.StatusCode, null, httpResponse.ReasonPhrase);
                 }
 
-                string content = await httpResponse.Content.ReadAsStringAsync();
+                string content = await httpResponse.Content.ReadAsStringAsync(cancellationToken);
                 PaginatedResult<Connection> rightHolders = JsonSerializer.Deserialize<PaginatedResult<Connection>>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
                 return rightHolders.Items.ToList();
             }
             catch (HttpStatusException)
+            {
+                throw;
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
                 throw;
             }
@@ -126,12 +131,12 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc />
-        public async Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party)
+        public async Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"enduser/connections/users?party={party}";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
 
-            var httpResponse = await _client.GetAsync(token, endpointUrl);
+            var httpResponse = await _client.GetAsync(token, endpointUrl, cancellationToken);
             PaginatedResult<SimplifiedConnection> result =
                 await ClientUtils.DeserializeIfSuccessfullStatusCode<PaginatedResult<SimplifiedConnection>>(
                     httpResponse,

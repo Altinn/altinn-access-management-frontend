@@ -33,7 +33,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
 
 
         /// <inheritdoc/>
-        public Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to)
+        public Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to, CancellationToken cancellationToken = default)
         {
 
             if (party == Guid.Empty)
@@ -51,7 +51,8 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
             Guid? from,
             Guid? to,
             bool includeClientDelegations = true,
-            bool includeAgentConnections = true)
+            bool includeAgentConnections = true,
+            CancellationToken cancellationToken = default)
         {
             if (party == Guid.Empty)
             {
@@ -128,7 +129,7 @@ namespace Altinn.AccessManagement.UI.Mocks.Mocks
         }
 
         /// <inheritdoc/>
-        public Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party)
+        public Task<List<SimplifiedConnection>> GetSimplifiedConnections(Guid party, CancellationToken cancellationToken = default)
         {
             if (party == Guid.Empty)
             {

@@ -56,7 +56,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Party> GetPartyForOrganization(string organizationNumber)
+        public async Task<Party> GetPartyForOrganization(string organizationNumber, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -66,8 +66,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(new PartyLookup { OrgNo = organizationNumber }, _serializerOptions), Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
-                string responseContent = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, cancellationToken, accessToken);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -77,7 +77,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyForOrganization // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyForOrganization // Exception");
                 throw;
@@ -85,7 +85,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Party> GetPartyForPerson(string ssn)
+        public async Task<Party> GetPartyForPerson(string ssn, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"parties/lookup";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -93,13 +93,13 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
             StringContent requestBody = new StringContent(JsonSerializer.Serialize(new PartyLookup { Ssn = ssn }, _serializerOptions), Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
+            HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, cancellationToken, accessToken);
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<Party>(response, _logger, "RegisterClient // GetPartyForPerson");
         }
 
         /// <inheritdoc/>
-        public async Task<List<Party>> GetPartyList(List<Guid> uuidList)
+        public async Task<List<Party>> GetPartyList(List<Guid> uuidList, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -109,8 +109,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
 
                 StringContent requestBody = new StringContent(JsonSerializer.Serialize(uuidList, _serializerOptions), Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, accessToken);
-                string responseContent = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestBody, cancellationToken, accessToken);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -120,7 +120,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyList // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyList // Exception");
                 throw;
@@ -128,7 +128,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Altinn.Register.Contracts.Party> GetParty(Guid uuid)
+        public async Task<Altinn.Register.Contracts.Party> GetParty(Guid uuid, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -136,8 +136,8 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
                 var accessToken = await _accessTokenProvider.GetAccessToken();
 
-                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, accessToken);
-                string responseContent = await response.Content.ReadAsStringAsync();
+                HttpResponseMessage response = await _client.GetAsync(token, endpointUrl, cancellationToken, accessToken);
+                string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -147,7 +147,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyByUuid // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyByUuid // Exception");
                 throw;
@@ -155,7 +155,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
         }
 
         /// <inheritdoc/>
-        public async Task<Person> GetPerson(string ssn, string lastname)
+        public async Task<Person> GetPerson(string ssn, string lastname, CancellationToken cancellationToken = default)
         {
             string endpointUrl = $"persons";
             string token = JwtTokenUtil.GetTokenFromContext(_httpContextAccessor.HttpContext, _platformSettings.JwtCookieName);
@@ -167,7 +167,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
             request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             request.Headers.Add("PlatformAccessToken", platformAccessToken);
 
-            HttpResponseMessage response = await _client.SendAsync(request);
+            HttpResponseMessage response = await _client.SendAsync(request, cancellationToken);
 
             return await ClientUtils.DeserializeIfSuccessfullStatusCode<Person>(response);
         }
@@ -187,7 +187,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 };
                 StringContent requestContent = new(JsonSerializer.Serialize(lookupNames, _serializerOptions), Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestContent, accessToken);
+                HttpResponseMessage response = await _client.PostAsync(token, endpointUrl, requestContent, cancellationToken, accessToken);
                 string responseContent = await response.Content.ReadAsStringAsync(cancellationToken);
 
                 if (response.IsSuccessStatusCode)
@@ -198,7 +198,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // RegisterClient // GetPartyNames // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return null;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AccessManagement.UI // RegisterClient // GetPartyNames // Exception");
                 throw;

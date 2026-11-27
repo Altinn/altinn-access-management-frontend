@@ -6,7 +6,6 @@ using Altinn.AccessManagement.UI.Core.Models.User;
 using Altinn.AccessManagement.UI.Core.Models.User.Frontend;
 using Altinn.AccessManagement.UI.Core.Services.Interfaces;
 using Altinn.Register.Contracts.V1;
-using Microsoft.Extensions.Logging;
 
 namespace Altinn.AccessManagement.UI.Core.Services
 {
@@ -15,28 +14,24 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// </summary>
     public class ConnectionService : IConnectionService
     {
-        private readonly ILogger _logger;
         private readonly IConnectionClient _connectionClient;
         private readonly IRegisterClient _registerClient;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectionService"/> class.
         /// </summary>
-        /// <param name="logger">handler for logger</param>
         /// <param name="registerClient">handler for register client</param>
         /// <param name="connectionClient">handler for right holder client</param>
         public ConnectionService(
-            ILogger<ConnectionService> logger,
             IRegisterClient registerClient,
             IConnectionClient connectionClient)
         {
-            _logger = logger;
             _registerClient = registerClient;
             _connectionClient = connectionClient;
         }
 
         /// <inheritdoc/>
-        public async Task<Guid?> ValidatePerson(string personIdentifier, string lastname)
+        public async Task<Guid?> ValidatePerson(string personIdentifier, string lastname, CancellationToken cancellationToken = default)
         {
             string personIdentifierCleaned = personIdentifier.Trim().Replace("\"", string.Empty);
             string lastnameCleaned = lastname.Trim().Replace("\"", string.Empty);
@@ -51,27 +46,27 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 return null;
             }
 
-            Person person = await _registerClient.GetPerson(personIdentifierCleaned, lastnameCleaned);
+            Person person = await _registerClient.GetPerson(personIdentifierCleaned, lastnameCleaned, cancellationToken);
 
             if (person == null)
             {
                 return null;
             }
 
-            Party personParty = await _registerClient.GetPartyForPerson(personIdentifierCleaned);
+            Party personParty = await _registerClient.GetPartyForPerson(personIdentifierCleaned, cancellationToken);
 
             return personParty?.PartyUuid;
         }
 
         /// <inheritdoc/>
-        public async Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to)
+        public async Task<HttpResponseMessage> RevokeRightHolderConnection(Guid party, Guid? from, Guid? to, CancellationToken cancellationToken = default)
         {
-            HttpResponseMessage response = await _connectionClient.RevokeRightHolderConnection(party, from, to);
+            HttpResponseMessage response = await _connectionClient.RevokeRightHolderConnection(party, from, to, cancellationToken);
             return response;
         }
 
         /// <inheritdoc/>
-        public async Task<Guid> AddReporteeRightHolderConnection(Guid partyUuid, Guid? rightholderPartyUuid, PersonInput personInput)
+        public async Task<Guid> AddReporteeRightHolderConnection(Guid partyUuid, Guid? rightholderPartyUuid, PersonInput personInput, CancellationToken cancellationToken = default)
         {
             if (personInput != null)
             {
@@ -99,7 +94,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                     PersonIdentifier = personIdentifierCleaned
                 };
 
-                return await _connectionClient.PostNewRightHolderConnection(partyUuid, null, cleanedInput);
+                return await _connectionClient.PostNewRightHolderConnection(partyUuid, null, cleanedInput, cancellationToken);
             }
 
             if (!rightholderPartyUuid.HasValue)
@@ -107,7 +102,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 throw new ArgumentException("Either rightholderPartyUuid or personInput must be provided");
             }
 
-            return await _connectionClient.PostNewRightHolderConnection(partyUuid, rightholderPartyUuid);
+            return await _connectionClient.PostNewRightHolderConnection(partyUuid, rightholderPartyUuid, cancellationToken: cancellationToken);
         }
 
         /// <inheritdoc/>
@@ -116,29 +111,23 @@ namespace Altinn.AccessManagement.UI.Core.Services
             Guid? from,
             Guid? to,
             bool includeClientDelegations = true,
-            bool includeAgentConnections = true)
+            bool includeAgentConnections = true,
+            CancellationToken cancellationToken = default)
         {
-            try
-            {
-                List<Connection> connections = await _connectionClient.GetConnections(
-                    party,
-                    from,
-                    to,
-                    includeClientDelegations,
-                    includeAgentConnections);
-                return connections?.Select(ConnectionFE.FromConnection).ToList();
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed fetching rightholders for {PartyUuid}", party);
-                throw;
-            }
+            List<Connection> connections = await _connectionClient.GetConnections(
+                party,
+                from,
+                to,
+                includeClientDelegations,
+                includeAgentConnections,
+                cancellationToken);
+            return connections?.Select(ConnectionFE.FromConnection).ToList();
         }
 
         /// <inheritdoc/>
-        public async Task<List<SimplifiedConnectionFE>> GetSimplifiedConnections(Guid party)
+        public async Task<List<SimplifiedConnectionFE>> GetSimplifiedConnections(Guid party, CancellationToken cancellationToken = default)
         {
-            List<SimplifiedConnection> connections = await _connectionClient.GetSimplifiedConnections(party);
+            List<SimplifiedConnection> connections = await _connectionClient.GetSimplifiedConnections(party, cancellationToken);
             return connections?.Select(SimplifiedConnectionFE.FromSimplifiedConnection).ToList();
         }
     }

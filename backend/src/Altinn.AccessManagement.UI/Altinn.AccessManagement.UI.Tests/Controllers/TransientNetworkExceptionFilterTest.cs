@@ -115,7 +115,7 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         private HttpClient GetTestClient(Exception exception) => GetTestClient(services =>
         {
             services.AddTransient<IConsentClient, ConsentClientMock>();
-            services.AddTransient(_ => ThrowingClient<IRegisterClient>(c => c.GetPartyList(It.IsAny<List<Guid>>()), exception));
+            services.AddTransient(_ => ThrowingClient<IRegisterClient>(c => c.GetPartyList(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()), exception));
         });
 
         private HttpClient GetTestClientWithThrowingConsentClient(Exception exception) => GetTestClient(services =>
