@@ -17,6 +17,12 @@ namespace Altinn.AMUI.Core.Models.User
         public List<RoleInfo> Roles { get; set; } = new();
 
         /// <summary>
+        /// Gets or sets the roles the party has in the parent connection's party.
+        /// Only set on sub-connections.
+        /// </summary>
+        public List<RoleInfo> ViaRoles { get; set; } = new();
+
+        /// <summary>
         /// Gets or sets connections the party has.
         /// Users under the party.
         /// </summary>

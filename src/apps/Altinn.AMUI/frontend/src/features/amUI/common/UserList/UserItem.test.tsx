@@ -73,4 +73,19 @@ describe('UserItem, role badges', () => {
 
     expect(screen.queryByText('Konkursbo administrator')).toBeNull();
   });
+
+  it('shows an agent role through an organization as client access', () => {
+    const viaParty = {
+      id: 'firm-uuid',
+      name: 'REGNSKAPSHELTEN AS',
+      type: PartyType.Organization,
+      isDeleted: false,
+      children: null,
+    };
+    renderItem([{ id: 'agent-id', code: 'agent', viaParty }]);
+
+    expect(
+      screen.getByText('user_roles.has_client_access for Regnskapshelten AS', { exact: false }),
+    ).toBeInTheDocument();
+  });
 });
