@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Altinn.AccessManagement.UI.Core.Enums;
 
 namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
 {
@@ -25,6 +26,11 @@ namespace Altinn.AccessManagement.UI.Core.Models.ResourceRegistry.Frontend
         /// Flag indicating whether to include migrated/expired apps and correspondences in the search results. Default is false.
         /// </summary>
         public bool IncludeExpired { get; set; } = false;
+
+        /// <summary>
+        /// The type of party the rights are delegated from. When set and the search string is empty, the most delegated resources for that party type are sorted first.
+        /// </summary>
+        public PartyTypeFE? FromPartyType { get; set; }
 
         /// <summary>
         /// Number of returned resources (per page)

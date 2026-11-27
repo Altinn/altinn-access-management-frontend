@@ -123,6 +123,39 @@ namespace Altinn.AccessManagement.UI.Tests.Controllers
         }
 
         /// <summary>
+        ///     Test case: PaginatedSearch without search string, from an organization and from a person
+        ///     Expected: PaginatedSearch returns the popular resources for the party type first, followed by the rest in
+        ///     the original order
+        /// </summary>
+        [Fact]
+        public async Task GetSingleRightsSearch_fromPartyTypeSet_ReturnsPopularResourcesFirst()
+        {
+            // Arrange
+            string token = PrincipalUtil.GetToken(1337, 501337);
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            List<ServiceResourceFE> allResources = TestDataUtil.GetSingleRightsResources();
+
+            // Act
+            HttpResponseMessage organizationResponse = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=7&Page=1&FromPartyType=Organization");
+            HttpResponseMessage personResponse = await _client.GetAsync("accessmanagement/api/v1/resources/search?ResultsPerPage=7&Page=1&FromPartyType=Person");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, organizationResponse.StatusCode);
+            Assert.Equal(HttpStatusCode.OK, personResponse.StatusCode);
+
+            PaginatedList<ServiceResourceFE> organizationResults = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await organizationResponse.Content.ReadAsStringAsync(), options);
+            PaginatedList<ServiceResourceFE> personResults = JsonSerializer.Deserialize<PaginatedList<ServiceResourceFE>>(await personResponse.Content.ReadAsStringAsync(), options);
+
+            Assert.Equal(allResources.Count, organizationResults.NumEntriesTotal);
+            Assert.Equal("ske-krav-og-betalinger", organizationResults.PageList[0].Identifier);
+            Assert.Equal(allResources[0].Identifier, organizationResults.PageList[1].Identifier);
+
+            Assert.Equal(allResources.Count, personResults.NumEntriesTotal);
+            Assert.Equal("app_dibk_nabovarsel-v5", personResults.PageList[0].Identifier);
+            Assert.Equal(allResources[0].Identifier, personResults.PageList[1].Identifier);
+        }
+
+        /// <summary>
         ///     Test case: PaginatedSearch with pagination and filters
         ///     Expected: PaginatedSearch returns a list of resources matching the filters in paginated form with language filtered
         ///     for the authenticated users selected language

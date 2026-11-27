@@ -18,6 +18,29 @@ namespace Altinn.AccessManagement.UI.Core.Services
     /// <inheritdoc />
     public class ResourceService : IResourceService
     {
+        // The most delegated single rights resources, shown first when the search string is empty
+        private static readonly string[] PopularOrganizationResources =
+        [
+            "ske-innrapportering-amelding",
+            "ske-skattekort-til-arbeidsgiver",
+            "ske-informasjon-om-trekkpaalegg",
+            "ske-innrapportering-aksjonaerregisteroppgave",
+            "app_brg_aarsregnskap-vanlig-202406",
+            "ske-krav-og-betalinger",
+            "nav_sykepenger_sykmelding",
+        ];
+
+        private static readonly string[] PopularPersonResources =
+        [
+            "app_skd_formueinntekt-skattemelding-v2",
+            "ske-arbeid-i-hjemmet-amelding",
+            "ske-skatteoppgjoer-personlig",
+            "app_dibk_nabovarsel-v5",
+            "aarsregnskap-correspondence",
+            "app_dibk_nabovarsel-svar-v5",
+            "ske-utskrift-skattemelding-skatteoppgjoer",
+        ];
+
         private readonly CacheConfig _cacheConfig;
         private readonly ILogger<IResourceService> _logger;
         private readonly IMemoryCache _memoryCache;
@@ -66,6 +89,19 @@ namespace Altinn.AccessManagement.UI.Core.Services
                 // Perform search/filtering and return matches
                 List<ServiceResourceFE> filteredresources = FilterResourceList(resourcesFE, searchParams.ROFilters);
                 List<ServiceResourceFE> searchResults = SearchInResourceList(filteredresources, searchParams.SearchString, resourceTypes, cancellationToken);
+
+                string[] popularResources = searchParams.FromPartyType switch
+                {
+                    PartyTypeFE.Organization => PopularOrganizationResources,
+                    PartyTypeFE.Person => PopularPersonResources,
+                    _ => null,
+                };
+                if (popularResources != null && string.IsNullOrWhiteSpace(searchParams.SearchString))
+                {
+                    searchResults = searchResults
+                        .OrderBy(r => popularResources.Contains(r.Identifier) ? Array.IndexOf(popularResources, r.Identifier) : int.MaxValue)
+                        .ToList();
+                }
 
                 return PaginationUtils.GetListPage(searchResults, searchParams.Page, searchParams.ResultsPerPage);
             }

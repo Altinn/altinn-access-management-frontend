@@ -57,6 +57,7 @@ export const ResourceSearch = ({ onSelect, availableActions }: ResourceSearchPro
     page: currentPage,
     resultsPerPage: searchResultsPerPage,
     includeExpired: includeExpiredResources,
+    fromPartyType: fromParty?.type,
   });
   const { data: delegatedResources } = useGetSingleRightsForRightholderQuery(
     {
