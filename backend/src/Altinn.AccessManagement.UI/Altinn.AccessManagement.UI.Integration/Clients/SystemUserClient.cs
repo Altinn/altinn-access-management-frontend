@@ -118,7 +118,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // SystemUserClient // DeleteSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return false;
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // DeleteSystemUser // Exception");
                 throw;
@@ -222,7 +222,7 @@ namespace Altinn.AccessManagement.UI.Integration.Clients
                 _logger.LogError("AccessManagement.UI // SystemUserClient // DeleteAgentSystemUser // Unexpected HttpStatusCode: {StatusCode}\n {responseBody}", response.StatusCode, responseContent);
                 return ProblemMapper.MapToAuthUiError(responseContent, response.StatusCode);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not OperationCanceledException || !cancellationToken.IsCancellationRequested)
             {
                 _logger.LogError(ex, "AccessManagement.UI // SystemUserClient // DeleteAgentSystemUser // Exception");
                 throw;
