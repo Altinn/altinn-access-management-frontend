@@ -59,7 +59,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<ResourceDelegation>> GetSupplierResources(string languageCode, Guid party, string supplier = null, string resource = null, CancellationToken cancellationToken = default)
         {
             IEnumerable<ResourcePermission> resourcePermissions = await _maskinportenClient.GetSupplierResources(party, languageCode, supplier, resource, cancellationToken);
-            return await EnrichResourcePermissions(resourcePermissions, languageCode);
+            return await EnrichResourcePermissions(resourcePermissions, languageCode, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -97,7 +97,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
         public async Task<List<ResourceDelegation>> GetConsumerResources(string languageCode, Guid party, string consumer = null, CancellationToken cancellationToken = default)
         {
             IEnumerable<ResourcePermission> resourcePermissions = await _maskinportenClient.GetConsumerResources(party, languageCode, consumer, cancellationToken);
-            return await EnrichResourcePermissions(resourcePermissions, languageCode);
+            return await EnrichResourcePermissions(resourcePermissions, languageCode, cancellationToken);
         }
 
         /// <inheritdoc />
@@ -106,7 +106,7 @@ namespace Altinn.AccessManagement.UI.Core.Services
             await _maskinportenClient.RemoveConsumerResource(party, consumer, resource, cancellationToken);
         }
 
-        private async Task<List<ResourceDelegation>> EnrichResourcePermissions(IEnumerable<ResourcePermission> resourcePermissions, string languageCode)
+        private async Task<List<ResourceDelegation>> EnrichResourcePermissions(IEnumerable<ResourcePermission> resourcePermissions, string languageCode, CancellationToken cancellationToken)
         {
             List<ResourcePermission> permissions = resourcePermissions?
                 .Where(rp => !string.IsNullOrWhiteSpace(rp.Resource?.RefId))
@@ -115,7 +115,8 @@ namespace Altinn.AccessManagement.UI.Core.Services
             // Each resource is looked up once. Resources that cannot be found are left out.
             Dictionary<string, ServiceResourceFE> resources = await _resourceService.GetResourcesFE(
                 permissions.Select(rp => rp.Resource.RefId),
-                languageCode);
+                languageCode,
+                cancellationToken);
 
             return permissions
                 .Where(rp => resources.ContainsKey(rp.Resource.RefId))
